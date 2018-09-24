@@ -22,6 +22,7 @@ import CloseIcon from "@material-ui/icons/Close";
 
 //Mis componentes
 import Login from "./Login/index";
+import Inicio from "./Inicio";
 import NuevoUsuario from "./NuevoUsuario";
 import Pagina404 from "@UI/_Pagina404";
 import ProcesarRecuperarPassword from "@UI/ProcesarRecuperarPassword";
@@ -81,6 +82,7 @@ class App extends React.Component {
             path="/ProcesarActivacionUsuario"
             component={ProcesarActivacionUsuario}
           />
+          <Route path="/Inicio" component={Inicio} />
           <Route component={Pagina404} />
         </AnimatedSwitch>
       </main>

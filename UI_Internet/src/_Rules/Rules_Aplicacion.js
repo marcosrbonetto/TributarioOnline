@@ -1,12 +1,8 @@
 import _ from "lodash";
 
-let baseURL =
-  "https://servicios2.cordoba.gov.ar/WSVecinoVirtual_Bridge/v1/Aplicacion";
-baseURL = "http://localhost:7294/v1/Aplicacion";
-
 const metodos = {
   getInfoLogin: codigo => {
-    let url = baseURL + "/InfoLogin";
+    let url = window.Config.BASE_URL_WS + "/v1/Aplicacion/InfoLogin";
 
     return new Promise((resolve, reject) => {
       fetch(url, {
