@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ServicioTributario.Resultados" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ServicioTributario.Resultados" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="RecargosResultados">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="coeficiente" type="xs:double" />
+      <xs:element minOccurs="0" name="diasTranscurridos" type="xs:int" />
+      <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="montoTotal" type="xs:decimal" />
+      <xs:element minOccurs="0" name="recargo" type="xs:decimal" />
+      <xs:element minOccurs="0" name="tipoRecargo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="valorAlternativo" type="xs:double" />
+      <xs:element minOccurs="0" name="valorBase" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RecargosResultados" nillable="true" type="tns:RecargosResultados" />
+</xs:schema>

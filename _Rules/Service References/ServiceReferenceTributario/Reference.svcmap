@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="87ff9fe5-19bf-44ff-8dc7-2aa61a5cf697" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="ServicioTributario.disco" MetadataType="Disco" ID="39afacae-6225-457e-8c14-5cf3964b1f02" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?disco" />
+    <MetadataFile FileName="ServicioTributario.xsd" MetadataType="Schema" ID="ca5593be-f8eb-4623-8dcf-a6898824b461" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd6" />
+    <MetadataFile FileName="ServicioTributario1.xsd" MetadataType="Schema" ID="d86dedf4-ca7f-46b0-a8b7-927ff7ded730" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd4" />
+    <MetadataFile FileName="ServicioTributario2.xsd" MetadataType="Schema" ID="c177c3d4-a1a6-436b-b41f-d6aba8db40c3" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd0" />
+    <MetadataFile FileName="ServicioTributario3.xsd" MetadataType="Schema" ID="cdb5b46e-4e12-452c-81c6-698f38a12803" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd1" />
+    <MetadataFile FileName="ServicioTributario4.xsd" MetadataType="Schema" ID="f5a92976-0762-4f63-ab75-8f9782486f45" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd3" />
+    <MetadataFile FileName="ServicioTributario5.xsd" MetadataType="Schema" ID="05e63f75-f60c-4a34-8d17-83eaca4af6be" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd7" />
+    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="73bd23a6-8d22-466d-8874-573b900427fb" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?wsdl" />
+    <MetadataFile FileName="ServicioTributario6.xsd" MetadataType="Schema" ID="b1c5705b-f0f8-442b-88e1-a2ae861971a5" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd5" />
+    <MetadataFile FileName="ServicioTributario7.xsd" MetadataType="Schema" ID="9848bb92-4b38-4998-be8a-79bfa8276566" SourceId="1" SourceUrl="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

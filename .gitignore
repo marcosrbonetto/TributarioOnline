@@ -1,0 +1,13 @@
+/_DAO/bin/
+/_DAO/obj/
+/_Model/bin/
+/_Model/obj/
+/_Rules/bin/
+/_Rules/obj/
+/UI_Internet/bin/
+/UI_Internet/obj/
+/UI_Internet/node_modules/
+/WS_Internet/bin/
+/WS_Internet/obj/
+/WS_Intranet/bin/
+/WS_Intranet/obj/

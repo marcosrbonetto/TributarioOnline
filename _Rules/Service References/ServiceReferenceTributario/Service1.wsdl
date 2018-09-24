@@ -1,0 +1,1210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Service1" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpBinding_IServicioTributario_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ServicioTributario.Resultados" />
+      <xsd:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ServicioTributario" />
+      <xsd:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" />
+      <xsd:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/" />
+      <xsd:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/ServicioTributarioBD.Entidades" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IServicioTributario_calcularRecargoNormal_InputMessage">
+    <wsdl:part name="parameters" element="tns:calcularRecargoNormal" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_calcularRecargoNormal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:calcularRecargoNormalResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_calcularRecargoAlternativo_InputMessage">
+    <wsdl:part name="parameters" element="tns:calcularRecargoAlternativo" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_calcularRecargoAlternativo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:calcularRecargoAlternativoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_calcularRecargoNormalYPorcentaje_InputMessage">
+    <wsdl:part name="parameters" element="tns:calcularRecargoNormalYPorcentaje" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_calcularRecargoNormalYPorcentaje_OutputMessage">
+    <wsdl:part name="parameters" element="tns:calcularRecargoNormalYPorcentajeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_validarEstadoComponentesCics020_InputMessage">
+    <wsdl:part name="parameters" element="tns:validarEstadoComponentesCics020" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_validarEstadoComponentesCics020_OutputMessage">
+    <wsdl:part name="parameters" element="tns:validarEstadoComponentesCics020Response" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_validarEstadoComponentesCics050_InputMessage">
+    <wsdl:part name="parameters" element="tns:validarEstadoComponentesCics050" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_validarEstadoComponentesCics050_OutputMessage">
+    <wsdl:part name="parameters" element="tns:validarEstadoComponentesCics050Response" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTributo_InputMessage">
+    <wsdl:part name="parameters" element="tns:getTributo" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTributo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getTributoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTributoReducido_InputMessage">
+    <wsdl:part name="parameters" element="tns:getTributoReducido" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTributoReducido_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getTributoReducidoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCloacasPorOpcionSistema_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCloacasPorOpcionSistema" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCloacasPorOpcionSistema_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCloacasPorOpcionSistemaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTributoPorOpcionSistema_InputMessage">
+    <wsdl:part name="parameters" element="tns:getTributoPorOpcionSistema" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTributoPorOpcionSistema_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getTributoPorOpcionSistemaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTributoReducidoPorOpcionSistema_InputMessage">
+    <wsdl:part name="parameters" element="tns:getTributoReducidoPorOpcionSistema" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTributoReducidoPorOpcionSistema_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getTributoReducidoPorOpcionSistemaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getPeriodosTributoRebaja_InputMessage">
+    <wsdl:part name="parameters" element="tns:getPeriodosTributoRebaja" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getPeriodosTributoRebaja_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getPeriodosTributoRebajaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getPlanInmueble_InputMessage">
+    <wsdl:part name="parameters" element="tns:getPlanInmueble" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getPlanInmueble_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getPlanInmuebleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getPeriodosBloqueadosPlanDePago_InputMessage">
+    <wsdl:part name="parameters" element="tns:getPeriodosBloqueadosPlanDePago" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getPeriodosBloqueadosPlanDePago_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getPeriodosBloqueadosPlanDePagoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getPlanInmueblePorOpcionSistema_InputMessage">
+    <wsdl:part name="parameters" element="tns:getPlanInmueblePorOpcionSistema" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getPlanInmueblePorOpcionSistema_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getPlanInmueblePorOpcionSistemaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getImpresionPeriodosDDJJ_InputMessage">
+    <wsdl:part name="parameters" element="tns:getImpresionPeriodosDDJJ" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getImpresionPeriodosDDJJ_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getImpresionPeriodosDDJJResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getJuicioInmueble_InputMessage">
+    <wsdl:part name="parameters" element="tns:getJuicioInmueble" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getJuicioInmueble_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getJuicioInmuebleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getJuicioPorOpcionSistema_InputMessage">
+    <wsdl:part name="parameters" element="tns:getJuicioPorOpcionSistema" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getJuicioPorOpcionSistema_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getJuicioPorOpcionSistemaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCedulonJuicio_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCedulonJuicio" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCedulonJuicio_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCedulonJuicioResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_gestionarCedulon_InputMessage">
+    <wsdl:part name="parameters" element="tns:gestionarCedulon" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_gestionarCedulon_OutputMessage">
+    <wsdl:part name="parameters" element="tns:gestionarCedulonResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_gestionarCedulonDeGastos_InputMessage">
+    <wsdl:part name="parameters" element="tns:gestionarCedulonDeGastos" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_gestionarCedulonDeGastos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:gestionarCedulonDeGastosResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_gestionarCedulonTribunalDeFaltas_InputMessage">
+    <wsdl:part name="parameters" element="tns:gestionarCedulonTribunalDeFaltas" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_gestionarCedulonTribunalDeFaltas_OutputMessage">
+    <wsdl:part name="parameters" element="tns:gestionarCedulonTribunalDeFaltasResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getFormulaDeCalculoInmueble_InputMessage">
+    <wsdl:part name="parameters" element="tns:getFormulaDeCalculoInmueble" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getFormulaDeCalculoInmueble_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getFormulaDeCalculoInmuebleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTaxisYRemises_InputMessage">
+    <wsdl:part name="parameters" element="tns:getTaxisYRemises" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getTaxisYRemises_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getTaxisYRemisesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_gestionarCedulonTaxisYRemises_InputMessage">
+    <wsdl:part name="parameters" element="tns:gestionarCedulonTaxisYRemises" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_gestionarCedulonTaxisYRemises_OutputMessage">
+    <wsdl:part name="parameters" element="tns:gestionarCedulonTaxisYRemisesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuitConsulta_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCuitConsulta" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuitConsulta_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCuitConsultaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getDdjj_InputMessage">
+    <wsdl:part name="parameters" element="tns:getDdjj" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getDdjj_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getDdjjResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuitConsultaJuicio_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCuitConsultaJuicio" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuitConsultaJuicio_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCuitConsultaJuicioResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuitConsultaPlan_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCuitConsultaPlan" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuitConsultaPlan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCuitConsultaPlanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getFormularioPlan_InputMessage">
+    <wsdl:part name="parameters" element="tns:getFormularioPlan" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getFormularioPlan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getFormularioPlanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getResumenDeuda_InputMessage">
+    <wsdl:part name="parameters" element="tns:getResumenDeuda" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getResumenDeuda_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getResumenDeudaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getResumenDeudaTributo_InputMessage">
+    <wsdl:part name="parameters" element="tns:getResumenDeudaTributo" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getResumenDeudaTributo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getResumenDeudaTributoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getResumenDeudaDetallada_InputMessage">
+    <wsdl:part name="parameters" element="tns:getResumenDeudaDetallada" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getResumenDeudaDetallada_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getResumenDeudaDetalladaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getResumenDeudaDetalladaTributo_InputMessage">
+    <wsdl:part name="parameters" element="tns:getResumenDeudaDetalladaTributo" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getResumenDeudaDetalladaTributo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getResumenDeudaDetalladaTributoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCarnetConsulta_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCarnetConsulta" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCarnetConsulta_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCarnetConsultaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuotasPlan_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCuotasPlan" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuotasPlan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCuotasPlanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuotasPlanProcuracion_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCuotasPlanProcuracion" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuotasPlanProcuracion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCuotasPlanProcuracionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_simularCaducidadPlan_InputMessage">
+    <wsdl:part name="parameters" element="tns:simularCaducidadPlan" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_simularCaducidadPlan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:simularCaducidadPlanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_grabarPlan_InputMessage">
+    <wsdl:part name="parameters" element="tns:grabarPlan" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_grabarPlan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:grabarPlanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getDerechosVariosInmueble_InputMessage">
+    <wsdl:part name="parameters" element="tns:getDerechosVariosInmueble" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getDerechosVariosInmueble_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getDerechosVariosInmuebleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInformeNotarial_InputMessage">
+    <wsdl:part name="parameters" element="tns:getInformeNotarial" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInformeNotarial_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getInformeNotarialResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getContribucionesXMejoras_InputMessage">
+    <wsdl:part name="parameters" element="tns:getContribucionesXMejoras" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getContribucionesXMejoras_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getContribucionesXMejorasResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuitTributosBatch_InputMessage">
+    <wsdl:part name="parameters" element="tns:getCuitTributosBatch" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getCuitTributosBatch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getCuitTributosBatchResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInformeTaxisYRemises_InputMessage">
+    <wsdl:part name="parameters" element="tns:getInformeTaxisYRemises" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInformeTaxisYRemises_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getInformeTaxisYRemisesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_poseeMultasOMultasEnProcuracionREDUCIDO_InputMessage">
+    <wsdl:part name="parameters" element="tns:poseeMultasOMultasEnProcuracionREDUCIDO" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_poseeMultasOMultasEnProcuracionREDUCIDO_OutputMessage">
+    <wsdl:part name="parameters" element="tns:poseeMultasOMultasEnProcuracionREDUCIDOResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_obtenerSubastaInmueble_InputMessage">
+    <wsdl:part name="parameters" element="tns:obtenerSubastaInmueble" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_obtenerSubastaInmueble_OutputMessage">
+    <wsdl:part name="parameters" element="tns:obtenerSubastaInmuebleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososParticularidades_InputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososParticularidades" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososParticularidades_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososParticularidadesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososParticularidadesPorTributo_InputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososParticularidadesPorTributo" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososParticularidadesPorTributo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososParticularidadesPorTributoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getAutomotoresTipos_InputMessage">
+    <wsdl:part name="parameters" element="tns:getAutomotoresTipos" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getAutomotoresTipos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getAutomotoresTiposResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getAutomotoresTiposBajas_InputMessage">
+    <wsdl:part name="parameters" element="tns:getAutomotoresTiposBajas" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getAutomotoresTiposBajas_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getAutomotoresTiposBajasResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getAutomotoresTiposEximiciones_InputMessage">
+    <wsdl:part name="parameters" element="tns:getAutomotoresTiposEximiciones" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getAutomotoresTiposEximiciones_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getAutomotoresTiposEximicionesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getAutomotoresTiposOrigenes_InputMessage">
+    <wsdl:part name="parameters" element="tns:getAutomotoresTiposOrigenes" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getAutomotoresTiposOrigenes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getAutomotoresTiposOrigenesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getComerciosCodigosEstados_InputMessage">
+    <wsdl:part name="parameters" element="tns:getComerciosCodigosEstados" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getComerciosCodigosEstados_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getComerciosCodigosEstadosResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getComerciosTiposContribuyentes_InputMessage">
+    <wsdl:part name="parameters" element="tns:getComerciosTiposContribuyentes" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getComerciosTiposContribuyentes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getComerciosTiposContribuyentesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInmueblesCategorias_InputMessage">
+    <wsdl:part name="parameters" element="tns:getInmueblesCategorias" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInmueblesCategorias_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getInmueblesCategoriasResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInmueblesTiposEximiciones_InputMessage">
+    <wsdl:part name="parameters" element="tns:getInmueblesTiposEximiciones" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInmueblesTiposEximiciones_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getInmueblesTiposEximicionesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorSujetoGeneral_InputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorSujetoGeneral" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorSujetoGeneral_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorSujetoGeneralResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorBienesGeneral_InputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorBienesGeneral" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorBienesGeneral_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorBienesGeneralResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorBienesAutomotores_InputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorBienesAutomotores" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorBienesAutomotores_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorBienesAutomotoresResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorBienesInmuebles_InputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorBienesInmuebles" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorBienesInmuebles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorBienesInmueblesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorBienesComercios_InputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorBienesComercios" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getMorososPorBienesComercios_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getMorososPorBienesComerciosResponse" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInmueblesDestinos_InputMessage">
+    <wsdl:part name="parameters" element="tns:getInmueblesDestinos" />
+  </wsdl:message>
+  <wsdl:message name="IServicioTributario_getInmueblesDestinos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:getInmueblesDestinosResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IServicioTributario">
+    <wsdl:operation name="calcularRecargoNormal">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/calcularRecargoNormal" message="tns:IServicioTributario_calcularRecargoNormal_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/calcularRecargoNormalResponse" message="tns:IServicioTributario_calcularRecargoNormal_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="calcularRecargoAlternativo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/calcularRecargoAlternativo" message="tns:IServicioTributario_calcularRecargoAlternativo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/calcularRecargoAlternativoResponse" message="tns:IServicioTributario_calcularRecargoAlternativo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="calcularRecargoNormalYPorcentaje">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/calcularRecargoNormalYPorcentaje" message="tns:IServicioTributario_calcularRecargoNormalYPorcentaje_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/calcularRecargoNormalYPorcentajeResponse" message="tns:IServicioTributario_calcularRecargoNormalYPorcentaje_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="validarEstadoComponentesCics020">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/validarEstadoComponentesCics020" message="tns:IServicioTributario_validarEstadoComponentesCics020_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/validarEstadoComponentesCics020Response" message="tns:IServicioTributario_validarEstadoComponentesCics020_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="validarEstadoComponentesCics050">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/validarEstadoComponentesCics050" message="tns:IServicioTributario_validarEstadoComponentesCics050_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/validarEstadoComponentesCics050Response" message="tns:IServicioTributario_validarEstadoComponentesCics050_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getTributo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getTributo" message="tns:IServicioTributario_getTributo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getTributoResponse" message="tns:IServicioTributario_getTributo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getTributoReducido">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getTributoReducido" message="tns:IServicioTributario_getTributoReducido_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getTributoReducidoResponse" message="tns:IServicioTributario_getTributoReducido_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCloacasPorOpcionSistema">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCloacasPorOpcionSistema" message="tns:IServicioTributario_getCloacasPorOpcionSistema_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCloacasPorOpcionSistemaResponse" message="tns:IServicioTributario_getCloacasPorOpcionSistema_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getTributoPorOpcionSistema">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getTributoPorOpcionSistema" message="tns:IServicioTributario_getTributoPorOpcionSistema_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getTributoPorOpcionSistemaResponse" message="tns:IServicioTributario_getTributoPorOpcionSistema_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getTributoReducidoPorOpcionSistema">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getTributoReducidoPorOpcionSistema" message="tns:IServicioTributario_getTributoReducidoPorOpcionSistema_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getTributoReducidoPorOpcionSistemaResponse" message="tns:IServicioTributario_getTributoReducidoPorOpcionSistema_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getPeriodosTributoRebaja">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getPeriodosTributoRebaja" message="tns:IServicioTributario_getPeriodosTributoRebaja_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getPeriodosTributoRebajaResponse" message="tns:IServicioTributario_getPeriodosTributoRebaja_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getPlanInmueble">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getPlanInmueble" message="tns:IServicioTributario_getPlanInmueble_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getPlanInmuebleResponse" message="tns:IServicioTributario_getPlanInmueble_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getPeriodosBloqueadosPlanDePago">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getPeriodosBloqueadosPlanDePago" message="tns:IServicioTributario_getPeriodosBloqueadosPlanDePago_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getPeriodosBloqueadosPlanDePagoResponse" message="tns:IServicioTributario_getPeriodosBloqueadosPlanDePago_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getPlanInmueblePorOpcionSistema">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getPlanInmueblePorOpcionSistema" message="tns:IServicioTributario_getPlanInmueblePorOpcionSistema_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getPlanInmueblePorOpcionSistemaResponse" message="tns:IServicioTributario_getPlanInmueblePorOpcionSistema_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getImpresionPeriodosDDJJ">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getImpresionPeriodosDDJJ" message="tns:IServicioTributario_getImpresionPeriodosDDJJ_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getImpresionPeriodosDDJJResponse" message="tns:IServicioTributario_getImpresionPeriodosDDJJ_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getJuicioInmueble">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getJuicioInmueble" message="tns:IServicioTributario_getJuicioInmueble_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getJuicioInmuebleResponse" message="tns:IServicioTributario_getJuicioInmueble_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getJuicioPorOpcionSistema">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getJuicioPorOpcionSistema" message="tns:IServicioTributario_getJuicioPorOpcionSistema_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getJuicioPorOpcionSistemaResponse" message="tns:IServicioTributario_getJuicioPorOpcionSistema_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCedulonJuicio">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCedulonJuicio" message="tns:IServicioTributario_getCedulonJuicio_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCedulonJuicioResponse" message="tns:IServicioTributario_getCedulonJuicio_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="gestionarCedulon">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/gestionarCedulon" message="tns:IServicioTributario_gestionarCedulon_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/gestionarCedulonResponse" message="tns:IServicioTributario_gestionarCedulon_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="gestionarCedulonDeGastos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/gestionarCedulonDeGastos" message="tns:IServicioTributario_gestionarCedulonDeGastos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/gestionarCedulonDeGastosResponse" message="tns:IServicioTributario_gestionarCedulonDeGastos_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="gestionarCedulonTribunalDeFaltas">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/gestionarCedulonTribunalDeFaltas" message="tns:IServicioTributario_gestionarCedulonTribunalDeFaltas_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/gestionarCedulonTribunalDeFaltasResponse" message="tns:IServicioTributario_gestionarCedulonTribunalDeFaltas_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getFormulaDeCalculoInmueble">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getFormulaDeCalculoInmueble" message="tns:IServicioTributario_getFormulaDeCalculoInmueble_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getFormulaDeCalculoInmuebleResponse" message="tns:IServicioTributario_getFormulaDeCalculoInmueble_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getTaxisYRemises">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getTaxisYRemises" message="tns:IServicioTributario_getTaxisYRemises_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getTaxisYRemisesResponse" message="tns:IServicioTributario_getTaxisYRemises_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="gestionarCedulonTaxisYRemises">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/gestionarCedulonTaxisYRemises" message="tns:IServicioTributario_gestionarCedulonTaxisYRemises_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/gestionarCedulonTaxisYRemisesResponse" message="tns:IServicioTributario_gestionarCedulonTaxisYRemises_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCuitConsulta">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCuitConsulta" message="tns:IServicioTributario_getCuitConsulta_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCuitConsultaResponse" message="tns:IServicioTributario_getCuitConsulta_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getDdjj">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getDdjj" message="tns:IServicioTributario_getDdjj_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getDdjjResponse" message="tns:IServicioTributario_getDdjj_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCuitConsultaJuicio">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCuitConsultaJuicio" message="tns:IServicioTributario_getCuitConsultaJuicio_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCuitConsultaJuicioResponse" message="tns:IServicioTributario_getCuitConsultaJuicio_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCuitConsultaPlan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCuitConsultaPlan" message="tns:IServicioTributario_getCuitConsultaPlan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCuitConsultaPlanResponse" message="tns:IServicioTributario_getCuitConsultaPlan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getFormularioPlan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getFormularioPlan" message="tns:IServicioTributario_getFormularioPlan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getFormularioPlanResponse" message="tns:IServicioTributario_getFormularioPlan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getResumenDeuda">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getResumenDeuda" message="tns:IServicioTributario_getResumenDeuda_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getResumenDeudaResponse" message="tns:IServicioTributario_getResumenDeuda_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getResumenDeudaTributo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getResumenDeudaTributo" message="tns:IServicioTributario_getResumenDeudaTributo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getResumenDeudaTributoResponse" message="tns:IServicioTributario_getResumenDeudaTributo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getResumenDeudaDetallada">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getResumenDeudaDetallada" message="tns:IServicioTributario_getResumenDeudaDetallada_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getResumenDeudaDetalladaResponse" message="tns:IServicioTributario_getResumenDeudaDetallada_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getResumenDeudaDetalladaTributo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getResumenDeudaDetalladaTributo" message="tns:IServicioTributario_getResumenDeudaDetalladaTributo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getResumenDeudaDetalladaTributoResponse" message="tns:IServicioTributario_getResumenDeudaDetalladaTributo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCarnetConsulta">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCarnetConsulta" message="tns:IServicioTributario_getCarnetConsulta_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCarnetConsultaResponse" message="tns:IServicioTributario_getCarnetConsulta_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCuotasPlan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCuotasPlan" message="tns:IServicioTributario_getCuotasPlan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCuotasPlanResponse" message="tns:IServicioTributario_getCuotasPlan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCuotasPlanProcuracion">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCuotasPlanProcuracion" message="tns:IServicioTributario_getCuotasPlanProcuracion_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCuotasPlanProcuracionResponse" message="tns:IServicioTributario_getCuotasPlanProcuracion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="simularCaducidadPlan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/simularCaducidadPlan" message="tns:IServicioTributario_simularCaducidadPlan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/simularCaducidadPlanResponse" message="tns:IServicioTributario_simularCaducidadPlan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="grabarPlan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/grabarPlan" message="tns:IServicioTributario_grabarPlan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/grabarPlanResponse" message="tns:IServicioTributario_grabarPlan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getDerechosVariosInmueble">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getDerechosVariosInmueble" message="tns:IServicioTributario_getDerechosVariosInmueble_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getDerechosVariosInmuebleResponse" message="tns:IServicioTributario_getDerechosVariosInmueble_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getInformeNotarial">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getInformeNotarial" message="tns:IServicioTributario_getInformeNotarial_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getInformeNotarialResponse" message="tns:IServicioTributario_getInformeNotarial_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getContribucionesXMejoras">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getContribucionesXMejoras" message="tns:IServicioTributario_getContribucionesXMejoras_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getContribucionesXMejorasResponse" message="tns:IServicioTributario_getContribucionesXMejoras_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCuitTributosBatch">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getCuitTributosBatch" message="tns:IServicioTributario_getCuitTributosBatch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getCuitTributosBatchResponse" message="tns:IServicioTributario_getCuitTributosBatch_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getInformeTaxisYRemises">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getInformeTaxisYRemises" message="tns:IServicioTributario_getInformeTaxisYRemises_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getInformeTaxisYRemisesResponse" message="tns:IServicioTributario_getInformeTaxisYRemises_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="poseeMultasOMultasEnProcuracionREDUCIDO">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/poseeMultasOMultasEnProcuracionREDUCIDO" message="tns:IServicioTributario_poseeMultasOMultasEnProcuracionREDUCIDO_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/poseeMultasOMultasEnProcuracionREDUCIDOResponse" message="tns:IServicioTributario_poseeMultasOMultasEnProcuracionREDUCIDO_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="obtenerSubastaInmueble">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/obtenerSubastaInmueble" message="tns:IServicioTributario_obtenerSubastaInmueble_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/obtenerSubastaInmuebleResponse" message="tns:IServicioTributario_obtenerSubastaInmueble_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getMorososParticularidades">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getMorososParticularidades" message="tns:IServicioTributario_getMorososParticularidades_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getMorososParticularidadesResponse" message="tns:IServicioTributario_getMorososParticularidades_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getMorososParticularidadesPorTributo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getMorososParticularidadesPorTributo" message="tns:IServicioTributario_getMorososParticularidadesPorTributo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getMorososParticularidadesPorTributoResponse" message="tns:IServicioTributario_getMorososParticularidadesPorTributo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getAutomotoresTipos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getAutomotoresTipos" message="tns:IServicioTributario_getAutomotoresTipos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getAutomotoresTiposResponse" message="tns:IServicioTributario_getAutomotoresTipos_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getAutomotoresTiposBajas">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getAutomotoresTiposBajas" message="tns:IServicioTributario_getAutomotoresTiposBajas_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getAutomotoresTiposBajasResponse" message="tns:IServicioTributario_getAutomotoresTiposBajas_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getAutomotoresTiposEximiciones">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getAutomotoresTiposEximiciones" message="tns:IServicioTributario_getAutomotoresTiposEximiciones_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getAutomotoresTiposEximicionesResponse" message="tns:IServicioTributario_getAutomotoresTiposEximiciones_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getAutomotoresTiposOrigenes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getAutomotoresTiposOrigenes" message="tns:IServicioTributario_getAutomotoresTiposOrigenes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getAutomotoresTiposOrigenesResponse" message="tns:IServicioTributario_getAutomotoresTiposOrigenes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getComerciosCodigosEstados">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getComerciosCodigosEstados" message="tns:IServicioTributario_getComerciosCodigosEstados_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getComerciosCodigosEstadosResponse" message="tns:IServicioTributario_getComerciosCodigosEstados_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getComerciosTiposContribuyentes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getComerciosTiposContribuyentes" message="tns:IServicioTributario_getComerciosTiposContribuyentes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getComerciosTiposContribuyentesResponse" message="tns:IServicioTributario_getComerciosTiposContribuyentes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getInmueblesCategorias">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getInmueblesCategorias" message="tns:IServicioTributario_getInmueblesCategorias_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getInmueblesCategoriasResponse" message="tns:IServicioTributario_getInmueblesCategorias_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getInmueblesTiposEximiciones">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getInmueblesTiposEximiciones" message="tns:IServicioTributario_getInmueblesTiposEximiciones_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getInmueblesTiposEximicionesResponse" message="tns:IServicioTributario_getInmueblesTiposEximiciones_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorSujetoGeneral">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorSujetoGeneral" message="tns:IServicioTributario_getMorososPorSujetoGeneral_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorSujetoGeneralResponse" message="tns:IServicioTributario_getMorososPorSujetoGeneral_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorBienesGeneral">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorBienesGeneral" message="tns:IServicioTributario_getMorososPorBienesGeneral_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorBienesGeneralResponse" message="tns:IServicioTributario_getMorososPorBienesGeneral_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorBienesAutomotores">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorBienesAutomotores" message="tns:IServicioTributario_getMorososPorBienesAutomotores_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorBienesAutomotoresResponse" message="tns:IServicioTributario_getMorososPorBienesAutomotores_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorBienesInmuebles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorBienesInmuebles" message="tns:IServicioTributario_getMorososPorBienesInmuebles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorBienesInmueblesResponse" message="tns:IServicioTributario_getMorososPorBienesInmuebles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorBienesComercios">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorBienesComercios" message="tns:IServicioTributario_getMorososPorBienesComercios_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getMorososPorBienesComerciosResponse" message="tns:IServicioTributario_getMorososPorBienesComercios_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getInmueblesDestinos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IServicioTributario/getInmueblesDestinos" message="tns:IServicioTributario_getInmueblesDestinos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IServicioTributario/getInmueblesDestinosResponse" message="tns:IServicioTributario_getInmueblesDestinos_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_IServicioTributario" type="tns:IServicioTributario">
+    <wsp:PolicyReference URI="#BasicHttpBinding_IServicioTributario_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="calcularRecargoNormal">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/calcularRecargoNormal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="calcularRecargoAlternativo">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/calcularRecargoAlternativo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="calcularRecargoNormalYPorcentaje">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/calcularRecargoNormalYPorcentaje" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validarEstadoComponentesCics020">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/validarEstadoComponentesCics020" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validarEstadoComponentesCics050">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/validarEstadoComponentesCics050" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTributo">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getTributo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTributoReducido">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getTributoReducido" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCloacasPorOpcionSistema">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCloacasPorOpcionSistema" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTributoPorOpcionSistema">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getTributoPorOpcionSistema" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTributoReducidoPorOpcionSistema">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getTributoReducidoPorOpcionSistema" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPeriodosTributoRebaja">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getPeriodosTributoRebaja" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPlanInmueble">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getPlanInmueble" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPeriodosBloqueadosPlanDePago">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getPeriodosBloqueadosPlanDePago" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getPlanInmueblePorOpcionSistema">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getPlanInmueblePorOpcionSistema" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getImpresionPeriodosDDJJ">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getImpresionPeriodosDDJJ" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJuicioInmueble">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getJuicioInmueble" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getJuicioPorOpcionSistema">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getJuicioPorOpcionSistema" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCedulonJuicio">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCedulonJuicio" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="gestionarCedulon">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/gestionarCedulon" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="gestionarCedulonDeGastos">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/gestionarCedulonDeGastos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="gestionarCedulonTribunalDeFaltas">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/gestionarCedulonTribunalDeFaltas" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFormulaDeCalculoInmueble">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getFormulaDeCalculoInmueble" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTaxisYRemises">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getTaxisYRemises" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="gestionarCedulonTaxisYRemises">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/gestionarCedulonTaxisYRemises" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCuitConsulta">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCuitConsulta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDdjj">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getDdjj" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCuitConsultaJuicio">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCuitConsultaJuicio" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCuitConsultaPlan">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCuitConsultaPlan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getFormularioPlan">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getFormularioPlan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResumenDeuda">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getResumenDeuda" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResumenDeudaTributo">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getResumenDeudaTributo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResumenDeudaDetallada">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getResumenDeudaDetallada" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResumenDeudaDetalladaTributo">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getResumenDeudaDetalladaTributo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCarnetConsulta">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCarnetConsulta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCuotasPlan">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCuotasPlan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCuotasPlanProcuracion">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCuotasPlanProcuracion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="simularCaducidadPlan">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/simularCaducidadPlan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="grabarPlan">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/grabarPlan" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDerechosVariosInmueble">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getDerechosVariosInmueble" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInformeNotarial">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getInformeNotarial" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getContribucionesXMejoras">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getContribucionesXMejoras" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getCuitTributosBatch">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getCuitTributosBatch" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInformeTaxisYRemises">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getInformeTaxisYRemises" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="poseeMultasOMultasEnProcuracionREDUCIDO">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/poseeMultasOMultasEnProcuracionREDUCIDO" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerSubastaInmueble">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/obtenerSubastaInmueble" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMorososParticularidades">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getMorososParticularidades" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMorososParticularidadesPorTributo">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getMorososParticularidadesPorTributo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAutomotoresTipos">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getAutomotoresTipos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAutomotoresTiposBajas">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getAutomotoresTiposBajas" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAutomotoresTiposEximiciones">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getAutomotoresTiposEximiciones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getAutomotoresTiposOrigenes">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getAutomotoresTiposOrigenes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getComerciosCodigosEstados">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getComerciosCodigosEstados" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getComerciosTiposContribuyentes">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getComerciosTiposContribuyentes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInmueblesCategorias">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getInmueblesCategorias" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInmueblesTiposEximiciones">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getInmueblesTiposEximiciones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorSujetoGeneral">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getMorososPorSujetoGeneral" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorBienesGeneral">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getMorososPorBienesGeneral" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorBienesAutomotores">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getMorososPorBienesAutomotores" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorBienesInmuebles">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getMorososPorBienesInmuebles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMorososPorBienesComercios">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getMorososPorBienesComercios" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getInmueblesDestinos">
+      <soap:operation soapAction="http://tempuri.org/IServicioTributario/getInmueblesDestinos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service1">
+    <wsdl:port name="BasicHttpBinding_IServicioTributario" binding="tns:BasicHttpBinding_IServicioTributario">
+      <soap:address location="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

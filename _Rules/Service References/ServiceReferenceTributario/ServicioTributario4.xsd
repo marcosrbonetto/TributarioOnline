@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/ServicioTributario" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ServicioTributario" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd7" namespace="http://schemas.datacontract.org/2004/07/ServicioTributarioBD.Entidades" />
+  <xs:complexType name="Tributo">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="datosCuenta" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="domicilio" nillable="true" type="tns:Domicilio" />
+      <xs:element minOccurs="0" name="dv" type="xs:int" />
+      <xs:element minOccurs="0" name="error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="errorMultas" type="xs:int" />
+      <xs:element minOccurs="0" name="esGranContribuyente" type="xs:int" />
+      <xs:element minOccurs="0" name="fechaUltImputacion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="item" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="juicios" nillable="true" type="q2:ArrayOfKeyValueOfstringJuicioB4Fwfsza" />
+      <xs:element minOccurs="0" name="listaDeJuicios" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element minOccurs="0" name="listaDePlanes" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element minOccurs="0" name="listaDeudaNormal" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="listaNroJuicios" nillable="true" type="q3:ArrayOfstring" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="listaNroPlanes" nillable="true" type="q4:ArrayOfstring" />
+      <xs:element minOccurs="0" name="listaPeriodosConCodigoDesconocido" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element minOccurs="0" name="listaPeriodosFiscaliazcion" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element minOccurs="0" name="listaPeriodosQuiebra" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element minOccurs="0" name="listaPeriodosSinCodigo" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="multas" nillable="true" type="q5:ArrayOfKeyValueOfstringMultaB4Fwfsza" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="planes" nillable="true" type="q6:ArrayOfKeyValueOfstringPlanB4Fwfsza" />
+      <xs:element minOccurs="0" name="poseeMultas" type="xs:boolean" />
+      <xs:element minOccurs="0" name="titular" nillable="true" type="tns:Titular" />
+      <xs:element minOccurs="0" name="totalDeudaAVecer" type="xs:decimal" />
+      <xs:element minOccurs="0" name="totalDeudaMesActual" type="xs:decimal" />
+      <xs:element minOccurs="0" name="totalDeudaVencida" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Tributo" nillable="true" type="tns:Tributo" />
+  <xs:complexType name="Domicilio">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="barrio" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="calle" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="codPost" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="departamento" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="numero" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="piso" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="provincia" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Domicilio" nillable="true" type="tns:Domicilio" />
+  <xs:complexType name="ArrayOfPeriodo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Periodo" nillable="true" type="tns:Periodo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPeriodo" nillable="true" type="tns:ArrayOfPeriodo" />
+  <xs:complexType name="Periodo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="citacion" type="xs:decimal" />
+      <xs:element minOccurs="0" name="descuento" type="xs:decimal" />
+      <xs:element minOccurs="0" name="error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="idPeriodo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="leyendaSituacion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="montoBase" type="xs:decimal" />
+      <xs:element minOccurs="0" name="multa" type="xs:decimal" />
+      <xs:element minOccurs="0" name="recargo" type="xs:decimal" />
+      <xs:element minOccurs="0" name="retencion" type="xs:decimal" />
+      <xs:element minOccurs="0" name="subTotal" type="xs:decimal" />
+      <xs:element minOccurs="0" name="tipoDeuda" type="tns:TipoDeuda" />
+      <xs:element minOccurs="0" name="vencimiento" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Periodo" nillable="true" type="tns:Periodo" />
+  <xs:simpleType name="TipoDeuda">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="sin_codigo" />
+      <xs:enumeration value="normal" />
+      <xs:enumeration value="procuracion" />
+      <xs:enumeration value="plan_normal" />
+      <xs:enumeration value="plan_de_procuracion" />
+      <xs:enumeration value="quiebra" />
+      <xs:enumeration value="fiscalizacion" />
+      <xs:enumeration value="honorarios" />
+      <xs:enumeration value="planConJuicio" />
+      <xs:enumeration value="multas" />
+      <xs:enumeration value="desconocido" />
+      <xs:enumeration value="capital">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="plan_cloaca">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">11</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="procuracion_contribucion_x_mejora">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">12</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TipoDeuda" nillable="true" type="tns:TipoDeuda" />
+  <xs:complexType name="Titular">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="apellidoYNombre" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="domicilio" nillable="true" type="tns:Domicilio" />
+      <xs:element minOccurs="0" name="telefono" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Titular" nillable="true" type="tns:Titular" />
+  <xs:complexType name="PlanPagoCuota">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="existenPeriodosCaducos" type="xs:boolean" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ServicioTributarioBD.Entidades" minOccurs="0" name="listParametrosCuotas" nillable="true" type="q7:ArrayOfParametroCuota" />
+      <xs:element minOccurs="0" name="listaCuotas" nillable="true" type="tns:ArrayOfCuota" />
+      <xs:element minOccurs="0" name="montoAFinanciar" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoBase" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoCuotaMinimaParametro" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoCuotaMinimaPeriodo" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoNoFinanciable" type="xs:decimal" />
+      <xs:element minOccurs="0" name="totalPeriodos" type="xs:int" />
+      <xs:element minOccurs="0" name="totalPeriodosIncluidos" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlanPagoCuota" nillable="true" type="tns:PlanPagoCuota" />
+  <xs:complexType name="ArrayOfCuota">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Cuota" nillable="true" type="tns:Cuota" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCuota" nillable="true" type="tns:ArrayOfCuota" />
+  <xs:complexType name="Cuota">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ctdCuotasHonorarios" type="xs:int" />
+      <xs:element minOccurs="0" name="cuotas" type="xs:int" />
+      <xs:element minOccurs="0" name="cuotasParam" type="xs:int" />
+      <xs:element minOccurs="0" name="cuotasRestan" type="xs:int" />
+      <xs:element minOccurs="0" name="leyendaCuotas" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="montoAnticipo" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoCuota" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoCuotaHonorarios" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoTasaAdministrativa" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoTotalPlan" type="xs:decimal" />
+      <xs:element minOccurs="0" name="porcentajeEntrega" type="xs:decimal" />
+      <xs:element minOccurs="0" name="porcentajeFinanciacion" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Cuota" nillable="true" type="tns:Cuota" />
+  <xs:complexType name="NuevoPlanDePago">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="apellidoNombreGarante" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="apellidoNombreTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="barrioGarante" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="barrioTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="calleGarante" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="calleTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cantCuotas" type="xs:short" />
+      <xs:element minOccurs="0" name="cantPeriodos" type="xs:short" />
+      <xs:element minOccurs="0" name="cbuBloque1" type="xs:int" />
+      <xs:element minOccurs="0" name="cbuBloque2" type="xs:decimal" />
+      <xs:element minOccurs="0" name="codigoBarrioGarante" type="xs:short" />
+      <xs:element minOccurs="0" name="codigoBarrioTitular" type="xs:short" />
+      <xs:element minOccurs="0" name="codigoPostalGarante" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="codigoPostalTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="cuitTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="dispositivoLegal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="dniUsuario" type="xs:int" />
+      <xs:element minOccurs="0" name="dptoGarante" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="dptoTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="dvCuitGarante" type="xs:short" />
+      <xs:element minOccurs="0" name="dvPlan" type="xs:short" />
+      <xs:element minOccurs="0" name="gestor" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="identificacionOrigen" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="identificacionTributaria" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="identificacionTributariaDv" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="item" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="itemPlan" type="xs:short" />
+      <xs:element minOccurs="0" name="leyendaError" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="marcaProcuracion" type="xs:short" />
+      <xs:element minOccurs="0" name="montoAFinanciar" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoAnticipo" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoCuota1" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoCuota2" type="xs:decimal" />
+      <xs:element minOccurs="0" name="montoPlan" type="xs:decimal" />
+      <xs:element minOccurs="0" name="nroCalleGarante" type="xs:int" />
+      <xs:element minOccurs="0" name="nroCalleTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="nroCuitGarante" type="xs:int" />
+      <xs:element minOccurs="0" name="nroCuota1" type="xs:short" />
+      <xs:element minOccurs="0" name="nroCuota2" type="xs:short" />
+      <xs:element minOccurs="0" name="nroPlan" type="xs:int" />
+      <xs:element minOccurs="0" name="observacionesGarante" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="periodosPlanesNormales" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element minOccurs="0" name="periodosPlanesProcuracion" nillable="true" type="tns:ArrayOfPeriodo" />
+      <xs:element minOccurs="0" name="pisoGarante" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="pisoTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="porcEntrega" type="xs:short" />
+      <xs:element minOccurs="0" name="porcInteresFinanciacion" type="xs:decimal" />
+      <xs:element minOccurs="0" name="procuracionAbogado" type="xs:short" />
+      <xs:element minOccurs="0" name="procuracionAnio" type="xs:short" />
+      <xs:element minOccurs="0" name="procuracionNro" type="xs:int" />
+      <xs:element minOccurs="0" name="provinciaGarante" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="provinciaTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="requiereCBU" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="tasaAdministrativa" type="xs:decimal" />
+      <xs:element minOccurs="0" name="telefonoTitular" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="tipoContribuyente" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="tipoCuitGarante" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="NuevoPlanDePago" nillable="true" type="tns:NuevoPlanDePago" />
+  <xs:complexType name="ArrayOfTributo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Tributo" nillable="true" type="tns:Tributo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTributo" nillable="true" type="tns:ArrayOfTributo" />
+</xs:schema>

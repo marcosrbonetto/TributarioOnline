@@ -1,0 +1,918 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/ServicioTributario.Resultados" />
+  <xs:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/ServicioTributario" />
+  <xs:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" />
+  <xs:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="https://srv-dev04.cordoba.local/WSTributario-Dev/ServicioTributario.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/" />
+  <xs:element name="calcularRecargoNormal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="valorBase" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="calcularRecargoNormalResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/ServicioTributario.Resultados" minOccurs="0" name="calcularRecargoNormalResult" nillable="true" type="q1:RecargosResultados" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="calcularRecargoAlternativo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="valorBase" type="xs:double" />
+        <xs:element minOccurs="0" name="recargoAlternativo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="calcularRecargoAlternativoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/ServicioTributario.Resultados" minOccurs="0" name="calcularRecargoAlternativoResult" nillable="true" type="q2:RecargosResultados" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="calcularRecargoNormalYPorcentaje">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="valorBase" type="xs:double" />
+        <xs:element minOccurs="0" name="recargoAlternativo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="calcularRecargoNormalYPorcentajeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ServicioTributario.Resultados" minOccurs="0" name="calcularRecargoNormalYPorcentajeResult" nillable="true" type="q3:RecargosResultados" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="validarEstadoComponentesCics020">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="validarEstadoComponentesCics020Response">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="validarEstadoComponentesCics020Result" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="validarEstadoComponentesCics050">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="validarEstadoComponentesCics050Response">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="validarEstadoComponentesCics050Result" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTributo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTipoTributo" type="xs:int" />
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTributoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getTributoResult" nillable="true" type="q4:Tributo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTributoReducido">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTipoTributo" type="xs:int" />
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTributoReducidoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getTributoReducidoResult" nillable="true" type="q5:Tributo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCloacasPorOpcionSistema">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTipoTributo" type="xs:int" />
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="opcionSistema" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCloacasPorOpcionSistemaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getCloacasPorOpcionSistemaResult" nillable="true" type="q6:Tributo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTributoPorOpcionSistema">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTipoTributo" type="xs:int" />
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="opcionSistema" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTributoPorOpcionSistemaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getTributoPorOpcionSistemaResult" nillable="true" type="q7:Tributo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTributoReducidoPorOpcionSistema">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTipoTributo" type="xs:int" />
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="opcionSistema" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTributoReducidoPorOpcionSistemaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getTributoReducidoPorOpcionSistemaResult" nillable="true" type="q8:Tributo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getPeriodosTributoRebaja">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTipoTributo" type="xs:int" />
+        <xs:element minOccurs="0" name="idMoratoria" type="xs:int" />
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getPeriodosTributoRebajaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getPeriodosTributoRebajaResult" nillable="true" type="q9:ArrayOfPeriodo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getPlanInmueble">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nroPlan" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getPlanInmuebleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getPlanInmuebleResult" nillable="true" type="q10:Plan" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getPeriodosBloqueadosPlanDePago">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nroPlan" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getPeriodosBloqueadosPlanDePagoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getPeriodosBloqueadosPlanDePagoResult" nillable="true" type="q11:ArrayOfPeriodo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getPlanInmueblePorOpcionSistema">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nroPlan" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="opcionSistema" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getPlanInmueblePorOpcionSistemaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getPlanInmueblePorOpcionSistemaResult" nillable="true" type="q12:Plan" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getImpresionPeriodosDDJJ">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="periodosSeleccionados" nillable="true" type="q13:ArrayOfPeriodo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getImpresionPeriodosDDJJResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getImpresionPeriodosDDJJResult" nillable="true" type="q14:ArrayOfImpresionDdjj" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getJuicioInmueble">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nroJuicio" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getJuicioInmuebleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getJuicioInmuebleResult" nillable="true" type="q15:Juicio" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getJuicioPorOpcionSistema">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nroJuicio" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="opcionSistema" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getJuicioPorOpcionSistemaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getJuicioPorOpcionSistemaResult" nillable="true" type="q16:Juicio" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCedulonJuicio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="numJuicio" nillable="true" type="xs:string" />
+        <xs:element xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="datosDeImpresion" nillable="true" type="q17:ArrayOfstring" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="listaPeriodos" nillable="true" type="q18:ArrayOfPeriodo" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="opcionPago" type="q19:OpcionVencimiento" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCedulonJuicioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getCedulonJuicioResult" nillable="true" type="q20:ArrayOfImpresion" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gestionarCedulon">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="listaPeriodos" nillable="true" type="q21:ArrayOfPeriodo" />
+        <xs:element minOccurs="0" name="idTipoTributo" type="xs:int" />
+        <xs:element minOccurs="0" name="idMoratoria" type="xs:int" />
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="opcionPago" type="q22:OpcionVencimiento" />
+        <xs:element minOccurs="0" name="tipoEmision" type="xs:int" />
+        <xs:element minOccurs="0" name="tipoCorte" type="xs:int" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="tipoTributoAImprimir" type="q23:TipoTributos" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gestionarCedulonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="gestionarCedulonResult" nillable="true" type="q24:ArrayOfImpresion" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gestionarCedulonDeGastos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="impresion" nillable="true" type="q25:Impresion" />
+        <xs:element xmlns:q26="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="datos" nillable="true" type="q26:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gestionarCedulonDeGastosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="gestionarCedulonDeGastosResult" nillable="true" type="q27:Impresion" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gestionarCedulonTribunalDeFaltas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q28="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ListaNrosCausa" nillable="true" type="q28:ArrayOfstring" />
+        <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="opcionPago" type="q29:OpcionVencimiento" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gestionarCedulonTribunalDeFaltasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="gestionarCedulonTribunalDeFaltasResult" nillable="true" type="q30:ArrayOfImpresion" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getFormulaDeCalculoInmueble">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getFormulaDeCalculoInmuebleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q31="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="getFormulaDeCalculoInmuebleResult" nillable="true" type="q31:ArrayOfstring" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTaxisYRemises">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="chapaPatente" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="permisionario" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getTaxisYRemisesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getTaxisYRemisesResult" nillable="true" type="q32:Tributo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gestionarCedulonTaxisYRemises">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+        <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="listaPeriodos" nillable="true" type="q33:ArrayOfPeriodo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="gestionarCedulonTaxisYRemisesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="gestionarCedulonTaxisYRemisesResult" nillable="true" type="q34:ArrayOfImpresion" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuitConsulta">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuitConsultaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getCuitConsultaResult" nillable="true" type="q35:CuitConsulta" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getDdjj">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getDdjjResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getDdjjResult" nillable="true" type="q36:ArrayOfDdjj" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuitConsultaJuicio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuitConsultaJuicioResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getCuitConsultaJuicioResult" nillable="true" type="q37:CuitConsulta" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuitConsultaPlan">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuitConsultaPlanResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q38="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getCuitConsultaPlanResult" nillable="true" type="q38:CuitConsulta" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getFormularioPlan">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nroPlan" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="poseeCbu" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getFormularioPlanResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q39="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getFormularioPlanResult" nillable="true" type="q39:FormularioPlan" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getResumenDeuda">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getResumenDeudaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getResumenDeudaResult" nillable="true" type="q40:ArrayOfCuitConsultaMasiva" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getResumenDeudaTributo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="tipoTributo" type="q41:TipoTributos" />
+        <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getResumenDeudaTributoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getResumenDeudaTributoResult" nillable="true" type="q42:CuitConsultaMasiva" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getResumenDeudaDetallada">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getResumenDeudaDetalladaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getResumenDeudaDetalladaResult" nillable="true" type="q43:ArrayOfCuitConsultaMasiva" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getResumenDeudaDetalladaTributo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/" minOccurs="0" name="tipoTributo" type="q44:TipoTributos" />
+        <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getResumenDeudaDetalladaTributoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getResumenDeudaDetalladaTributoResult" nillable="true" type="q45:CuitConsultaMasiva" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCarnetConsulta">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fechaHasta" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="fechaDesde" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCarnetConsultaResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getCarnetConsultaResult" nillable="true" type="q46:ArrayOfCuitConsultaMasiva" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuotasPlan">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="listaPeriodos" nillable="true" type="q47:ArrayOfPeriodo" />
+        <xs:element minOccurs="0" name="codItem" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="idDispositivoLegalPlanes" type="xs:int" />
+        <xs:element minOccurs="0" name="montoBaseTodosPeriodos" type="xs:decimal" />
+        <xs:element minOccurs="0" name="totalPeriodos" type="xs:int" />
+        <xs:element minOccurs="0" name="valorDistingueTributo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="existenPeriodosCaducos" type="xs:boolean" />
+        <xs:element minOccurs="0" name="porcentajeEntrega" nillable="true" type="xs:decimal" />
+        <xs:element minOccurs="0" name="montoEntrega" nillable="true" type="xs:decimal" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuotasPlanResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q48="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getCuotasPlanResult" nillable="true" type="q48:PlanPagoCuota" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuotasPlanProcuracion">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q49="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="listaPeriodos" nillable="true" type="q49:ArrayOfPeriodo" />
+        <xs:element minOccurs="0" name="codItem" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="idDispositivoLegalPlanes" type="xs:int" />
+        <xs:element minOccurs="0" name="valorDistingueTributo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="existenPeriodosCaducos" type="xs:boolean" />
+        <xs:element minOccurs="0" name="porcentajeEntrega" nillable="true" type="xs:decimal" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuotasPlanProcuracionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q50="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getCuotasPlanProcuracionResult" nillable="true" type="q50:PlanPagoCuota" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="simularCaducidadPlan">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q51="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="listaPeriodosBloqueados" nillable="true" type="q51:ArrayOfPeriodo" />
+        <xs:element xmlns:q52="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="listaPeriodosPagos" nillable="true" type="q52:ArrayOfPeriodo" />
+        <xs:element minOccurs="0" name="tasaAdministrativa" type="xs:decimal" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="simularCaducidadPlanResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q53="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="simularCaducidadPlanResult" nillable="true" type="q53:ArrayOfPeriodo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="grabarPlan">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q54="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="planAGrabar" nillable="true" type="q54:NuevoPlanDePago" />
+        <xs:element minOccurs="0" name="codSistema" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="opcionSistema" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="grabarPlanResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q55="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="grabarPlanResult" nillable="true" type="q55:NuevoPlanDePago" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getDerechosVariosInmueble">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getDerechosVariosInmuebleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q56="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getDerechosVariosInmuebleResult" nillable="true" type="q56:ArrayOfDerechosVarios" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInformeNotarial">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInformeNotarialResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q57="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getInformeNotarialResult" nillable="true" type="q57:InformeNotarial" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getContribucionesXMejoras">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getContribucionesXMejorasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="getContribucionesXMejorasResult" nillable="true" type="q58:ArrayOfTributo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuitTributosBatch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="cuit" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getCuitTributosBatchResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q59="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getCuitTributosBatchResult" nillable="true" type="q59:ArrayOfTributoMinimo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInformeTaxisYRemises">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInformeTaxisYRemisesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q60="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getInformeTaxisYRemisesResult" nillable="true" type="q60:TaxisYRemisesInforme" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="poseeMultasOMultasEnProcuracionREDUCIDO">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="poseeMultasOMultasEnProcuracionREDUCIDOResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/ServicioTributario" minOccurs="0" name="poseeMultasOMultasEnProcuracionREDUCIDOResult" nillable="true" type="q61:Tributo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="obtenerSubastaInmueble">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="idTributaria" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="obtenerSubastaInmuebleResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="obtenerSubastaInmuebleResult" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososParticularidades">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososParticularidadesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q62="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getMorososParticularidadesResult" nillable="true" type="q62:ArrayOfMorososParticularidad" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososParticularidadesPorTributo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="tributo" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososParticularidadesPorTributoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q63="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getMorososParticularidadesPorTributoResult" nillable="true" type="q63:ArrayOfMorososParticularidad" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getAutomotoresTipos">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getAutomotoresTiposResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q64="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getAutomotoresTiposResult" nillable="true" type="q64:ArrayOfAutomotoresTipo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getAutomotoresTiposBajas">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getAutomotoresTiposBajasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q65="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getAutomotoresTiposBajasResult" nillable="true" type="q65:ArrayOfAutomotoresTiposBaja" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getAutomotoresTiposEximiciones">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getAutomotoresTiposEximicionesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q66="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getAutomotoresTiposEximicionesResult" nillable="true" type="q66:ArrayOfAutomotoresTiposEximicion" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getAutomotoresTiposOrigenes">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getAutomotoresTiposOrigenesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q67="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getAutomotoresTiposOrigenesResult" nillable="true" type="q67:ArrayOfAutomotoresTiposOrigen" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getComerciosCodigosEstados">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getComerciosCodigosEstadosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q68="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getComerciosCodigosEstadosResult" nillable="true" type="q68:ArrayOfComerciosCodigosEstado" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getComerciosTiposContribuyentes">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getComerciosTiposContribuyentesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q69="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getComerciosTiposContribuyentesResult" nillable="true" type="q69:ArrayOfComerciosTiposContribuyente" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInmueblesCategorias">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInmueblesCategoriasResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q70="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getInmueblesCategoriasResult" nillable="true" type="q70:ArrayOfInmueblesCategorias" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInmueblesTiposEximiciones">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInmueblesTiposEximicionesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q71="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getInmueblesTiposEximicionesResult" nillable="true" type="q71:ArrayOfInmueblesTiposEximicion" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorSujetoGeneral">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="filtroGral" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroAutGral" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroInmGral" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroComGral" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroAut" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroInm" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroCom" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorSujetoGeneralResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q72="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getMorososPorSujetoGeneralResult" nillable="true" type="q72:ArrayOfMorososPorSujetoGeneral" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorBienesGeneral">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="filtroGral" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroAutGral" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroInmGral" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroComGral" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroAut" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroInm" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroCom" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorBienesGeneralResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q73="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getMorososPorBienesGeneralResult" nillable="true" type="q73:ArrayOfMorososPorBienesGeneral" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorBienesAutomotores">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="filtroAut" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroAutGral" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorBienesAutomotoresResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q74="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getMorososPorBienesAutomotoresResult" nillable="true" type="q74:ArrayOfMorososPorBienesAutomotores" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorBienesInmuebles">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="filtroInm" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroInmGral" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorBienesInmueblesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q75="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getMorososPorBienesInmueblesResult" nillable="true" type="q75:ArrayOfMorososPorBienesInmuebles" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorBienesComercios">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="filtroCom" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="filtroComGral" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getMorososPorBienesComerciosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q76="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getMorososPorBienesComerciosResult" nillable="true" type="q76:ArrayOfMorososPorBienesComercios" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInmueblesDestinos">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="getInmueblesDestinosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q77="http://schemas.datacontract.org/2004/07/ServicioTributario.Entidades" minOccurs="0" name="getInmueblesDestinosResult" nillable="true" type="q77:ArrayOfInmueblesDestinos" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

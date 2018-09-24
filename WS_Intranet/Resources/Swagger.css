@@ -1,0 +1,250 @@
+﻿* {
+    outline: none !important;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #9E9E9E;
+}
+
+#logo {
+    visibility: hidden;
+}
+
+.snippet_json pre::-webkit-scrollbar-thumb,
+.response pre::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+}
+
+body {
+    background-color: #F5F5F5;
+}
+
+#header {
+    background-color: rgb(0,166,101) !important;
+    height: auto !important;
+    padding: 10px 10px 18px 10px !important;
+    box-shadow: 2px 4px 10px rgba(0,0,0,.2);
+}
+
+#api_info {
+    position: absolute;
+    top: 0;
+    margin: 16px;
+}
+
+    #api_info .info_title {
+        padding: 0 !important;
+        text-transform: uppercase;
+        color: #fff !important;
+    }
+
+.container {
+    margin-top: 10px;
+}
+
+.logo__img,
+.footer,
+.info_description,
+#input_apiKey,
+#message-bar {
+    display: none !important;
+}
+
+.resource, .operation {
+    border: none !important;
+    border-radius: 1rem;
+    margin: .8rem !important;
+}
+
+.resource {
+    background: #FFF;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2) !important;
+    padding: .5rem 0 !important;
+}
+
+    .resource .heading h2 {
+        width: 100%;
+    }
+
+        .resource .heading h2 a,
+        .resource:hover .heading h2 a {
+            display: block;
+            color: #212121 !important;
+            text-transform: uppercase;
+            width: 100%;
+        }
+
+    .resource > .heading {
+        padding-left: 1rem !important;
+    }
+
+        .resource > .heading > .options {
+            display: none !important;
+        }
+
+.operation {
+    background-color: transparent !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+    .operation > .heading {
+        background: white !important;
+        width: 100% !important;
+        border: none !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+
+        .operation > .heading .http_method > a {
+            margin-left: 0.5rem !important;
+            border-radius: 1rem !important;
+            margin-top: 0.5rem !important;
+        }
+
+        .operation > .heading .options {
+            float: inherit !important;
+            margin: 0 !important;
+            padding: 2px 0 1px 0 !important;
+        }
+
+            .operation > .heading .options p {
+                padding: 8px 0px !important;
+            }
+
+            .operation > .heading .options * {
+                color: #212121 !important;
+            }
+
+    .operation > .content {
+        border: none !important;
+        border-top: 1px solid rgba(0,0,0,0.1) !important;
+        background: white !important;
+    }
+
+        .operation > .content h4 {
+            padding: 5px 0 10px !important;
+        }
+
+.snippet_json pre,
+.response pre {
+    background-color: rgba(0,0,0,0.05) !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+input,
+select,
+textarea,
+.snippet_json pre,
+.response pre {
+    border-radius: 5px;
+    padding: 0.6rem !important;
+}
+
+    input.error,
+    select.error,
+    textarea.error {
+        border: 2px solid #cc0000 !important;
+    }
+
+    select[name='parameterContentType'] {
+        max-width: initial !important;
+        width: 100%;
+    }
+
+    select[name='responseContentType'] {
+        width: 268px;
+    }
+
+
+.snippet_json pre {
+    width: calc(100% - 24px);
+}
+
+input[type=submit],
+input[type=button] {
+    color: white !important;
+    background-color: rgb(0, 166,101) !important;
+    margin-top: 2rem;
+    border: 0;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+    cursor: pointer;
+    text-transform: uppercase;
+    min-width: 150px;
+}
+
+.swagger-section #explore {
+    color: white !important;
+    background-color: rgba(0,0,0,0.2) !important;
+    border: 0;
+    border-radius: 5px;
+    text-transform: uppercase;
+    padding: 0.8rem;
+}
+
+#input_baseUrl {
+    background: rgba(255,255,255,.15) !important;
+    border: 0 !important;
+    color: #fff;
+}
+
+    #input_baseUrl option {
+        color: #333;
+    }
+
+.sandbox_header {
+    overflow: initial !important;
+    text-align: right !important;
+}
+
+    .sandbox_header .submit {
+        display: inline-block !important;
+        clear: none !important;
+        float: none !important;
+        margin-right: 1rem !important;
+    }
+
+.operation.get .http_method a {
+    background-color: #2196F3 !important;
+}
+
+.operation.post .http_method a {
+    background-color: #4CAF50 !important;
+}
+
+.operation.put .http_method a {
+    background-color: #FFC107 !important;
+}
+
+.operation.delete .http_method a {
+    background-color: #FF5722 !important;
+}
+
+.response_hider {
+    color: rgb(0, 166,101) !important;
+    padding: 1rem !important;
+    text-transform: uppercase;
+}
+
+.IniciarSesion .heading,
+.IniciarSesion .http_method a {
+    background-color: #212121 !important;
+    border: none !important;
+}
+
+    .IniciarSesion .heading a {
+        color: #fff !important;
+    }
+
+    .IniciarSesion .heading .http_method a {
+        border: 1px solid #fff;
+    }

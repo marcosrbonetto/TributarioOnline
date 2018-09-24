@@ -1,0 +1,13 @@
+.switch-wrapper {
+  position: relative;
+  width: 100%;
+  flex: 1;
+}
+
+.switch-wrapper > div {
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  bottom: 0px;
+  display: flex;
+}
