@@ -1,30 +1,9 @@
-import Home from "./Home/index";
-import TestComponentes from "./TestComponentes/index";
-import TributarioOnline from "./TributarioOnline/index";
-import TributarioDetalle from "./TributarioDetalle/index";
+import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
 
 const Menu = [
   {
     url: "/Inicio",
     exact: true,
-    mostrarEnMenu: true,
-    component: Home,
-    nombre: "Servicios",
-    titulo: "Servicios disponibles",
-    icono: "home"
-  },
-  {
-    url: "/Inicio/TestComponentes",
-    exact: false,
-    mostrarEnMenu: true,
-    component: TestComponentes,
-    nombre: "Test Componentes",
-    titulo: "Test de Componentes",
-    icono: "home"
-  },
-  {
-    url: "/Inicio/TributarioOnline",
-    exact: false,
     mostrarEnMenu: true,
     component: TributarioOnline,
     nombre: "Tributario Online",
@@ -32,12 +11,12 @@ const Menu = [
     icono: "home"
   },
   {
-    url: "/Inicio/TributarioDetalle",
+    url: "/Inicio/:tributo",
     exact: false,
-    mostrarEnMenu: true,
-    component: TributarioDetalle,
-    nombre: "Detalle de Tributo",
-    titulo: "Detalle de Tributo",
+    mostrarEnMenu: false,
+    component: TributarioOnline,
+    nombre: "Tributario Online",
+    titulo: "Tributario Online",
     icono: "home"
   }
 ];

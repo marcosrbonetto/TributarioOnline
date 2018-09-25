@@ -36,6 +36,13 @@ const styles = theme => ({
       backgroundPosition: '5px',
       backgroundRepeat: 'no-repeat',
       width: '128px',
+      '&:hover': {
+        background: '#fff',
+        backgroundImage: 'url(https://botw-pd.s3.amazonaws.com/styles/logo-thumbnail/s3/082013/untitled-1_49.png?itok=S3wtZ8fs)',
+        backgroundSize: '115px',
+        backgroundPosition: '5px',
+        backgroundRepeat: 'no-repeat',
+      }
     },
     buttonActionsCaption: {
       top: '40px',

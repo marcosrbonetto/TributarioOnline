@@ -22,7 +22,7 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-class TributarioDetalle extends React.PureComponent {
+class DetalleTributo extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -315,4 +315,4 @@ class TributarioDetalle extends React.PureComponent {
 export default connect(
   null,
   mapDispatchToProps
-)(withStyles(styles)(TributarioDetalle));
+)(withStyles(styles)(DetalleTributo));

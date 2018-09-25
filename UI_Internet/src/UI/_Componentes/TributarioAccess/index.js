@@ -170,7 +170,7 @@ class TributarioAccess extends React.PureComponent {
                                             variant="contained"
                                             color="secondary"
                                             className={classNames(classes.buttonActions, classes.button)}
-                                            onClick={this.props.onBotonAlertaClick2}
+                                            onClick={this.props.eventRedirect}
                                         >
                                             ✓
                                         </Button>
