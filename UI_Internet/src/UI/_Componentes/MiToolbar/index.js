@@ -94,10 +94,11 @@ class MiToolbar extends React.Component {
             )}
 
           {/* Logo muni */}
-          {/* <img
+          {<img
             className={classes.logoMuni}
-            src="https://i2.wp.com/www.cordoba.gob.ar/wp-content/uploads/2016/07/isotipo-negro.png?fit=300%2C300"
-          /> */}
+            src="https://www.cordoba.gob.ar/wp-content/uploads/2016/07/logo-oscuro-01.png"
+          />}
+          
 
           <Typography
             variant="title"
@@ -180,8 +181,13 @@ const styles = theme => {
     appBar: {
       zIndex: theme.zIndex.drawer + 2
     },
-    logoMuni: {},
+    logoMuni: {
+      width: '140px',
+      marginRight: '20px'
+    },
     title: {
+      borderLeft: '1px solid rgba(0,0,0,0.2)',
+      padding: '10px 0px 10px 20px',
       flexGrow: 1
     },
     icono: {

@@ -119,9 +119,11 @@ class TributarioAccess extends React.PureComponent {
                     <CardHeader
                         className={classes.header}
                         avatar={
-                            <Icon className={classes.icon}>
-                                {this.props.icono}
-                            </Icon>
+                            (this.props.icono && <Icon className={classes.icon}>
+                                                    {this.props.icono}
+                                                </Icon>)
+                            ||
+                            (!this.props.icono && <div className={classes.iconSvg}>{this.props.iconoSvg}</div>)
                         }
                         title={
                             <Typography className={classes.title} variant="title">{this.props.tipo}</Typography>

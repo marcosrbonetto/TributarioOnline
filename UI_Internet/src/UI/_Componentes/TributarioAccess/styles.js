@@ -48,7 +48,13 @@ const styles = theme => ({
     icon: {
       margin: '0px',
       color: '#757575',
-      fontSize: '50px'
+      fontSize: '50px',
+    },
+    iconSvg: {
+      '& svg': {
+        width: '50px',
+        fill: '#757575'
+      }
     },
     title: {
       paddingBottom: '12px'

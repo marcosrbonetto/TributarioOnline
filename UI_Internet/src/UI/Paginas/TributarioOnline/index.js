@@ -1,7 +1,7 @@
 import React from "react";
 
 //Styles
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, createMuiTheme } from "@material-ui/core/styles";
 import styles from './styles';
 
 import { withRouter } from "react-router-dom";
@@ -12,16 +12,35 @@ import { push } from "connected-react-router";
 
 import TributarioAccess from '@Componentes/TributarioAccess';
 
-const mapDispatchToProps = dispatch => ({
-  redireccionar: url => {
-    dispatch(push(url));
-  }
-});
+import { getIdTributos } from "@ReduxTributarioOnline/actions";
+
+import services from './services.js';
+
+const mapStateToProps = state => {
+  return { datos: state.Automotores.GET_ID_TRIBUTOS };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    redireccionar: url => {
+      dispatch(push(url));
+    },
+    getIdTributos: cuit => {
+      services.serviceGetDatos(cuit, (datos) => {
+        dispatch(getIdTributos(datos));
+      });
+    }
+  };
+};
 
 class TributarioOnline extends React.PureComponent {
   constructor(props) {
     super(props);
     let tributoParam = this.props.match.params.tributo;
+  }
+
+  componentWillMount() {
+    this.props.getIdTributos('20355266169');
   }
 
   eventRedirect = () => {
@@ -68,22 +87,24 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercios') &&
-          <Grid item xs={6}>
-            <TributarioAccess
-              tipo="Comercios"
-              identificador="Identificador"
-              icono="store"
-            />
-          </Grid>
+            <Grid item xs={6}>
+              <TributarioAccess
+                tipo="Comercios"
+                identificador="Identificador"
+                icono="store"
+              />
+            </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerios') &&
-          <Grid item xs={6}>
-            <TributarioAccess
-              tipo="Cementerios"
-              identificador="Identificador"
-              icono="account_balance"
-            />
-          </Grid>
+            <Grid item xs={6}>
+              <TributarioAccess
+                tipo="Cementerios"
+                identificador="Identificador"
+                iconoSvg={<svg viewBox="0 0 24 24">
+                  <path d="M10.5,2H13.5V8H19V11H13.5V22H10.5V11H5V8H10.5V2Z" />
+                </svg>}
+              />
+            </Grid>
           )}
         </Grid>
       </div>
@@ -93,7 +114,7 @@ class TributarioOnline extends React.PureComponent {
 
 let componente = TributarioOnline;
 componente = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withStyles(styles)(componente));
 componente = withRouter(componente);

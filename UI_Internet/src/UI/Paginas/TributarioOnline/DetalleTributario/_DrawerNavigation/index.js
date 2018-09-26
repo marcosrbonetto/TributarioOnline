@@ -124,9 +124,9 @@ const styles = theme => {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      width: theme.spacing.unit * 7,
+      width: 0, //theme.spacing.unit * 7,
       [theme.breakpoints.up("sm")]: {
-        width: theme.spacing.unit * 9
+        width: 0, //theme.spacing.unit * 9
       }
     }
   };

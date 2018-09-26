@@ -1,0 +1,17 @@
+{
+  "return": {
+    "cuitComercios": [],
+    "cuitInmuebles": [
+      "100906201900000"
+    ],
+    "cuitJuicios": [],
+    "cuitPlanes": [],
+    "cuitRodados": [
+      "HCJ675",
+      "OUE828"
+    ],
+    "error": ""
+  },
+  "error": null,
+  "ok": true
+}

@@ -26,8 +26,14 @@ class DetalleTributo extends React.PureComponent {
   constructor(props) {
     super(props);
 
-
+    this.state = {
+      importeAPagar: '0,00'
+    };
   }
+
+  getImporteTotal = (importeTotal) => {
+    this.setState({ importeAPagar: importeTotal.toFixed(2).replace('.',',') });
+  };
 
   render() {
     const { classes } = this.props;
@@ -87,6 +93,7 @@ class DetalleTributo extends React.PureComponent {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    value={this.state.importeAPagar}
                   />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
@@ -98,7 +105,7 @@ class DetalleTributo extends React.PureComponent {
                   >
                     CEDULÓN
                     <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
-                      Pago Online
+                      Pago Efectivo
                     </Typography>
                   </Button>
                   <Button
@@ -113,7 +120,7 @@ class DetalleTributo extends React.PureComponent {
                 </Grid>
               </Grid>
 
-              <MiTabla></MiTabla>
+              <MiTabla getImporteTotal={this.getImporteTotal}></MiTabla>
 
               <Grid container spacing={16}>
                 <Grid item sm={7}>
@@ -127,6 +134,7 @@ class DetalleTributo extends React.PureComponent {
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    value={this.state.importeAPagar}
                   />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
@@ -138,7 +146,7 @@ class DetalleTributo extends React.PureComponent {
                   >
                     CEDULÓN
                     <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
-                      Pago Online
+                      Pago Efectivo
                     </Typography>
                   </Button>
                   <Button
@@ -225,47 +233,6 @@ class DetalleTributo extends React.PureComponent {
             </MiCard>
             <br />
             <MiCard>
-              <Typography className={classes.title} variant="title">Deuda Administrativa</Typography>
-              <Divider className={classes.divider} />
-
-              <Grid container spacing={16}>
-                <Grid item sm={6}>
-                  <Typography variant="subheading" gutterBottom>Total: </Typography>
-                </Grid>
-                <Grid item sm={6}>
-                  <Typography variant="subheading" gutterBottom><b>$ 6443,00</b></Typography>
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={16}>
-                <Grid item sm={6}>
-                  <Typography variant="subheading" gutterBottom>Vencida: </Typography>
-                </Grid>
-                <Grid item sm={6}>
-                  <Typography variant="subheading" gutterBottom><b>$ 351,12</b></Typography>
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={16}>
-                <Grid item sm={6}>
-                  <Typography variant="subheading" gutterBottom>A vencer: </Typography>
-                </Grid>
-                <Grid item sm={6}>
-                  <Typography variant="subheading" gutterBottom><b>$ 233,03</b></Typography>
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={16}>
-                <Grid item sm={6}>
-                  <Typography variant="subheading" gutterBottom>Último Pago: </Typography>
-                </Grid>
-                <Grid item sm={6}>
-                  <Typography variant="subheading" gutterBottom><b>10/06/2108</b></Typography>
-                </Grid>
-              </Grid>
-            </MiCard>
-            <br />
-            <MiCard>
               <Typography className={classes.title} variant="title">Otras operaciones</Typography>
               <Divider className={classes.divider} />
 
@@ -304,6 +271,47 @@ class DetalleTributo extends React.PureComponent {
                 </Grid>
               </Grid>
 
+            </MiCard>
+            <br/>
+            <MiCard>
+              <Typography className={classes.title} variant="title">Deuda Administrativa</Typography>
+              <Divider className={classes.divider} />
+
+              <Grid container spacing={16}>
+                <Grid item sm={6}>
+                  <Typography variant="subheading" gutterBottom>Total: </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography variant="subheading" gutterBottom><b>$ 6443,00</b></Typography>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={16}>
+                <Grid item sm={6}>
+                  <Typography variant="subheading" gutterBottom>Vencida: </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography variant="subheading" gutterBottom><b>$ 351,12</b></Typography>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={16}>
+                <Grid item sm={6}>
+                  <Typography variant="subheading" gutterBottom>A vencer: </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography variant="subheading" gutterBottom><b>$ 233,03</b></Typography>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={16}>
+                <Grid item sm={6}>
+                  <Typography variant="subheading" gutterBottom>Último Pago: </Typography>
+                </Grid>
+                <Grid item sm={6}>
+                  <Typography variant="subheading" gutterBottom><b>10/06/2108</b></Typography>
+                </Grid>
+              </Grid>
             </MiCard>
           </Grid>
         </Grid>

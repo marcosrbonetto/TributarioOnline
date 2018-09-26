@@ -23,9 +23,9 @@ const mapDispatchToProps = dispatch => ({
 });
 
 let counter = 0;
-function createData(periodo,vencimiento,importe) {
+function createData(concepto,vencimiento,importe) {
     counter += 1;
-    return { id: counter, periodo,vencimiento,importe };
+    return { id: counter, concepto,vencimiento,importe };
 }
 
 function desc(a, b, orderBy, orderType) {
@@ -69,7 +69,7 @@ function getSorting(order, orderBy, orderType) {
 }
 
 const rows = [
-    { id: 'periodo', type: 'string', numeric: false, disablePadding: true, label: 'Periodo' },
+    { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: 'Concepto' },
     { id: 'vencimiento', type: 'date', numeric: false, disablePadding: true, label: 'Vencimiento' },
     { id: 'importe', type: 'string', numeric: false, disablePadding: true, label: 'Importe' },
 ];
@@ -138,21 +138,21 @@ class MiTabla extends React.PureComponent {
 
         this.state = {
             order: 'desc',
-            orderBy: 'periodo',
+            orderBy: 'concepto',
             orderType: 'string',
             selected: [],
             data: [
-                createData('2018/002', '20/04/2018', '$1,00'),
-                createData('2017/002', '19/05/2018', '$4,00'),
-                createData('2016/002', '10/04/2016', '$3,00'),
-                createData('2015/002', '10/04/2015', '$6,00'),
-                createData('2014/002', '10/04/2014', '$5,00'),
-                createData('2013/002', '10/04/2013', '$7,00'),
-                createData('2012/002', '10/04/2012', '$6,00'),
-                createData('2011/002', '10/04/2011', '$8,00'),
-                createData('2012/002', '10/04/2012', '$6,00'),
-                createData('2013/002', '10/04/2013', '$5,00'),
-                createData('2014/002', '10/04/2014', '$4,00'),
+                createData('2018/002', '20/04/2018', '1,00'),
+                createData('2017/002', '19/05/2018', '4,20'),
+                createData('2016/002', '10/04/2016', '3,30'),
+                createData('2015/002', '10/04/2015', '6,40'),
+                createData('2014/002', '10/04/2014', '5,59'),
+                createData('2013/002', '10/04/2013', '7,68'),
+                createData('2012/002', '10/04/2012', '6,77'),
+                createData('2011/002', '10/04/2011', '8,86'),
+                createData('2012/002', '10/04/2012', '6,05'),
+                createData('2013/002', '10/04/2013', '5,40'),
+                createData('2014/002', '10/04/2014', '4,30'),
             ],
             page: 0,
             rowsPerPage: 5,
@@ -199,7 +199,17 @@ class MiTabla extends React.PureComponent {
         }
 
         this.setState({ selected: newSelected });
+
+        const dataActual = this.state.data;
+
+        let importeTotal = 0;
+        dataActual.map((item) => {
+            importeTotal += parseFloat(newSelected.indexOf(item.id) != -1 ? this.stringToFloat(item.importe) : 0);
+        });
+        this.props.getImporteTotal(importeTotal);
     };
+
+    stringToFloat = (numero) => parseFloat(parseFloat(("" + (numero)).replace(',','.')).toFixed(2));
 
     handleChangePage = (event, page) => {
         this.setState({ page });
@@ -248,10 +258,10 @@ class MiTabla extends React.PureComponent {
                                                 <Checkbox checked={isSelected} />
                                             </TableCell>
                                             <TableCell component="th" scope="row" padding="none">
-                                                {n.periodo}
+                                                {n.concepto}
                                             </TableCell>
                                             <TableCell padding="none">{n.vencimiento}</TableCell>
-                                            <TableCell padding="none">{n.importe}</TableCell>
+                                            <TableCell padding="none">${n.importe}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -276,7 +286,7 @@ class MiTabla extends React.PureComponent {
                     }}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                    labelRowsPerPage='Filas por página'
+                    labelRowsPerPage='Concepto por página'
                     labelDisplayedRows={function labelDisplayedRows(_ref) {
                         var from = _ref.from,
                             to = _ref.to,
