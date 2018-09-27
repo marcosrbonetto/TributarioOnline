@@ -61,7 +61,6 @@ class MiDrawer extends React.PureComponent {
                 key={index}
                 index={index}
                 texto={item.nombre || "Sin texto"}
-                icono={item.icono}
                 seleccionado={paginaActual.url == item.url}
                 onClick={this.onDrawerItemClick}
               />
@@ -124,9 +123,9 @@ const styles = theme => {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      width: theme.spacing.unit * 7,
+      width: 0, //theme.spacing.unit * 7,
       [theme.breakpoints.up("sm")]: {
-        width: theme.spacing.unit * 9
+        width: 0, //theme.spacing.unit * 9
       }
     }
   };

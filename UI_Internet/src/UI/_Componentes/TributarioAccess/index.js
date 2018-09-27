@@ -33,16 +33,8 @@ class TributarioAccess extends React.PureComponent {
 
         this.selectOnChange = this.selectOnChange.bind(this);
 
-        this.onClickAgregar = this.onClickAgregar.bind(this);
-        this.onClickBorrar = this.onClickBorrar.bind(this);
-
-        this.updateInputIdentificador = this.updateInputIdentificador.bind(this);
-
         this.state = {
             opcionSeleccionada: '0',
-            desdeSistema: true,
-            nuevoIdentificador: '',
-            errorInputNuevo: false,
             opcionesTributos: []
         }
     }
@@ -66,62 +58,8 @@ class TributarioAccess extends React.PureComponent {
             return false;
 
         this.setState({
-            opcionSeleccionada: event.target.value,
-            desdeSistema: (event.currentTarget.attributes.sistema.value == 'true' ? true : false)
+            opcionSeleccionada: event.target.value
         });
-    };
-
-    onClickAgregar = event => {
-        let $state = this.state;
-
-        // Valido que el lo ingresado pase el opcionTest seteado en props
-        if ($state.nuevoIdentificador.toUpperCase() == '' ||
-            !new RegExp(this.props.opcionTest).test($state.nuevoIdentificador.toUpperCase())) {
-
-            this.setState({ errorInputNuevo: true });
-            return false;
-        }
-
-        //Corroboro cuantos identificadores iguales hay existentes
-        var itemsIdem = [...$state.opcionesTributos].filter(function (item) {
-            return item.identificador == $state.nuevoIdentificador.toUpperCase();
-        });
-
-        //Ingreso el identificador
-        this.setState({
-            nuevoIdentificador: '',
-            opcionSeleccionada: $state.nuevoIdentificador.toUpperCase(),
-            desdeSistema: false,
-            errorInputNuevo: false,
-            opcionesTributos: itemsIdem.length != 0 ?
-                $state.opcionesTributos
-                :
-                [
-                    ...$state.opcionesTributos,
-                    {
-                        sistema: 'false',
-                        identificador: $state.nuevoIdentificador.toUpperCase()
-                    }
-                ]
-        });
-    };
-
-    onClickBorrar = event => {
-        let $state = this.state;
-
-        var items = [...$state.opcionesTributos].filter(function (item) {
-            return item.identificador !== $state.opcionSeleccionada;
-        });
-
-        this.setState({
-            opcionSeleccionada: items.length ? items[0].identificador : '0',
-            desdeSistema: items.length ? items[0].sistema : true,
-            opcionesTributos: items
-        });
-    };
-
-    updateInputIdentificador = event => {
-        this.setState({ nuevoIdentificador: event.target.value });
     };
 
     eventRedirect = () => {
@@ -168,62 +106,19 @@ class TributarioAccess extends React.PureComponent {
                                         <em>Seleccione</em>
                                     </MenuItem>
                                     {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.map((data, index) => {
-                                        return <MenuItem key={index} sistema={data.sistema} value={data.identificador}>{data.identificador}</MenuItem>
+                                        return <MenuItem key={index} value={data.identificador}>{data.identificador}</MenuItem>
                                     })}
                                 </Select>
                             </Grid>
                             <Grid item md={3} className={classes.contentRight}>
-                                {
-                                    this.state.opcionSeleccionada != '0' &&
-                                    !this.state.desdeSistema && (
-                                        <Button
-                                            type="cancel"
-                                            variant="contained"
-                                            color="secondary"
-                                            className={classNames(classes.buttonActions, classes.button)}
-                                            onClick={this.onClickBorrar}
-                                        >
-                                            X
-                                        </Button>
-                                    )
-                                }
-                                {
-                                    this.state.opcionSeleccionada != '0' && (
-                                        <Button
-                                            type="go"
-                                            variant="contained"
-                                            color="secondary"
-                                            className={classNames(classes.buttonActions, classes.button)}
-                                            onClick={this.eventRedirect}
-                                        >
-                                            ✓
-                                        </Button>
-                                    )
-                                }
-                            </Grid>
-                        </Grid>
-                    </div>
-                    <div className={classes.sectionInputSpacing}>
-                        <InputLabel className={classes.labelInput} htmlFor="identificador">Ingresar nuevo {this.props.identificador.toLowerCase()}</InputLabel>
-                        <Grid container spacing={0}>
-                            <Grid item md={9}>
-                                <TextField
-                                    {...(this.state.errorInputNuevo ? { error: "true" } : {})}
-                                    id="standard-bare"
-                                    margin="normal"
-                                    value={this.state.nuevoIdentificador}
-                                    onChange={this.updateInputIdentificador}
-                                />
-                            </Grid>
-                            <Grid item md={3} className={classes.contentRight}>
                                 <Button
-                                    type="add"
+                                    type="enter"
                                     variant="contained"
                                     color="secondary"
                                     className={classes.buttonActions}
-                                    onClick={this.onClickAgregar}
+                                    onClick={this.eventRedirect}
                                 >
-                                    Agregar
+                                    Entrar
                                 </Button>
                             </Grid>
                         </Grid>

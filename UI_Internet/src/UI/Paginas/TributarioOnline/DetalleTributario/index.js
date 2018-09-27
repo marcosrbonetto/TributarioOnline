@@ -42,7 +42,7 @@ class App extends React.Component {
 
     let paraMobile = !isWidthUp(limite, props.width);
     this.state = {
-      open: paraMobile ? false : true,
+      open: false,
       paraMobile: paraMobile
     };
   }

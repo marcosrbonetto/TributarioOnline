@@ -1,7 +1,4 @@
 const styles = theme => ({
-    button: {
-      margin: theme.spacing.unit
-    },
     labelInput: {
       display: 'block',
       color: '#000'
@@ -34,11 +31,6 @@ const styles = theme => ({
     },
     contentRight: {
         textAlign: 'right'
-    },
-    root: {
-      flexGrow: 1,
-      display: 'flex',
-      flexWrap: 'wrap',
     },
     header: {
       fontSize: 'large',

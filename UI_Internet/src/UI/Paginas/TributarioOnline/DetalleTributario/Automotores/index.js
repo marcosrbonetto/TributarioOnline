@@ -37,11 +37,8 @@ const mapDispatchToProps = dispatch => ({
   mostrarCargando: (cargar) => {
     dispatch(mostrarCargando(cargar));
   },
-  getConceptosTributo: (cuit,callback) => {
-    services.getConceptosTributo(cuit, (datos) => {
-      dispatch(getConceptosTributo(datos));
-      callback();
-    });
+  getConceptosTributo: (datos) => {
+    dispatch(getConceptosTributo(datos));
   }
 });
 
@@ -56,7 +53,9 @@ class DetalleTributo extends React.PureComponent {
 
   componentWillMount() {
     this.props.mostrarCargando(true);
-    this.props.getConceptosTributo('HCJ675',() => {
+
+    services.getConceptosTributo('HCJ675', (datos) => {
+      this.props.getConceptosTributo(datos);
       this.props.mostrarCargando(false);
     });
   }
