@@ -8,13 +8,13 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_ID_TRIBUTOS: {
 
-            var IdsTributos =  action.payload.result.cuitRodados.map((identificador) => {
+            var IdsTributos =  action.payload.return.cuitRodados.map((identificador) => {
                 return {
                     sistema: 'true',
                     identificador: identificador
                 }
             });
-debugger;
+
             return Object.assign({}, state.GET_ID_TRIBUTOS, {
                 GET_ID_TRIBUTOS: {
                     automotores: IdsTributos

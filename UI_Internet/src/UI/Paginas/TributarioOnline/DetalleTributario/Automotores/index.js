@@ -25,9 +25,23 @@ import MiTabla from "@Componentes/MiTabla";
 import cedulonFoto from './img/cedulon.png';
 import cedulonFoto2 from './img/MP4.png';
 
+import { getConceptosTributo } from "@ReduxTributarioOnline/DetalleTributario/Automotores/actions";
+
+import services from './services.js';
+
+const mapStateToProps = state => {
+  return { conceptos: state.Automotores.GET_CONCEPTOS_TRIBUTO };
+};
+
 const mapDispatchToProps = dispatch => ({
   mostrarCargando: (cargar) => {
     dispatch(mostrarCargando(cargar));
+  },
+  getConceptosTributo: (cuit,callback) => {
+    services.getConceptosTributo(cuit, (datos) => {
+      dispatch(getConceptosTributo(datos));
+      callback();
+    });
   }
 });
 
@@ -41,11 +55,10 @@ class DetalleTributo extends React.PureComponent {
   }
 
   componentWillMount() {
-    //this.props.mostrarCargando(true);
-  }
-
-  componentDidMount() {
-    //this.props.mostrarCargando(false);
+    this.props.mostrarCargando(true);
+    this.props.getConceptosTributo('HCJ675',() => {
+      this.props.mostrarCargando(false);
+    });
   }
 
   getImporteTotal = (importeTotal) => {
@@ -155,7 +168,15 @@ class DetalleTributo extends React.PureComponent {
                 </Grid>
               </Grid>
 
-              <MiTabla getImporteTotal={this.getImporteTotal}></MiTabla>
+              <MiTabla 
+              columns={[
+                { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: 'Concepto' },
+                { id: 'vencimiento', type: 'date', numeric: false, disablePadding: true, label: 'Vencimiento' },
+                { id: 'importe', type: 'string', numeric: false, disablePadding: true, label: 'Importe' },
+              ]}
+              rows={this.props.conceptos} 
+              orderBy={'concepto'} 
+              getImporteTotal={this.getImporteTotal}></MiTabla>
 
               <Grid container spacing={16}>
                 <Grid item sm={7}>
@@ -390,6 +411,6 @@ class DetalleTributo extends React.PureComponent {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withStyles(styles)(DetalleTributo));

@@ -93,6 +93,7 @@ module.exports = {
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       "react-native": "react-native-web",
       "@Redux": "_Redux",
+      "@Utils": "_Utils",
       "@Rules": "_Rules",
       "@Resources": "_Resources",
       "@Componentes": "UI/_Componentes",

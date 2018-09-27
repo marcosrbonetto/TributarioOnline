@@ -20,7 +20,7 @@ import Icon from '@material-ui/core/Icon';
 import MiCard from "@Componentes/MiCard";
 
 const mapStateToProps = state => {
-    return { opciones: state.Automotores.GET_ID_TRIBUTOS };
+    return { opciones: state.TributarioOnline.GET_ID_TRIBUTOS };
 };
 
 const mapDispatchToProps = dispatch => ({

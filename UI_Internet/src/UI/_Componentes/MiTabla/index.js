@@ -22,12 +22,6 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-let counter = 0;
-function createData(concepto,vencimiento,importe) {
-    counter += 1;
-    return { id: counter, concepto,vencimiento,importe };
-}
-
 function desc(a, b, orderBy, orderType) {
     switch(orderType) {
         case 'date':
@@ -68,12 +62,6 @@ function getSorting(order, orderBy, orderType) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy, orderType) : (a, b) => -desc(a, b, orderBy, orderType);
 }
 
-const rows = [
-    { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: 'Concepto' },
-    { id: 'vencimiento', type: 'date', numeric: false, disablePadding: true, label: 'Vencimiento' },
-    { id: 'importe', type: 'string', numeric: false, disablePadding: true, label: 'Importe' },
-];
-
 class EnhancedTableHead extends React.Component {
     createSortHandler = (property, colType) => event => {
         this.props.onRequestSort(event, property, colType);
@@ -95,7 +83,7 @@ class EnhancedTableHead extends React.Component {
                             onChange={onSelectAllClick}
                         />
                     </TableCell>
-                    {rows.map(row => {
+                    {this.props.columns.map(row => {
                         return (
                             <TableCell
                                 className={classes.tableCell}
@@ -138,27 +126,25 @@ class MiTabla extends React.PureComponent {
 
         this.state = {
             order: 'desc',
-            orderBy: 'concepto',
+            orderBy: this.props.orderBy,
             orderType: 'string',
             selected: [],
-            data: [
-                createData('2018/002', '20/04/2018', '1,00'),
-                createData('2017/002', '19/05/2018', '4,20'),
-                createData('2016/002', '10/04/2016', '3,30'),
-                createData('2015/002', '10/04/2015', '6,40'),
-                createData('2014/002', '10/04/2014', '5,59'),
-                createData('2013/002', '10/04/2013', '7,68'),
-                createData('2012/002', '10/04/2012', '6,77'),
-                createData('2011/002', '10/04/2011', '8,86'),
-                createData('2012/002', '10/04/2012', '6,05'),
-                createData('2013/002', '10/04/2013', '5,40'),
-                createData('2014/002', '10/04/2014', '4,30'),
-            ],
+            data: [],
             page: 0,
             rowsPerPage: 5,
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        var data = this.props.rows.map((row, key) => {
+            row.id = key;
+            return row;
+        });
+
+        this.setState({
+            data: data
+        });
+    }
 
     handleRequestSort = (event, property, colType) => {
         const orderBy = property;
@@ -231,6 +217,7 @@ class MiTabla extends React.PureComponent {
                 <div className={classes.tableWrapper}>
                     <Table aria-labelledby="tableTitle">
                         <EnhancedTableHead
+                            columns={this.props.columns}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
@@ -257,11 +244,9 @@ class MiTabla extends React.PureComponent {
                                             <TableCell padding="checkbox">
                                                 <Checkbox checked={isSelected} />
                                             </TableCell>
-                                            <TableCell component="th" scope="row" padding="none">
-                                                {n.concepto}
-                                            </TableCell>
-                                            <TableCell padding="none">{n.vencimiento}</TableCell>
-                                            <TableCell padding="none">${n.importe}</TableCell>
+                                            {Object.keys(n).map(key => {
+                                                return key != 'id' && <TableCell padding="none">{n[key]}</TableCell>
+                                            })}
                                         </TableRow>
                                     );
                                 })}

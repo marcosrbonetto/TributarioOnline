@@ -1,5 +1,5 @@
-const serviceGetDatos = (cuit,callback) => {
-    fetch('https://httpbin.org/get')
+const getIdTributos = (cuit,callback) => {
+    /*fetch('https://httpbin.org/get')
     .then(res => {
         if (res.status >= 400) {
         throw new Error("Bad response from server");
@@ -7,8 +7,15 @@ const serviceGetDatos = (cuit,callback) => {
         return res.json()
     })
     .then(datos => {
+        callback(datos);
+    })
+    .catch(err => {
+        console.error(err);
+    });*/
+
+    setTimeout(function() {
         callback({
-            "result": {
+            "return": {
               "cuitComercios": [],
               "cuitInmuebles": [
                 "100906201900000"
@@ -24,14 +31,12 @@ const serviceGetDatos = (cuit,callback) => {
             "error": null,
             "ok": true
           });
-    })
-    .catch(err => {
-        console.error(err);
-    });
+      }, 2000);
+    
 };
 
 const services = {
-    serviceGetDatos: serviceGetDatos
+    getIdTributos: getIdTributos
 }
 
 export default services;
