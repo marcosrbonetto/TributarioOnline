@@ -3,7 +3,7 @@ import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
 
 const Menu = [
   {
-    url: "/DetalleTributario",
+    url: "/DetalleTributario/:identificador",
     exact: true,
     mostrarEnMenu: true,
     component: Automotores,

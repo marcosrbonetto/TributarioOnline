@@ -1,7 +1,8 @@
+import "./public-path";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "@UI/App";
-import registerServiceWorker from "./registerServiceWorker";
+//import registerServiceWorker from "./registerServiceWorker";
 import { hot } from "react-hot-loader";
 
 import MuiPickersUtilsProvider from "material-ui-pickers/utils/MuiPickersUtilsProvider";
@@ -47,4 +48,4 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-registerServiceWorker();
+//registerServiceWorker();

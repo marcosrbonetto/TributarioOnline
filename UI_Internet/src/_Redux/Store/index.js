@@ -1,12 +1,12 @@
-import { createBrowserHistory } from "history";
+import { createHashHistory } from "history";
 
 import { applyMiddleware, compose, createStore } from "redux";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 
 import rootReducer from "@Redux/Reducers/index";
 
-export const history = createBrowserHistory({
-  basename: window.Config.BASE_URL
+export const history = createHashHistory({
+  basename: ''
 });
 
 const store = createStore(

@@ -19,6 +19,10 @@ import Icon from '@material-ui/core/Icon';
 
 import MiCard from "@Componentes/MiCard";
 
+const mapStateToProps = state => {
+    return { opciones: state.Automotores.GET_ID_TRIBUTOS };
+};
+
 const mapDispatchToProps = dispatch => ({
 
 });
@@ -35,11 +39,25 @@ class TributarioAccess extends React.PureComponent {
         this.updateInputIdentificador = this.updateInputIdentificador.bind(this);
 
         this.state = {
-            opcionSeleccionada: this.props.opcionInicial ? this.props.opcionInicial : '0',
+            opcionSeleccionada: '0',
             desdeSistema: true,
             nuevoIdentificador: '',
             errorInputNuevo: false,
-            opcionesTributos: this.props.opciones ? this.props.opciones : []
+            opcionesTributos: []
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(JSON.stringify(this.props.opciones[this.props.id])!=JSON.stringify(nextProps.opciones[this.props.id])){
+            this.setState({
+                opcionSeleccionada: nextProps.opciones[this.props.id][0].identificador,
+                opcionesTributos: nextProps.opciones[this.props.id]
+            });
+        } else if(this.props.opciones[this.props.id]){
+            this.setState({
+                opcionSeleccionada: this.props.opciones[this.props.id][0].identificador,
+                opcionesTributos: this.props.opciones[this.props.id]
+            });
         }
     }
 
@@ -47,7 +65,7 @@ class TributarioAccess extends React.PureComponent {
         if (event.target.value == '0')
             return false;
 
-        this.setState({ 
+        this.setState({
             opcionSeleccionada: event.target.value,
             desdeSistema: (event.currentTarget.attributes.sistema.value == 'true' ? true : false)
         });
@@ -63,19 +81,19 @@ class TributarioAccess extends React.PureComponent {
             this.setState({ errorInputNuevo: true });
             return false;
         }
-        
+
         //Corroboro cuantos identificadores iguales hay existentes
         var itemsIdem = [...$state.opcionesTributos].filter(function (item) {
             return item.identificador == $state.nuevoIdentificador.toUpperCase();
         });
 
         //Ingreso el identificador
-        this.setState({ 
+        this.setState({
             nuevoIdentificador: '',
             opcionSeleccionada: $state.nuevoIdentificador.toUpperCase(),
             desdeSistema: false,
             errorInputNuevo: false,
-            opcionesTributos: itemsIdem.length != 0 ? 
+            opcionesTributos: itemsIdem.length != 0 ?
                 $state.opcionesTributos
                 :
                 [
@@ -95,15 +113,19 @@ class TributarioAccess extends React.PureComponent {
             return item.identificador !== $state.opcionSeleccionada;
         });
 
-        this.setState({ 
+        this.setState({
             opcionSeleccionada: items.length ? items[0].identificador : '0',
             desdeSistema: items.length ? items[0].sistema : true,
-            opcionesTributos: items 
+            opcionesTributos: items
         });
     };
 
     updateInputIdentificador = event => {
         this.setState({ nuevoIdentificador: event.target.value });
+    };
+
+    eventRedirect = () => {
+        this.props.eventRedirect(this.state.opcionSeleccionada);
     };
 
     render() {
@@ -120,8 +142,8 @@ class TributarioAccess extends React.PureComponent {
                         className={classes.header}
                         avatar={
                             (this.props.icono && <Icon className={classes.icon}>
-                                                    {this.props.icono}
-                                                </Icon>)
+                                {this.props.icono}
+                            </Icon>)
                             ||
                             (!this.props.icono && <div className={classes.iconSvg}>{this.props.iconoSvg}</div>)
                         }
@@ -172,7 +194,7 @@ class TributarioAccess extends React.PureComponent {
                                             variant="contained"
                                             color="secondary"
                                             className={classNames(classes.buttonActions, classes.button)}
-                                            onClick={this.props.eventRedirect}
+                                            onClick={this.eventRedirect}
                                         >
                                             ✓
                                         </Button>
@@ -213,6 +235,6 @@ class TributarioAccess extends React.PureComponent {
 }
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(withStyles(styles)(TributarioAccess));

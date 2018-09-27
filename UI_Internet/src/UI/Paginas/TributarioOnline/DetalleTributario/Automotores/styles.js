@@ -83,6 +83,18 @@ const styles = theme => ({
       '&:hover': {
         textDecoration: 'underline'
       }
+    },
+    imgPago: {
+      position: 'absolute',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      top: '100px',
+    },
+    imgPago2: {
+      position: 'absolute',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      top: '20px',
     }
   });
 

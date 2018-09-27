@@ -1,6 +1,6 @@
 {
   "name": "vv-login",
-  "homepage": "*SUBDIRECTORIO*",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

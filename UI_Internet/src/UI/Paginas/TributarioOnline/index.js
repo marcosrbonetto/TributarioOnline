@@ -7,6 +7,9 @@ import styles from './styles';
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
+//Redux
+import { mostrarCargando } from '@Redux/Actions/mainContent'
+
 import Grid from '@material-ui/core/Grid';
 import { push } from "connected-react-router";
 
@@ -16,9 +19,6 @@ import { getIdTributos } from "@ReduxTributarioOnline/actions";
 
 import services from './services.js';
 
-const mapStateToProps = state => {
-  return { datos: state.Automotores.GET_ID_TRIBUTOS };
-};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -29,6 +29,9 @@ const mapDispatchToProps = dispatch => {
       services.serviceGetDatos(cuit, (datos) => {
         dispatch(getIdTributos(datos));
       });
+    },
+    mostrarCargando: (cargar) => {
+      dispatch(mostrarCargando(cargar));
     }
   };
 };
@@ -40,11 +43,18 @@ class TributarioOnline extends React.PureComponent {
   }
 
   componentWillMount() {
+    //this.props.mostrarCargando(true);
+
+    //Traemos los tributos asociados al CUIT
     this.props.getIdTributos('20355266169');
   }
 
-  eventRedirect = () => {
-    this.props.redireccionar('/DetalleTributario')
+  componentDidMount() {
+    //this.props.mostrarCargando(false);
+  }
+
+  eventRedirect = (idTributo) => {
+    this.props.redireccionar('/DetalleTributario/'+idTributo);
   }
 
   render() {
@@ -56,24 +66,12 @@ class TributarioOnline extends React.PureComponent {
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Automotores') &&
             <Grid item xs={6}>
               <TributarioAccess
+                id="automotores"
                 tipo="Automotores"
                 identificador="Dominio"
                 icono="directions_car"
-                opciones={[
-                  {
-                    sistema: 'true',
-                    identificador: 'HCJ675'
-                  },
-                  {
-                    sistema: 'true',
-                    identificador: 'ERT324'
-                  },
-                  {
-                    sistema: 'false',
-                    identificador: 'RFG475'
-                  },
-                ]}
-                opcionInicial='HCJ675'
+                opciones={[]}
+                opcionInicial={'0'}
                 opcionTest='([a-zA-Z]{3}[0-9]{3}$)|([a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}$)'
                 eventRedirect={this.eventRedirect} />
             </Grid>
@@ -81,6 +79,7 @@ class TributarioOnline extends React.PureComponent {
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Inmuebles') &&
             <Grid item xs={6}>
               <TributarioAccess
+                id="inmuebles"
                 tipo="Inmuebles"
                 identificador="Identificador"
                 icono="home" />
@@ -89,6 +88,7 @@ class TributarioOnline extends React.PureComponent {
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercios') &&
             <Grid item xs={6}>
               <TributarioAccess
+                id="comercios"
                 tipo="Comercios"
                 identificador="Identificador"
                 icono="store"
@@ -98,6 +98,7 @@ class TributarioOnline extends React.PureComponent {
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerios') &&
             <Grid item xs={6}>
               <TributarioAccess
+                id="cementerios"
                 tipo="Cementerios"
                 identificador="Identificador"
                 iconoSvg={<svg viewBox="0 0 24 24">
@@ -114,7 +115,7 @@ class TributarioOnline extends React.PureComponent {
 
 let componente = TributarioOnline;
 componente = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(withStyles(styles)(componente));
 componente = withRouter(componente);
