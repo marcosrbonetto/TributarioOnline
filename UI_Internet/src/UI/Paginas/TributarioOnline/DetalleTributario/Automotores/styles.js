@@ -53,7 +53,14 @@ const styles = theme => ({
     },
     select: {
       width: '100%',
-      marginBottom: '10px'
+      marginBottom: '10px',
+      background: '#149257',
+      textAlign: 'center',
+      color: '#fff',
+      borderRadius: '20px',
+    },
+    iconSelect: {
+      fill: '#fff'
     },
     divider: {
       margin: '10px 0px'

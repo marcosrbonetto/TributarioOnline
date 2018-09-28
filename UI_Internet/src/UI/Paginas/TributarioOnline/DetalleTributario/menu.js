@@ -23,8 +23,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Comercios",
-    titulo: "Comercios",
+    nombre: "Comercios e Industria",
+    titulo: "Comercios e Industria",
   },
   {
     url: "/Inicio/Cementerios",
@@ -33,14 +33,6 @@ const Menu = [
     component: TributarioOnline,
     nombre: "Cementerios",
     titulo: "Cementerios",
-  },
-  {
-    url: "/Inicio/Tributos",
-    exact: true,
-    mostrarEnMenu: true,
-    component: TributarioOnline,
-    nombre: "Declaraciones Juradas - Comercio",
-    titulo: "Declaraciones Juradas - Comercio",
   },
   {
     url: "/Inicio/Tributos",
@@ -73,6 +65,30 @@ const Menu = [
     component: TributarioOnline,
     nombre: "Contribución por mejoras",
     titulo: "Contribución por mejoras",
+  },
+  {
+    url: "/Inicio/Tributos",
+    exact: true,
+    mostrarEnMenu: true,
+    component: TributarioOnline,
+    nombre: "Planes de Vivienda",
+    titulo: "Planes de Vivienda",
+  },
+  {
+    url: "/Inicio/Tributos",
+    exact: true,
+    mostrarEnMenu: true,
+    component: TributarioOnline,
+    nombre: "Consulta por número de nexo",
+    titulo: "Consulta por número de nexo",
+  },
+  {
+    url: "/MisRepresentantes",
+    exact: true,
+    mostrarEnMenu: true,
+    component: TributarioOnline,
+    nombre: "Mis Representantes",
+    titulo: "Mis Representantes",
   }
 ];
 

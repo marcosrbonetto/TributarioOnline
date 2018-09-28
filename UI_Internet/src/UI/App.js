@@ -24,10 +24,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Login from "./Login/index";
 import Inicio from "./Inicio";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
-import NuevoUsuario from "./NuevoUsuario";
 import Pagina404 from "@UI/_Pagina404";
-import ProcesarRecuperarPassword from "@UI/ProcesarRecuperarPassword";
-import ProcesarActivacionUsuario from "@UI/ProcesarActivacionUsuario";
 
 const mapStateToProps = state => {
   return {
@@ -74,15 +71,6 @@ class App extends React.Component {
           className={"switch-wrapper"}
         >
           <Route path="/Login/:codigo" component={Login} />
-          <Route path="/NuevoUsuario/:codigo" component={NuevoUsuario} />
-          <Route
-            path="/ProcesarRecuperarPassword"
-            component={ProcesarRecuperarPassword}
-          />
-          <Route
-            path="/ProcesarActivacionUsuario"
-            component={ProcesarActivacionUsuario}
-          />
           <Route path="/DetalleTributario" component={DetalleTributario} />
           <Route path="/Inicio" component={Inicio} />
           <Route component={Pagina404} />

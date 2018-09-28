@@ -11,8 +11,23 @@ import IconButton from "@material-ui/core/IconButton";
 // import IconoAccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
 import Avatar from "@material-ui/core/Avatar";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Badge from "@material-ui/core/Badge";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import Divider from "@material-ui/core/Divider";
+import Popper from "@material-ui/core/Popper";
+
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import ListItemText from "@material-ui/core/ListItemText";
+
+import MiCard from "@Componentes/MiCard";
 
 //REDUX
 import { connect } from "react-redux";
@@ -35,8 +50,11 @@ class MiToolbar extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleToggle = this.handleToggle.bind(this);
+
     this.state = {
-      anchorPopupUsuario: undefined
+      anchorPopupUsuario: undefined,
+      open: false
     };
   }
 
@@ -71,8 +89,23 @@ class MiToolbar extends React.Component {
     }
   };
 
+  handleToggle = () => {
+    this.setState({ 
+      open: !this.state.open 
+    });
+  }
+
+  handleChange = panel => (event, expanded) => {
+    this.setState({
+      expanded: expanded ? panel : false
+    });
+  }
+
   render() {
     let { classes, titulo } = this.props;
+
+    const { open } = this.state;
+    const { expanded } = this.state;
 
     return (
       <AppBar position="absolute" className={classNames(classes.appBar)}>
@@ -98,7 +131,7 @@ class MiToolbar extends React.Component {
             className={classes.logoMuni}
             src="https://www.cordoba.gob.ar/wp-content/uploads/2016/07/logo-oscuro-01.png"
           />}
-          
+
 
           <Typography
             variant="title"
@@ -108,6 +141,23 @@ class MiToolbar extends React.Component {
           >
             {titulo}
           </Typography>
+
+          {/* Icono de Notificaciones */}
+          <IconButton
+            className={classes.marginIcon}
+            color="inherit"
+
+            buttonRef={node => {
+              this.anchorEl = node
+            }}
+            aria-owns={open ? 'menu-list-grow' : null}
+            aria-haspopup="true"
+            onClick={this.handleToggle}
+          >
+            <Badge badgeContent={17} color="secondary" >
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
 
           {/* Icono del usuario */}
           <IconButton onClick={this.onUsuarioPress} color="inherit">
@@ -149,6 +199,62 @@ class MiToolbar extends React.Component {
           </MenuItem>
         </Menu>
 
+
+        <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+          <MiCard padding={false}>
+            <Typography className={classes.titleMiCard} variant="subheading"><b>Notificaciones</b></Typography>
+
+            <Badge badgeContent={7} color="secondary" classes={{ badge: classes.badgeNotificaciones}}>
+              <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+                <ExpansionPanelSummary expandIcon={<expandMoreIcon />} >
+                  <Typography variant="subheading">Mis Notificaciones</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails className={classes.detalleNotificacion}>
+                  <MenuList className={classes.listNotificacion}>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <InboxIcon />
+                      </ListItemIcon>
+                      <ListItemText inset primary="Notificacion 1" />
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <InboxIcon />
+                      </ListItemIcon>
+                      <ListItemText inset primary="Notificacion 2" />
+                    </MenuItem>
+                  </MenuList>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </Badge>
+            <br/>
+            <Badge badgeContent={10} color="secondary" classes={{ badge: classes.badgeNotificaciones}}>
+              <ExpansionPanel expanded={expanded === 'panel2'} onChange={this.handleChange('panel2')}>
+                <ExpansionPanelSummary expandIcon={<expandMoreIcon />} >
+                  <Typography variant="subheading">20-35526616-9</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails className={classes.detalleNotificacion}>
+                  <MenuList className={classes.listNotificacion}>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <InboxIcon />
+                      </ListItemIcon>
+                      <ListItemText inset primary="Notificacion 1" />
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <InboxIcon />
+                      </ListItemIcon>
+                      <ListItemText inset primary="Notificacion 2" />
+                    </MenuItem>
+                  </MenuList>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </Badge>
+
+          </MiCard>
+        </Popper>
+
         <div
           className={classNames(
             classes.contenedorCargando,
@@ -189,6 +295,12 @@ const styles = theme => {
       borderLeft: '1px solid rgba(0,0,0,0.2)',
       padding: '10px 0px 10px 20px',
       flexGrow: 1
+    },
+    titleMiCard: {
+      background: '#149257',
+      color: '#fff',
+      padding: '14px',
+      margin: '0px',
     },
     icono: {
       width: 40,
@@ -232,10 +344,26 @@ const styles = theme => {
       width: "100%",
       opacity: 0,
       transition: "all 0.3s"
-      // position: "absolute"
     },
     contenedorCargandoVisible: {
       opacity: 1
+    },
+    marginIcon: {
+      margin: '0px 15px'
+    },
+    dividerMiCard: {
+      margin: '10px 0px'
+    },
+    detalleNotificacion: {
+      padding: '0px',
+      width: '300px'
+    },
+    listNotificacion: {
+      width: '100%'
+    },
+    badgeNotificaciones: {
+      top: '12px',
+      right: '12px',
     }
   };
 };
