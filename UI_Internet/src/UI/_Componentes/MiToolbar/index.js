@@ -16,12 +16,12 @@ import Avatar from "@material-ui/core/Avatar";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Badge from "@material-ui/core/Badge";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import Divider from "@material-ui/core/Divider";
 import Popper from "@material-ui/core/Popper";
 
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
@@ -54,6 +54,7 @@ class MiToolbar extends React.Component {
 
     this.state = {
       anchorPopupUsuario: undefined,
+      anchorEl: null,
       open: false
     };
   }
@@ -89,8 +90,10 @@ class MiToolbar extends React.Component {
     }
   };
 
-  handleToggle = () => {
+  handleToggle = event => {
+    const { currentTarget }  = event;
     this.setState({ 
+      anchorEl: currentTarget,
       open: !this.state.open 
     });
   }
@@ -104,8 +107,7 @@ class MiToolbar extends React.Component {
   render() {
     let { classes, titulo } = this.props;
 
-    const { open } = this.state;
-    const { expanded } = this.state;
+    const { open, anchorEl, expanded } = this.state;
 
     return (
       <AppBar position="absolute" className={classNames(classes.appBar)}>
@@ -146,12 +148,6 @@ class MiToolbar extends React.Component {
           <IconButton
             className={classes.marginIcon}
             color="inherit"
-
-            buttonRef={node => {
-              this.anchorEl = node
-            }}
-            aria-owns={open ? 'menu-list-grow' : null}
-            aria-haspopup="true"
             onClick={this.handleToggle}
           >
             <Badge badgeContent={17} color="secondary" >
@@ -200,24 +196,24 @@ class MiToolbar extends React.Component {
         </Menu>
 
 
-        <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
-          <MiCard padding={false}>
+        <Popper open={open} anchorEl={anchorEl} transition disablePortal>
+          {open && <MiCard padding={false}>
             <Typography className={classes.titleMiCard} variant="subheading"><b>Notificaciones</b></Typography>
 
             <Badge badgeContent={7} color="secondary" classes={{ badge: classes.badgeNotificaciones}}>
               <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
-                <ExpansionPanelSummary expandIcon={<expandMoreIcon />} >
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} >
                   <Typography variant="subheading">Mis Notificaciones</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.detalleNotificacion}>
                   <MenuList className={classes.listNotificacion}>
-                    <MenuItem>
+                    <MenuItem onClick={this.handleToggle}>
                       <ListItemIcon>
                         <InboxIcon />
                       </ListItemIcon>
                       <ListItemText inset primary="Notificacion 1" />
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem onClick={this.handleToggle}>
                       <ListItemIcon>
                         <InboxIcon />
                       </ListItemIcon>
@@ -230,18 +226,18 @@ class MiToolbar extends React.Component {
             <br/>
             <Badge badgeContent={10} color="secondary" classes={{ badge: classes.badgeNotificaciones}}>
               <ExpansionPanel expanded={expanded === 'panel2'} onChange={this.handleChange('panel2')}>
-                <ExpansionPanelSummary expandIcon={<expandMoreIcon />} >
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} >
                   <Typography variant="subheading">20-35526616-9</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.detalleNotificacion}>
                   <MenuList className={classes.listNotificacion}>
-                    <MenuItem>
+                    <MenuItem onClick={this.handleToggle}>
                       <ListItemIcon>
                         <InboxIcon />
                       </ListItemIcon>
                       <ListItemText inset primary="Notificacion 1" />
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem onClick={this.handleToggle}>
                       <ListItemIcon>
                         <InboxIcon />
                       </ListItemIcon>
@@ -252,7 +248,7 @@ class MiToolbar extends React.Component {
               </ExpansionPanel>
             </Badge>
 
-          </MiCard>
+          </MiCard>}
         </Popper>
 
         <div
@@ -363,7 +359,7 @@ const styles = theme => {
     },
     badgeNotificaciones: {
       top: '12px',
-      right: '12px',
+      right: '20px',
     }
   };
 };
