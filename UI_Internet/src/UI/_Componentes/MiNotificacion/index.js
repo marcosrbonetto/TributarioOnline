@@ -20,6 +20,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import ListItemText from "@material-ui/core/ListItemText";
 
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import MiCard from "@Componentes/MiCard";
 
 //REDUX
@@ -33,19 +40,24 @@ class MiNotificacion extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.handleToggle = this.handleToggle.bind(this);
+    this.handleToggleLista = this.handleToggleLista.bind(this);
 
     this.state = {
       anchorEl: null,
-      open: false
+      openListado: false,
+      openNotificacion: false,
+      notificacion: {
+        tituloNotificacion: '',
+        textoNotificacion: ''
+      }
     };
   }
 
-  handleToggle = event => {
-    const { currentTarget }  = event;
-    this.setState({ 
+  handleToggleLista = event => {
+    const { currentTarget } = event;
+    this.setState({
       anchorEl: currentTarget,
-      open: !this.state.open 
+      openListado: !this.state.openListado
     });
   }
 
@@ -55,11 +67,64 @@ class MiNotificacion extends React.PureComponent {
     });
   }
 
+  handleToggleNotificacion = event => {
+    this.setState({
+      openNotificacion: !this.state.openNotificacion
+    });
+  }
+
+  handleClickItemLista = event => {
+    this.handleToggleLista(event);
+    this.setState({
+      notificacion: {
+        tituloNotificacion: 'Notificacion 1',
+        textoNotificacion: 'Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac\
+              facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum\
+              at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus\
+              sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum\
+              nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur\
+              et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras\
+              mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
+              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
+              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
+              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
+              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
+              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis\
+              consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
+              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
+              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
+              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
+              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
+              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis\
+              consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
+              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
+              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
+              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
+              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
+              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis\
+              consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
+              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
+              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
+              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
+              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
+              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis\
+              consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
+              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
+              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
+              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
+              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
+              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.'
+      }
+    });
+    this.handleToggleNotificacion();
+  }
+
+
 
   render() {
     let { classes } = this.props;
 
-    const { open, anchorEl, expanded } = this.state;
+    const { openListado, openNotificacion, anchorEl, expanded } = this.state;
 
     return (
       <div>
@@ -67,31 +132,31 @@ class MiNotificacion extends React.PureComponent {
         <IconButton
           className={classes.marginIcon}
           color="inherit"
-          onClick={this.handleToggle}
+          onClick={this.handleToggleLista}
         >
           <Badge badgeContent={4} color="secondary" >
             <NotificationsIcon />
           </Badge>
         </IconButton>
 
-        <Popper open={open} anchorEl={anchorEl} transition disablePortal>
-          {open && <MiCard padding={false}>
+        <Popper open={openListado} anchorEl={anchorEl} transition disablePortal>
+          {openListado && <MiCard padding={false}>
             <Typography className={classes.titleMiCard} variant="subheading"><b>Notificaciones</b></Typography>
 
-            <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones}}>
+            <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
               <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
                 <ExpansionPanelSummary>
                   <Typography variant="subheading">Mis Notificaciones</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.detalleNotificacion}>
                   <MenuList className={classes.listNotificacion}>
-                    <MenuItem onClick={this.handleToggle}>
+                    <MenuItem onClick={this.handleClickItemLista}>
                       <ListItemIcon>
                         <InboxIcon />
                       </ListItemIcon>
                       <ListItemText inset primary="Notificacion 1" />
                     </MenuItem>
-                    <MenuItem onClick={this.handleToggle}>
+                    <MenuItem onClick={this.handleClickItemLista}>
                       <ListItemIcon>
                         <InboxIcon />
                       </ListItemIcon>
@@ -101,21 +166,21 @@ class MiNotificacion extends React.PureComponent {
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             </Badge>
-            <br/>
-            <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones}}>
+            <br />
+            <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
               <ExpansionPanel expanded={expanded === 'panel2'} onChange={this.handleChange('panel2')}>
                 <ExpansionPanelSummary>
                   <Typography variant="subheading">20-35526616-9</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.detalleNotificacion}>
                   <MenuList className={classes.listNotificacion}>
-                    <MenuItem onClick={this.handleToggle}>
+                    <MenuItem onClick={this.handleClickItemLista}>
                       <ListItemIcon>
                         <InboxIcon />
                       </ListItemIcon>
                       <ListItemText inset primary="Notificacion 1" />
                     </MenuItem>
-                    <MenuItem onClick={this.handleToggle}>
+                    <MenuItem onClick={this.handleClickItemLista}>
                       <ListItemIcon>
                         <InboxIcon />
                       </ListItemIcon>
@@ -128,6 +193,26 @@ class MiNotificacion extends React.PureComponent {
 
           </MiCard>}
         </Popper>
+
+
+        <Dialog
+          open={openNotificacion}
+          onClose={this.handleToggleNotificacion}
+          scroll='paper'
+          aria-labelledby="scroll-dialog-title"
+        >
+          <DialogTitle id="scroll-dialog-title">{this.state.notificacion.tituloNotificacion}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {this.state.notificacion.textoNotificacion}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleToggleNotificacion} color="secondary">
+              Cerrar
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
