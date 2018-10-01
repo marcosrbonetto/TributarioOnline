@@ -30,7 +30,13 @@ const theme = createMuiTheme({
     background: {
       default: "#eee"
     }
-  }
+  },
+  button: {
+    display: 'inline-block',
+    minWidth: 'auto',
+    margin: '2px',
+    borderRadius: '20px'
+  },
 });
 
 hot(module)(App);

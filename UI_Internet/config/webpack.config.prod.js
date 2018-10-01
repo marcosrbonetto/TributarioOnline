@@ -98,7 +98,7 @@ module.exports = {
       "@Resources": "_Resources",
       "@Componentes": "UI/_Componentes",
       "@UI": "UI",
-      "@ReduxTributarioOnline": "_Redux/Src/TributarioOnline"
+      "@ReduxSrc": "_Redux/Src"
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

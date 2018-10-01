@@ -271,7 +271,7 @@ class MiTabla extends React.PureComponent {
                     }}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                    labelRowsPerPage='Concepto por página'
+                    labelRowsPerPage={(this.props.rowType ? this.props.rowType : 'Concepto')+' por página'}
                     labelDisplayedRows={function labelDisplayedRows(_ref) {
                         var from = _ref.from,
                             to = _ref.to,

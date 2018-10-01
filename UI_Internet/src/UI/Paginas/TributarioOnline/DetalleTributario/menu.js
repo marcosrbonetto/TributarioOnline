@@ -11,7 +11,7 @@ const Menu = [
     titulo: "Automotores",
   },
   {
-    url: "/Inicio/Inmuebles",
+    url: "/Inicio/Tributo/Inmuebles",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -19,7 +19,7 @@ const Menu = [
     titulo: "Inmuebles",
   },
   {
-    url: "/Inicio/Comercios",
+    url: "/Inicio/Tributo/Comercios",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -27,7 +27,7 @@ const Menu = [
     titulo: "Comercios e Industria",
   },
   {
-    url: "/Inicio/Cementerios",
+    url: "/Inicio/Tributo/Cementerios",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -35,7 +35,7 @@ const Menu = [
     titulo: "Cementerios",
   },
   {
-    url: "/Inicio/Tributos",
+    url: "/Inicio/Tributo/Tributos",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -43,7 +43,7 @@ const Menu = [
     titulo: "Ferias y Mercados",
   },
   {
-    url: "/Inicio/Tributos",
+    url: "/Inicio/Tributo/Tributos",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -51,7 +51,7 @@ const Menu = [
     titulo: "Aranceles Taxis y Remises",
   },
   {
-    url: "/Inicio/Tributos",
+    url: "/Inicio/Tributo/Tributos",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -59,7 +59,7 @@ const Menu = [
     titulo: "Agentes de percepción y retención",
   },
   {
-    url: "/Inicio/Tributos",
+    url: "/Inicio/Tributo/Tributos",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -67,7 +67,7 @@ const Menu = [
     titulo: "Contribución por mejoras",
   },
   {
-    url: "/Inicio/Tributos",
+    url: "/Inicio/Tributo/Tributos",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -75,7 +75,7 @@ const Menu = [
     titulo: "Planes de Vivienda",
   },
   {
-    url: "/Inicio/Tributos",
+    url: "/Inicio/Tributo/Tributos",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,

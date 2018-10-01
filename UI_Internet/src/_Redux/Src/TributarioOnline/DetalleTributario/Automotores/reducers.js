@@ -1,4 +1,4 @@
-import { GET_CONCEPTOS_TRIBUTO } from "@ReduxTributarioOnline/DetalleTributario/Automotores/constants";
+import { GET_CONCEPTOS_TRIBUTO } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
 const initialState = {

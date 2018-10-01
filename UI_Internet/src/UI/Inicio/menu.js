@@ -1,4 +1,5 @@
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
+import Representantes from "@UI/Paginas/Representantes/index";
 
 const Menu = [
   {
@@ -11,7 +12,16 @@ const Menu = [
     icono: "home"
   },
   {
-    url: "/Inicio/:tributo",
+    url: "/Inicio/Representantes",
+    exact: false,
+    mostrarEnMenu: true,
+    component: Representantes,
+    nombre: "Representantes",
+    titulo: "Representantes",
+    icono: "home"
+  },
+  {
+    url: "/Inicio/Tributo/:tributo",
     exact: false,
     mostrarEnMenu: false,
     component: TributarioOnline,

@@ -25,7 +25,7 @@ import MiTabla from "@Componentes/MiTabla";
 import cedulonFoto from './img/cedulon.png';
 import cedulonFoto2 from './img/MP4.png';
 
-import { getConceptosTributo } from "@ReduxTributarioOnline/DetalleTributario/Automotores/actions";
+import { getConceptosTributo } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/actions";
 
 import services from './services.js';
 

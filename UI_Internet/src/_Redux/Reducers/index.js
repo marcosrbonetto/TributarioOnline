@@ -2,8 +2,9 @@ import Usuario from "./usuario";
 import Alerta from "./alerta";
 import MainContent from "./mainContent";
 
-import TributarioOnline from "@ReduxTributarioOnline/reducers";
-import Automotores from "@ReduxTributarioOnline/DetalleTributario/Automotores/reducers";
+import TributarioOnline from "@ReduxSrc/TributarioOnline/reducers";
+import Automotores from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/reducers";
+import Representantes from "@ReduxSrc/Representantes/reducers";
 
 import { combineReducers } from "redux";
 
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   Alerta,
   MainContent,
   TributarioOnline,
-  Automotores
+  Automotores,
+  Representantes
 });
 
 export default rootReducer;

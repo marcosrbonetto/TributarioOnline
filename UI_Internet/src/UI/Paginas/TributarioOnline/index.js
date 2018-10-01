@@ -15,7 +15,7 @@ import { push } from "connected-react-router";
 
 import TributarioAccess from '@Componentes/TributarioAccess';
 
-import { getIdTributos } from "@ReduxTributarioOnline/actions";
+import { getIdTributos } from "@ReduxSrc/TributarioOnline/actions";
 
 import services from './services.js';
 
