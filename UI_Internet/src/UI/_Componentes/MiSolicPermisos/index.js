@@ -1,76 +1,69 @@
 import React from 'react';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
+import classNames from "classnames";
 
 import styles from './styles';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 import Badge from '@material-ui/core/Badge';
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 class MiSolicPermisos extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      checked: [],
-      cantPermisos: 0
+      checked: []
     };
   }
 
-  handleToggle = value => () => {
-    const { checked } = this.state;
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  componentWillUpdate(nextProps, nextState) {
+    this.props.addPermiso(this.props.tipo, nextState.checked.length);
+  }
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    this.setState({
-      checked: newChecked,
-    });
-
-    this.props.addPermiso(this.props.tipo,newChecked.length);
+  handleChange = event => {
+    this.setState({ checked: event.target.value });
   };
 
   render() {
-    let { classes } = this.props;
+    const { classes, theme } = this.props;
 
     return (
       <div className={classes.root}>
-        <Badge badgeContent={this.props.cantPermisos} color="secondary" className={classes.lista}>
-          <ExpansionPanel className={classes.lista}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>{this.props.label}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <List>
-                {this.props.opciones && this.props.opciones.map(value => (
-                  <ListItem key={value} dense button className={classes.listItem}>
-                    <ListItemText primary={`${value}`} />
-                    <ListItemSecondaryAction>
-                      <Checkbox
-                        onChange={this.handleToggle(value)}
-                        checked={this.state.checked.indexOf(value) !== -1}
-                      />
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+        <Badge badgeContent={this.props.cantPermisos} color="secondary" className={classNames(classes.lista,classes.container)}>
+          <FormControl className={classes.lista}>
+            <InputLabel htmlFor="select-multiple-checkbox" className={classes.labelSelect}>{this.props.label}</InputLabel>
+            <Select
+              multiple
+              value={this.state.checked}
+              onChange={this.handleChange}
+              input={<Input id="select-multiple-checkbox" className={classes.inputSelect} />}
+              renderValue={selected => selected.join(', ')}
+              MenuProps={MenuProps}
+            >
+              {this.props.opciones && this.props.opciones.map(opcion => (
+                <MenuItem key={opcion} value={opcion}>
+                  <Checkbox checked={this.state.checked.indexOf(opcion) > -1} />
+                  <ListItemText primary={opcion} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Badge>
       </div>
     );

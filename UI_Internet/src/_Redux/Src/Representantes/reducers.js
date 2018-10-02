@@ -1,4 +1,4 @@
-import { GET_TRIBUTOS_CUIT, CANCELAR_SOLICITUD_PERMISOS } from "@ReduxSrc/Representantes/constants";
+import { GET_TRIBUTOS_CUIT, GET_SOLICITUDES_PERMISOS, CANCELAR_SOLICITUD_PERMISOS } from "@ReduxSrc/Representantes/constants";
 
 const initialState = {
     GET_TRIBUTOS_CUIT: []
@@ -21,13 +21,36 @@ const reducer = (state = initialState, action) => {
                 };
             });
 
-            return Object.assign({}, state.datosSolicitudPermisos, {
-                datosSolicitudPermisos: datos
+            return Object.assign({}, state.datosEnvioSolicitudPermisos, {
+                datosEnvioSolicitudPermisos: datos
+            });
+        }
+        case GET_SOLICITUDES_PERMISOS: {
+
+            var datos = [];
+            action.payload.return.map((repr) => {
+                var newRepresentante = {};
+                newRepresentante.representante = repr.representante;
+                newRepresentante.cuitRepresentante = repr.cuitRepresentante;
+                newRepresentante.tributos = {};
+                Object.keys(repr.tributos).map((tributo) => {
+                    newRepresentante.tributos[tributo] = {
+                        label: tributo,
+                        tipo: tributo,
+                        opciones: repr.tributos[tributo]
+                    };
+                });
+
+                datos.push(newRepresentante);
+            });
+
+            return Object.assign({}, state.datosPedidoSolicitudPermisos, {
+                datosPedidoSolicitudPermisos: datos
             });
         }
         case CANCELAR_SOLICITUD_PERMISOS: {
-            return Object.assign({}, state.datosSolicitudPermisos, {
-                datosSolicitudPermisos: {}
+            return Object.assign({}, state.datosEnvioSolicitudPermisos, {
+                datosEnvioSolicitudPermisos: {}
             });
         }
         default:

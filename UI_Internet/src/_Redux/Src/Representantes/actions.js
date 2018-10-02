@@ -1,8 +1,13 @@
-import { GET_TRIBUTOS_CUIT, CANCELAR_SOLICITUD_PERMISOS } from "@ReduxSrc/Representantes/constants";
+import { GET_TRIBUTOS_CUIT, GET_SOLICITUDES_PERMISOS, CANCELAR_SOLICITUD_PERMISOS } from "@ReduxSrc/Representantes/constants";
 
-export const getTributosCUIT = tributos => ({ 
+export const getTributosCUIT = datos => ({ 
     type: GET_TRIBUTOS_CUIT, 
-    payload: tributos
+    payload: datos
+});
+
+export const getSolicitudesPermiso = datos => ({ 
+    type: GET_SOLICITUDES_PERMISOS, 
+    payload: datos
 });
 
 export const cancelSolicitudPermisos = () => ({ 
