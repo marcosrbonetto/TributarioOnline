@@ -16,7 +16,19 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import Tooltip from '@material-ui/core/Tooltip';
+
+/*
+Props esperadas:
+
+->columns - (obligatorio) - Array columnas - Ej.: { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: 'Concepto' },
+->rows - (obligatorio) - Array de objetos con respectivas columnas
+->orderBy - (obligatorio) - id columna por la cual ordenar inicialmente
+->order (defecto 'desc') - Sentido para ordenar
+->getFilasSeleccionadas - Función que obtendrá las un array de filas y otro de los id de aquellas seleccionadas
+->customCell - Funcion que retornara el contenido de la columna del tipo  type: 'customCell', y estará al último
+->rowType - (defecto 'Concepto') - String que dice el tipo de filas que hay 
+->noCheck - Boolean que determina si la grilla muestra los checks o no
+*/
 
 const mapDispatchToProps = dispatch => ({
 
@@ -174,7 +186,8 @@ class MiTabla extends React.PureComponent {
             this.setState({ selected: newSelected });
         }
 
-        this.calcularSeleccion(this.state.data, newSelected);
+        if (this.props.getFilasSeleccionadas)
+            this.props.getFilasSeleccionadas(this.state.data, newSelected);
     };
 
     handleClick = (event, id) => {
@@ -197,20 +210,9 @@ class MiTabla extends React.PureComponent {
 
         this.setState({ selected: newSelected });
 
-        this.calcularSeleccion(this.state.data, newSelected);
+        if (this.props.getFilasSeleccionadas)
+            this.props.getFilasSeleccionadas(this.state.data, newSelected);
     };
-
-    calcularSeleccion = (dataActual, dataNueva) => {
-        let total = 0;
-        dataActual.map((item) => {
-            total += parseFloat(dataNueva.indexOf(item.id) != -1 ? this.stringToFloat(item[this.props.colCalculoSeleccion]) : 0);
-        });
-
-        if (this.props.getTotalSeleccionado)
-            this.props.getTotalSeleccionado(total);
-    }
-
-    stringToFloat = (numero) => parseFloat(parseFloat(("" + (numero)).replace(',', '.')).toFixed(2));
 
     handleChangePage = (event, page) => {
         this.setState({ page });
@@ -319,7 +321,7 @@ class MiRow extends React.PureComponent {
                     <Checkbox checked={this.props.isSelected || false} />
                 </TableCell>}
             {Object.keys(this.props.data).map((cell, key) => {
-                if(cell == 'data') return;
+                if(cell == 'data') return; //'data' son datos extras para utilizar
                 return cell != 'id' && <TableCell className={noCheck && key == 0 ? '' : classes.paddingLeft} key={cell} padding="none">{this.props.data[cell]}</TableCell>
             })}
             {this.renderCustomCell()}

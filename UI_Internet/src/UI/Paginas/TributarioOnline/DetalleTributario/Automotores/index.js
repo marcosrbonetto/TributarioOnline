@@ -13,6 +13,7 @@ import { withRouter } from "react-router-dom";
 import { mostrarCargando } from '@Redux/Actions/mainContent'
 import { replace, push } from "connected-react-router";
 
+//Material UI Components
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -27,6 +28,7 @@ import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
 
+//Custom Components
 import MiCard from "@Componentes/MiCard";
 import MiTabla from "@Componentes/MiTabla";
 
@@ -35,7 +37,9 @@ import cedulonFoto2 from './img/MP4.png';
 
 import { getInfoTributo } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/actions";
 
-import services from './services.js';
+import services from '@Rules/Rules_Automotores';
+
+import { stringToFloat } from "@Utils/functions"
 
 const mapStateToProps = state => {
   return { infoTributo: state.Automotores.infoTributo };
@@ -69,14 +73,19 @@ class DetalleTributo extends React.PureComponent {
 
   componentWillMount() {
     this.props.mostrarCargando(true);
-    console.log("itemMenu");
+    
     services.getInfoTributo('HCJ675', (datos) => {
       this.props.getInfoTributo(datos);
       this.props.mostrarCargando(false);
     });
   }
 
-  getTotalSeleccionado = (importeTotal) => {
+  getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
+    let importeTotal = 0;
+    filas.map((item) => {
+        importeTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
+    });
+    
     this.setState({ importeAPagar: importeTotal.toFixed(2).replace('.', ',') });
   };
 
@@ -318,8 +327,7 @@ class DetalleTributo extends React.PureComponent {
                   rows={this.props.infoTributo.rowList || []}
                   order={'asc'}
                   orderBy={'concepto'}
-                  getTotalSeleccionado={this.getTotalSeleccionado}
-                  colCalculoSeleccion={'importe'}
+                  getFilasSeleccionadas={this.getFilasSeleccionadas}
                   customCell={this.getCustomCell} />
 
                 <Grid container spacing={16}>

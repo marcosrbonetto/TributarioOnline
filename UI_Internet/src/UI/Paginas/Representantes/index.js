@@ -36,7 +36,7 @@ import {
   getMisRepresentantes
 } from "@ReduxSrc/Representantes/actions";
 
-import services from './services.js';
+import services from '@Rules/Rules_Representantes.js';
 
 
 const mapStateToProps = state => {

@@ -17,7 +17,7 @@ import TributarioAccess from '@Componentes/TributarioAccess';
 
 import { getIdTributos } from "@ReduxSrc/TributarioOnline/actions";
 
-import services from './services.js';
+import services from '@Rules/Rules_TributarioOnline.js';
 
 
 const mapDispatchToProps = dispatch => {
