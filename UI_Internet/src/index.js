@@ -37,6 +37,17 @@ const theme = createMuiTheme({
     margin: '2px',
     borderRadius: '20px'
   },
+  color: {
+    ok: {
+      main: "#149257"
+    },
+    error: {
+      main: "#F44336"
+    },
+    info: {
+      main: "#2196f3"
+    }
+  }
 });
 
 hot(module)(App);

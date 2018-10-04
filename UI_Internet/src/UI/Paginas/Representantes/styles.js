@@ -8,7 +8,8 @@ const styles = theme => ({
   },
   title: {
     fontWeight: '100',
-    margin: '5px 0px'
+    margin: '5px 0px',
+    display: 'inline-block'
   },
   infoTexto: {
     color: 'rgba(0, 0, 0, 0.87)',
@@ -23,6 +24,12 @@ const styles = theme => ({
     ...theme.button,
     position: 'absolute',
     bottom: '5px'
+  },
+  btnDenegarPermiso: {
+    ...theme.button,
+    float: 'right',
+    marginTop: '4px',
+    background: '#F44336'
   },
   containerButton: {
     position: 'relative'
@@ -61,7 +68,8 @@ const styles = theme => ({
     right: '80px',
     color: '#F44336',
     borderColor: '#F44336',
-    width: '34px'
+    width: '34px',
+    background: '#fff'
   },
   subItemsTributo: {
     padding: '0px auto',

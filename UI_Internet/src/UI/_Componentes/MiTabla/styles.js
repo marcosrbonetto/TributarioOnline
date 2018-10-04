@@ -9,6 +9,9 @@ export const styles = theme => ({
   tableWrapper: {
     overflowX: 'auto',
     borderRadius: '6px'
+  },
+  paddingLeft: {
+    paddingLeft: '20px'
   }
 });
 
@@ -47,4 +50,7 @@ export const toolbarStyles = theme => ({
       color: 'red'
     },
   },
+  paddingLeft: {
+    paddingLeft: '20px'
+  }
 });

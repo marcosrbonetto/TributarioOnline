@@ -23,13 +23,13 @@ const mapDispatchToProps = dispatch => ({
 });
 
 function desc(a, b, orderBy, orderType) {
-    switch(orderType) {
+    switch (orderType) {
         case 'date':
             var dateB = b[orderBy].split('/');
             var dateA = a[orderBy].split('/');
 
-            dateB = new Date(dateB[1]+'/'+dateB[0]+'/'+dateB[2]);
-            dateA = new Date(dateA[1]+'/'+dateA[0]+'/'+dateA[2]);
+            dateB = new Date(dateB[1] + '/' + dateB[0] + '/' + dateB[2]);
+            dateA = new Date(dateA[1] + '/' + dateA[0] + '/' + dateA[2]);
             if (dateB < dateA) {
                 return -1;
             }
@@ -70,23 +70,25 @@ class EnhancedTableHead extends React.Component {
     render() {
         const { classes } = this.props;
         const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
+        const noCheck = this.props.noCheck;
 
         return (
             <TableHead className={classes.tableHead}>
                 <TableRow>
-                    <TableCell padding="checkbox">
-                        <Checkbox
-                            color='primary'
-                            className={classes.tableCell}
-                            indeterminate={numSelected > 0 && numSelected < rowCount}
-                            checked={numSelected === rowCount}
-                            onChange={onSelectAllClick}
-                        />
-                    </TableCell>
-                    {this.props.columns.map(row => {
+                    {noCheck &&
+                        <TableCell padding="checkbox">
+                            <Checkbox
+                                color='primary'
+                                className={classes.tableCell}
+                                indeterminate={numSelected > 0 && numSelected < rowCount}
+                                checked={numSelected === rowCount}
+                                onChange={onSelectAllClick}
+                            />
+                        </TableCell>}
+                    {this.props.columns.map((row, key) => {
                         return (
                             <TableCell
-                                className={classes.tableCell}
+                                className={noCheck && key == 0 ? classes.tableCell : classNames(classes.tableCell, classes.paddingLeft)}
                                 key={row.id}
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'default'}
@@ -96,7 +98,7 @@ class EnhancedTableHead extends React.Component {
                                     className={classes.tableCell}
                                     active={orderBy === row.id}
                                     direction={order}
-                                    onClick={this.createSortHandler(row.id,row.type)}
+                                    onClick={this.createSortHandler(row.id, row.type)}
                                 >
                                     {row.label}
                                 </TableSortLabel>
@@ -124,19 +126,24 @@ class MiTabla extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        var data = (props.rows || []).map((row, key) => {
+            row.id = key;
+            return row;
+        });
+
         this.state = {
-            order: 'desc',
+            order: this.props.order || 'desc',
             orderBy: this.props.orderBy,
             orderType: 'string',
             selected: [],
-            data: [],
+            data: data,
             page: 0,
             rowsPerPage: 5,
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        var data = this.props.rows.map((row, key) => {
+        var data = nextProps.rows.map((row, key) => {
             row.id = key;
             return row;
         });
@@ -159,11 +166,15 @@ class MiTabla extends React.PureComponent {
     };
 
     handleSelectAllClick = event => {
+        let newSelected = [];
         if (event.target.checked) {
-            this.setState(state => ({ selected: state.data.map(n => n.id) }));
-            return;
+            newSelected = this.state.data.map(n => n.id);
+            this.setState(state => ({ selected: newSelected }));
+        } else {
+            this.setState({ selected: newSelected });
         }
-        this.setState({ selected: [] });
+
+        this.calcularSeleccion(this.state.data, newSelected);
     };
 
     handleClick = (event, id) => {
@@ -186,16 +197,20 @@ class MiTabla extends React.PureComponent {
 
         this.setState({ selected: newSelected });
 
-        const dataActual = this.state.data;
-
-        let importeTotal = 0;
-        dataActual.map((item) => {
-            importeTotal += parseFloat(newSelected.indexOf(item.id) != -1 ? this.stringToFloat(item.importe) : 0);
-        });
-        this.props.getImporteTotal(importeTotal);
+        this.calcularSeleccion(this.state.data, newSelected);
     };
 
-    stringToFloat = (numero) => parseFloat(parseFloat(("" + (numero)).replace(',','.')).toFixed(2));
+    calcularSeleccion = (dataActual, dataNueva) => {
+        let total = 0;
+        dataActual.map((item) => {
+            total += parseFloat(dataNueva.indexOf(item.id) != -1 ? this.stringToFloat(item[this.props.colCalculoSeleccion]) : 0);
+        });
+
+        if (this.props.getTotalSeleccionado)
+            this.props.getTotalSeleccionado(total);
+    }
+
+    stringToFloat = (numero) => parseFloat(parseFloat(("" + (numero)).replace(',', '.')).toFixed(2));
 
     handleChangePage = (event, page) => {
         this.setState({ page });
@@ -211,6 +226,7 @@ class MiTabla extends React.PureComponent {
         const { classes } = this.props;
         const { data, order, orderBy, orderType, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+        const noCheck = !this.props.noCheck;
 
         return (
             <Paper className={classes.root}>
@@ -225,30 +241,22 @@ class MiTabla extends React.PureComponent {
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
                             rowCount={data.length}
+                            noCheck={noCheck}
                         />
                         <TableBody>
                             {stableSort(data, getSorting(order, orderBy, orderType))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
                                     const isSelected = this.isSelected(n.id);
-                                    return (
-                                        <TableRow
-                                            hover
-                                            onClick={event => this.handleClick(event, n.id)}
-                                            role="checkbox"
-                                            aria-checked={isSelected}
-                                            tabIndex={-1}
-                                            key={n.id}
-                                            selected={isSelected}
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <Checkbox checked={isSelected} />
-                                            </TableCell>
-                                            {Object.keys(n).map(key => {
-                                                return key != 'id' && <TableCell padding="none">{n[key]}</TableCell>
-                                            })}
-                                        </TableRow>
-                                    );
+
+                                    return <MiRow
+                                        noCheck={noCheck}
+                                        data={n}
+                                        classes={classes}
+                                        onClick={this.handleClick}
+                                        isSelected={isSelected}
+                                        customCell={this.props.customCell}
+                                    />
                                 })}
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 49 * emptyRows }}>
@@ -271,18 +279,67 @@ class MiTabla extends React.PureComponent {
                     }}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                    labelRowsPerPage={(this.props.rowType ? this.props.rowType : 'Concepto')+' por página'}
+                    labelRowsPerPage={(this.props.rowType ? this.props.rowType : 'Concepto') + ' por página'}
                     labelDisplayedRows={function labelDisplayedRows(_ref) {
                         var from = _ref.from,
                             to = _ref.to,
                             count = _ref.count;
                         return "".concat(from, "-").concat(to, " de ").concat(count);
-                      }}
+                    }}
                 />
             </Paper>
         );
     }
+
+
 }
+
+class MiRow extends React.PureComponent {
+
+    onClick = (event) => {
+        if (this.props.onClick == undefined) return;
+        this.props.onClick(event, this.props.data.id);
+    }
+
+    render() {
+        const noCheck = (this.props.noCheck || true);
+        const classes = this.props.classes;
+
+        return <TableRow
+            hover
+            onClick={this.onClick}
+            role="checkbox"
+            aria-checked={this.props.isSelected || false}
+            tabIndex={-1}
+            key={this.props.data.id}
+            selected={this.props.isSelected || false}
+        >
+            {noCheck &&
+                <TableCell padding="checkbox">
+                    <Checkbox checked={this.props.isSelected || false} />
+                </TableCell>}
+            {Object.keys(this.props.data).map((cell, key) => {
+                if(cell == 'data') return;
+                return cell != 'id' && <TableCell className={noCheck && key == 0 ? '' : classes.paddingLeft} key={cell} padding="none">{this.props.data[cell]}</TableCell>
+            })}
+            {this.renderCustomCell()}
+        </TableRow>
+    }
+
+
+    renderCustomCell = () => {
+        return (
+            <TableCell padding="none">{this.renderCustomCellContent()}</TableCell>
+        );
+    }
+
+    renderCustomCellContent = () => {
+        if (this.props.customCell == undefined) return null;
+        return this.props.customCell(this.props.data);
+    }
+
+}
+
 
 MiTabla.propTypes = {
     classes: PropTypes.object.isRequired,

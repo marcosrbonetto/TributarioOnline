@@ -28,15 +28,24 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
 
-import { getTributosCUIT, getSolicitudesPermiso, cancelSolicitudPermisos } from "@ReduxSrc/Representantes/actions";
+import {
+  getTributosCUIT,
+  getSolicitudesPermiso,
+  cancelSolicitudPermisos,
+  getMisRepresentados,
+  getMisRepresentantes
+} from "@ReduxSrc/Representantes/actions";
 
 import services from './services.js';
 
 
 const mapStateToProps = state => {
+
   return {
     datosEnvioSolicitudPermisos: state.Representantes.datosEnvioSolicitudPermisos,
-    datosPedidoSolicitudPermisos: state.Representantes.datosPedidoSolicitudPermisos
+    datosPedidoSolicitudPermisos: state.Representantes.datosPedidoSolicitudPermisos,
+    datosMisRepresentantes: state.Representantes.datosMisRepresentantes,
+    datosMisRepresentados: state.Representantes.datosMisRepresentados,
   };
 };
 
@@ -50,6 +59,12 @@ const mapDispatchToProps = dispatch => ({
   getSolicitudesPermiso: (datos) => {
     dispatch(getSolicitudesPermiso(datos));
   },
+  getMisRepresentados: (datos) => {
+    dispatch(getMisRepresentados(datos));
+  },
+  getMisRepresentantes: (datos) => {
+    dispatch(getMisRepresentantes(datos));
+  },
   cancelSolicitudPermisos: () => {
     dispatch(cancelSolicitudPermisos());
   }
@@ -59,7 +74,7 @@ class Representantes extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.handleaddPermiso = this.handleaddPermiso.bind(this);
+    // this.handleaddPermiso = this.handleaddPermiso.bind(this);
 
     this.state = {
       inputCuit: '', //Input para la busqueda de representado
@@ -67,13 +82,13 @@ class Representantes extends React.PureComponent {
         representado: '', //Representado ya que es a quien envío la solicitud
         cuitRepresentado: '', //CUIT del representado
         tributos: undefined //Tributos para el uso del envío de solicitud
-      },
-      recepcionSolicitud: [], //Array de solicitudes de representantes
+      }
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (JSON.stringify(this.props.datosEnvioSolicitudPermisos) != JSON.stringify(nextProps.datosEnvioSolicitudPermisos)) {
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.datosEnvioSolicitudPermisos) {
       this.setState({
         envioSolicitud: {
           representado: nextProps.datosEnvioSolicitudPermisos.representado,
@@ -82,21 +97,31 @@ class Representantes extends React.PureComponent {
         }
       });
     }
-
-    if (JSON.stringify(this.props.datosPedidoSolicitudPermisos) != JSON.stringify(nextProps.datosPedidoSolicitudPermisos)) {
-      this.setState({
-        recepcionSolicitud: nextProps.datosPedidoSolicitudPermisos
-      });
-    }
   }
 
   componentWillMount() {
     this.props.mostrarCargando(true);
 
-    //Traemos los tributos asociados al CUIT
+    //Traemos los permisos asociados al CUIT
     services.getSolicitudesPermiso('20355266169', (datos) => {
       //Guardamos los datos en el store
       this.props.getSolicitudesPermiso(datos);
+      //Finalizamos el cargando 
+      this.props.mostrarCargando(false);
+    });
+
+    //Traemos los representantes asociados al CUIT
+    services.getMisRepresentantes('20355266169', (datos) => {
+      //Guardamos los datos en el store
+      this.props.getMisRepresentantes(datos);
+      //Finalizamos el cargando 
+      this.props.mostrarCargando(false);
+    });
+
+    //Traemos los representados asociados al CUIT
+    services.getMisRepresentados('20355266169', (datos) => {
+      //Guardamos los datos en el store
+      this.props.getMisRepresentados(datos);
       //Finalizamos el cargando 
       this.props.mostrarCargando(false);
     });
@@ -127,7 +152,6 @@ class Representantes extends React.PureComponent {
   handleaddPermiso = (tipo, cantidad) => {
     var newState = { ...this.state }
     newState.envioSolicitud.tributos[tipo].cantPermisos = cantidad;
-
     this.setState({ newState });
   }
 
@@ -147,8 +171,6 @@ class Representantes extends React.PureComponent {
 
   handleEnviarSolicitudPermisos = () => {
 
-    //this.props.enviarSolicitudPermisos();
-
     this.setState({
       inputCuit: '',
       envioSolicitud: {
@@ -160,6 +182,8 @@ class Representantes extends React.PureComponent {
 
   }
 
+  getImporteTotal= () => {}
+
   render() {
     const { classes } = this.props;
 
@@ -169,34 +193,41 @@ class Representantes extends React.PureComponent {
           <Grid item xs={8}>
             <MiCard>
               <Typography className={classes.title} variant="title">Mis Representantes</Typography>
+              <Button
+                type="enter"
+                variant="contained"
+                color="secondary"
+                className={classNames(classes.btnDenegarPermiso)}
+                onClick={this.handleDenegarPermisos}
+              >
+                Denegar Permisos</Button>
               {/*<Divider className={classes.divider} />*/}
               <MiTabla
                 rowType={'Representantes'}
                 columns={[
                   { id: 'usuario', type: 'string', numeric: false, disablePadding: true, label: 'Representante' },
                   { id: 'tributo', type: 'date', numeric: false, disablePadding: true, label: 'Permiso' },
-                  { id: 'estado', type: 'string', numeric: false, disablePadding: true, label: 'Estado' },
-                  { id: 'denegar', type: 'string', numeric: false, disablePadding: true, label: 'Denegar' },
+                  { id: 'estado', type: 'string', numeric: false, disablePadding: true, label: 'Estado' }
                 ]}
-                rows={[]}
+                rows={this.props.datosMisRepresentantes || []}
                 orderBy={'usuario'}
-                getImporteTotal={this.getImporteTotal}></MiTabla>
+                getImporteTotal={this.getImporteTotal} />
             </MiCard>
             <br />
             <MiCard>
               <Typography className={classes.title} variant="title">Mis Representados</Typography>
               {/*<Divider className={classes.divider} />*/}
+
               <MiTabla
                 rowType={'Representados'}
                 columns={[
                   { id: 'usuario', type: 'string', numeric: false, disablePadding: true, label: 'Representados' },
                   { id: 'tributo', type: 'date', numeric: false, disablePadding: true, label: 'Permiso' },
-                  { id: 'estado', type: 'string', numeric: false, disablePadding: true, label: 'Estado' },
-                  { id: 'denegar', type: 'string', numeric: false, disablePadding: true, label: 'Denegar' },
+                  { id: 'estado', type: 'string', numeric: false, disablePadding: true, label: 'Estado' }
                 ]}
-                rows={[]}
+                rows={this.props.datosMisRepresentados || []}
                 orderBy={'usuario'}
-                getImporteTotal={this.getImporteTotal}></MiTabla>
+                getImporteTotal={this.getImporteTotal} />
             </MiCard>
           </Grid>
 
@@ -205,14 +236,14 @@ class Representantes extends React.PureComponent {
               <Typography className={classes.title} variant="title">Solicitudes de representantes</Typography>
               <Divider className={classes.divider} />
 
-              {[0, 1, 2, 3, 4].length == 0 &&
+              {this.props.datosPedidoSolicitudPermisos && this.props.datosPedidoSolicitudPermisos.length == 0 &&
                 <Typography className={classes.infoTexto}>
                   {`
                 No tiene solicitudes pendientes.
               `}
                 </Typography>}
               <List className={classes.listaSolicitudes} subheader={<li />}>
-                {this.state.recepcionSolicitud && this.state.recepcionSolicitud.map((repr, index1) => (
+                {this.props.datosPedidoSolicitudPermisos && this.props.datosPedidoSolicitudPermisos.map((repr, index1) => (
                   <li key={`section-${index1}`} className={classes.containerLista}>
                     <ul className={classes.ulLista}>
                       <ListSubheader className={classes.labelItemTributo}>
@@ -221,7 +252,7 @@ class Representantes extends React.PureComponent {
                         <Button size="small" variant="outlined" color="secondary" className={classNames(classes.button, classes.botonAceptacionSolicitud)}>Aceptar</Button>
                       </ListSubheader>
                       {repr.tributos && Object.keys(repr.tributos).map((tributo, index2) => (
-                        <div>
+                        <div key={index2}>
                           <ListItem key={`item-${tributo}-${index2}`} className={classes.itemsTributo}>
                             <ListItemText primary={repr.tributos[tributo].label} />
                           </ListItem>

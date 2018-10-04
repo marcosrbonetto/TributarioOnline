@@ -1,4 +1,11 @@
-import { GET_TRIBUTOS_CUIT, GET_SOLICITUDES_PERMISOS, CANCELAR_SOLICITUD_PERMISOS } from "@ReduxSrc/Representantes/constants";
+import { 
+    GET_TRIBUTOS_CUIT, 
+    GET_SOLICITUDES_PERMISOS, 
+    GET_MIS_REPRESENTANTES, 
+    GET_MIS_REPRESENTADOS, 
+    CANCELAR_SOLICITUD_PERMISOS 
+} from "@ReduxSrc/Representantes/constants";
+import { debug } from "util";
 
 const initialState = {
     GET_TRIBUTOS_CUIT: []
@@ -21,7 +28,7 @@ const reducer = (state = initialState, action) => {
                 };
             });
 
-            return Object.assign({}, state.datosEnvioSolicitudPermisos, {
+            return Object.assign({...state}, state.datosEnvioSolicitudPermisos, {
                 datosEnvioSolicitudPermisos: datos
             });
         }
@@ -44,12 +51,40 @@ const reducer = (state = initialState, action) => {
                 datos.push(newRepresentante);
             });
 
-            return Object.assign({}, state.datosPedidoSolicitudPermisos, {
+            return Object.assign({...state}, state.datosPedidoSolicitudPermisos, {
                 datosPedidoSolicitudPermisos: datos
             });
         }
+        case GET_MIS_REPRESENTANTES: {
+
+            var datos = action.payload.return.map((repr) => {
+                return {
+                    usuario: repr.representante,
+                    tributo: repr.identificador+' - '+repr.tributo,
+                    estado: repr.estado
+                }
+            });
+
+            return Object.assign({...state}, state.datosMisRepresentantes, {
+                datosMisRepresentantes: datos
+            });
+        }
+        case GET_MIS_REPRESENTADOS: {
+
+            var datos = action.payload.return.map((repr) => {
+                return {
+                    usuario: repr.representado,
+                    tributo: repr.identificador+' - '+repr.tributo,
+                    estado: repr.estado
+                }
+            });
+
+            return Object.assign({...state}, state.datosMisRepresentados, {
+                datosMisRepresentados: datos
+            });
+        }
         case CANCELAR_SOLICITUD_PERMISOS: {
-            return Object.assign({}, state.datosEnvioSolicitudPermisos, {
+            return Object.assign({...state}, state.datosEnvioSolicitudPermisos, {
                 datosEnvioSolicitudPermisos: {}
             });
         }

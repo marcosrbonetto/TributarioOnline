@@ -32,10 +32,6 @@ import MiCard from "@Componentes/MiCard";
 //REDUX
 import { connect } from "react-redux";
 
-const mapDispatchToProps = dispatch => {
-
-};
-
 class MiNotificacion extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -259,6 +255,6 @@ let componente = undefined;
 componente = withStyles(styles)(MiNotificacion);
 componente = connect(
   null,
-  mapDispatchToProps
+  null
 )(componente);
 export default componente;

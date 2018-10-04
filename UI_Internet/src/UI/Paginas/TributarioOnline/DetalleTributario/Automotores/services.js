@@ -1,4 +1,4 @@
-const getConceptosTributo = (cuit,callback) => {
+const getInfoTributo = (cuit,callback) => {
     /*fetch('https://httpbin.org/get')
     .then(res => {
         if (res.status >= 400) {
@@ -15,138 +15,225 @@ const getConceptosTributo = (cuit,callback) => {
 
     setTimeout(function() {
         callback({
-            "return": [
+          "return": {
+            "identificador": "CHT211",
+            "tieneJuicios": true,
+            "tienePlanes": false,
+            "tieneMultas": true,
+            "titular": {
+              "cuit": "20164095054",
+              "titular": "DE UGARTE MANUEL ELOY"
+            },
+            "deudaAdministrativa": {
+              "total": 0,
+              "vencida": 7122.7,
+              "aVecer": 0,
+              "ultimoPago": "07/09/2018"
+            },
+            "periodos": [
               {
-                "periodo": "2017/002",
-                "concepto": "2017-04-10T00:00:00",
+                "item": "2015/003",
+                "fecha": "2015-06-12T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 465.1,
-                  "base": 303,
-                  "recargo": 162.1,
-                  "deduccion": 0
+                  "total": 396.7,
+                  "base": 180,
+                  "recargo": 216.7,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2017/003",
-                "concepto": "2017-06-12T00:00:00",
+                "item": "2015/004",
+                "fecha": "2015-08-13T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 446,
-                  "base": 303,
-                  "recargo": 143,
-                  "deduccion": 0
+                  "total": 385.6,
+                  "base": 180,
+                  "recargo": 205.6,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2017/004",
-                "concepto": "2017-08-10T00:00:00",
+                "item": "2015/005",
+                "fecha": "2015-10-13T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 428.1,
-                  "base": 303,
-                  "recargo": 125.1,
-                  "deduccion": 0
+                  "total": 374.6,
+                  "base": 180,
+                  "recargo": 194.6,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2017/005",
-                "concepto": "2017-10-10T00:00:00",
+                "item": "2015/006",
+                "fecha": "2015-12-14T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 409.7,
-                  "base": 303,
-                  "recargo": 106.7,
-                  "deduccion": 0
+                  "total": 363.4,
+                  "base": 180,
+                  "recargo": 183.4,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2017/006",
-                "concepto": "2017-12-11T00:00:00",
+                "item": "2016/001",
+                "fecha": "2016-02-12T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 390.9,
-                  "base": 303,
-                  "recargo": 87.9,
-                  "deduccion": 0
+                  "total": 538.7,
+                  "base": 275,
+                  "recargo": 263.7,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2018/001",
-                "concepto": "2018-02-15T00:00:00",
+                "item": "2016/002",
+                "fecha": "2016-04-15T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 370.9,
-                  "base": 303,
-                  "recargo": 67.9,
-                  "deduccion": 0
+                  "total": 521.4,
+                  "base": 275,
+                  "recargo": 246.4,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2018/002",
-                "concepto": "2018-04-12T00:00:00",
+                "item": "2016/003",
+                "fecha": "2016-06-14T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 353.9,
-                  "base": 303,
-                  "recargo": 50.9,
-                  "deduccion": 0
+                  "total": 504.9,
+                  "base": 275,
+                  "recargo": 229.9,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2018/003",
-                "concepto": "2018-06-13T00:00:00",
+                "item": "2016/004",
+                "fecha": "2016-08-12T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 335.1,
-                  "base": 303,
-                  "recargo": 32.1,
-                  "deduccion": 0
+                  "total": 488.7,
+                  "base": 275,
+                  "recargo": 213.7,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2018/004",
-                "concepto": "2018-08-14T00:00:00",
+                "item": "2016/005",
+                "fecha": "2016-10-13T00:00:00",
                 "referencia": "",
                 "importe": {
-                  "total": 316.3,
-                  "base": 303,
-                  "recargo": 13.3,
-                  "deduccion": 0
+                  "total": 471.6,
+                  "base": 275,
+                  "recargo": 196.6,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2018/005",
-                "concepto": "2018-10-12T00:00:00",
-                "referencia": "PERIODO NO VENCIDO",
+                "item": "2016/006",
+                "fecha": "2016-12-14T00:00:00",
+                "referencia": "",
                 "importe": {
-                  "total": 303,
-                  "base": 303,
-                  "recargo": 0,
-                  "deduccion": 0
+                  "total": 454.6,
+                  "base": 275,
+                  "recargo": 179.6,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               },
               {
-                "periodo": "2018/006",
-                "concepto": "2018-12-12T00:00:00",
-                "referencia": "PERIODO NO VENCIDO",
+                "item": "2017/001",
+                "fecha": "2017-02-17T00:00:00",
+                "referencia": "",
                 "importe": {
-                  "total": 303,
+                  "total": 481.2,
                   "base": 303,
-                  "recargo": 0,
-                  "deduccion": 0
+                  "recargo": 178.2,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "item": "2017/002",
+                "fecha": "2017-04-10T00:00:00",
+                "referencia": "",
+                "importe": {
+                  "total": 465.4,
+                  "base": 303,
+                  "recargo": 162.4,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "item": "2017/003",
+                "fecha": "2017-06-12T00:00:00",
+                "referencia": "",
+                "importe": {
+                  "total": 446.3,
+                  "base": 303,
+                  "recargo": 143.3,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "item": "2017/004",
+                "fecha": "2017-08-10T00:00:00",
+                "referencia": "",
+                "importe": {
+                  "total": 428.4,
+                  "base": 303,
+                  "recargo": 125.4,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "item": "2017/005",
+                "fecha": "2017-10-10T00:00:00",
+                "referencia": "",
+                "importe": {
+                  "total": 410,
+                  "base": 303,
+                  "recargo": 107,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "item": "2017/006",
+                "fecha": "2017-12-11T00:00:00",
+                "referencia": "",
+                "importe": {
+                  "total": 391.2,
+                  "base": 303,
+                  "recargo": 88.2,
+                  "deduccion": 0,
+                  "citacion": 0
                 }
               }
-            ],
-            "error": null,
-            "ok": true
-          });
+            ]
+          },
+          "error": null,
+          "ok": true
+        });
       }, 2000);
     
 };
 
 const services = {
-    getConceptosTributo: getConceptosTributo
+    getInfoTributo: getInfoTributo
 }
 
 export default services;

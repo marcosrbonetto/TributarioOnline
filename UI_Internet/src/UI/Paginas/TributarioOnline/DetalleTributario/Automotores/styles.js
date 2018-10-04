@@ -1,7 +1,7 @@
 const styles = theme => ({
     mainContainer: {
       width: '100%',
-      margin: '16px'
+      margin: '16px',
     },
     title: {
       fontWeight: '100',
@@ -23,7 +23,7 @@ const styles = theme => ({
       display: 'inline-block',
       minWidth: 'auto',
       margin: '2px',
-      borderRadius: '20px'
+      borderRadius: '20px',
     },
     buttonActionsContent: {
       textAlign: 'right',
@@ -102,6 +102,60 @@ const styles = theme => ({
       left: '50%',
       transform: 'translateX(-50%)',
       top: '20px',
+    },
+    selectIdentificador:{
+      fontSize: '22px',
+      fontWeight: 'bold',
+      marginLeft: '10px'
+    },
+    badgeMenu: {
+      background: theme.color.info.main,
+      right: '-24px',
+      top: '-5px',
+      display: 'none'
+    },
+    tabMenu: {
+      background: '#fff'
+    },
+    itemMenu: {
+      width: '100px',
+    },
+    containerDeudaAdm: {
+      border: '1px solid',
+      borderColor: theme.color.ok.main,
+      padding: '10px 0px',
+      textAlign: 'center',
+      position: 'relative',
+      margin: '28px 0px 10px 0px',
+      borderRadius: '5px',
+      '& h3': {
+        marginBottom: '0px'
+      }
+    },
+    tituloDeudaAdm: {
+      background: '#fff',
+      position: 'absolute',
+      fontSize: '14px',
+      color: theme.color.ok.main,
+      top: '-14px',
+      left: '8px',
+      padding: '5px'
+    },
+    link: {
+      color: theme.color.info.main,
+      cursor: 'pointer'
+    },
+    contaninerDetalle: {
+      padding: '10px',
+      position: 'relative',
+      '& .closePopover': {
+        fontFamily: "\'Roboto\', \'Helvetica\', \'Arial\', \'sans-serif\'",
+        fontSize: '15px',
+        position: 'absolute',
+        top: '-2px',
+        right: '4px',
+        cursor: 'pointer'
+      }
     }
   });
 
