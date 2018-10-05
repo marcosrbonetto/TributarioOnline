@@ -70,37 +70,64 @@ class DetalleTributo extends React.PureComponent {
         this.state = {
             identificadorActual: this.props.match.params.identificador,
             menuItemSeleccionado: 'contribucion',
-            labels: {
-              contribucion: {
-                detalleTitulo: 'Contribución por Período',
-                totalesDeuda: 'Administrativa',
-                vencida: 'Vencida',
-                aVencer: 'A vencer' 
-              },
-              multas: {
-                detalleTitulo: 'Multas',
-                totalesDeuda: 'Multas',
-                vencida: 'Vencida',
-                aVencer: 'A vencer' 
-              },
-              juicioContribucion: {
-                detalleTitulo: 'Juicio por Contribucion',
-                totalesDeuda: 'Administrativa',
-                vencida: 'Vencida1',
-                aVencer: 'A vencer1' 
-              },
-              juicioMultas: {
-                detalleTitulo: 'Juicio por Multas',
-                totalesDeuda: 'Administrativa',
-                vencida: 'Vencida1',
-                aVencer: 'A vencer1' 
-              },
-              planesPago: {
-                detalleTitulo: 'Planes de Pago',
-                totalesDeuda: 'Administrativa',
-                vencida: 'Vencida1',
-                aVencer: 'A vencer1' 
-              }
+            modals: {
+                informeCuenta: false,
+                datosCuenta: false,
+            },
+            contribucion: {
+                orderId: 'concepto',
+                orderBy: 'asc',
+                labels: {
+                    detalleTitulo: 'Contribución por Período',
+                    totalesDeuda: 'Administrativa',
+                    vencida: 'Deuda vencida',
+                    aVencer: 'A vencer',
+                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                }
+            },
+            multas: {
+                orderId: 'concepto',
+                orderBy: 'asc',
+                labels: {
+                    detalleTitulo: 'Multas',
+                    totalesDeuda: 'Administrativa',
+                    vencida: 'Deuda vencida',
+                    aVencer: 'A vencer',
+                    columnas: ['Causa', 'Fecha', 'Total ($)']
+                }
+            },
+            juicioContribucion: {
+                orderId: 'concepto',
+                orderBy: 'asc',
+                labels: {
+                    detalleTitulo: 'Juicio por Contribucion',
+                    totalesDeuda: 'del Juicio',
+                    vencida: 'Capital',
+                    aVencer: 'Gastos',
+                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                }
+            },
+            juicioMultas: {
+                orderId: 'concepto',
+                orderBy: 'asc',
+                labels: {
+                    detalleTitulo: 'Juicio por Multas',
+                    totalesDeuda: 'del Juicio',
+                    vencida: 'Capital',
+                    aVencer: 'Gastos',
+                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                }
+            },
+            planesPago: {
+                orderId: 'concepto',
+                orderBy: 'asc',
+                labels: {
+                    detalleTitulo: 'Planes de Pago',
+                    totalesDeuda: 'Administrativa',
+                    vencida: 'Vencida',
+                    aVencer: 'A vencer',
+                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                }
             }
         };
     }
@@ -123,22 +150,6 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
-    handleOpenModalCedulon = () => {
-        this.setState({ openModalCedulon: true });
-    };
-
-    handleOpenModalMercadoPago = () => {
-        this.setState({ openModalMercadoPago: true });
-    };
-
-    handleCloseModalCedulon = () => {
-        this.setState({ openModalCedulon: false });
-    };
-
-    handleCloseModalMercadoPago = () => {
-        this.setState({ openModalMercadoPago: false });
-    };
-
     selectIdentificador = event => {
         if (event.target.value == '0')
             return false;
@@ -160,9 +171,25 @@ class DetalleTributo extends React.PureComponent {
         });
     };
 
+    handleOpenModal = (event) => {
+        let modal = event.currentTarget.attributes.modal.value;
+
+        this.setState({ modals: {
+            [modal]: true
+        } });
+    };
+
+    handleCloseModal = (event) => {
+        let modal = event.currentTarget.attributes.modal.value;
+
+        this.setState({ modals: {
+            [modal]: false
+        } });
+    };
+
     render() {
         const { classes } = this.props;
-
+debugger;
         return (
             <div className={classes.mainContainer}>
                 <Grid container className={classes.root} spacing={16}>
@@ -182,7 +209,7 @@ class DetalleTributo extends React.PureComponent {
                                     <MenuItem value="HCJ675">HCJ675</MenuItem>
                                     <MenuItem value="FGH454">FGH454</MenuItem>
                                 </Select>
-                                - {this.state.labels[this.state.menuItemSeleccionado].detalleTitulo}
+                                - {this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}
                             </Typography>
 
                             <Typography className={classes.infoTexto}>
@@ -220,9 +247,9 @@ class DetalleTributo extends React.PureComponent {
                             {this.state.menuItemSeleccionado == 'contribucion' && <div>
                                 <MisPagos
                                     classes={classes}
-                                    info={this.props.infoContribucion}
-                                    labels={this.state.labels}
+                                    info={this.props.infoContribucion || null}
                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                    data={this.state[this.state.menuItemSeleccionado]}
                                 />
                             </div>}
 
@@ -230,9 +257,39 @@ class DetalleTributo extends React.PureComponent {
                             {this.state.menuItemSeleccionado == 'multas' && <div>
                                 <MisPagos
                                     classes={classes}
-                                    info={this.props.infoMultas}
-                                    labels={this.state.labels}
+                                    info={this.props.infoMultas || null}
                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                    data={this.state[this.state.menuItemSeleccionado]}
+                                />
+                            </div>}
+
+                            {/* Juicio por Contribucion */}
+                            {this.state.menuItemSeleccionado == 'juicioContribucion' && <div>
+                                <MisPagos
+                                    classes={classes}
+                                    info={this.props.infoJuiciosContribucion || null}
+                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                    data={this.state[this.state.menuItemSeleccionado]}
+                                />
+                            </div>}
+
+                            {/* Juicio por Multas */}
+                            {this.state.menuItemSeleccionado == 'juicioMultas' && <div>
+                                <MisPagos
+                                    classes={classes}
+                                    info={this.props.infoJuiciosMultas || null}
+                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                    data={this.state[this.state.menuItemSeleccionado]}
+                                />
+                            </div>}
+
+                            {/* Planes de Pago */}
+                            {this.state.menuItemSeleccionado == 'planesPago' && <div>
+                                <MisPagos
+                                    classes={classes}
+                                    info={this.props.infoPlanesPago || null}
+                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                    data={this.state[this.state.menuItemSeleccionado]}
                                 />
                             </div>}
 
@@ -248,7 +305,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                    <b>{this.props.infoContribucion.titular && this.props.infoContribucion.titular.titular}</b>
+                                        <b>{this.props.infoContribucion.titular && this.props.infoContribucion.titular.titular}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -259,7 +316,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                    <b>{this.props.infoContribucion.titular && this.props.infoContribucion.titular.cuit}</b>
+                                        <b>{this.props.infoContribucion.titular && this.props.infoContribucion.titular.cuit}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -270,7 +327,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                    <b>{this.props.match.params.identificador}</b>
+                                        <b>{this.props.match.params.identificador}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -281,7 +338,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                    <b>{this.props.infoContribucion.tieneJuicios ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{this.props.infoContribucion.tieneJuicios ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -292,7 +349,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                    <b>{this.props.infoContribucion.tienePlanes ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{this.props.infoContribucion.tienePlanes ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -303,7 +360,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                    <b>{this.props.infoContribucion.tieneMultas ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{this.props.infoContribucion.tieneMultas ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -321,7 +378,10 @@ class DetalleTributo extends React.PureComponent {
                                     </svg>
                                 </Grid>
                                 <Grid item sm={10}>
-                                    <Typography variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Informe de Cuenta</Typography>
+                                    <Typography 
+                                    onClick={this.handleOpenModal}
+                                    modal={'informeCuenta'}
+                                    variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Informe de Cuenta</Typography>
                                 </Grid>
                             </Grid>
 
@@ -332,7 +392,10 @@ class DetalleTributo extends React.PureComponent {
                                     </svg>
                                 </Grid>
                                 <Grid item sm={10}>
-                                    <Typography variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Datos de la Cuenta</Typography>
+                                    <Typography
+                                    onClick={this.handleOpenModal}
+                                    modal={'datosCuenta'}
+                                    variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Datos de la Cuenta</Typography>
                                 </Grid>
                             </Grid>
 
@@ -390,28 +453,21 @@ class DetalleTributo extends React.PureComponent {
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
-                    open={this.state.openModalCedulon || false}
-                    onClose={this.handleCloseModalCedulon}
+                    open={this.state.modals['informeCuenta'] || false}
+                    onClose={this.handleCloseModal}
+                    modal={'informeCuenta'}
                 >
-                    <img src={cedulonFoto} className={classes.imgPago} onClick={this.handleCloseModalCedulon} />
+                    <img modal={'informeCuenta'} src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModal} />
                 </Modal>
 
                 <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
-                    open={this.state.openModalMercadoPago || false}
-                    onClose={this.handleCloseModalMercadoPago}
+                    open={this.state.modals['datosCuenta'] || false}
+                    onClose={this.handleCloseModal}
+                    modal={'datosCuenta'}
                 >
-                    <img src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModalMercadoPago} />
-                </Modal>
-
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={this.state.openModalMercadoPago || false}
-                    onClose={this.handleCloseModalMercadoPago}
-                >
-                    <img src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModalMercadoPago} />
+                    <img modal={'datosCuenta'} src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModal} />
                 </Modal>
 
             </div>
@@ -426,9 +482,29 @@ class MisPagos extends React.PureComponent {
 
         this.state = {
             importeAPagar: '0,00',
-            anchorEl: null
+            anchorEl: null,
+            modals: {
+                Cedulon: false,
+                MercadoPago: false
+            },
         };
     }
+
+    handleOpenModal = (event) => {
+        let modal = event.currentTarget.attributes.modal.value;
+
+        this.setState({ modals: {
+            [modal]: true
+        } });
+    };
+
+    handleCloseModal = (event) => {
+        let modal = event.currentTarget.attributes.modal.value;
+
+        this.setState({ modals: {
+            [modal]: false
+        } });
+    };
 
     getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
         let importeTotal = 0;
@@ -482,37 +558,41 @@ class MisPagos extends React.PureComponent {
 
     render() {
         const classes = this.props.classes;
-
+        
+        const deudaAdministrativa = this.props.info ? this.props.info.deudaAdministrativa: null;
+        const rowList = this.props.info ? this.props.info.rowList : [];
+        const columnas = this.props.data.labels.columnas || null;
+        
         return <div>
             <Grid container className={classes.containerDeudaAdm}>
-                <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda {this.props.labels[this.props.menuItemSeleccionado].totalesDeuda}</Typography>
+                <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda {this.props.data.labels.totalesDeuda}</Typography>
                 <Grid item sm={4}>
                     <Grid container>
                         <Grid item sm={6}>
                             <Typography variant="subheading" gutterBottom>Total: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {this.props.info.deudaAdministrativa && this.props.info.deudaAdministrativa.total}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {deudaAdministrativa && deudaAdministrativa.total}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item sm={4}>
                     <Grid container>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom>{this.props.labels[this.props.menuItemSeleccionado].vencida}: </Typography>
+                            <Typography variant="subheading" gutterBottom>{this.props.data.labels.vencida}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {this.props.info.deudaAdministrativa && this.props.info.deudaAdministrativa.vencida}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {deudaAdministrativa && deudaAdministrativa.vencida}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item sm={4}>
                     <Grid container>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom>{this.props.labels[this.props.menuItemSeleccionado].aVencer}: </Typography>
+                            <Typography variant="subheading" gutterBottom>{this.props.data.labels.aVencer}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {this.props.info.deudaAdministrativa && this.props.info.deudaAdministrativa.aVencer}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {deudaAdministrativa && deudaAdministrativa.aVencer}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -537,7 +617,8 @@ class MisPagos extends React.PureComponent {
                         variant="contained"
                         color="secondary"
                         className={classes.buttonActions}
-                        onClick={this.handleOpenModalCedulon}
+                        onClick={this.handleOpenModal}
+                        modal={'Cedulon'}
                     >
                         CEDULÓN
                     <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
@@ -548,7 +629,8 @@ class MisPagos extends React.PureComponent {
                         variant="contained"
                         color="secondary"
                         className={classNames(classes.buttonActions, classes.buttonMercadoLibre)}
-                        onClick={this.handleOpenModalMercadoPago}
+                        onClick={this.handleOpenModal}
+                        modal={'MercadoPago'}
                     >
                         <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
                             Pago Online
@@ -559,12 +641,12 @@ class MisPagos extends React.PureComponent {
 
             <MiTabla
                 columns={[
-                    { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: 'Concepto' },
-                    { id: 'vencimiento', type: 'date', numeric: false, disablePadding: true, label: 'Vencimiento' },
-                    { id: 'importe', type: 'string', numeric: false, disablePadding: true, label: 'Importe ($)' },
+                    { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: (columnas ? columnas[0] : 'Concepto') },
+                    { id: 'vencimiento', type: 'date', numeric: false, disablePadding: true, label: (columnas ? columnas[1] : 'Vencimiento') },
+                    { id: 'importe', type: 'string', numeric: false, disablePadding: true, label: (columnas ? columnas[2] : 'Importe ($)') },
                     { id: 'detalle', type: 'customCell', numeric: false, disablePadding: true, label: 'Detalle' },
                 ]}
-                rows={this.props.info.rowList || []}
+                rows={rowList || []}
                 order={'asc'}
                 orderBy={'concepto'}
                 getFilasSeleccionadas={this.getFilasSeleccionadas}
@@ -590,7 +672,8 @@ class MisPagos extends React.PureComponent {
                         variant="contained"
                         color="secondary"
                         className={classes.buttonActions}
-                        onClick={this.handleOpenModalCedulon}
+                        onClick={this.handleOpenModal}
+                        modal={'Cedulon'}
                     >
                         CEDULÓN
                     <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
@@ -601,7 +684,8 @@ class MisPagos extends React.PureComponent {
                         variant="contained"
                         color="secondary"
                         className={classNames(classes.buttonActions, classes.buttonMercadoLibre)}
-                        onClick={this.handleOpenModalMercadoPago}
+                        onClick={this.handleOpenModal}
+                        modal={'MercadoPago'}
                     >
                         <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
                             Pago Online
@@ -609,6 +693,26 @@ class MisPagos extends React.PureComponent {
                     </Button>
                 </Grid>
             </Grid>
+
+            <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.modals['Cedulon'] || false}
+                onClose={this.handleCloseModal}
+                modal={'Cedulon'}
+            >
+                <img modal={'Cedulon'} src={cedulonFoto} className={classes.imgPago} onClick={this.handleCloseModal} />
+            </Modal>
+
+            <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.modals['MercadoPago'] || false}
+                onClose={this.handleCloseModal}
+                modal={'MercadoPago'}
+            >
+                <img modal={'MercadoPago'} src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModal} />
+            </Modal>
         </div>
     }
 
