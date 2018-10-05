@@ -1,2 +1,2 @@
 //Consumo WebService
-export const GET_INFO_TRIBUTO = "GET_INFO_TRIBUTO";
+export const GET_INFO_CONTRIBUCION = "GET_INFO_CONTRIBUCION";

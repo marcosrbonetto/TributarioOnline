@@ -35,7 +35,7 @@ import MiTabla from "@Componentes/MiTabla";
 import cedulonFoto from './img/cedulon.png';
 import cedulonFoto2 from './img/MP4.png';
 
-import { getInfoTributo } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/actions";
+import { getInfoContribucion } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/actions";
 
 import services from '@Rules/Rules_Automotores';
 
@@ -49,8 +49,8 @@ const mapDispatchToProps = dispatch => ({
   mostrarCargando: (cargar) => {
     dispatch(mostrarCargando(cargar));
   },
-  getInfoTributo: (datos) => {
-    dispatch(getInfoTributo(datos));
+  setPropsInfoContribucion: (datos) => {
+    dispatch(getInfoContribucion(datos));
   },
   redireccionar: url => {
     dispatch(replace(url));
@@ -74,8 +74,8 @@ class DetalleTributo extends React.PureComponent {
   componentWillMount() {
     this.props.mostrarCargando(true);
     
-    services.getInfoTributo('HCJ675', (datos) => {
-      this.props.getInfoTributo(datos);
+    services.getInfoContribucion('HCJ675', (datos) => {
+      this.props.setPropsInfoContribucion(datos);
       this.props.mostrarCargando(false);
     });
   }

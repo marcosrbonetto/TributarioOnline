@@ -1,4 +1,4 @@
-import { GET_INFO_TRIBUTO } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/constants";
+import { GET_INFO_CONTRIBUCION } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
 const initialState = {
@@ -7,7 +7,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_INFO_TRIBUTO: {
+        case GET_INFO_CONTRIBUCION: {
 
             action.payload.return['rowList'] =  action.payload.return.periodos.map((concepto) => {
                 

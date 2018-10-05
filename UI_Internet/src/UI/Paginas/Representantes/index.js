@@ -53,16 +53,16 @@ const mapDispatchToProps = dispatch => ({
   mostrarCargando: (cargar) => {
     dispatch(mostrarCargando(cargar));
   },
-  getTributosCUIT: (datos) => {
+  setPropsTributosCUIT: (datos) => {
     dispatch(getTributosCUIT(datos));
   },
-  getSolicitudesPermiso: (datos) => {
+  setPropsSolicitudesPermiso: (datos) => {
     dispatch(getSolicitudesPermiso(datos));
   },
-  getMisRepresentados: (datos) => {
+  setPropsMisRepresentados: (datos) => {
     dispatch(getMisRepresentados(datos));
   },
-  getMisRepresentantes: (datos) => {
+  setPropsMisRepresentantes: (datos) => {
     dispatch(getMisRepresentantes(datos));
   },
   cancelSolicitudPermisos: () => {
@@ -105,7 +105,7 @@ class Representantes extends React.PureComponent {
     //Traemos los permisos asociados al CUIT
     services.getSolicitudesPermiso('20355266169', (datos) => {
       //Guardamos los datos en el store
-      this.props.getSolicitudesPermiso(datos);
+      this.props.setPropsSolicitudesPermiso(datos);
       //Finalizamos el cargando 
       this.props.mostrarCargando(false);
     });
@@ -113,7 +113,7 @@ class Representantes extends React.PureComponent {
     //Traemos los representantes asociados al CUIT
     services.getMisRepresentantes('20355266169', (datos) => {
       //Guardamos los datos en el store
-      this.props.getMisRepresentantes(datos);
+      this.props.setPropsMisRepresentantes(datos);
       //Finalizamos el cargando 
       this.props.mostrarCargando(false);
     });
@@ -121,7 +121,7 @@ class Representantes extends React.PureComponent {
     //Traemos los representados asociados al CUIT
     services.getMisRepresentados('20355266169', (datos) => {
       //Guardamos los datos en el store
-      this.props.getMisRepresentados(datos);
+      this.props.setPropsMisRepresentados(datos);
       //Finalizamos el cargando 
       this.props.mostrarCargando(false);
     });
@@ -137,7 +137,7 @@ class Representantes extends React.PureComponent {
     //Traemos los tributos asociados al CUIT
     services.getTributosCUIT('20355266169', (datos) => {
       //Guardamos los datos en el store
-      this.props.getTributosCUIT(datos);
+      this.props.setPropsTributosCUIT(datos);
       //Finalizamos el cargando 
       this.props.mostrarCargando(false);
     });

@@ -1,6 +1,6 @@
-import { GET_INFO_TRIBUTO } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/constants";
+import { GET_INFO_CONTRIBUCION } from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/constants";
 
-export const getInfoTributo = datos => ({ 
-    type: GET_INFO_TRIBUTO,
+export const getInfoContribucion = datos => ({ 
+    type: GET_INFO_CONTRIBUCION,
     payload: datos
 });

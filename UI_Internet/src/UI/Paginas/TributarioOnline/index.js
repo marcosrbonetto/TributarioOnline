@@ -25,7 +25,7 @@ const mapDispatchToProps = dispatch => {
     redireccionar: url => {
       dispatch(push(url));
     },
-    getIdTributos: (datos) => {
+    setPropsIdTributos: (datos) => {
       dispatch(getIdTributos(datos));
     },
     mostrarCargando: (cargar) => {
@@ -46,7 +46,7 @@ class TributarioOnline extends React.PureComponent {
     //Traemos los tributos asociados al CUIT
     services.getIdTributos('20355266169', (datos) => {
       //Guardamos los datos en el store
-      this.props.getIdTributos(datos); 
+      this.props.setPropsIdTributos(datos); 
       //Finalizamos el cargando 
       this.props.mostrarCargando(false);
     });
