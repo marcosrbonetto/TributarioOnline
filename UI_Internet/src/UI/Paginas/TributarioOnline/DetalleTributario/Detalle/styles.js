@@ -109,13 +109,27 @@ const styles = theme => ({
       marginLeft: '10px'
     },
     badgeMenu: {
-      background: theme.color.info.main,
-      right: '-24px',
-      top: '-5px',
-      display: 'none'
+      background: theme.color.ok.main,
+      top: '-6px',
+      right: '0px',
+    },
+    badgeTab: {
+      width: '160px',
+      height: '36px',
+      '& > div': {
+        margin: '0px auto',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)'
+      }
     },
     tabMenu: {
-      background: '#fff'
+      background: '#fff',
+      '& > div': {
+        borderTop: '1px solid #bbb',
+        borderBottom: '1px solid #bbb',
+      }
     },
     itemMenu: {
       width: '100px',

@@ -32,6 +32,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Menu from '@material-ui/core/Menu';
 
 //Custom Components
 import MiCard from "@Componentes/MiCard";
@@ -199,7 +200,13 @@ class DetalleTributo extends React.PureComponent {
 
     render() {
         const { classes } = this.props;
-        
+
+        const infoContribucion = this.props.infoContribucion ? this.props.infoContribucion.rowList : [];
+        const infoMultas = this.props.infoMultas ? this.props.infoMultas.rowList : [];
+        const infoJuiciosContribucion = this.props.infoJuiciosContribucion ? this.props.infoJuiciosContribucion.rowList : [];
+        const infoJuiciosMultas = this.props.infoJuiciosMultas ? this.props.infoJuiciosMultas.rowList : [];
+        const infoPlanesPago = this.props.infoPlanesPago ? this.props.infoPlanesPago.rowList : [];
+
         return (
             <div className={classes.mainContainer}>
                 <Grid container className={classes.root} spacing={16}>
@@ -238,15 +245,15 @@ class DetalleTributo extends React.PureComponent {
                                         scrollButtons="on"
                                     >
 
-                                        <Tab className={classes.itemMenu} value="contribucion" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Contribución por período</Badge>} />
+                                        <Tab className={classes.itemMenu} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Contribución por período</div></Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="multas" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Multas</Badge>} />
+                                        <Tab className={classes.itemMenu} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoMultas ? infoMultas.length : 0}><div>Multas</div></Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="juicioContribucion" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Juicios por contribución</Badge>} />
+                                        <Tab className={classes.itemMenu} value="juicioContribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuiciosContribucion ? infoJuiciosContribucion.length : 0}><div>Juicios por contribución</div></Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="juicioMultas" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Juicios por multas</Badge>} />
+                                        <Tab className={classes.itemMenu} value="juicioMultas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuiciosMultas ? infoJuiciosMultas.length : 0}><div>Juicios por multas</div></Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="planesPago" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Planes de pago</Badge>} />
+                                        <Tab className={classes.itemMenu} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes de pago</div></Badge>} />
 
                                     </Tabs>
 
@@ -535,6 +542,7 @@ class MisPagos extends React.PureComponent {
         this.state = {
             importeAPagar: '0,00',
             anchorEl: null,
+            anchorElCedulon: null,
             modals: {
                 Cedulon: false,
                 MercadoPago: false
@@ -579,6 +587,14 @@ class MisPagos extends React.PureComponent {
         this.setState({ anchorEl: null });
     };
 
+    handleClickCedulon = event => {
+        this.setState({ anchorElCedulon: event.currentTarget });
+    };
+
+    handleCloseCedulon = () => {
+        this.setState({ anchorElCedulon: null });
+    };
+
     getCustomCell = (datosExtra) => {
         const { classes } = this.props;
 
@@ -606,7 +622,7 @@ class MisPagos extends React.PureComponent {
                     <Typography className={classes.typography}>Base: <b>$ {datosExtra.data.importe.base}</b></Typography>
                     <Typography className={classes.typography}>Recargo: <b>$ {datosExtra.data.importe.recargo}</b></Typography>
                     <Typography className={classes.typography}>Deducción: <b>$ {datosExtra.data.importe.deduccion}</b></Typography>
-                    <Typography className={classes.typography}>Citación: <b>$ {datosExtra.data.importe.citacion}</b></Typography>
+                    <Typography className={classes.typography}>Referencia: <b>{datosExtra.data.referencia}</b></Typography>
                 </Paper>
             </Popover>
         </div>;
@@ -676,14 +692,22 @@ class MisPagos extends React.PureComponent {
                         variant="contained"
                         color="secondary"
                         className={classes.buttonActions}
-                        onClick={this.handleOpenModal}
-                        modal={'Cedulon'}
+                        onClick={this.handleClickCedulon}
                     >
                         CEDULÓN
                     <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
                             Pago Efectivo
                     </Typography>
                     </Button>
+                    <Menu
+                        anchorEl={this.state.anchorElCedulon}
+                        open={Boolean(this.state.anchorElCedulon)}
+                        onClose={this.handleCloseCedulon}
+                    >
+                        <MenuItem onClick={this.handleOpenModal} modal={'Cedulon'}>Hoy</MenuItem>
+                        <MenuItem onClick={this.handleOpenModal} modal={'Cedulon'}>A Días</MenuItem>
+                    </Menu>
+
                     <Button
                         variant="contained"
                         color="secondary"
@@ -728,18 +752,26 @@ class MisPagos extends React.PureComponent {
                     />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
-                    <Button
+                <Button
                         variant="contained"
                         color="secondary"
                         className={classes.buttonActions}
-                        onClick={this.handleOpenModal}
-                        modal={'Cedulon'}
+                        onClick={this.handleClickCedulon}
                     >
                         CEDULÓN
                     <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
                             Pago Efectivo
                     </Typography>
                     </Button>
+                    <Menu
+                        anchorEl={this.state.anchorElCedulon}
+                        open={Boolean(this.state.anchorElCedulon)}
+                        onClose={this.handleCloseCedulon}
+                    >
+                        <MenuItem onClick={this.handleOpenModal} modal={'Cedulon'}>Hoy</MenuItem>
+                        <MenuItem onClick={this.handleOpenModal} modal={'Cedulon'}>A Días</MenuItem>
+                    </Menu>
+                    
                     <Button
                         variant="contained"
                         color="secondary"
