@@ -27,6 +27,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 //Custom Components
 import MiCard from "@Componentes/MiCard";
@@ -73,10 +78,11 @@ class DetalleTributo extends React.PureComponent {
             modals: {
                 informeCuenta: false,
                 datosCuenta: false,
+                ultimosPagos: false,
             },
             contribucion: {
-                orderId: 'concepto',
-                orderBy: 'asc',
+                order: 'asc',
+                orderBy: 'concepto',
                 labels: {
                     detalleTitulo: 'Contribución por Período',
                     totalesDeuda: 'Administrativa',
@@ -86,8 +92,8 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             multas: {
-                orderId: 'concepto',
-                orderBy: 'asc',
+                order: 'asc',
+                orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Multas',
                     totalesDeuda: 'Administrativa',
@@ -97,8 +103,8 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             juicioContribucion: {
-                orderId: 'concepto',
-                orderBy: 'asc',
+                order: 'asc',
+                orderBy: 'concepto',
                 labels: {
                     detalleTitulo: 'Juicio por Contribucion',
                     totalesDeuda: 'del Juicio',
@@ -108,8 +114,8 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             juicioMultas: {
-                orderId: 'concepto',
-                orderBy: 'asc',
+                order: 'asc',
+                orderBy: 'concepto',
                 labels: {
                     detalleTitulo: 'Juicio por Multas',
                     totalesDeuda: 'del Juicio',
@@ -119,8 +125,8 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             planesPago: {
-                orderId: 'concepto',
-                orderBy: 'asc',
+                order: 'asc',
+                orderBy: 'concepto',
                 labels: {
                     detalleTitulo: 'Planes de Pago',
                     totalesDeuda: 'Administrativa',
@@ -174,22 +180,26 @@ class DetalleTributo extends React.PureComponent {
     handleOpenModal = (event) => {
         let modal = event.currentTarget.attributes.modal.value;
 
-        this.setState({ modals: {
-            [modal]: true
-        } });
+        this.setState({
+            modals: {
+                [modal]: true
+            }
+        });
     };
 
     handleCloseModal = (event) => {
         let modal = event.currentTarget.attributes.modal.value;
 
-        this.setState({ modals: {
-            [modal]: false
-        } });
+        this.setState({
+            modals: {
+                [modal]: false
+            }
+        });
     };
 
     render() {
         const { classes } = this.props;
-debugger;
+        
         return (
             <div className={classes.mainContainer}>
                 <Grid container className={classes.root} spacing={16}>
@@ -270,6 +280,7 @@ debugger;
                                     info={this.props.infoJuiciosContribucion || null}
                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
                                     data={this.state[this.state.menuItemSeleccionado]}
+                                    noCheck={true}
                                 />
                             </div>}
 
@@ -280,6 +291,7 @@ debugger;
                                     info={this.props.infoJuiciosMultas || null}
                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
                                     data={this.state[this.state.menuItemSeleccionado]}
+                                    noCheck={true}
                                 />
                             </div>}
 
@@ -378,10 +390,10 @@ debugger;
                                     </svg>
                                 </Grid>
                                 <Grid item sm={10}>
-                                    <Typography 
-                                    onClick={this.handleOpenModal}
-                                    modal={'informeCuenta'}
-                                    variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Informe de Cuenta</Typography>
+                                    <Typography
+                                        onClick={this.handleOpenModal}
+                                        modal={'informeCuenta'}
+                                        variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Informe de Cuenta</Typography>
                                 </Grid>
                             </Grid>
 
@@ -393,9 +405,9 @@ debugger;
                                 </Grid>
                                 <Grid item sm={10}>
                                     <Typography
-                                    onClick={this.handleOpenModal}
-                                    modal={'datosCuenta'}
-                                    variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Datos de la Cuenta</Typography>
+                                        onClick={this.handleOpenModal}
+                                        modal={'datosCuenta'}
+                                        variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Datos de la Cuenta</Typography>
                                 </Grid>
                             </Grid>
 
@@ -417,7 +429,10 @@ debugger;
                                     </svg>
                                 </Grid>
                                 <Grid item sm={10}>
-                                    <Typography variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Últimos Pagos</Typography>
+                                    <Typography
+                                        onClick={this.handleOpenModal}
+                                        modal={'ultimosPagos'}
+                                        variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>Últimos Pagos</Typography>
                                 </Grid>
                             </Grid>
 
@@ -450,25 +465,62 @@ debugger;
                     </Grid>
                 </Grid>
 
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={this.state.modals['informeCuenta'] || false}
-                    onClose={this.handleCloseModal}
-                    modal={'informeCuenta'}
-                >
-                    <img modal={'informeCuenta'} src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModal} />
-                </Modal>
 
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={this.state.modals['datosCuenta'] || false}
-                    onClose={this.handleCloseModal}
-                    modal={'datosCuenta'}
+
+                <Dialog
+                    open={this.state.modals['informeCuenta'] || false}
+                    scroll='paper'
+                    aria-labelledby="scroll-dialog-title"
                 >
-                    <img modal={'datosCuenta'} src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModal} />
-                </Modal>
+                    <DialogTitle id="scroll-dialog-title">Informe de Cuenta</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Muchos datos! =D
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseModal} modal={'informeCuenta'} color="secondary">
+                            Cerrar
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    open={this.state.modals['datosCuenta'] || false}
+                    scroll='paper'
+                    aria-labelledby="scroll-dialog-title"
+                >
+                    <DialogTitle id="scroll-dialog-title">Datos de Cuenta</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Muchos datos! =D
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseModal} modal={'datosCuenta'} color="secondary">
+                            Cerrar
+                    </Button>
+                    </DialogActions>
+                </Dialog>
+
+
+                <Dialog
+                    open={this.state.modals['ultimosPagos'] || false}
+                    scroll='paper'
+                    aria-labelledby="scroll-dialog-title"
+                >
+                    <DialogTitle id="scroll-dialog-title">Últimos Pagos</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Muchos datos! =D
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleCloseModal} modal={'ultimosPagos'} color="secondary">
+                            Cerrar
+                    </Button>
+                    </DialogActions>
+                </Dialog>
 
             </div>
         );
@@ -493,17 +545,21 @@ class MisPagos extends React.PureComponent {
     handleOpenModal = (event) => {
         let modal = event.currentTarget.attributes.modal.value;
 
-        this.setState({ modals: {
-            [modal]: true
-        } });
+        this.setState({
+            modals: {
+                [modal]: true
+            }
+        });
     };
 
     handleCloseModal = (event) => {
         let modal = event.currentTarget.attributes.modal.value;
 
-        this.setState({ modals: {
-            [modal]: false
-        } });
+        this.setState({
+            modals: {
+                [modal]: false
+            }
+        });
     };
 
     getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
@@ -558,11 +614,14 @@ class MisPagos extends React.PureComponent {
 
     render() {
         const classes = this.props.classes;
-        
-        const deudaAdministrativa = this.props.info ? this.props.info.deudaAdministrativa: null;
+
+        const deudaAdministrativa = this.props.info ? this.props.info.deudaAdministrativa : null;
         const rowList = this.props.info ? this.props.info.rowList : [];
         const columnas = this.props.data.labels.columnas || null;
-        
+        const order = this.props.data.order || 'asc';
+        const orderBy = this.props.data.orderBy || 'concepto';
+        const noCheck = this.props.noCheck;
+
         return <div>
             <Grid container className={classes.containerDeudaAdm}>
                 <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda {this.props.data.labels.totalesDeuda}</Typography>
@@ -647,10 +706,11 @@ class MisPagos extends React.PureComponent {
                     { id: 'detalle', type: 'customCell', numeric: false, disablePadding: true, label: 'Detalle' },
                 ]}
                 rows={rowList || []}
-                order={'asc'}
-                orderBy={'concepto'}
+                order={order}
+                orderBy={orderBy}
                 getFilasSeleccionadas={this.getFilasSeleccionadas}
-                customCell={this.getCustomCell} />
+                customCell={this.getCustomCell}
+                noCheck={noCheck} />
 
             <Grid container spacing={16}>
                 <Grid item sm={7}>
