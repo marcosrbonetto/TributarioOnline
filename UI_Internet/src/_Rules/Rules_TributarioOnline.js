@@ -67,7 +67,7 @@ const getInfoContribucion = (cuit) => {
           "deudaAdministrativa": {
             "total": 0,
             "vencida": 7122.7,
-            "aVecer": 0,
+            "aVencer": 0,
             "ultimoPago": "07/09/2018"
           },
           "periodos": [
@@ -303,7 +303,7 @@ const getInfoMultas = (cuit) => {
           "deudaAdministrativa": {
             "total": 0,
             "vencida": 0,
-            "aVecer": 0,
+            "aVencer": 0,
             "ultimoPago": ""
           },
           "periodos": [

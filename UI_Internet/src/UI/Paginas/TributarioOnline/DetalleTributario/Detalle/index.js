@@ -69,7 +69,39 @@ class DetalleTributo extends React.PureComponent {
 
         this.state = {
             identificadorActual: this.props.match.params.identificador,
-            menuItemSeleccionado: 'item0',
+            menuItemSeleccionado: 'contribucion',
+            labels: {
+              contribucion: {
+                detalleTitulo: 'Contribución por Período',
+                totalesDeuda: 'Administrativa',
+                vencida: 'Vencida',
+                aVencer: 'A vencer' 
+              },
+              multas: {
+                detalleTitulo: 'Multas',
+                totalesDeuda: 'Multas',
+                vencida: 'Vencida',
+                aVencer: 'A vencer' 
+              },
+              juicioContribucion: {
+                detalleTitulo: 'Juicio por Contribucion',
+                totalesDeuda: 'Administrativa',
+                vencida: 'Vencida1',
+                aVencer: 'A vencer1' 
+              },
+              juicioMultas: {
+                detalleTitulo: 'Juicio por Multas',
+                totalesDeuda: 'Administrativa',
+                vencida: 'Vencida1',
+                aVencer: 'A vencer1' 
+              },
+              planesPago: {
+                detalleTitulo: 'Planes de Pago',
+                totalesDeuda: 'Administrativa',
+                vencida: 'Vencida1',
+                aVencer: 'A vencer1' 
+              }
+            }
         };
     }
 
@@ -150,6 +182,7 @@ class DetalleTributo extends React.PureComponent {
                                     <MenuItem value="HCJ675">HCJ675</MenuItem>
                                     <MenuItem value="FGH454">FGH454</MenuItem>
                                 </Select>
+                                - {this.state.labels[this.state.menuItemSeleccionado].detalleTitulo}
                             </Typography>
 
                             <Typography className={classes.infoTexto}>
@@ -168,15 +201,15 @@ class DetalleTributo extends React.PureComponent {
                                         scrollButtons="on"
                                     >
 
-                                        <Tab className={classes.itemMenu} value="item0" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Contribución por período</Badge>} />
+                                        <Tab className={classes.itemMenu} value="contribucion" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Contribución por período</Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="item1" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Multas</Badge>} />
+                                        <Tab className={classes.itemMenu} value="multas" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Multas</Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="item2" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Juicios por contribución</Badge>} />
+                                        <Tab className={classes.itemMenu} value="juicioContribucion" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Juicios por contribución</Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="item3" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Juicios por multas</Badge>} />
+                                        <Tab className={classes.itemMenu} value="juicioMultas" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Juicios por multas</Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="item4" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Planes de pago</Badge>} />
+                                        <Tab className={classes.itemMenu} value="planesPago" label={<Badge classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={4}>Planes de pago</Badge>} />
 
                                     </Tabs>
 
@@ -184,18 +217,22 @@ class DetalleTributo extends React.PureComponent {
                             </Grid>
 
                             {/* Contribución por período */}
-                            {this.state.menuItemSeleccionado == 'item0' && <div>
+                            {this.state.menuItemSeleccionado == 'contribucion' && <div>
                                 <MisPagos
                                     classes={classes}
                                     info={this.props.infoContribucion}
+                                    labels={this.state.labels}
+                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
                                 />
                             </div>}
 
                             {/* Multas */}
-                            {this.state.menuItemSeleccionado == 'item1' && <div>
+                            {this.state.menuItemSeleccionado == 'multas' && <div>
                                 <MisPagos
                                     classes={classes}
                                     info={this.props.infoMultas}
+                                    labels={this.state.labels}
+                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
                                 />
                             </div>}
 
@@ -368,6 +405,15 @@ class DetalleTributo extends React.PureComponent {
                     <img src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModalMercadoPago} />
                 </Modal>
 
+                <Modal
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={this.state.openModalMercadoPago || false}
+                    onClose={this.handleCloseModalMercadoPago}
+                >
+                    <img src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModalMercadoPago} />
+                </Modal>
+
             </div>
         );
     }
@@ -439,7 +485,7 @@ class MisPagos extends React.PureComponent {
 
         return <div>
             <Grid container className={classes.containerDeudaAdm}>
-                <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda Administrativa</Typography>
+                <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda {this.props.labels[this.props.menuItemSeleccionado].totalesDeuda}</Typography>
                 <Grid item sm={4}>
                     <Grid container>
                         <Grid item sm={6}>
@@ -453,7 +499,7 @@ class MisPagos extends React.PureComponent {
                 <Grid item sm={4}>
                     <Grid container>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom>Vencida: </Typography>
+                            <Typography variant="subheading" gutterBottom>{this.props.labels[this.props.menuItemSeleccionado].vencida}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
                             <Typography variant="subheading" gutterBottom><b>$ {this.props.info.deudaAdministrativa && this.props.info.deudaAdministrativa.vencida}</b></Typography>
@@ -463,10 +509,10 @@ class MisPagos extends React.PureComponent {
                 <Grid item sm={4}>
                     <Grid container>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom>A vencer: </Typography>
+                            <Typography variant="subheading" gutterBottom>{this.props.labels[this.props.menuItemSeleccionado].aVencer}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {this.props.info.deudaAdministrativa && this.props.info.deudaAdministrativa.aVecer}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {this.props.info.deudaAdministrativa && this.props.info.deudaAdministrativa.aVencer}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
