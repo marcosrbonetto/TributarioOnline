@@ -63,7 +63,7 @@ class TributarioAccess extends React.PureComponent {
     };
 
     eventRedirect = () => {
-        this.props.eventRedirect(this.state.opcionSeleccionada);
+        this.props.eventRedirect(this.props.tipo, this.state.opcionSeleccionada);
     };
 
     render() {

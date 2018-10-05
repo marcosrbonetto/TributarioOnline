@@ -141,7 +141,7 @@ class MiNotificacion extends React.PureComponent {
 
             <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
               <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
-                <ExpansionPanelSummary>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="subheading">Mis Notificaciones</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.detalleNotificacion}>
@@ -165,7 +165,7 @@ class MiNotificacion extends React.PureComponent {
             <br />
             <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
               <ExpansionPanel expanded={expanded === 'panel2'} onChange={this.handleChange('panel2')}>
-                <ExpansionPanelSummary>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="subheading">20-35526616-9</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.detalleNotificacion}>
@@ -246,7 +246,7 @@ const styles = theme => {
     },
     badgeNotificaciones: {
       top: '12px',
-      right: '20px',
+      right: '46px',
     }
   };
 };

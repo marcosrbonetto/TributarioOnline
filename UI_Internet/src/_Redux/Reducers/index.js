@@ -3,7 +3,7 @@ import Alerta from "./alerta";
 import MainContent from "./mainContent";
 
 import TributarioOnline from "@ReduxSrc/TributarioOnline/reducers";
-import Automotores from "@ReduxSrc/TributarioOnline/DetalleTributario/Automotores/reducers";
+import DetalleTributario from "@ReduxSrc/TributarioOnline/DetalleTributario/reducers";
 import Representantes from "@ReduxSrc/Representantes/reducers";
 
 import { combineReducers } from "redux";
@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   Alerta,
   MainContent,
   TributarioOnline,
-  Automotores,
+  DetalleTributario,
   Representantes
 });
 

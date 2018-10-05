@@ -44,7 +44,8 @@ class TributarioOnline extends React.PureComponent {
     this.props.mostrarCargando(true);
 
     //Traemos los tributos asociados al CUIT
-    services.getIdTributos('20355266169', (datos) => {
+    services.getIdTributos('20355266169')
+    .then((datos)=> {
       //Guardamos los datos en el store
       this.props.setPropsIdTributos(datos); 
       //Finalizamos el cargando 
@@ -56,8 +57,8 @@ class TributarioOnline extends React.PureComponent {
     //this.props.mostrarCargando(false);
   }
 
-  eventRedirect = (idTributo) => {
-    this.props.redireccionar('/DetalleTributario/'+idTributo);
+  eventRedirect = (tipoTributo, identificador) => {
+    this.props.redireccionar('/DetalleTributario/'+tipoTributo+'/'+identificador);
   }
 
   render() {

@@ -1,12 +1,12 @@
-import Automotores from "@UI/Paginas/TributarioOnline/DetalleTributario/Automotores/index";
+import DetalleTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Detalle/index";
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
 
 const Menu = [
   {
-    url: "/DetalleTributario/:identificador",
+    url: "/DetalleTributario/:tributo/:identificador",
     exact: true,
     mostrarEnMenu: true,
-    component: Automotores,
+    component: DetalleTributo,
     nombre: "Automotores",
     titulo: "Automotores",
   },
