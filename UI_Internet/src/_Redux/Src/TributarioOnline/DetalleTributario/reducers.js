@@ -1,4 +1,8 @@
-import { GET_INFO_CONTRIBUCION, GET_INFO_MULTAS } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
+import { 
+    GET_INFO_CONTRIBUCION, 
+    GET_INFO_MULTAS,
+    GET_DATOS_CUENTA 
+} from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
 const initialState = {
@@ -38,6 +42,12 @@ const reducer = (state = initialState, action) => {
 
             return Object.assign({...state}, state.infoMultas, {
                 infoMultas: action.payload.return
+            });
+        }
+        case GET_DATOS_CUENTA: {
+debugger;
+            return Object.assign({...state}, state.infoMultas, {
+                datosCuenta: action.payload.return
             });
         }
         default:

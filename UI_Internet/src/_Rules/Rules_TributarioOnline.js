@@ -544,10 +544,90 @@ const getInfoMultas = (cuit) => {
   });
 };
 
+
+
+const getDatosCuenta = (cuit) => {
+  return new Promise((resolve, reject) => {
+    /*fetch('https://httpbin.org/get')
+    .then(res => {
+        if (res.status >= 400) {
+        throw new Error("Bad response from server");
+        }
+        return res.json()
+    })
+    .then(datos => {
+        callback(datos);
+    })
+    .catch(err => {
+        console.error(err);
+    });*/
+
+    setTimeout(function () {
+      resolve({
+        "return": {
+          "identificador": "PFE018",
+          "titular": {
+            "cuit": "27115599971",
+            "titular": "ROJAS DIANA BEATRIZ"
+          },
+          "datosCuenta": [
+            "TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+          ],
+          "tieneJuicios": false,
+          "tienePlanes": false,
+          "tieneMultas": false,
+          "deudaAdministrativa": {
+            "total": 0,
+            "vencida": 0,
+            "aVencer": 694,
+            "ultimoPago": "21/09/2018"
+          },
+          "periodos": [
+            {
+              "concepto": "2018/005",
+              "fecha": "2018-10-12T00:00:00",
+              "referencia": "PERIODO NO VENCIDO",
+              "importe": {
+                "total": 347,
+                "base": 347,
+                "recargo": 0,
+                "deduccion": 0,
+                "citacion": 0
+              }
+            },
+            {
+              "concepto": "2018/006",
+              "fecha": "2018-12-12T00:00:00",
+              "referencia": "PERIODO NO VENCIDO",
+              "importe": {
+                "total": 347,
+                "base": 347,
+                "recargo": 0,
+                "deduccion": 0,
+                "citacion": 0
+              }
+            }
+          ]
+        },
+        "error": null,
+        "ok": true
+      });
+    }, 2000);
+  });
+};
+
+
+
 const services = {
   getIdTributos: getIdTributos,
   getInfoContribucion: getInfoContribucion,
-  getInfoMultas: getInfoMultas
+  getInfoMultas: getInfoMultas,
+  getDatosCuenta: getDatosCuenta
 }
 
 export default services;
