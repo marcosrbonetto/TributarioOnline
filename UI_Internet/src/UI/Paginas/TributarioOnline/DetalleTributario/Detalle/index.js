@@ -27,11 +27,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Menu from '@material-ui/core/Menu';
 
 //Custom Components
@@ -46,7 +41,7 @@ import { getInfoContribucion, getInfoMultas, getDatosCuenta } from "@ReduxSrc/Tr
 
 import services from '@Rules/Rules_TributarioOnline';
 
-import { stringToFloat } from "@Utils/functions"
+import { stringToFloat, stringToDate, diffDays } from "@Utils/functions"
 
 const mapStateToProps = state => {
     return {
@@ -81,7 +76,9 @@ class DetalleTributo extends React.PureComponent {
         this.state = {
             identificadorActual: this.props.match.params.identificador,
             menuItemSeleccionado: 'contribucion',
+            mostrarAlternativaPlan: false,
             contribucion: {
+                paramDatos: 'infoContribucion',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -93,6 +90,7 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             multas: {
+                paramDatos: 'infoMultas',
                 order: 'asc',
                 orderBy: 'vencimiento',
                 labels: {
@@ -104,6 +102,7 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             juicioContribucion: {
+                paramDatos: 'infoJuicioContribucion',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -115,6 +114,7 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             juicioMultas: {
+                paramDatos: 'infoJuicioMultas',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -126,6 +126,7 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             planesPago: {
+                paramDatos: 'infoPlanesPago',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -154,6 +155,26 @@ class DetalleTributo extends React.PureComponent {
 
         Promise.all([service1, service2]).then(() => {
             this.props.mostrarCargando(false);
+        });
+    }
+
+    componentDidUpdate() {
+        //Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días
+        const seccion = this.state.menuItemSeleccionado;
+        const datosSeccion = this.state[seccion].paramDatos;
+        let mostrarAlternativaPlan = false;
+        
+        this.props[datosSeccion].rowList && this.props[datosSeccion].rowList.some((item) => {
+            
+            if(diffDays(stringToDate(item.vencimiento),new Date()) >= 60) {
+                mostrarAlternativaPlan = true;
+                return true;
+            }
+
+        });
+
+        this.setState({
+            mostrarAlternativaPlan: mostrarAlternativaPlan
         });
     }
 
@@ -445,21 +466,23 @@ class DetalleTributo extends React.PureComponent {
                             {/* NO Planes de Pago */}
                             {this.state.menuItemSeleccionado != 'planesPago' && <div>
 
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
+                                {this.state.mostrarAlternativaPlan && <div>
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <MiLinkDialog
+                                                textoLink={'Alternativa de plan'}
+                                                titulo={'Alternativa de plan'}
+                                            >
+                                                Contenido Alternativa de plan!
+                                            </MiLinkDialog>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item sm={10}>
-                                        <MiLinkDialog
-                                            textoLink={'Alternativa de plan'}
-                                            titulo={'Alternativa de plan'}
-                                        >
-                                            Contenido Alternativa de plan!
-                                        </MiLinkDialog>
-                                    </Grid>
-                                </Grid>
+                                </div>}
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={2}>

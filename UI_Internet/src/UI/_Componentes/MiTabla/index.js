@@ -248,10 +248,11 @@ class MiTabla extends React.PureComponent {
                         <TableBody>
                             {stableSort(data, getSorting(order, orderBy, orderType))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
+                                .map((n,index) => {
                                     const isSelected = this.isSelected(n.id);
 
                                     return <MiRow
+                                        key={index}
                                         noCheck={noCheck}
                                         data={n}
                                         classes={classes}

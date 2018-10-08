@@ -51,4 +51,19 @@ export const dateToString = (date, format) => {
     return format.replace('DD',day).replace('MM',month).replace('YYYY',year);
 };
 
+export const stringToDate = (stringDate) => {
+    const day =  parseInt(stringDate.split("/")[0]);
+	const month =  parseInt(stringDate.split("/")[1]) + 1;
+	const strYear = stringDate.split("/")[2];
+    const year =  strYear.length > 2 ? parseInt(strYear) : (2000+parseInt(strYear));
+
+    return new Date(year,month,day);
+};
+
+export const diffDays = (fromDate,toDate) => {
+	return Math.round(Math.abs((fromDate.getTime() - toDate.getTime())/(24*60*60*1000)));
+};
+
+
+
 
