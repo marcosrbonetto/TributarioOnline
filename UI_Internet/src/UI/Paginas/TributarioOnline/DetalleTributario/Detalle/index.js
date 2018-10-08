@@ -37,7 +37,13 @@ import MiLinkDialog from "@Componentes/MiLinkDialog";
 import cedulonFoto from './img/cedulon.png';
 import cedulonFoto2 from './img/MP4.png';
 
-import { getInfoContribucion, getInfoMultas, getDatosCuenta } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
+import {
+    getInfoContribucion,
+    getInfoMultas,
+    getDatosCuenta,
+    getInfoJuiciosContribucion,
+    getInfoJuiciosMulta
+} from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 
 import services from '@Rules/Rules_TributarioOnline';
 
@@ -47,6 +53,8 @@ const mapStateToProps = state => {
     return {
         infoContribucion: state.DetalleTributario.infoContribucion,
         infoMultas: state.DetalleTributario.infoMultas,
+        infoJuiciosContribucion: state.DetalleTributario.infoJuiciosContribucion,
+        infoJuiciosMulta: state.DetalleTributario.infoJuiciosMulta,
         datosCuenta: state.DetalleTributario.datosCuenta,
     };
 };
@@ -60,6 +68,12 @@ const mapDispatchToProps = dispatch => ({
     },
     setPropsInfoMultas: (datos) => {
         dispatch(getInfoMultas(datos));
+    },
+    setPropsInfoJuiciosContribucion: (datos) => {
+        dispatch(getInfoJuiciosContribucion(datos));
+    },
+    setPropsInfoJuiciosMulta: (datos) => {
+        dispatch(getInfoJuiciosMulta(datos));
     },
     setPropsDatosCuenta: (datos) => {
         dispatch(getDatosCuenta(datos));
@@ -102,7 +116,7 @@ class DetalleTributo extends React.PureComponent {
                 }
             },
             juicioContribucion: {
-                paramDatos: 'infoJuicioContribucion',
+                paramDatos: 'infoJuiciosContribucion',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -111,10 +125,11 @@ class DetalleTributo extends React.PureComponent {
                     vencida: 'Capital',
                     aVencer: 'Gastos',
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
-                }
+                },
+                menuItemSeleccionado: ''
             },
             juicioMultas: {
-                paramDatos: 'infoJuicioMultas',
+                paramDatos: 'infoJuiciosMulta',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -123,7 +138,8 @@ class DetalleTributo extends React.PureComponent {
                     vencida: 'Capital',
                     aVencer: 'Gastos',
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
-                }
+                },
+                menuItemSeleccionado: ''
             },
             planesPago: {
                 paramDatos: 'infoPlanesPago',
@@ -153,9 +169,33 @@ class DetalleTributo extends React.PureComponent {
                 this.props.setPropsInfoMultas(datos);
             });
 
-        Promise.all([service1, service2]).then(() => {
+        const service3 = services.getInfoJuiciosContribucion(this.props.match.params.identificador)
+            .then((datos) => {
+                this.props.setPropsInfoJuiciosContribucion(datos);
+            });
+
+        const service4 = services.getInfoJuiciosMulta(this.props.match.params.identificador)
+            .then((datos) => {
+                this.props.setPropsInfoJuiciosMulta(datos);
+            });
+
+        Promise.all([service1, service2, service3, service4]).then(() => {
             this.props.mostrarCargando(false);
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(JSON.stringify(this.props.infoJuiciosContribucion)!=JSON.stringify(nextProps.infoJuiciosContribucion)){
+            let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
+            juicioContribucion.menuItemSeleccionado = nextProps.infoJuiciosContribucion.juiciosList[0].idJuicio;
+            this.setState({juicioContribucion});   
+        }
+
+        if(JSON.stringify(this.props.infoJuiciosMulta)!=JSON.stringify(nextProps.infoJuiciosMulta)){
+            let juicioMultas = Object.assign({}, this.state.juicioMultas);
+            juicioMultas.menuItemSeleccionado = nextProps.infoJuiciosMulta.juiciosList[0].idJuicio;
+            this.setState({juicioMultas});   
+        }
     }
 
     componentDidUpdate() {
@@ -163,10 +203,10 @@ class DetalleTributo extends React.PureComponent {
         const seccion = this.state.menuItemSeleccionado;
         const datosSeccion = this.state[seccion].paramDatos;
         let mostrarAlternativaPlan = false;
-        
+
         this.props[datosSeccion].rowList && this.props[datosSeccion].rowList.some((item) => {
-            
-            if(diffDays(stringToDate(item.vencimiento),new Date()) >= 60) {
+
+            if (diffDays(stringToDate(item.vencimiento), new Date()) >= 60) {
                 mostrarAlternativaPlan = true;
                 return true;
             }
@@ -199,6 +239,20 @@ class DetalleTributo extends React.PureComponent {
         });
     };
 
+    handleMenuJuicioContribucionChange = (event, value) => {
+
+        let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
+        juicioContribucion.menuItemSeleccionado = value;
+        this.setState({juicioContribucion});   
+    };
+
+    handleMenuJuicioMultasChange = (event, value) => {
+
+        let juicioMultas = Object.assign({}, this.state.juicioMultas);
+        juicioMultas.menuItemSeleccionado = value;
+        this.setState({juicioMultas});   
+    };
+
     dialogGetDatosCuenta = event => {
         return new Promise((resolve, reject) => {
             if (!this.props.datosCuenta) {
@@ -225,8 +279,8 @@ class DetalleTributo extends React.PureComponent {
 
         const infoContribucion = this.props.infoContribucion ? this.props.infoContribucion.rowList : [];
         const infoMultas = this.props.infoMultas ? this.props.infoMultas.rowList : [];
-        const infoJuiciosContribucion = this.props.infoJuiciosContribucion ? this.props.infoJuiciosContribucion.rowList : [];
-        const infoJuiciosMultas = this.props.infoJuiciosMultas ? this.props.infoJuiciosMultas.rowList : [];
+        const infoJuiciosContribucion = this.props.infoJuiciosContribucion ? this.props.infoJuiciosContribucion.juiciosList : [];
+        const infoJuiciosMulta = this.props.infoJuiciosMulta ? this.props.infoJuiciosMulta.juiciosList : [];
         const infoPlanesPago = this.props.infoPlanesPago ? this.props.infoPlanesPago.rowList : [];
 
         return (
@@ -273,7 +327,7 @@ class DetalleTributo extends React.PureComponent {
 
                                         <Tab className={classes.itemMenu} value="juicioContribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuiciosContribucion ? infoJuiciosContribucion.length : 0}><div>Juicios por contribución</div></Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="juicioMultas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuiciosMultas ? infoJuiciosMultas.length : 0}><div>Juicios por multas</div></Badge>} />
+                                        <Tab className={classes.itemMenu} value="juicioMultas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuiciosMulta ? infoJuiciosMulta.length : 0}><div>Juicios por multas</div></Badge>} />
 
                                         <Tab className={classes.itemMenu} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes de pago</div></Badge>} />
 
@@ -304,24 +358,74 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Juicio por Contribucion */}
                             {this.state.menuItemSeleccionado == 'juicioContribucion' && <div>
-                                <MisPagos
-                                    classes={classes}
-                                    info={this.props.infoJuiciosContribucion || null}
-                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                    data={this.state[this.state.menuItemSeleccionado]}
-                                    noCheck={true}
-                                />
+
+                                <Grid container spacing={16}>
+                                    <Grid item sm={12} className={classes.tabMenu}>
+
+                                        <Tabs
+                                            value={this.state.juicioContribucion.menuItemSeleccionado}
+                                            onChange={this.handleMenuJuicioContribucionChange}
+                                            classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+                                            scrollable
+                                            scrollButtons="on"
+                                        >
+
+                                            {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.juiciosList.map((juicio) => {
+                                                return <Tab className={classes.itemMenu} value={juicio.idJuicio} label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                            })}
+
+                                        </Tabs>
+
+                                    </Grid>
+                                </Grid>
+                                {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.juiciosList.map((juicio) => {
+                                    return  <div>
+                                                {this.state.juicioContribucion.menuItemSeleccionado == juicio.idJuicio &&
+                                                    <MisPagos
+                                                        classes={classes}
+                                                        info={juicio || null}
+                                                        menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                                        data={this.state[this.state.menuItemSeleccionado]}
+                                                    />
+                                                }
+                                            </div>
+                                })}
                             </div>}
 
                             {/* Juicio por Multas */}
                             {this.state.menuItemSeleccionado == 'juicioMultas' && <div>
-                                <MisPagos
-                                    classes={classes}
-                                    info={this.props.infoJuiciosMultas || null}
-                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                    data={this.state[this.state.menuItemSeleccionado]}
-                                    noCheck={true}
-                                />
+
+                                <Grid container spacing={16}>
+                                    <Grid item sm={12} className={classes.tabMenu}>
+
+                                        <Tabs
+                                            value={this.state.juicioMultas.menuItemSeleccionado}
+                                            onChange={this.handleMenuJuicioMultasChange}
+                                            classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+                                            scrollable
+                                            scrollButtons="on"
+                                        >
+
+                                            {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.juiciosList.map((juicio) => {
+                                                return <Tab className={classes.itemMenu} value={juicio.idJuicio} label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                            })}
+
+                                        </Tabs>
+
+                                    </Grid>
+                                </Grid>
+                                {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.juiciosList.map((juicio) => {
+                                    return  <div>
+                                                {this.state.juicioMultas.menuItemSeleccionado == juicio.idJuicio &&
+                                                    <MisPagos
+                                                        classes={classes}
+                                                        info={juicio || null}
+                                                        menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                                        data={this.state[this.state.menuItemSeleccionado]}
+                                                    />
+                                                }
+                                            </div>
+                                })}
                             </div>}
 
                             {/* Planes de Pago */}
@@ -692,6 +796,14 @@ class MisPagos extends React.PureComponent {
         const classes = this.props.classes;
 
         const deudaAdministrativa = this.props.info ? this.props.info.deudaAdministrativa : null;
+        const deudaJuicio = this.props.info ? this.props.info.deudaJuicio : null;
+
+        let valoresDeuda = {
+            valor1: (deudaAdministrativa && deudaAdministrativa.total) || (deudaJuicio && deudaJuicio.total) || 0,
+            valor2: (deudaAdministrativa && deudaAdministrativa.vencida) || (deudaJuicio && deudaJuicio.capital) || 0,
+            valor3: (deudaAdministrativa && deudaAdministrativa.aVencer) || (deudaJuicio && deudaJuicio.gastos) || 0,
+        }
+
         const rowList = this.props.info ? this.props.info.rowList : [];
         const columnas = this.props.data.labels.columnas || null;
         const order = this.props.data.order || 'asc';
@@ -707,7 +819,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>Total: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {deudaAdministrativa && deudaAdministrativa.total}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {valoresDeuda.valor1}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -717,7 +829,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>{this.props.data.labels.vencida}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {deudaAdministrativa && deudaAdministrativa.vencida}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {valoresDeuda.valor2}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -727,7 +839,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>{this.props.data.labels.aVencer}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {deudaAdministrativa && deudaAdministrativa.aVencer}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {valoresDeuda.valor3}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>

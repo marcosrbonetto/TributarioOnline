@@ -113,6 +113,12 @@ const styles = theme => ({
       top: '-6px',
       right: '0px',
     },
+    badgeJuicioMenu: {
+      background: theme.color.error.main,
+      top: '-6px',
+      right: '0px',
+      color: '#fff'
+    },
     badgeTab: {
       width: '160px',
       height: '36px',
@@ -133,6 +139,12 @@ const styles = theme => ({
     },
     itemMenu: {
       width: '100px',
+    },
+    tabsRoot: {
+      color: theme.color.error.main,
+    },
+    tabsIndicator: {
+      borderBottom: `2px solid ${theme.color.error.main}`,
     },
     containerDeudaAdm: {
       border: '1px solid',
