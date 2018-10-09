@@ -1,7 +1,6 @@
 import { 
     GET_INFO_CONTRIBUCION, 
     GET_INFO_MULTAS,
-    GET_DATOS_CUENTA,
     GET_INFO_JUICIOS_CONTR,
     GET_INFO_JUICIOS_MULTAS,
     GET_INFO_PLANES_PAGO
@@ -97,12 +96,6 @@ const reducer = (state = initialState, action) => {
 
             return Object.assign({...state}, state.infoJuiciosMulta, {
                 infoJuiciosMulta: action.payload.return
-            });
-        }
-        case GET_DATOS_CUENTA: {
-
-            return Object.assign({...state}, state.infoMultas, {
-                datosCuenta: action.payload.return
             });
         }
         default:

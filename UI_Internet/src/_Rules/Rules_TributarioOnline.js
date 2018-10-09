@@ -70,6 +70,14 @@ const getInfoContribucion = (cuit) => {
             "aVencer": 0,
             "ultimoPago": "07/09/2018"
           },
+          "datosCuenta": [
+            "1TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+          ],
           "periodos": [
             {
               "concepto": "2015/003",
@@ -306,6 +314,14 @@ const getInfoMultas = (cuit) => {
             "aVencer": 0,
             "ultimoPago": ""
           },
+          "datosCuenta": [
+            "2TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+          ],
           "periodos": [
             {
               "concepto": "4882435",
@@ -575,6 +591,14 @@ const getInfoJuiciosContribucion = (cuit) => {
               "capital": 2474.4,
               "gastos": 1775.59
             },
+            "datosCuenta": [
+            "3TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "2012/004",
@@ -721,6 +745,14 @@ const getInfoJuiciosContribucion = (cuit) => {
               "capital": 1462.2,
               "gastos": 1775.59
             },
+            "datosCuenta": [
+            "3TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "2014/001",
@@ -858,10 +890,18 @@ const getInfoJuiciosMulta = (cuit) => {
               "capital": 812.5,
               "gastos": 947.3
             },
+            "datosCuenta": [
+            "41TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "MULTA",
-                "fecha": "2018-10-08T00:00:00",
+                "fecha": "2018-01-08T00:00:00",
                 "referencia": "En Juicio Nro. TF 00350/2018",
                 "importe": {
                   "total": 812.5,
@@ -873,7 +913,7 @@ const getInfoJuiciosMulta = (cuit) => {
               },
               {
                 "concepto": "HONORAR.",
-                "fecha": "2018-10-08T00:00:00",
+                "fecha": "2018-01-08T00:00:00",
                 "referencia": "HONORARIOS",
                 "importe": {
                   "total": 406.2,
@@ -885,7 +925,7 @@ const getInfoJuiciosMulta = (cuit) => {
               },
               {
                 "concepto": "GASTOS",
-                "fecha": "2018-10-08T00:00:00",
+                "fecha": "2018-01-08T00:00:00",
                 "referencia": "GASTOS",
                 "importe": {
                   "total": 541.1,
@@ -908,6 +948,14 @@ const getInfoJuiciosMulta = (cuit) => {
               "capital": 917.9,
               "gastos": 1052.7
             },
+            "datosCuenta": [
+            "42TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "MULTA",
@@ -958,6 +1006,14 @@ const getInfoJuiciosMulta = (cuit) => {
               "capital": 307.3,
               "gastos": 442.2
             },
+            "datosCuenta": [
+            "43TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "MULTA",
@@ -1008,6 +1064,14 @@ const getInfoJuiciosMulta = (cuit) => {
               "capital": 311.2,
               "gastos": 446.1
             },
+            "datosCuenta": [
+            "41TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "MULTA",
@@ -1058,6 +1122,14 @@ const getInfoJuiciosMulta = (cuit) => {
               "capital": 370.3,
               "gastos": 505.2
             },
+            "datosCuenta": [
+            "41TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "MULTA",
@@ -1108,6 +1180,14 @@ const getInfoJuiciosMulta = (cuit) => {
               "capital": 749.1,
               "gastos": 883.9
             },
+            "datosCuenta": [
+            "41TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "MULTA",
@@ -1158,6 +1238,14 @@ const getInfoJuiciosMulta = (cuit) => {
               "capital": 253.2,
               "gastos": 388.1
             },
+            "datosCuenta": [
+            "41TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
+            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
+            "ORIGEN:     CNAS:           DNRPA: 13622413",
+            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
+            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
+            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
+            ],
             "periodos": [
               {
                 "concepto": "MULTA",
@@ -1205,91 +1293,12 @@ const getInfoJuiciosMulta = (cuit) => {
   });
 };
 
-
-const getDatosCuenta = (cuit) => {
-  return new Promise((resolve, reject) => {
-    /*fetch('https://httpbin.org/get')
-    .then(res => {
-        if (res.status >= 400) {
-        throw new Error("Bad response from server");
-        }
-        return res.json()
-    })
-    .then(datos => {
-        callback(datos);
-    })
-    .catch(err => {
-        console.error(err);
-    });*/
-
-    setTimeout(function () {
-      resolve({
-        "return": {
-          "identificador": "PFE018",
-          "titular": {
-            "cuit": "27115599971",
-            "titular": "ROJAS DIANA BEATRIZ"
-          },
-          "datosCuenta": [
-            "TIPO: AUTOMOVIL              VALOR CUOTA:    385,00        VALUACION:    140.000",
-            "MARCA: VOLKSWAGEN       GOL TREND 1.6            MODELO: 2015",
-            "ORIGEN:     CNAS:           DNRPA: 13622413",
-            "CODIGO DE BANELCO PAGOS: 171333201800    CODIGO DE LINK PAGOS: 0000171333201800",
-            "FECHA DE INICIO DE FACTURACION: 09/10/2015",
-            "APLICA 10% DESCTO.S/TASA 2018 POR CONTRIB.CUMPLIDOR   $   228,00"
-          ],
-          "tieneJuicios": false,
-          "tienePlanes": false,
-          "tieneMultas": false,
-          "deudaAdministrativa": {
-            "total": 0,
-            "vencida": 0,
-            "aVencer": 694,
-            "ultimoPago": "21/09/2018"
-          },
-          "periodos": [
-            {
-              "concepto": "2018/005",
-              "fecha": "2018-10-12T00:00:00",
-              "referencia": "PERIODO NO VENCIDO",
-              "importe": {
-                "total": 347,
-                "base": 347,
-                "recargo": 0,
-                "deduccion": 0,
-                "citacion": 0
-              }
-            },
-            {
-              "concepto": "2018/006",
-              "fecha": "2018-12-12T00:00:00",
-              "referencia": "PERIODO NO VENCIDO",
-              "importe": {
-                "total": 347,
-                "base": 347,
-                "recargo": 0,
-                "deduccion": 0,
-                "citacion": 0
-              }
-            }
-          ]
-        },
-        "error": null,
-        "ok": true
-      });
-    }, 2000);
-  });
-};
-
-
-
 const services = {
   getIdTributos: getIdTributos,
   getInfoContribucion: getInfoContribucion,
   getInfoMultas: getInfoMultas,
   getInfoJuiciosContribucion: getInfoJuiciosContribucion,
-  getInfoJuiciosMulta: getInfoJuiciosMulta,
-  getDatosCuenta: getDatosCuenta
+  getInfoJuiciosMulta: getInfoJuiciosMulta
 }
 
 export default services;

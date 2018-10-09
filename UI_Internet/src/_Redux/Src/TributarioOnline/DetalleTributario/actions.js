@@ -1,7 +1,6 @@
 import { 
     GET_INFO_CONTRIBUCION, 
     GET_INFO_MULTAS,
-    GET_DATOS_CUENTA,
     GET_INFO_JUICIOS_CONTR,
     GET_INFO_JUICIOS_MULTAS,
     GET_INFO_PLANES_PAGO
@@ -29,10 +28,5 @@ export const getInfoJuiciosMulta = datos => ({
 
 export const getInfoPlanesPago = datos => ({ 
     type: GET_INFO_PLANES_PAGO,
-    payload: datos
-});
-
-export const getDatosCuenta = datos => ({ 
-    type: GET_DATOS_CUENTA,
     payload: datos
 });

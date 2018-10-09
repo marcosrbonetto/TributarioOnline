@@ -40,7 +40,6 @@ import cedulonFoto2 from './img/MP4.png';
 import {
     getInfoContribucion,
     getInfoMultas,
-    getDatosCuenta,
     getInfoJuiciosContribucion,
     getInfoJuiciosMulta
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
@@ -75,9 +74,6 @@ const mapDispatchToProps = dispatch => ({
     setPropsInfoJuiciosMulta: (datos) => {
         dispatch(getInfoJuiciosMulta(datos));
     },
-    setPropsDatosCuenta: (datos) => {
-        dispatch(getDatosCuenta(datos));
-    },
     redireccionar: url => {
         dispatch(replace(url));
     }
@@ -91,8 +87,10 @@ class DetalleTributo extends React.PureComponent {
             identificadorActual: this.props.match.params.identificador,
             menuItemSeleccionado: 'contribucion',
             mostrarAlternativaPlan: false,
+            infoDatosCuenta: [],
             contribucion: {
                 paramDatos: 'infoContribucion',
+                arrayResult: false,
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -105,6 +103,7 @@ class DetalleTributo extends React.PureComponent {
             },
             multas: {
                 paramDatos: 'infoMultas',
+                arrayResult: false,
                 order: 'asc',
                 orderBy: 'vencimiento',
                 labels: {
@@ -117,6 +116,7 @@ class DetalleTributo extends React.PureComponent {
             },
             juicioContribucion: {
                 paramDatos: 'infoJuiciosContribucion',
+                arrayResult: true,
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -130,6 +130,7 @@ class DetalleTributo extends React.PureComponent {
             },
             juicioMultas: {
                 paramDatos: 'infoJuiciosMulta',
+                arrayResult: true,
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -143,6 +144,7 @@ class DetalleTributo extends React.PureComponent {
             },
             planesPago: {
                 paramDatos: 'infoPlanesPago',
+                arrayResult: true,
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -185,6 +187,12 @@ class DetalleTributo extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
+        if(JSON.stringify(this.props.infoContribucion)!=JSON.stringify(nextProps.infoContribucion)){
+            this.refreshValoresPantalla({
+                listaDatos: nextProps.infoContribucion
+            });
+        }
+        
         if(JSON.stringify(this.props.infoJuiciosContribucion)!=JSON.stringify(nextProps.infoJuiciosContribucion)){
             let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
             juicioContribucion.menuItemSeleccionado = nextProps.infoJuiciosContribucion.juiciosList[0].idJuicio;
@@ -198,22 +206,30 @@ class DetalleTributo extends React.PureComponent {
         }
     }
 
-    componentDidUpdate() {
-        //Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días
-        const seccion = this.state.menuItemSeleccionado;
-        const datosSeccion = this.state[seccion].paramDatos;
-        let mostrarAlternativaPlan = false;
+    //mostrarAlternativaPlan - Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días
+    //infoDatosCuenta - La información de "Datos de Cuenta" varia respecto a cada seccion
+    refreshValoresPantalla(parametros) {
+        const listaDatos = parametros.listaDatos || [];
 
-        this.props[datosSeccion].rowList && this.props[datosSeccion].rowList.some((item) => {
+        if(listaDatos.length == 0)
+            return false;
+
+        let mostrarAlternativaPlan = false;
+        let infoDatosCuenta = [];
+
+        if(listaDatos.datosCuenta)
+            infoDatosCuenta = listaDatos.datosCuenta;
+
+        listaDatos.rowList && listaDatos.rowList.some((item) => {
 
             if (diffDays(stringToDate(item.vencimiento), new Date()) >= 60) {
                 mostrarAlternativaPlan = true;
                 return true;
             }
-
         });
-
+        
         this.setState({
+            infoDatosCuenta: infoDatosCuenta,
             mostrarAlternativaPlan: mostrarAlternativaPlan
         });
     }
@@ -237,40 +253,59 @@ class DetalleTributo extends React.PureComponent {
         this.setState({
             menuItemSeleccionado: value
         });
+
+        //Seteamos valores que varias de acuerdo a la sección seleccionada
+        const infoSeccion = this.state[value].paramDatos;
+        const listaDatos = this.state[value].arrayResult ? this.getListaDatosJuicios(this.props[infoSeccion]) : this.props[infoSeccion];
+        this.refreshValoresPantalla({
+            listaDatos: listaDatos
+        });
     };
 
-    handleMenuJuicioContribucionChange = (event, value) => {
+    //Retorna listaDatos de un juicio para el uso de funcion refreshValoresPantalla
+    getListaDatosJuicios = (infoDatos, idJuicio) => {
+
+        let listaDatosJuicio = {};
+        if(!idJuicio) {
+            listaDatosJuicio = infoDatos && infoDatos.juiciosList[0];
+        } else {
+            infoDatos && infoDatos.juiciosList.some((item) => {
+
+                if(!idJuicio || item.idJuicio == idJuicio) {
+                    listaDatosJuicio = item;
+                    return false
+                }
+            });
+        }
+
+        return listaDatosJuicio;
+    }
+
+    handleMenuJuicioContribucionChange = (event, idJuicio) => {
 
         let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
-        juicioContribucion.menuItemSeleccionado = value;
+        juicioContribucion.menuItemSeleccionado = idJuicio;
         this.setState({juicioContribucion});   
+        
+        const seccion = this.state.menuItemSeleccionado;
+        const infoSeccion = this.state[seccion].paramDatos;
+        const listaDatos = this.getListaDatosJuicios(this.props[infoSeccion], idJuicio);
+        this.refreshValoresPantalla({
+            listaDatos: listaDatos
+        });
     };
 
-    handleMenuJuicioMultasChange = (event, value) => {
+    handleMenuJuicioMultasChange = (event, idJuicio) => {
 
         let juicioMultas = Object.assign({}, this.state.juicioMultas);
-        juicioMultas.menuItemSeleccionado = value;
+        juicioMultas.menuItemSeleccionado = idJuicio;
         this.setState({juicioMultas});   
-    };
 
-    dialogGetDatosCuenta = event => {
-        return new Promise((resolve, reject) => {
-            if (!this.props.datosCuenta) {
-                this.props.mostrarCargando(true);
-                return services.getDatosCuenta(this.props.match.params.identificador)
-                    .then((datos) => {
-
-                        this.props.setPropsDatosCuenta(datos);
-                        this.props.mostrarCargando(false);
-
-                        resolve(this.props.datosCuenta);
-                    })
-                    .catch(function (e) {
-                        reject(e);
-                    });
-            } else {
-                resolve(this.props.datosCuenta);
-            }
+        const seccion = this.state.menuItemSeleccionado;
+        const infoSeccion = this.state[seccion].paramDatos;
+        const listaDatos = this.getListaDatosJuicios(this.props[infoSeccion], idJuicio);
+        this.refreshValoresPantalla({
+            listaDatos: listaDatos
         });
     };
 
@@ -542,9 +577,8 @@ class DetalleTributo extends React.PureComponent {
                                     <MiLinkDialog
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
-                                        promiseBeforeOpen={this.dialogGetDatosCuenta}
                                     >
-                                        {this.props.datosCuenta && this.props.datosCuenta.datosCuenta.map((item) => {
+                                        {this.state.infoDatosCuenta && this.state.infoDatosCuenta.map((item) => {
                                             return <div>{item}</div>;
                                         })}
                                     </MiLinkDialog>
