@@ -20,7 +20,7 @@ import Icon from '@material-ui/core/Icon';
 import MiCard from "@Componentes/MiCard";
 
 const mapStateToProps = state => {
-    return { opciones: state.TributarioOnline.GET_ID_TRIBUTOS };
+    return { opciones: state.TributarioOnline.idsTributos };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -40,15 +40,18 @@ class TributarioAccess extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(JSON.stringify(this.props.opciones[this.props.id])!=JSON.stringify(nextProps.opciones[this.props.id])){
+        const nextPropsTributo = (nextProps.opciones && nextProps.opciones[this.props.id]) ? nextProps.opciones[this.props.id] : null;
+        const propsTributo = (this.props.opciones && this.props.opciones[this.props.id]) ? this.props.opciones[this.props.id] : null;
+
+        if(nextPropsTributo && JSON.stringify(propsTributo)!=JSON.stringify(nextPropsTributo)){
             this.setState({
-                opcionSeleccionada: nextProps.opciones[this.props.id][0].identificador,
-                opcionesTributos: nextProps.opciones[this.props.id]
+                opcionSeleccionada: nextPropsTributo.length > 0 ? nextPropsTributo[0].identificador : null,
+                opcionesTributos: nextPropsTributo
             });
-        } else if(this.props.opciones[this.props.id]){
+        } else if(propsTributo){
             this.setState({
-                opcionSeleccionada: this.props.opciones[this.props.id][0].identificador,
-                opcionesTributos: this.props.opciones[this.props.id]
+                opcionSeleccionada: propsTributo.length > 0 ? propsTributo[0].identificador : null,
+                opcionesTributos: propsTributo
             });
         }
     }

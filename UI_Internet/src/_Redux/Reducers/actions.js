@@ -1,6 +1,7 @@
 import { GET_ID_TRIBUTOS } from "@ReduxSrc/TributarioOnline/constants";
 
-export const getIdTributos = datos => ({ 
-    type: GET_ID_TRIBUTOS, 
-    payload: datos
+export const getIdTributos = (IdsTributos, tipoTributo) => ({ 
+    type: GET_ID_TRIBUTOS,
+    payload: IdsTributos,
+    tipo: tipoTributo
 });

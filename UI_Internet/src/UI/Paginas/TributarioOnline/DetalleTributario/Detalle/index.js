@@ -38,6 +38,10 @@ import cedulonFoto from './img/cedulon.png';
 import cedulonFoto2 from './img/MP4.png';
 
 import {
+    getIdTributos
+} from "@ReduxSrc/TributarioOnline/actions";
+
+import {
     getInfoContribucion,
     getInfoMultas,
     getInfoJuiciosContribucion,
@@ -50,6 +54,7 @@ import { stringToFloat, stringToDate, diffDays } from "@Utils/functions"
 
 const mapStateToProps = state => {
     return {
+        identificadores: state.TributarioOnline.idsTributos.automotores,
         infoContribucion: state.DetalleTributario.infoContribucion,
         infoMultas: state.DetalleTributario.infoMultas,
         infoJuiciosContribucion: state.DetalleTributario.infoJuiciosContribucion,
@@ -61,6 +66,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     mostrarCargando: (cargar) => {
         dispatch(mostrarCargando(cargar));
+    },
+    setPropsIdTributos: (datos) => {
+        dispatch(getIdTributos(datos));
     },
     setPropsInfoContribucion: (datos) => {
         dispatch(getInfoContribucion(datos));
@@ -161,6 +169,11 @@ class DetalleTributo extends React.PureComponent {
     componentWillMount() {
         this.props.mostrarCargando(true);
 
+        const service = services.getIdTributos('20355266169')
+            .then((datos) => {
+                this.props.setPropsIdTributos(datos);
+            });
+
         const service1 = services.getInfoContribucion(this.props.match.params.identificador)
             .then((datos) => {
                 this.props.setPropsInfoContribucion(datos);
@@ -181,7 +194,7 @@ class DetalleTributo extends React.PureComponent {
                 this.props.setPropsInfoJuiciosMulta(datos);
             });
 
-        Promise.all([service1, service2, service3, service4]).then(() => {
+        Promise.all([service, service1, service2, service3, service4]).then(() => {
             this.props.mostrarCargando(false);
         });
     }
@@ -237,7 +250,6 @@ class DetalleTributo extends React.PureComponent {
     selectIdentificador = event => {
         if (event.target.value == '0')
             return false;
-
 
         this.setState({
             identificadorActual: event.target.value
@@ -334,8 +346,10 @@ class DetalleTributo extends React.PureComponent {
                                     disableUnderline
                                     onChange={this.selectIdentificador}
                                 >
-                                    <MenuItem value="HCJ675">HCJ675</MenuItem>
-                                    <MenuItem value="FGH454">FGH454</MenuItem>
+                                    
+                                    {this.props.identificadores && this.props.identificadores.map((tributo) => {
+                                        return <MenuItem value={tributo.identificador}>{tributo.identificador}</MenuItem>
+                                    })}
                                 </Select>
                                 - {this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}
                             </Typography>
