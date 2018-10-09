@@ -45,7 +45,8 @@ import {
     getInfoContribucion,
     getInfoMultas,
     getInfoJuiciosContribucion,
-    getInfoJuiciosMulta
+    getInfoJuiciosMulta,
+    getInfoPlanesPago
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 
 import services from '@Rules/Rules_TributarioOnline';
@@ -59,7 +60,7 @@ const mapStateToProps = state => {
         infoMultas: state.DetalleTributario.infoMultas,
         infoJuiciosContribucion: state.DetalleTributario.infoJuiciosContribucion,
         infoJuiciosMulta: state.DetalleTributario.infoJuiciosMulta,
-        datosCuenta: state.DetalleTributario.datosCuenta,
+        infoPlanesPago: state.DetalleTributario.infoPlanesPago
     };
 };
 
@@ -81,6 +82,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setPropsInfoJuiciosMulta: (datos) => {
         dispatch(getInfoJuiciosMulta(datos));
+    },
+    setPropsInfoPlanesPago: (datos) => {
+        dispatch(getInfoPlanesPago(datos));
     },
     redireccionar: url => {
         dispatch(replace(url));
@@ -161,7 +165,8 @@ class DetalleTributo extends React.PureComponent {
                     vencida: 'Vencida',
                     aVencer: 'A vencer',
                     columnas: ['Concepto', 'Fecha', 'Total ($)']
-                }
+                },
+                menuItemSeleccionado: ''
             }
         };
     }
@@ -194,7 +199,12 @@ class DetalleTributo extends React.PureComponent {
                 this.props.setPropsInfoJuiciosMulta(datos);
             });
 
-        Promise.all([service, service1, service2, service3, service4]).then(() => {
+        const service5 = services.getInfoPlanesPago(this.props.match.params.identificador)
+            .then((datos) => {
+                this.props.setPropsInfoPlanesPago(datos);
+            });
+
+        Promise.all([service, service1, service2, service3, service4, service5]).then(() => {
             this.props.mostrarCargando(false);
         });
     }
@@ -208,23 +218,29 @@ class DetalleTributo extends React.PureComponent {
         
         if(JSON.stringify(this.props.infoJuiciosContribucion)!=JSON.stringify(nextProps.infoJuiciosContribucion)){
             let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
-            juicioContribucion.menuItemSeleccionado = nextProps.infoJuiciosContribucion.juiciosList[0].idJuicio;
+            juicioContribucion.menuItemSeleccionado = nextProps.infoJuiciosContribucion.lista[0].idJuicio;
             this.setState({juicioContribucion});   
         }
 
         if(JSON.stringify(this.props.infoJuiciosMulta)!=JSON.stringify(nextProps.infoJuiciosMulta)){
             let juicioMultas = Object.assign({}, this.state.juicioMultas);
-            juicioMultas.menuItemSeleccionado = nextProps.infoJuiciosMulta.juiciosList[0].idJuicio;
+            juicioMultas.menuItemSeleccionado = nextProps.infoJuiciosMulta.lista[0].idJuicio;
             this.setState({juicioMultas});   
+        }
+
+        if(JSON.stringify(this.props.infoPlanesPago)!=JSON.stringify(nextProps.infoPlanesPago)){
+            let planesPago = Object.assign({}, this.state.planesPago);
+            planesPago.menuItemSeleccionado = nextProps.infoPlanesPago.lista[0].idPlan;
+            this.setState({planesPago});   
         }
     }
 
     //mostrarAlternativaPlan - Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días
     //infoDatosCuenta - La información de "Datos de Cuenta" varia respecto a cada seccion
     refreshValoresPantalla(parametros) {
-        const listaDatos = parametros.listaDatos || [];
+        const listaDatos = parametros.listaDatos || null;
 
-        if(listaDatos.length == 0)
+        if(listaDatos == null)
             return false;
 
         let mostrarAlternativaPlan = false;
@@ -268,22 +284,22 @@ class DetalleTributo extends React.PureComponent {
 
         //Seteamos valores que varias de acuerdo a la sección seleccionada
         const infoSeccion = this.state[value].paramDatos;
-        const listaDatos = this.state[value].arrayResult ? this.getListaDatosJuicios(this.props[infoSeccion]) : this.props[infoSeccion];
+        const listaDatos = this.state[value].arrayResult ? this.getListaDatosLista(this.props[infoSeccion]) : this.props[infoSeccion];
         this.refreshValoresPantalla({
             listaDatos: listaDatos
         });
     };
 
-    //Retorna listaDatos de un juicio para el uso de funcion refreshValoresPantalla
-    getListaDatosJuicios = (infoDatos, idJuicio) => {
+    //Retorna listaDatos para el uso de funcion refreshValoresPantalla
+    getListaDatosLista = (infoDatos, identificador) => {
 
         let listaDatosJuicio = {};
-        if(!idJuicio) {
-            listaDatosJuicio = infoDatos && infoDatos.juiciosList[0];
+        if(!identificador) {
+            listaDatosJuicio = infoDatos && infoDatos.lista[0];
         } else {
-            infoDatos && infoDatos.juiciosList.some((item) => {
+            infoDatos && infoDatos.lista.some((item) => {
 
-                if(!idJuicio || item.idJuicio == idJuicio) {
+                if(!identificador || item.identificador == identificador) {
                     listaDatosJuicio = item;
                     return false
                 }
@@ -301,7 +317,7 @@ class DetalleTributo extends React.PureComponent {
         
         const seccion = this.state.menuItemSeleccionado;
         const infoSeccion = this.state[seccion].paramDatos;
-        const listaDatos = this.getListaDatosJuicios(this.props[infoSeccion], idJuicio);
+        const listaDatos = this.getListaDatosLista(this.props[infoSeccion], idJuicio);
         this.refreshValoresPantalla({
             listaDatos: listaDatos
         });
@@ -315,7 +331,21 @@ class DetalleTributo extends React.PureComponent {
 
         const seccion = this.state.menuItemSeleccionado;
         const infoSeccion = this.state[seccion].paramDatos;
-        const listaDatos = this.getListaDatosJuicios(this.props[infoSeccion], idJuicio);
+        const listaDatos = this.getListaDatosLista(this.props[infoSeccion], idJuicio);
+        this.refreshValoresPantalla({
+            listaDatos: listaDatos
+        });
+    };
+
+    handleMenuPlanesPagoChange = (event, idPlan) => {
+
+        let planesPago = Object.assign({}, this.state.planesPago);
+        planesPago.menuItemSeleccionado = idPlan;
+        this.setState({planesPago});   
+
+        const seccion = this.state.menuItemSeleccionado;
+        const infoSeccion = this.state[seccion].paramDatos;
+        const listaDatos = this.getListaDatosLista(this.props[infoSeccion], idPlan);
         this.refreshValoresPantalla({
             listaDatos: listaDatos
         });
@@ -326,9 +356,9 @@ class DetalleTributo extends React.PureComponent {
 
         const infoContribucion = this.props.infoContribucion ? this.props.infoContribucion.rowList : [];
         const infoMultas = this.props.infoMultas ? this.props.infoMultas.rowList : [];
-        const infoJuiciosContribucion = this.props.infoJuiciosContribucion ? this.props.infoJuiciosContribucion.juiciosList : [];
-        const infoJuiciosMulta = this.props.infoJuiciosMulta ? this.props.infoJuiciosMulta.juiciosList : [];
-        const infoPlanesPago = this.props.infoPlanesPago ? this.props.infoPlanesPago.rowList : [];
+        const infoJuiciosContribucion = this.props.infoJuiciosContribucion ? this.props.infoJuiciosContribucion.lista : [];
+        const infoJuiciosMulta = this.props.infoJuiciosMulta ? this.props.infoJuiciosMulta.lista : [];
+        const infoPlanesPago = this.props.infoPlanesPago ? this.props.infoPlanesPago.lista : [];
 
         return (
             <div className={classes.mainContainer}>
@@ -347,8 +377,8 @@ class DetalleTributo extends React.PureComponent {
                                     onChange={this.selectIdentificador}
                                 >
                                     
-                                    {this.props.identificadores && this.props.identificadores.map((tributo) => {
-                                        return <MenuItem value={tributo.identificador}>{tributo.identificador}</MenuItem>
+                                    {this.props.identificadores && this.props.identificadores.map((tributo, index) => {
+                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}</MenuItem>
                                     })}
                                 </Select>
                                 - {this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}
@@ -419,7 +449,7 @@ class DetalleTributo extends React.PureComponent {
                                             scrollButtons="on"
                                         >
 
-                                            {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.juiciosList.map((juicio) => {
+                                            {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista.map((juicio) => {
                                                 return <Tab className={classes.itemMenu} value={juicio.idJuicio} label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                             })}
 
@@ -427,7 +457,7 @@ class DetalleTributo extends React.PureComponent {
 
                                     </Grid>
                                 </Grid>
-                                {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.juiciosList.map((juicio) => {
+                                {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista.map((juicio) => {
                                     return  <div>
                                                 {this.state.juicioContribucion.menuItemSeleccionado == juicio.idJuicio &&
                                                     <MisPagos
@@ -455,7 +485,7 @@ class DetalleTributo extends React.PureComponent {
                                             scrollButtons="on"
                                         >
 
-                                            {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.juiciosList.map((juicio) => {
+                                            {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista.map((juicio) => {
                                                 return <Tab className={classes.itemMenu} value={juicio.idJuicio} label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                             })}
 
@@ -463,7 +493,7 @@ class DetalleTributo extends React.PureComponent {
 
                                     </Grid>
                                 </Grid>
-                                {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.juiciosList.map((juicio) => {
+                                {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista.map((juicio) => {
                                     return  <div>
                                                 {this.state.juicioMultas.menuItemSeleccionado == juicio.idJuicio &&
                                                     <MisPagos
@@ -479,12 +509,37 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Planes de Pago */}
                             {this.state.menuItemSeleccionado == 'planesPago' && <div>
-                                <MisPagos
-                                    classes={classes}
-                                    info={this.props.infoPlanesPago || null}
-                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                    data={this.state[this.state.menuItemSeleccionado]}
-                                />
+
+                                <Grid container spacing={16}>
+                                    <Grid item sm={12} className={classes.tabMenu}>
+
+                                        <Tabs
+                                            value={this.state.planesPago.menuItemSeleccionado}
+                                            onChange={this.handleMenuPlanesPagoChange}
+                                            scrollable
+                                            scrollButtons="on"
+                                        >
+
+                                            {this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
+                                                return <Tab className={classes.itemMenu} value={plan.idPlan} label={<Badge  className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                            })}
+
+                                        </Tabs>
+
+                                    </Grid>
+                                </Grid>
+                                {this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
+                                    return  <div>
+                                                {this.state.planesPago.menuItemSeleccionado == plan.idPlan &&
+                                                    <MisPagos
+                                                        classes={classes}
+                                                        info={plan || null}
+                                                        menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                                        data={this.state[this.state.menuItemSeleccionado]}
+                                                    />
+                                                }
+                                            </div>
+                                })}
                             </div>}
 
                         </MiCard>

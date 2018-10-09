@@ -1293,12 +1293,283 @@ const getInfoJuiciosMulta = (cuit) => {
   });
 };
 
+const getInfoPlanesPago = (cuit, callback) => {
+  return new Promise((resolve, reject) => {
+    /*fetch('https://httpbin.org/get')
+    .then(res => {
+        if (res.status >= 400) {
+        throw new Error("Bad response from server");
+        }
+        return res.json()
+    })
+    .then(datos => {
+        callback(datos);
+    })
+    .catch(err => {
+        console.error(err);
+    });*/
+
+    setTimeout(function () {
+      resolve({
+        "return": [
+          {
+            "identificador": "17708945",
+            "titular": {
+              "cuit": "27332706719",
+              "titular": "CRIVARO AGUIRRE YANINA MAR"
+            },
+            "datosCuenta": [
+              "IUT DE ORIGEN:         ESS636  /4 81                  < PLAN ACTIVO  >",
+              "PLANES DE PAGO EN CUOTAS     ",
+              "ITEM : 1.01.03.08          A U T O M O T O R E S (1997)",
+              "TOTAL PLAN :     13.406,00 TOT.A FIN.:     10.473,60 C.CTAS : 018 %ENT.: 00",
+              "INT.: 03,00 TASA: 52,00   ANT.:     633,90 CTA.:     751,30 FEC.OT.: 05/10/2018",
+              "                                   CARP.:     F.PROC.: *< NO >*",
+              "OBSERVACIONES: //...-                                  PLAN CON CBU SI",
+              " << TELEFONO  >>  0351156631732  *",
+              "                      ",
+              "IUT DE ORIGEN: "
+            ],
+            "deudaAdministrativa": {
+              "total": 13408.5,
+              "vencida": 636.4,
+              "aVencer": 12772.1,
+              "ultimoPago": "21/09/2018"
+            },
+            "periodos": [
+              {
+                "concepto": "001/018",
+                "fecha": "2018-10-05T00:00:00",
+                "referencia": "",
+                "importe": {
+                  "total": 636.4,
+                  "base": 633.9,
+                  "recargo": 2.5,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "002/018",
+                "fecha": "2018-11-12T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "003/018",
+                "fecha": "2018-12-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "004/018",
+                "fecha": "2019-01-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "005/018",
+                "fecha": "2019-02-11T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "006/018",
+                "fecha": "2019-03-11T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "007/018",
+                "fecha": "2019-04-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "008/018",
+                "fecha": "2019-05-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "009/018",
+                "fecha": "2019-06-11T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "010/018",
+                "fecha": "2019-07-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "011/018",
+                "fecha": "2019-08-12T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "012/018",
+                "fecha": "2019-09-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "013/018",
+                "fecha": "2019-10-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "014/018",
+                "fecha": "2019-11-11T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "015/018",
+                "fecha": "2019-12-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "016/018",
+                "fecha": "2020-01-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "017/018",
+                "fecha": "2020-02-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              },
+              {
+                "concepto": "018/018",
+                "fecha": "2020-03-10T00:00:00",
+                "referencia": "PERIODO NO VENCIDO",
+                "importe": {
+                  "total": 751.3,
+                  "base": 751.3,
+                  "recargo": 0,
+                  "deduccion": 0,
+                  "citacion": 0
+                }
+              }
+            ]
+          }
+        ],
+        "error": null,
+        "ok": true
+      });
+    }, 2000);
+  });
+};
+
 const services = {
   getIdTributos: getIdTributos,
   getInfoContribucion: getInfoContribucion,
   getInfoMultas: getInfoMultas,
   getInfoJuiciosContribucion: getInfoJuiciosContribucion,
-  getInfoJuiciosMulta: getInfoJuiciosMulta
+  getInfoJuiciosMulta: getInfoJuiciosMulta,
+  getInfoPlanesPago: getInfoPlanesPago
 }
 
 export default services;
