@@ -172,6 +172,7 @@ class DetalleTributo extends React.PureComponent {
     }
 
     componentWillMount() {
+        //Servicios que setean los datos en las props del store de redux
         this.props.mostrarCargando(true);
 
         const service = services.getIdTributos('20355266169')
@@ -210,24 +211,30 @@ class DetalleTributo extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
+        //Al setearse las props de redux llevamos a cabo estas acciones
+
+        //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
         if(JSON.stringify(this.props.infoContribucion)!=JSON.stringify(nextProps.infoContribucion)){
             this.refreshValoresPantalla({
                 listaDatos: nextProps.infoContribucion
             });
         }
         
+        //Seteo de el primer item de los juicios de contribucion el cual es el primero que se mostrará
         if(JSON.stringify(this.props.infoJuiciosContribucion)!=JSON.stringify(nextProps.infoJuiciosContribucion)){
             let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
             juicioContribucion.menuItemSeleccionado = nextProps.infoJuiciosContribucion.lista[0].idJuicio;
             this.setState({juicioContribucion});   
         }
 
+        //Seteo de el primer item de los juicios de multas el cual es el primero que se mostrará
         if(JSON.stringify(this.props.infoJuiciosMulta)!=JSON.stringify(nextProps.infoJuiciosMulta)){
             let juicioMultas = Object.assign({}, this.state.juicioMultas);
             juicioMultas.menuItemSeleccionado = nextProps.infoJuiciosMulta.lista[0].idJuicio;
             this.setState({juicioMultas});   
         }
 
+        //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
         if(JSON.stringify(this.props.infoPlanesPago)!=JSON.stringify(nextProps.infoPlanesPago)){
             let planesPago = Object.assign({}, this.state.planesPago);
             planesPago.menuItemSeleccionado = nextProps.infoPlanesPago.lista[0].idPlan;
@@ -235,8 +242,9 @@ class DetalleTributo extends React.PureComponent {
         }
     }
 
-    //mostrarAlternativaPlan - Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días
-    //infoDatosCuenta - La información de "Datos de Cuenta" varia respecto a cada seccion
+    //Cada vez que se cambia de sección se checkean y actualizan datos
+    //Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días ( mostrarAlternativaPlan )
+    //La información de "Datos de Cuenta" varia respecto a cada seccion ( infoDatosCuenta )
     refreshValoresPantalla(parametros) {
         const listaDatos = parametros.listaDatos || null;
 
@@ -263,6 +271,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Evento cuando se cambia de identificador
     selectIdentificador = event => {
         if (event.target.value == '0')
             return false;
@@ -276,6 +285,7 @@ class DetalleTributo extends React.PureComponent {
         window.location.reload();//Recargamos la pagina con la nueva url
     };
 
+    //Evento cuando se cambia de sección
     handleMenuChange = (event, value) => {
 
         this.setState({
@@ -290,7 +300,12 @@ class DetalleTributo extends React.PureComponent {
         });
     };
 
-    //Retorna listaDatos para el uso de funcion refreshValoresPantalla
+    /*
+        Retorna listaDatos para el uso de funcion refreshValoresPantalla
+        Este es el caso de juicios y planes de pago ya que se tiene que buscar
+        los datos de alguno de los subitems (submenu) para realizar los calculos al
+        refrescar la pantalla
+    */
     getListaDatosLista = (infoDatos, identificador) => {
 
         let listaDatosJuicio = {};
@@ -309,43 +324,20 @@ class DetalleTributo extends React.PureComponent {
         return listaDatosJuicio;
     }
 
-    handleMenuJuicioContribucionChange = (event, idJuicio) => {
+    //Evento cuando se cambia de subsección
+    handleSubMenuChange = (event, identificador) => {
 
-        let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
-        juicioContribucion.menuItemSeleccionado = idJuicio;
-        this.setState({juicioContribucion});   
-        
-        const seccion = this.state.menuItemSeleccionado;
-        const infoSeccion = this.state[seccion].paramDatos;
-        const listaDatos = this.getListaDatosLista(this.props[infoSeccion], idJuicio);
-        this.refreshValoresPantalla({
-            listaDatos: listaDatos
-        });
-    };
+        const seccionActual = this.state.menuItemSeleccionado;
 
-    handleMenuJuicioMultasChange = (event, idJuicio) => {
+        let seccionState = Object.assign({}, this.state[seccionActual]);
+        seccionState.menuItemSeleccionado = identificador;
+        this.setState({
+            [seccionActual]: seccionState
+        });  
 
-        let juicioMultas = Object.assign({}, this.state.juicioMultas);
-        juicioMultas.menuItemSeleccionado = idJuicio;
-        this.setState({juicioMultas});   
-
-        const seccion = this.state.menuItemSeleccionado;
-        const infoSeccion = this.state[seccion].paramDatos;
-        const listaDatos = this.getListaDatosLista(this.props[infoSeccion], idJuicio);
-        this.refreshValoresPantalla({
-            listaDatos: listaDatos
-        });
-    };
-
-    handleMenuPlanesPagoChange = (event, idPlan) => {
-
-        let planesPago = Object.assign({}, this.state.planesPago);
-        planesPago.menuItemSeleccionado = idPlan;
-        this.setState({planesPago});   
-
-        const seccion = this.state.menuItemSeleccionado;
-        const infoSeccion = this.state[seccion].paramDatos;
-        const listaDatos = this.getListaDatosLista(this.props[infoSeccion], idPlan);
+        //Seteamos valores que varias de acuerdo a la sección seleccionada
+        const infoSeccion = this.state[seccionActual].paramDatos;
+        const listaDatos = this.getListaDatosLista(this.props[infoSeccion], identificador);
         this.refreshValoresPantalla({
             listaDatos: listaDatos
         });
@@ -365,6 +357,7 @@ class DetalleTributo extends React.PureComponent {
                 <Grid container className={classes.root} spacing={16}>
                     <Grid item xs={8}>
                         <MiCard>
+                            {/* Titulo y selección de identificador */}
                             <Typography className={classes.title} variant="title">Dominio:
                             <Select
                                     className={classes.selectIdentificador}
@@ -388,6 +381,7 @@ class DetalleTributo extends React.PureComponent {
                                 {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                             </Typography>
 
+                            {/* Menu de secciones */}
                             <Grid container spacing={16}>
                                 <Grid item sm={12} className={classes.tabMenu}>
 
@@ -414,6 +408,8 @@ class DetalleTributo extends React.PureComponent {
 
                                 </Grid>
                             </Grid>
+                            
+                            {/* Secciones */}
 
                             {/* Contribución por período */}
                             {this.state.menuItemSeleccionado == 'contribucion' && <div>
@@ -436,14 +432,14 @@ class DetalleTributo extends React.PureComponent {
                             </div>}
 
                             {/* Juicio por Contribucion */}
-                            {this.state.menuItemSeleccionado == 'juicioContribucion' && <div>
+                            {this.state.menuItemSeleccionado == 'juicioContribucion' && this.props.infoJuiciosContribucion.lista.length > 0 && <div>
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
-
+                                        {/* SubMenu */}
                                         <Tabs
                                             value={this.state.juicioContribucion.menuItemSeleccionado}
-                                            onChange={this.handleMenuJuicioContribucionChange}
+                                            onChange={this.handleSubMenuChange}
                                             classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
                                             scrollable
                                             scrollButtons="on"
@@ -472,14 +468,14 @@ class DetalleTributo extends React.PureComponent {
                             </div>}
 
                             {/* Juicio por Multas */}
-                            {this.state.menuItemSeleccionado == 'juicioMultas' && <div>
+                            {this.state.menuItemSeleccionado == 'juicioMultas' && this.props.infoJuiciosMulta.lista.length > 0 && <div>
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
-
+                                        {/* SubMenu */} 
                                         <Tabs
                                             value={this.state.juicioMultas.menuItemSeleccionado}
-                                            onChange={this.handleMenuJuicioMultasChange}
+                                            onChange={this.handleSubMenuChange}
                                             classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
                                             scrollable
                                             scrollButtons="on"
@@ -508,14 +504,14 @@ class DetalleTributo extends React.PureComponent {
                             </div>}
 
                             {/* Planes de Pago */}
-                            {this.state.menuItemSeleccionado == 'planesPago' && <div>
+                            {this.state.menuItemSeleccionado == 'planesPago' && this.props.infoPlanesPago.lista.length > 0 && <div>
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
-
+                                        {/* SubMenu */} 
                                         <Tabs
                                             value={this.state.planesPago.menuItemSeleccionado}
-                                            onChange={this.handleMenuPlanesPagoChange}
+                                            onChange={this.handleSubMenuChange}
                                             scrollable
                                             scrollButtons="on"
                                         >
@@ -545,6 +541,7 @@ class DetalleTributo extends React.PureComponent {
                         </MiCard>
                     </Grid>
                     <Grid item xs={4}>
+                        {/* Bloque Datos Generales */}
                         <MiCard>
                             <Typography className={classes.title} variant="title">Datos Generales</Typography>
                             <Divider className={classes.divider} />
@@ -617,6 +614,7 @@ class DetalleTributo extends React.PureComponent {
                         </MiCard>
                         <br />
                         <MiCard>
+                            {/* Bloque Otras Operaciones */}
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
                             <Divider className={classes.divider} />
 
@@ -647,8 +645,8 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
-                                        {this.state.infoDatosCuenta && this.state.infoDatosCuenta.map((item) => {
-                                            return <div>{item}</div>;
+                                        {this.state.infoDatosCuenta && this.state.infoDatosCuenta.map((item, index) => {
+                                            return <div key={index}>{item}</div>;
                                         })}
                                     </MiLinkDialog>
                                 </Grid>
@@ -670,7 +668,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                             </Grid>
 
-                            {/* NO Planes de Pago */}
+                            {/* Cuando no este seleccionado Planes de Pago */}
                             {this.state.menuItemSeleccionado != 'planesPago' && <div>
 
                                 {this.state.mostrarAlternativaPlan && <div>
@@ -726,7 +724,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                             </div>}
 
-                            {/* NO Planes de Pago */}
+                            {/* Cuando no este seleccionado Planes de Pago */}
                             {this.state.menuItemSeleccionado == 'planesPago' && <div>
                                 <Grid container spacing={16}>
                                     <Grid item sm={2}>
@@ -801,7 +799,7 @@ class DetalleTributo extends React.PureComponent {
     }
 }
 
-
+/* Componente que contiene lista de deudas con pago en efectivo (Cedulón) y online (MercadoPago) */
 class MisPagos extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -817,6 +815,7 @@ class MisPagos extends React.PureComponent {
         };
     }
 
+    //Evento para mostrar modal deleccionado del state.modals
     handleOpenModal = (event) => {
         let modal = event.currentTarget.attributes.modal.value;
 
@@ -827,6 +826,7 @@ class MisPagos extends React.PureComponent {
         });
     };
 
+    //Evento para ocultar modal deleccionado del state.modals
     handleCloseModal = (event) => {
         let modal = event.currentTarget.attributes.modal.value;
 
@@ -837,6 +837,7 @@ class MisPagos extends React.PureComponent {
         });
     };
 
+    //Totalizador de importe de filas seleccionadas
     getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
         let importeTotal = 0;
         filas.map((item) => {
@@ -846,22 +847,27 @@ class MisPagos extends React.PureComponent {
         this.setState({ importeAPagar: importeTotal.toFixed(2).replace('.', ',') });
     };
 
+    //Totalizador de filas seleccionadas
     handlePopoverOpen = event => {
         this.setState({ anchorEl: event.currentTarget });
     };
 
+    //Evento para ocultar detalle de fila
     handlePopoverClose = () => {
         this.setState({ anchorEl: null });
     };
 
+    //Evento para mostrar menu de cedulon
     handleClickCedulon = event => {
         this.setState({ anchorElCedulon: event.currentTarget });
     };
 
+    //Evento para ocultar menu de cedulon
     handleCloseCedulon = () => {
         this.setState({ anchorElCedulon: null });
     };
 
+    //Link "Detalle" que se mostrará en la grilla y se pasara al componente MiTabla
     getCustomCell = (datosExtra) => {
         const { classes } = this.props;
 
@@ -915,6 +921,7 @@ class MisPagos extends React.PureComponent {
 
         return <div>
             <Grid container className={classes.containerDeudaAdm}>
+                {/* Totalizadores */}
                 <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda {this.props.data.labels.totalesDeuda}</Typography>
                 <Grid item sm={4}>
                     <Grid container>
@@ -948,6 +955,7 @@ class MisPagos extends React.PureComponent {
                 </Grid>
             </Grid>
             <Grid container spacing={16}>
+                {/* Totalizador de deudas seleccionadas y botones de pago */}
                 <Grid item sm={7}>
                     <TextField
                         id="standard-full-width"
@@ -997,6 +1005,7 @@ class MisPagos extends React.PureComponent {
                 </Grid>
             </Grid>
 
+            {/* Tabla de detalle del tributo */}
             <MiTabla
                 columns={[
                     { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: (columnas ? columnas[0] : 'Concepto') },
@@ -1012,6 +1021,7 @@ class MisPagos extends React.PureComponent {
                 noCheck={noCheck} />
 
             <Grid container spacing={16}>
+                {/* Totalizador de deudas seleccionadas y botones de pago */}
                 <Grid item sm={7}>
                     <TextField
                         id="standard-full-width"
@@ -1061,6 +1071,7 @@ class MisPagos extends React.PureComponent {
                 </Grid>
             </Grid>
 
+            {/* Modal de Cedulon */}
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
@@ -1071,6 +1082,7 @@ class MisPagos extends React.PureComponent {
                 <img modal={'Cedulon'} src={cedulonFoto} className={classes.imgPago} onClick={this.handleCloseModal} />
             </Modal>
 
+            {/* Modal de Mercado Pago */}
             <Modal
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
