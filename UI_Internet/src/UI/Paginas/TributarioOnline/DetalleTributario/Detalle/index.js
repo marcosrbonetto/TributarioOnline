@@ -33,6 +33,7 @@ import Menu from '@material-ui/core/Menu';
 import MiCard from "@Componentes/MiCard";
 import MiTabla from "@Componentes/MiTabla";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
+import MiCedulon from "@Componentes/MiCedulon";
 
 import cedulonFoto from './img/cedulon.png';
 import cedulonFoto2 from './img/MP4.png';
@@ -55,6 +56,7 @@ import { stringToFloat, stringToDate, diffDays } from "@Utils/functions"
 
 const mapStateToProps = state => {
     return {
+        loggedUser: state.MainContent.loggedUser,
         identificadores: state.TributarioOnline.idsTributos.automotores,
         infoContribucion: state.DetalleTributario.infoContribucion,
         infoMultas: state.DetalleTributario.infoMultas,
@@ -99,7 +101,7 @@ class DetalleTributo extends React.PureComponent {
             identificadorActual: this.props.match.params.identificador,
             menuItemSeleccionado: 'contribucion',
             mostrarAlternativaPlan: false,
-            infoDatosCuenta: [],
+            infoDatosCuenta: '',
             contribucion: {
                 paramDatos: 'infoContribucion',
                 arrayResult: false,
@@ -111,7 +113,8 @@ class DetalleTributo extends React.PureComponent {
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
-                }
+                },
+                registrosSeleccionados: []
             },
             multas: {
                 paramDatos: 'infoMultas',
@@ -124,7 +127,8 @@ class DetalleTributo extends React.PureComponent {
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
                     columnas: ['Causa', 'Fecha', 'Total ($)']
-                }
+                },
+                registrosSeleccionados: []
             },
             juicioContribucion: {
                 paramDatos: 'infoJuiciosContribucion',
@@ -138,7 +142,8 @@ class DetalleTributo extends React.PureComponent {
                     aVencer: 'Gastos',
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
                 },
-                menuItemSeleccionado: ''
+                menuItemSeleccionado: '',
+                registrosSeleccionados: []
             },
             juicioMultas: {
                 paramDatos: 'infoJuiciosMulta',
@@ -152,7 +157,8 @@ class DetalleTributo extends React.PureComponent {
                     aVencer: 'Gastos',
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
                 },
-                menuItemSeleccionado: ''
+                menuItemSeleccionado: '',
+                registrosSeleccionados: []
             },
             planesPago: {
                 paramDatos: 'infoPlanesPago',
@@ -166,7 +172,8 @@ class DetalleTributo extends React.PureComponent {
                     aVencer: 'A vencer',
                     columnas: ['Concepto', 'Fecha', 'Total ($)']
                 },
-                menuItemSeleccionado: ''
+                menuItemSeleccionado: '',
+                registrosSeleccionados: []
             }
         };
     }
@@ -174,33 +181,36 @@ class DetalleTributo extends React.PureComponent {
     componentWillMount() {
         //Servicios que setean los datos en las props del store de redux
         this.props.mostrarCargando(true);
+        const token = this.props.loggedUser.token;
+        const identificador = this.props.match.params.identificador;
 
-        const service = services.getIdTributos('20355266169')
+        //Traemos los tributos asociados al Token
+        const service = services.getIdTributos(token)
             .then((datos) => {
                 this.props.setPropsIdTributos(datos);
             });
 
-        const service1 = services.getInfoContribucion(this.props.match.params.identificador)
+        const service1 = services.getInfoContribucion(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoContribucion(datos);
             });
 
-        const service2 = services.getInfoMultas(this.props.match.params.identificador)
+        const service2 = services.getInfoMultas(identificador)
             .then((datos) => {
                 this.props.setPropsInfoMultas(datos);
             });
 
-        const service3 = services.getInfoJuiciosContribucion(this.props.match.params.identificador)
+        const service3 = services.getInfoJuiciosContribucion(identificador)
             .then((datos) => {
                 this.props.setPropsInfoJuiciosContribucion(datos);
             });
 
-        const service4 = services.getInfoJuiciosMulta(this.props.match.params.identificador)
+        const service4 = services.getInfoJuiciosMulta(identificador)
             .then((datos) => {
                 this.props.setPropsInfoJuiciosMulta(datos);
             });
 
-        const service5 = services.getInfoPlanesPago(this.props.match.params.identificador)
+        const service5 = services.getInfoPlanesPago(identificador)
             .then((datos) => {
                 this.props.setPropsInfoPlanesPago(datos);
             });
@@ -214,31 +224,31 @@ class DetalleTributo extends React.PureComponent {
         //Al setearse las props de redux llevamos a cabo estas acciones
 
         //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
-        if(JSON.stringify(this.props.infoContribucion)!=JSON.stringify(nextProps.infoContribucion)){
+        if (JSON.stringify(this.props.infoContribucion) != JSON.stringify(nextProps.infoContribucion)) {
             this.refreshValoresPantalla({
                 listaDatos: nextProps.infoContribucion
             });
         }
-        
+
         //Seteo de el primer item de los juicios de contribucion el cual es el primero que se mostrará
-        if(JSON.stringify(this.props.infoJuiciosContribucion)!=JSON.stringify(nextProps.infoJuiciosContribucion)){
+        if (JSON.stringify(this.props.infoJuiciosContribucion) != JSON.stringify(nextProps.infoJuiciosContribucion)) {
             let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
-            juicioContribucion.menuItemSeleccionado = nextProps.infoJuiciosContribucion.lista[0].idJuicio;
-            this.setState({juicioContribucion});   
+            juicioContribucion.menuItemSeleccionado = (nextProps.infoJuiciosContribucion.lista > 0 && nextProps.infoJuiciosContribucion.lista[0].idJuicio) || '';
+            this.setState({ juicioContribucion });
         }
 
         //Seteo de el primer item de los juicios de multas el cual es el primero que se mostrará
-        if(JSON.stringify(this.props.infoJuiciosMulta)!=JSON.stringify(nextProps.infoJuiciosMulta)){
+        if (JSON.stringify(this.props.infoJuiciosMulta) != JSON.stringify(nextProps.infoJuiciosMulta)) {
             let juicioMultas = Object.assign({}, this.state.juicioMultas);
-            juicioMultas.menuItemSeleccionado = nextProps.infoJuiciosMulta.lista[0].idJuicio;
-            this.setState({juicioMultas});   
+            juicioMultas.menuItemSeleccionado = (nextProps.infoJuiciosMulta.lista > 0 && nextProps.infoJuiciosMulta.lista[0].idJuicio) || '';
+            this.setState({ juicioMultas });
         }
 
         //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
-        if(JSON.stringify(this.props.infoPlanesPago)!=JSON.stringify(nextProps.infoPlanesPago)){
+        if (JSON.stringify(this.props.infoPlanesPago) != JSON.stringify(nextProps.infoPlanesPago)) {
             let planesPago = Object.assign({}, this.state.planesPago);
-            planesPago.menuItemSeleccionado = nextProps.infoPlanesPago.lista[0].idPlan;
-            this.setState({planesPago});   
+            planesPago.menuItemSeleccionado = (nextProps.infoPlanesPago.lista > 0 && nextProps.infoPlanesPago.lista[0].idPlan) || '';
+            this.setState({ planesPago });
         }
     }
 
@@ -248,14 +258,13 @@ class DetalleTributo extends React.PureComponent {
     refreshValoresPantalla(parametros) {
         const listaDatos = parametros.listaDatos || null;
 
-        if(listaDatos == null)
+        if (listaDatos == null)
             return false;
 
         let mostrarAlternativaPlan = false;
         let infoDatosCuenta = [];
 
-        if(listaDatos.datosCuenta)
-            infoDatosCuenta = listaDatos.datosCuenta;
+        infoDatosCuenta = listaDatos.datosCuenta ? listaDatos.datosCuenta : 'No se encontraron registros';
 
         listaDatos.rowList && listaDatos.rowList.some((item) => {
 
@@ -264,7 +273,7 @@ class DetalleTributo extends React.PureComponent {
                 return true;
             }
         });
-        
+
         this.setState({
             infoDatosCuenta: infoDatosCuenta,
             mostrarAlternativaPlan: mostrarAlternativaPlan
@@ -309,12 +318,12 @@ class DetalleTributo extends React.PureComponent {
     getListaDatosLista = (infoDatos, identificador) => {
 
         let listaDatosJuicio = {};
-        if(!identificador) {
-            listaDatosJuicio = infoDatos && infoDatos.lista[0];
+        if (!identificador) {
+            listaDatosJuicio = (infoDatos && infoDatos.lista[0]) || {};
         } else {
             infoDatos && infoDatos.lista.some((item) => {
 
-                if(!identificador || item.identificador == identificador) {
+                if (!identificador || item.identificador == identificador) {
                     listaDatosJuicio = item;
                     return false
                 }
@@ -333,7 +342,7 @@ class DetalleTributo extends React.PureComponent {
         seccionState.menuItemSeleccionado = identificador;
         this.setState({
             [seccionActual]: seccionState
-        });  
+        });
 
         //Seteamos valores que varias de acuerdo a la sección seleccionada
         const infoSeccion = this.state[seccionActual].paramDatos;
@@ -341,6 +350,14 @@ class DetalleTributo extends React.PureComponent {
         this.refreshValoresPantalla({
             listaDatos: listaDatos
         });
+    };
+
+    setRegistrosSeleccionados = (menuItemSeleccionado, registrosSeleccionados) => {
+        
+        let itemSeleccionado = Object.assign({}, this.state[menuItemSeleccionado]);
+        itemSeleccionado.registrosSeleccionados = registrosSeleccionados;
+        
+        this.setState({ [menuItemSeleccionado]: itemSeleccionado });
     };
 
     render() {
@@ -369,16 +386,12 @@ class DetalleTributo extends React.PureComponent {
                                     disableUnderline
                                     onChange={this.selectIdentificador}
                                 >
-                                    
+
                                     {this.props.identificadores && this.props.identificadores.map((tributo, index) => {
                                         return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}</MenuItem>
                                     })}
                                 </Select>
-                                - {this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}
-                            </Typography>
-
-                            <Typography className={classes.infoTexto}>
-                                {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                - <b>{this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}</b>
                             </Typography>
 
                             {/* Menu de secciones */}
@@ -391,7 +404,8 @@ class DetalleTributo extends React.PureComponent {
                                         indicatorColor="secondary"
                                         textColor="secondary"
                                         scrollable
-                                        scrollButtons="on"
+                                        scrollButtons="auto"
+                                        classes={{ scrollButtons: classes.scrollButtonsMenu }}
                                     >
 
                                         <Tab className={classes.itemMenu} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Contribución por período</div></Badge>} />
@@ -408,28 +422,8 @@ class DetalleTributo extends React.PureComponent {
 
                                 </Grid>
                             </Grid>
-                            
-                            {/* Secciones */}
 
-                            {/* Contribución por período */}
-                            {this.state.menuItemSeleccionado == 'contribucion' && <div>
-                                <MisPagos
-                                    classes={classes}
-                                    info={this.props.infoContribucion || null}
-                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                    data={this.state[this.state.menuItemSeleccionado]}
-                                />
-                            </div>}
-
-                            {/* Multas */}
-                            {this.state.menuItemSeleccionado == 'multas' && <div>
-                                <MisPagos
-                                    classes={classes}
-                                    info={this.props.infoMultas || null}
-                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                    data={this.state[this.state.menuItemSeleccionado]}
-                                />
-                            </div>}
+                            {/* Sub Menus */}
 
                             {/* Juicio por Contribucion */}
                             {this.state.menuItemSeleccionado == 'juicioContribucion' && this.props.infoJuiciosContribucion.lista.length > 0 && <div>
@@ -440,9 +434,9 @@ class DetalleTributo extends React.PureComponent {
                                         <Tabs
                                             value={this.state.juicioContribucion.menuItemSeleccionado}
                                             onChange={this.handleSubMenuChange}
-                                            classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+                                            classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
                                             scrollable
-                                            scrollButtons="on"
+                                            scrollButtons="auto"
                                         >
 
                                             {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista.map((juicio) => {
@@ -453,18 +447,6 @@ class DetalleTributo extends React.PureComponent {
 
                                     </Grid>
                                 </Grid>
-                                {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista.map((juicio) => {
-                                    return  <div>
-                                                {this.state.juicioContribucion.menuItemSeleccionado == juicio.idJuicio &&
-                                                    <MisPagos
-                                                        classes={classes}
-                                                        info={juicio || null}
-                                                        menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                                        data={this.state[this.state.menuItemSeleccionado]}
-                                                    />
-                                                }
-                                            </div>
-                                })}
                             </div>}
 
                             {/* Juicio por Multas */}
@@ -472,13 +454,13 @@ class DetalleTributo extends React.PureComponent {
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
-                                        {/* SubMenu */} 
+                                        {/* SubMenu */}
                                         <Tabs
                                             value={this.state.juicioMultas.menuItemSeleccionado}
                                             onChange={this.handleSubMenuChange}
-                                            classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+                                            classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
                                             scrollable
-                                            scrollButtons="on"
+                                            scrollButtons="auto"
                                         >
 
                                             {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista.map((juicio) => {
@@ -489,18 +471,6 @@ class DetalleTributo extends React.PureComponent {
 
                                     </Grid>
                                 </Grid>
-                                {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista.map((juicio) => {
-                                    return  <div>
-                                                {this.state.juicioMultas.menuItemSeleccionado == juicio.idJuicio &&
-                                                    <MisPagos
-                                                        classes={classes}
-                                                        info={juicio || null}
-                                                        menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                                        data={this.state[this.state.menuItemSeleccionado]}
-                                                    />
-                                                }
-                                            </div>
-                                })}
                             </div>}
 
                             {/* Planes de Pago */}
@@ -508,35 +478,148 @@ class DetalleTributo extends React.PureComponent {
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
-                                        {/* SubMenu */} 
+                                        {/* SubMenu */}
                                         <Tabs
                                             value={this.state.planesPago.menuItemSeleccionado}
                                             onChange={this.handleSubMenuChange}
                                             scrollable
-                                            scrollButtons="on"
+                                            scrollButtons="auto"
+                                            classes={{ scrollButtons: classes.scrollButtonsSubMenu }}
                                         >
 
                                             {this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
-                                                return <Tab className={classes.itemMenu} value={plan.idPlan} label={<Badge  className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                                return <Tab className={classes.itemMenu} value={plan.idPlan} label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
                                             })}
 
                                         </Tabs>
 
                                     </Grid>
                                 </Grid>
-                                {this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
-                                    return  <div>
-                                                {this.state.planesPago.menuItemSeleccionado == plan.idPlan &&
-                                                    <MisPagos
-                                                        classes={classes}
-                                                        info={plan || null}
-                                                        menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                                        data={this.state[this.state.menuItemSeleccionado]}
-                                                    />
-                                                }
-                                            </div>
-                                })}
                             </div>}
+
+                            {/* Secciones */}
+
+                            {/* Contribución por período */}
+                            {this.state.menuItemSeleccionado == 'contribucion' &&
+                                this.props.infoContribucion.rowList &&
+                                this.props.infoContribucion.rowList.length > 0 && <div>
+                                    <div>
+                                        <Typography className={classes.infoTexto}>
+                                            {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                        </Typography>
+                                        <MisPagos
+                                            classes={classes}
+                                            info={this.props.infoContribucion || null}
+                                            menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                            data={this.state[this.state.menuItemSeleccionado]}
+                                            registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                            setRegistrosSeleccionados={this.setRegistrosSeleccionados}
+                                            identificadorActual={this.props.match.params.identificador}
+                                            tributoActual={this.props.match.params.tributo}
+                                        />
+                                    </div>
+                                </div>}
+
+                            {/* Multas */}
+                            {this.state.menuItemSeleccionado == 'multas' &&
+                                this.props.infoMultas.rowList &&
+                                this.props.infoMultas.rowList.length > 0 && <div>
+                                    <div>
+                                        <Typography className={classes.infoTexto}>
+                                            {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                        </Typography>
+                                        <MisPagos
+                                            classes={classes}
+                                            info={this.props.infoMultas || null}
+                                            menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                            data={this.state[this.state.menuItemSeleccionado]}
+                                            registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                            setRegistrosSeleccionados={this.setRegistrosSeleccionados}
+                                            identificadorActual={this.props.match.params.identificador}
+                                            tributoActual={this.props.match.params.tributo}
+                                        />
+                                    </div>
+                                </div>}
+
+                            {/* Sub Secciones */}
+
+                            {/* Juicio por Contribucion */}
+                            {this.state.menuItemSeleccionado == 'juicioContribucion' &&
+                                this.props.infoJuiciosContribucion.lista &&
+                                this.props.infoJuiciosContribucion.lista.length > 0 &&
+                                this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista.map((juicio) => {
+                                    return <div>
+                                        {this.state.juicioContribucion.menuItemSeleccionado == juicio.idJuicio &&
+                                            <div>
+                                                <Typography className={classes.infoTexto}>
+                                                    {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                                </Typography>
+                                                <MisPagos
+                                                    classes={classes}
+                                                    info={juicio || null}
+                                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                                    data={this.state[this.state.menuItemSeleccionado]}
+                                                    registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                                    setRegistrosSeleccionados={this.setRegistrosSeleccionados}
+                                                    identificadorActual={this.props.match.params.identificador}
+                                                    tributoActual={this.props.match.params.tributo}
+                                                />
+                                            </div>
+                                        }
+                                    </div>
+                                })}
+
+                            {/* Juicio por Multas */}
+                            {this.state.menuItemSeleccionado == 'juicioMultas' &&
+                                this.props.infoJuiciosMulta.lista &&
+                                this.props.infoJuiciosMulta.lista.length > 0 &&
+                                this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista.map((juicio) => {
+                                    return <div>
+                                        {this.state.juicioMultas.menuItemSeleccionado == juicio.idJuicio &&
+                                            <div>
+                                                <Typography className={classes.infoTexto}>
+                                                    {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                                </Typography>
+                                                <MisPagos
+                                                    classes={classes}
+                                                    info={juicio || null}
+                                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                                    data={this.state[this.state.menuItemSeleccionado]}
+                                                    registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                                    setRegistrosSeleccionados={this.setRegistrosSeleccionados}
+                                                    identificadorActual={this.props.match.params.identificador}
+                                                    tributoActual={this.props.match.params.tributo}
+                                                />
+                                            </div>
+                                        }
+                                    </div>
+                                })}
+
+                            {/* Planes de Pago */}
+                            {this.state.menuItemSeleccionado == 'planesPago' &&
+                                this.props.infoPlanesPago.lista &&
+                                this.props.infoPlanesPago.lista.length > 0 &&
+                                this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
+                                    return <div>
+                                        {this.state.planesPago.menuItemSeleccionado == plan.idPlan &&
+                                            <div>
+                                                <Typography className={classes.infoTexto}>
+                                                    {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                                </Typography>
+                                                <MisPagos
+                                                    classes={classes}
+                                                    info={plan || null}
+                                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
+                                                    data={this.state[this.state.menuItemSeleccionado]}
+                                                    registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                                    setRegistrosSeleccionados={this.setRegistrosSeleccionados}
+                                                    identificadorActual={this.props.match.params.identificador}
+                                                    tributoActual={this.props.match.params.tributo}
+                                                />
+                                            </div>
+                                        }
+                                    </div>
+                                })}
 
                         </MiCard>
                     </Grid>
@@ -645,9 +728,9 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
-                                        {this.state.infoDatosCuenta && this.state.infoDatosCuenta.map((item, index) => {
+                                        {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
                                             return <div key={index}>{item}</div>;
-                                        })}
+                                        })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
@@ -807,9 +890,7 @@ class MisPagos extends React.PureComponent {
         this.state = {
             importeAPagar: '0,00',
             anchorEl: null,
-            anchorElCedulon: null,
             modals: {
-                Cedulon: false,
                 MercadoPago: false
             },
         };
@@ -837,13 +918,20 @@ class MisPagos extends React.PureComponent {
         });
     };
 
+
     //Totalizador de importe de filas seleccionadas
     getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
+        let registrosSeleccionados = []
+        
         let importeTotal = 0;
         filas.map((item) => {
             importeTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
+            
+            if(idFilasSeleccionadas.indexOf(item.id) != -1)
+                registrosSeleccionados.push(item['concepto']);
         });
 
+        this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado,registrosSeleccionados);
         this.setState({ importeAPagar: importeTotal.toFixed(2).replace('.', ',') });
     };
 
@@ -855,16 +943,6 @@ class MisPagos extends React.PureComponent {
     //Evento para ocultar detalle de fila
     handlePopoverClose = () => {
         this.setState({ anchorEl: null });
-    };
-
-    //Evento para mostrar menu de cedulon
-    handleClickCedulon = event => {
-        this.setState({ anchorElCedulon: event.currentTarget });
-    };
-
-    //Evento para ocultar menu de cedulon
-    handleCloseCedulon = () => {
-        this.setState({ anchorElCedulon: null });
     };
 
     //Link "Detalle" que se mostrará en la grilla y se pasara al componente MiTabla
@@ -914,10 +992,15 @@ class MisPagos extends React.PureComponent {
         }
 
         const rowList = this.props.info ? this.props.info.rowList : [];
+        const rowsPerPage = (rowList.length <= 5 && 5) || (rowList.length > 5 && rowList.length <= 10 && 10) || (rowList.length > 10 && 25);
         const columnas = this.props.data.labels.columnas || null;
         const order = this.props.data.order || 'asc';
         const orderBy = this.props.data.orderBy || 'concepto';
         const noCheck = this.props.noCheck;
+
+        const tributo = this.props.tributoActual;
+
+        let tipoBien = (tributo == 'Automotores' && 1) || (tributo == 'Inmuebles' && 2) || (tributo == 'Comercios' && 3) || (tributo == 'Cementerios' && 4);
 
         return <div>
             <Grid container className={classes.containerDeudaAdm}>
@@ -971,25 +1054,11 @@ class MisPagos extends React.PureComponent {
                     />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.buttonActions}
-                        onClick={this.handleClickCedulon}
-                    >
-                        CEDULÓN
-                    <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
-                            Pago Efectivo
-                    </Typography>
-                    </Button>
-                    <Menu
-                        anchorEl={this.state.anchorElCedulon}
-                        open={Boolean(this.state.anchorElCedulon)}
-                        onClose={this.handleCloseCedulon}
-                    >
-                        <MenuItem onClick={this.handleOpenModal} modal={'Cedulon'}>Hoy</MenuItem>
-                        <MenuItem onClick={this.handleOpenModal} modal={'Cedulon'}>A Días</MenuItem>
-                    </Menu>
+                    <MiCedulon 
+                    registrosSeleccionados={this.props.registrosSeleccionados}
+                    tipoBien={tipoBien}
+                    identificador={this.props.identificadorActual}
+                    />
 
                     <Button
                         variant="contained"
@@ -1018,7 +1087,9 @@ class MisPagos extends React.PureComponent {
                 orderBy={orderBy}
                 getFilasSeleccionadas={this.getFilasSeleccionadas}
                 customCell={this.getCustomCell}
-                noCheck={noCheck} />
+                noCheck={noCheck}
+                rowsPerPage={rowsPerPage} 
+            />
 
             <Grid container spacing={16}>
                 {/* Totalizador de deudas seleccionadas y botones de pago */}
@@ -1037,25 +1108,11 @@ class MisPagos extends React.PureComponent {
                     />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.buttonActions}
-                        onClick={this.handleClickCedulon}
-                    >
-                        CEDULÓN
-                    <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
-                            Pago Efectivo
-                    </Typography>
-                    </Button>
-                    <Menu
-                        anchorEl={this.state.anchorElCedulon}
-                        open={Boolean(this.state.anchorElCedulon)}
-                        onClose={this.handleCloseCedulon}
-                    >
-                        <MenuItem onClick={this.handleOpenModal} modal={'Cedulon'}>Hoy</MenuItem>
-                        <MenuItem onClick={this.handleOpenModal} modal={'Cedulon'}>A Días</MenuItem>
-                    </Menu>
+                    <MiCedulon 
+                    registrosSeleccionados={this.props.registrosSeleccionados}
+                    tipoBien={tipoBien}
+                    identificador={this.props.identificadorActual}
+                    />
 
                     <Button
                         variant="contained"

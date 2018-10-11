@@ -1,14 +1,14 @@
 import React from "react";
 
 //Styles
-import { withStyles, createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
 
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 //Redux
-import { mostrarCargando } from '@Redux/Actions/mainContent'
+import { mostrarCargando, loginUser } from '@Redux/Actions/mainContent'
 
 import Grid from '@material-ui/core/Grid';
 import { push } from "connected-react-router";
@@ -19,6 +19,11 @@ import { getIdTributos } from "@ReduxSrc/TributarioOnline/actions";
 
 import services from '@Rules/Rules_TributarioOnline.js';
 
+const mapStateToProps = state => {
+  return {
+    loggedUser: state.MainContent.loggedUser
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -30,6 +35,9 @@ const mapDispatchToProps = dispatch => {
     },
     mostrarCargando: (cargar) => {
       dispatch(mostrarCargando(cargar));
+    },
+    setLoggedUser: (data) => {
+      dispatch(loginUser(data));
     }
   };
 };
@@ -37,28 +45,34 @@ const mapDispatchToProps = dispatch => {
 class TributarioOnline extends React.PureComponent {
   constructor(props) {
     super(props);
-    let tributoParam = this.props.match.params.tributo;
   }
 
   componentWillMount() {
     this.props.mostrarCargando(true);
 
-    //Traemos los tributos asociados al CUIT
-    services.getIdTributos('20355266169')
-    .then((datos)=> {
-      //Guardamos los datos en el store
-      this.props.setPropsIdTributos(datos); 
-      //Finalizamos el cargando 
-      this.props.mostrarCargando(false);
-    });
-  }
+    //Traemos datos de usuario para guardarlos en las props de redux
+    services.getDatosUsuario(this.props.loggedUser.token) //this.props.loggedUser.token
+      .then((datos) => {
 
-  componentDidMount() {
-    //this.props.mostrarCargando(false);
+        //Seteamos las props
+        this.props.setLoggedUser({
+          datos: datos.return
+        });
+
+      });
+
+    //Traemos los tributos asociados al Token
+    services.getIdTributos(this.props.loggedUser.token)
+      .then((datos) => {
+        //Guardamos los datos en el store
+        this.props.setPropsIdTributos(datos);
+        //Finalizamos el cargando 
+        this.props.mostrarCargando(false);
+      });
   }
 
   eventRedirect = (tipoTributo, identificador) => {
-    this.props.redireccionar('/DetalleTributario/'+tipoTributo+'/'+identificador);
+    this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + identificador);
   }
 
   render() {
@@ -119,7 +133,7 @@ class TributarioOnline extends React.PureComponent {
 
 let componente = TributarioOnline;
 componente = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withStyles(styles)(componente));
 componente = withRouter(componente);

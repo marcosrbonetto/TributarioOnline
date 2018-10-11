@@ -150,7 +150,7 @@ class MiTabla extends React.PureComponent {
             selected: [],
             data: data,
             page: 0,
-            rowsPerPage: 5,
+            rowsPerPage: this.props.rowsPerPage || 25,
         }
     }
 

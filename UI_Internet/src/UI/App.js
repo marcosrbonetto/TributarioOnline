@@ -1,4 +1,5 @@
 import React from "react";
+import Cookies from 'universal-cookie';
 
 //Styles
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +14,7 @@ import { AnimatedSwitch } from "react-router-transition";
 //REDUX
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
+import { mostrarCargando, loginUser } from '@Redux/Actions/mainContent'
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -26,15 +28,21 @@ import Inicio from "./Inicio";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
 import Pagina404 from "@UI/_Pagina404";
 
+import { getAllUrlParams } from "@Utils/functions"
+
 const mapStateToProps = state => {
   return {
-    alertas: state.Alerta.alertas
+    alertas: state.Alerta.alertas,
+    loggedUser: state.MainContent.loggedUser
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   onAlertaClose: id => {
     dispatch(ocultarAlerta(id));
+  },
+  setLoggedUser: (data) => {
+    dispatch(loginUser(data));
   }
 });
 
@@ -45,6 +53,18 @@ class App extends React.Component {
     this.state = {};
   }
 
+  componentWillMount() {
+    //Seteo Token en cookies // para salir del apuro asumimos que siempre viene
+    const cookies = new Cookies();
+    const tokenParam = getAllUrlParams(window.location.href).Token;
+
+    tokenParam && cookies.set('token', tokenParam);
+
+    this.props.setLoggedUser({
+      token: cookies.get('token')
+    });
+  }
+  
   componentDidMount() {}
 
   render() {

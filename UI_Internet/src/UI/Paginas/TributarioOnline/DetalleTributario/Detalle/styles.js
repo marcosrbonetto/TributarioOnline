@@ -104,18 +104,45 @@ const styles = theme => ({
       top: '20px',
     },
     selectIdentificador:{
+      color: theme.color.ok.main,
+      padding: '0px 10px 0px 15px',
       fontSize: '22px',
       fontWeight: 'bold',
-      marginLeft: '10px'
+      marginLeft: '10px',
+      marginRight: '5px',
+      marginBottom: '12px',
+      borderRadius: '20px',
+      border: '2px solid',
+      borderColor: theme.color.ok.main,
+      '& > div > div': {
+        paddingBottom: '4px'
+      },
+      '& svg': {
+        color: theme.color.ok.main
+      }
+    },
+    scrollButtonsMenu: {
+      '& svg': {
+        color: '#fff',
+        background: theme.color.ok.main,
+        borderRadius: '12px',
+      }
+    },
+    scrollButtonsSubMenu: {
+      '& svg': {
+        color: '#fff',
+        background: theme.color.error.main,
+        borderRadius: '12px',
+      }
     },
     badgeMenu: {
       background: theme.color.ok.main,
-      top: '-6px',
+      top: '-4px',
       right: '0px',
     },
     badgeJuicioMenu: {
       background: theme.color.error.main,
-      top: '-6px',
+      top: '-4px',
       right: '0px',
       color: '#fff'
     },

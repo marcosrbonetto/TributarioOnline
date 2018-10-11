@@ -98,7 +98,7 @@ class TributarioAccess extends React.PureComponent {
                             <Grid item md={9}>
                                 <Select
                                     className={classes.selectSpacing}
-                                    value={this.state.opcionSeleccionada}
+                                    value={this.state.opcionSeleccionada || '0'}
                                     onChange={this.selectOnChange}
                                     inputProps={{
                                         name: 'identificador',
@@ -106,7 +106,7 @@ class TributarioAccess extends React.PureComponent {
                                     }}
                                 >
                                     <MenuItem value="0">
-                                        <em>Seleccione</em>
+                                        <em>{Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.length > 0 ? 'Seleccione' : 'No se encontraron '+this.props.tipo}</em>
                                     </MenuItem>
                                     {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.map((data, index) => {
                                         return <MenuItem key={index} value={data.identificador}>{data.identificador}</MenuItem>
@@ -114,6 +114,7 @@ class TributarioAccess extends React.PureComponent {
                                 </Select>
                             </Grid>
                             <Grid item md={3} className={classes.contentRight}>
+                                {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.length > 0 &&
                                 <Button
                                     type="enter"
                                     variant="contained"
@@ -122,7 +123,7 @@ class TributarioAccess extends React.PureComponent {
                                     onClick={this.eventRedirect}
                                 >
                                     Entrar
-                                </Button>
+                                </Button>}
                             </Grid>
                         </Grid>
                     </div>
