@@ -29,6 +29,7 @@ import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/in
 import Pagina404 from "@UI/_Pagina404";
 
 import { getAllUrlParams } from "@Utils/functions"
+import services from '@Rules/Rules_TributarioOnline.js';
 
 const mapStateToProps = state => {
   return {
@@ -63,6 +64,17 @@ class App extends React.Component {
     this.props.setLoggedUser({
       token: cookies.get('token')
     });
+
+    //Traemos datos de usuario para guardarlos en las props de redux
+    services.getDatosUsuario(cookies.get('token')) //this.props.loggedUser.token
+      .then((datos) => {
+
+        //Seteamos las props
+        this.props.setLoggedUser({
+          datos: datos.return
+        });
+
+      });
   }
   
   componentDidMount() {}

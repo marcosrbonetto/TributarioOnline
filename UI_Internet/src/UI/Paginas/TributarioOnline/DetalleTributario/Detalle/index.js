@@ -197,22 +197,22 @@ class DetalleTributo extends React.PureComponent {
                 this.props.setPropsInfoContribucion(datos);
             });
 
-        const service2 = services.getInfoMultas(identificador)
+        const service2 = services.getInfoMultas(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoMultas(datos);
             });
 
-        const service3 = services.getInfoJuiciosContribucion(identificador)
+        const service3 = services.getInfoJuiciosContribucion(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoJuiciosContribucion(datos);
             });
 
-        const service4 = services.getInfoJuiciosMulta(identificador)
+        const service4 = services.getInfoJuiciosMulta(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoJuiciosMulta(datos);
             });
 
-        const service5 = services.getInfoPlanesPago(identificador)
+        const service5 = services.getInfoPlanesPago(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoPlanesPago(datos);
             });

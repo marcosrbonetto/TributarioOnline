@@ -50,17 +50,6 @@ class TributarioOnline extends React.PureComponent {
   componentWillMount() {
     this.props.mostrarCargando(true);
 
-    //Traemos datos de usuario para guardarlos en las props de redux
-    services.getDatosUsuario(this.props.loggedUser.token) //this.props.loggedUser.token
-      .then((datos) => {
-
-        //Seteamos las props
-        this.props.setLoggedUser({
-          datos: datos.return
-        });
-
-      });
-
     //Traemos los tributos asociados al Token
     services.getIdTributos(this.props.loggedUser.token)
       .then((datos) => {

@@ -20,7 +20,10 @@ import { cerrarSesion } from "@Redux/Actions/usuario";
 import Icon from '@material-ui/core/Icon';
 
 const mapStateToProps = state => {
-  return { usuario: state.Usuario.usuario };
+  return { 
+    usuario: state.Usuario.usuario,
+    loggedUser: state.MainContent.loggedUser
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -36,8 +39,17 @@ class MiToolbar extends React.Component {
     super(props);
 
     this.state = {
-      anchorPopupUsuario: undefined
+      anchorPopupUsuario: undefined,
+      datosUsuario: undefined
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (JSON.stringify(this.props.loggedUser.datos) != JSON.stringify(nextProps.loggedUser.datos)) {
+      this.setState({ 
+        datosUsuario: nextProps.loggedUser.datos
+      });
+    }
   }
 
   onUsuarioPress = event => {
@@ -51,9 +63,10 @@ class MiToolbar extends React.Component {
   };
 
   onBotonCerrarSesionPress = () => {
-    if (this.props.cargando) return;
+    window.location.href = "https://servicios2.cordoba.gov.ar/TributarioOnline/vecino-virtual.html";
+    /*if (this.props.cargando) return;
     this.setState({ anchorPopupUsuario: null });
-    this.props.cerrarSesion();
+    this.props.cerrarSesion();*/
   };
 
   handleDrawerClose = () => {
@@ -139,15 +152,15 @@ class MiToolbar extends React.Component {
               className={classNames(classes.icono)}
             />
             <Typography align="center" variant="subheading" color="inherit">
-              Federico Gabriel asdasd asdasd adasdasd asdasda sdasd asdasd
-              asdasda Amura
+              {this.state.datosUsuario &&
+              this.state.datosUsuario.apellido+', '+this.state.datosUsuario.nombre}
             </Typography>
           </div>
 
-          <MenuItem onClick={this.handleClose}>Mi perfil</MenuItem>
+          {/*<MenuItem onClick={this.handleClose}>Mi perfil</MenuItem>
           <MenuItem divider onClick={this.handleClose}>
             Cambiar contraseña
-          </MenuItem>
+          </MenuItem>*/}
           <MenuItem onClick={this.onBotonCerrarSesionPress}>
             Cerrar sesión
           </MenuItem>
