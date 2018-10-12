@@ -56,7 +56,7 @@ class MiCedulon extends React.PureComponent {
     if (registros.length > 0) {
       services.getCedulon(token,
         {
-          "tipoBien": parseInt(this.props.tipoBien),
+          "tipoTributo": parseInt(this.props.tipoTributo),
           "identificador": this.props.identificador,
           "opcionVencimiento": parseInt(opcion),
           "periodos": registros

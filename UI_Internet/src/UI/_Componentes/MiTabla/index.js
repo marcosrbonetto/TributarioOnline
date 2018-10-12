@@ -27,7 +27,8 @@ Props esperadas:
 ->getFilasSeleccionadas - Función que obtendrá las un array de filas y otro de los id de aquellas seleccionadas
 ->customCell - Funcion que retornara el contenido de la columna del tipo  type: 'customCell', y estará al último
 ->rowType - (defecto 'Concepto') - String que dice el tipo de filas que hay 
-->noCheck - Boolean que determina si la grilla muestra los checks o no
+->check - Boolean que determina si la grilla muestra los checks o no
+->rowsPerPage (defecto 25) - numero de filas por pagina
 */
 
 const mapDispatchToProps = dispatch => ({
@@ -82,12 +83,12 @@ class EnhancedTableHead extends React.Component {
     render() {
         const { classes } = this.props;
         const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
-        const noCheck = this.props.noCheck;
+        const check = this.props.check;
 
         return (
             <TableHead className={classes.tableHead}>
                 <TableRow>
-                    {noCheck &&
+                    {check &&
                         <TableCell padding="checkbox">
                             <Checkbox
                                 color='primary'
@@ -100,7 +101,7 @@ class EnhancedTableHead extends React.Component {
                     {this.props.columns.map((row, key) => {
                         return (
                             <TableCell
-                                className={noCheck && key == 0 ? classes.tableCell : classNames(classes.tableCell, classes.paddingLeft)}
+                                className={classes.tableCell}
                                 key={row.id}
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'default'}
@@ -228,7 +229,7 @@ class MiTabla extends React.PureComponent {
         const { classes } = this.props;
         const { data, order, orderBy, orderType, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-        const noCheck = !this.props.noCheck;
+        const check = this.props.check;
 
         return (
             <Paper className={classes.root}>
@@ -243,7 +244,7 @@ class MiTabla extends React.PureComponent {
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
                             rowCount={data.length}
-                            noCheck={noCheck}
+                            check={check}
                         />
                         <TableBody>
                             {stableSort(data, getSorting(order, orderBy, orderType))
@@ -253,7 +254,7 @@ class MiTabla extends React.PureComponent {
 
                                     return <MiRow
                                         key={index}
-                                        noCheck={noCheck}
+                                        check={check}
                                         data={n}
                                         classes={classes}
                                         onClick={this.handleClick}
@@ -305,7 +306,7 @@ class MiRow extends React.PureComponent {
     }
 
     render() {
-        const noCheck = (this.props.noCheck || true);
+        const check = (this.props.check || false);
         const classes = this.props.classes;
 
         return <TableRow
@@ -317,13 +318,13 @@ class MiRow extends React.PureComponent {
             key={this.props.data.id}
             selected={this.props.isSelected || false}
         >
-            {noCheck &&
+            {check &&
                 <TableCell padding="checkbox">
                     <Checkbox checked={this.props.isSelected || false} />
                 </TableCell>}
             {Object.keys(this.props.data).map((cell, key) => {
                 if(cell == 'data') return; //'data' son datos extras para utilizar
-                return cell != 'id' && <TableCell className={noCheck && key == 0 ? '' : classes.paddingLeft} key={cell} padding="none">{this.props.data[cell]}</TableCell>
+                return cell != 'id' && <TableCell key={cell} padding="default">{this.props.data[cell]}</TableCell>
             })}
             {this.renderCustomCell()}
         </TableRow>

@@ -30,7 +30,7 @@ const getDatosUsuario = (token, callback) => {
 const getIdTributos = (token, callback) => {
   return new Promise((resolve, reject) => {
 
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/MisBienes', {
+    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/MisTributos', {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -205,7 +205,7 @@ const getCedulon = (token, body) => {
         "Token": token
       },
       body: JSON.stringify({
-        "tipoBien": body.tipoBien,
+        "tipoTributo": body.tipoTributo,
         "identificador": body.identificador,
         "opcionVencimiento": body.opcionVencimiento,
         "periodos": body.periodos

@@ -27,6 +27,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+
+import MiLinkDialog from "@Componentes/MiLinkDialog";
 
 import {
   getTributosCUIT,
@@ -182,7 +187,29 @@ class Representantes extends React.PureComponent {
 
   }
 
-  getImporteTotal= () => {}
+  //Link "Detalle" que se mostrará en la grilla y se pasara al componente MiTabla
+  getCustomCell = (datosExtra) => {
+    const { classes } = this.props;
+
+    return <div className={classes.iconEliminarPermiso}>
+    <MiLinkDialog
+        textoLink={'Denegar Permiso'}
+        titulo={'Denegar Permiso'}
+        buttonOptions={true}
+        labelCancel={'No'}
+        labelAccept={'Si'}
+    >
+      <div key='buttonAction'>
+        <i class="material-icons">
+            cancel
+        </i>
+      </div>
+      <div key='mainContent'>
+        ¿Está seguro que desea eliminar el permiso para este tributo?
+      </div>
+    </MiLinkDialog>
+    </div>;
+  }
 
   render() {
     const { classes } = this.props;
@@ -205,13 +232,17 @@ class Representantes extends React.PureComponent {
               <MiTabla
                 rowType={'Representantes'}
                 columns={[
-                  { id: 'usuario', type: 'string', numeric: false, disablePadding: true, label: 'Representante' },
-                  { id: 'tributo', type: 'date', numeric: false, disablePadding: true, label: 'Permiso' },
-                  { id: 'estado', type: 'string', numeric: false, disablePadding: true, label: 'Estado' }
+                  { id: 'usuario', type: 'string', numeric: false, label: 'Representante' },
+                  { id: 'tributo', type: 'date', numeric: false, label: 'Permiso' },
+                  { id: 'estado', type: 'string', numeric: false, label: 'Estado' },
+                  { id: 'eliminarPermiso', type: 'customCell', numeric: false, label: 'Denegar' },
                 ]}
                 rows={this.props.datosMisRepresentantes || []}
                 orderBy={'usuario'}
-                getImporteTotal={this.getImporteTotal} />
+                customCell={this.getCustomCell}
+                check={false}
+                rowsPerPage={5}
+              />
             </MiCard>
             <br />
             <MiCard>
@@ -221,18 +252,22 @@ class Representantes extends React.PureComponent {
               <MiTabla
                 rowType={'Representados'}
                 columns={[
-                  { id: 'usuario', type: 'string', numeric: false, disablePadding: true, label: 'Representados' },
-                  { id: 'tributo', type: 'date', numeric: false, disablePadding: true, label: 'Permiso' },
-                  { id: 'estado', type: 'string', numeric: false, disablePadding: true, label: 'Estado' }
+                  { id: 'usuario', type: 'string', numeric: false, label: 'Representados' },
+                  { id: 'tributo', type: 'date', numeric: false, label: 'Permiso' },
+                  { id: 'estado', type: 'string', numeric: false, label: 'Estado' },
+                  { id: 'eliminarPermiso', type: 'customCell', numeric: false, label: 'Denegar' },
                 ]}
                 rows={this.props.datosMisRepresentados || []}
                 orderBy={'usuario'}
-                getImporteTotal={this.getImporteTotal} />
+                customCell={this.getCustomCell}
+                check={false}
+                rowsPerPage={5}
+              />
             </MiCard>
           </Grid>
 
           <Grid item xs={4}>
-            <MiCard>
+            {/*<MiCard>
               <Typography className={classes.title} variant="title">Solicitudes de representantes</Typography>
               <Divider className={classes.divider} />
 
@@ -270,14 +305,70 @@ class Representantes extends React.PureComponent {
                 ))}
               </List>
 
-            </MiCard>
-            <br />
+              </MiCard>*/}
             <MiCard>
-              <Typography className={classes.title} variant="title">Enviar solicitud de permisos</Typography>
+              <Typography className={classes.title} variant="title">Enviar solicitud por Tributo</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.infoTexto}>
                 {`
-                Debe seleccione por cada tributo los identificadores en los que desee operar
+                Debe ingresar el tipo de tributo y el identificador que desee operar
+              `}
+              </Typography>
+
+              <InputLabel className={classes.labelInput}>Tipo Tributo:</InputLabel>
+              <Select
+                value={'1'}
+                onChange={this.selectOnChangeTipoTributo}
+                inputProps={{
+                  name: 'tipo_tributo',
+                  id: 'tipo_tributo',
+                }}
+                className={classes.selectTipoTributo}
+              >
+                <MenuItem value="1">
+                  <em>Automotores</em>
+                </MenuItem>
+                <MenuItem value="2">
+                  <em>Inmuebles</em>
+                </MenuItem>
+                <MenuItem value="3">
+                  <em>Comercios</em>
+                </MenuItem>
+                <MenuItem value="4">
+                  <em>Cementerio</em>
+                </MenuItem>
+              </Select>
+
+              <Grid container spacing={0}>
+                <Grid item md={9}>
+                  <TextField
+                    id="input-identificador"
+                    label="Ingresar Identificador"
+                    className={classes.textField}
+                    margin="normal"
+                    value={this.state.inputIdentificador}
+                    onChange={this.handleInputIdentificador}
+                  />
+                </Grid>
+                <Grid item md={3} className={classes.containerButton}>
+                  <Button
+                    type="enter"
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={this.buscarTributosIdentificador}
+                  >
+                    Buscar</Button>
+                </Grid>
+              </Grid>
+            </MiCard>
+            <br />
+            <MiCard>
+              <Typography className={classes.title} variant="title">Enviar solicitud por CUIT</Typography>
+              <Divider className={classes.divider} />
+              <Typography className={classes.infoTexto}>
+                {`
+                Debe seleccionar por cada tributo los identificadores en los que desee operar
               `}
               </Typography>
 

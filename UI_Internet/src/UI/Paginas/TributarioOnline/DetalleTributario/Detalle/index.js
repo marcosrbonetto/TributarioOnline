@@ -1003,11 +1003,11 @@ class MisPagos extends React.PureComponent {
         const columnas = this.props.data.labels.columnas || null;
         const order = this.props.data.order || 'asc';
         const orderBy = this.props.data.orderBy || 'concepto';
-        const noCheck = this.props.noCheck;
+        const check = this.props.check;
 
         //Tributo y tipo de tributo para generar el cedulon
         const tributo = this.props.tributoActual;
-        let tipoBien = (tributo == 'Automotores' && 1) || (tributo == 'Inmuebles' && 2) || (tributo == 'Comercios' && 3) || (tributo == 'Cementerios' && 4);
+        let tipoTributo = (tributo == 'Automotores' && 1) || (tributo == 'Inmuebles' && 2) || (tributo == 'Comercios' && 3) || (tributo == 'Cementerios' && 4);
 
         return <div>
             <Grid container className={classes.containerDeudaAdm}>
@@ -1063,7 +1063,7 @@ class MisPagos extends React.PureComponent {
                 <Grid item sm={5} className={classes.buttonActionsContent}>
                     <MiCedulon 
                     registrosSeleccionados={this.props.registrosSeleccionados}
-                    tipoBien={tipoBien}
+                    tipoTributo={tipoTributo}
                     identificador={this.props.identificadorActual}
                     />
 
@@ -1094,7 +1094,7 @@ class MisPagos extends React.PureComponent {
                 orderBy={orderBy}
                 getFilasSeleccionadas={this.getFilasSeleccionadas}
                 customCell={this.getCustomCell}
-                noCheck={noCheck}
+                check={check}
                 rowsPerPage={rowsPerPage} 
             />
 
@@ -1117,7 +1117,7 @@ class MisPagos extends React.PureComponent {
                 <Grid item sm={5} className={classes.buttonActionsContent}>
                     <MiCedulon 
                     registrosSeleccionados={this.props.registrosSeleccionados}
-                    tipoBien={tipoBien}
+                    tipoTributo={tipoTributo}
                     identificador={this.props.identificadorActual}
                     />
 

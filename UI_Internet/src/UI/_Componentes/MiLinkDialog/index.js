@@ -20,6 +20,18 @@ class MiLinkDialog extends React.PureComponent {
       open: false
     }
   }
+
+  getComponent(key) {
+debugger;
+    if (typeof this.props.children == 'object')
+      return this.props.children.filter((comp) => {
+        return comp.key === key;
+      });
+    else if (key == 'mainContent')
+      return this.props.children
+
+    return false;
+  }
   
   handleOpenModal = event => {
 
@@ -48,10 +60,16 @@ class MiLinkDialog extends React.PureComponent {
 
     return (
       <div>
-        <Typography
-          onClick={this.handleOpenModal}
-          variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>{textoLink}</Typography>
-
+        {!this.getComponent('buttonAction') &&
+          <Typography
+            onClick={this.handleOpenModal}
+            variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>{textoLink}</Typography>
+        }
+        {this.getComponent('buttonAction') && 
+          <div onClick={this.handleOpenModal}>
+            {this.getComponent('buttonAction')}
+          </div>
+        }
         <Dialog
           open={this.state.open || false}
           scroll='paper'
@@ -60,13 +78,25 @@ class MiLinkDialog extends React.PureComponent {
           <DialogTitle id="scroll-dialog-title">{titulo}</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              {this.props.children}
+              {this.getComponent('headerContent')}
+              {this.getComponent('mainContent')}
+              {this.getComponent('footerContent')}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
+            {(this.props.buttonOptions && 
+            <div>
+              <Button onClick={this.handleCloseModal} color="secondary">
+                {this.props.labelCancel ? this.props.labelCancel : 'Cancelar'}
+              </Button>
+              <Button onClick={this.handleCloseModal} color="secondary">
+                {this.props.labelAccept ? this.props.labelAccept : 'Aceptar'}
+              </Button>
+            </div>
+            ) || 
             <Button onClick={this.handleCloseModal} color="secondary">
               Cerrar
-                    </Button>
+            </Button>}
           </DialogActions>
         </Dialog>
       </div>

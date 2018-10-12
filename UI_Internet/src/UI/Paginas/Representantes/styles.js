@@ -95,6 +95,23 @@ const styles = theme => ({
     color: '#000',
     borderTop: '1px solid #ddd',
     borderBottom: '1px solid #ddd',
+  },
+  labelInput: {
+    display: 'block',
+    marginTop: '10px',
+    fontSize: '12px'
+  },
+  selectTipoTributo: {
+    width: '100%'
+  },
+  iconEliminarPermiso: {
+    width: '100%',
+    textAlign: 'center',
+    '& i': {
+      color: theme.color.error.main,
+      marginRight: '50px',
+      cursor:'pointer'
+    }
   }
 });
 
