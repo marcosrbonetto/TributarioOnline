@@ -27,7 +27,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
-import Menu from '@material-ui/core/Menu';
 
 //Custom Components
 import MiCard from "@Componentes/MiCard";
@@ -35,9 +34,11 @@ import MiTabla from "@Componentes/MiTabla";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiCedulon from "@Componentes/MiCedulon";
 
+//Imagenes
 import cedulonFoto from './img/cedulon.png';
 import cedulonFoto2 from './img/MP4.png';
 
+//Actions - Redux
 import {
     getIdTributos
 } from "@ReduxSrc/TributarioOnline/actions";
@@ -52,6 +53,7 @@ import {
 
 import services from '@Rules/Rules_TributarioOnline';
 
+//Funciones Útiles
 import { stringToFloat, stringToDate, diffDays } from "@Utils/functions"
 
 const mapStateToProps = state => {
@@ -352,6 +354,7 @@ class DetalleTributo extends React.PureComponent {
         });
     };
 
+    //Función para setear en el state las filas seleccionadas de la seccion actual para generar cedulon
     setRegistrosSeleccionados = (menuItemSeleccionado, registrosSeleccionados) => {
         
         let itemSeleccionado = Object.assign({}, this.state[menuItemSeleccionado]);
@@ -363,6 +366,8 @@ class DetalleTributo extends React.PureComponent {
     render() {
         const { classes } = this.props;
 
+        //rowList - Filas de grilla
+        //lista - lista de tributos que contienen rowLists para mostrar en la grilla
         const infoContribucion = this.props.infoContribucion ? this.props.infoContribucion.rowList : [];
         const infoMultas = this.props.infoMultas ? this.props.infoMultas.rowList : [];
         const infoJuiciosContribucion = this.props.infoJuiciosContribucion ? this.props.infoJuiciosContribucion.lista : [];
@@ -982,15 +987,17 @@ class MisPagos extends React.PureComponent {
     render() {
         const classes = this.props.classes;
 
-        const deudaAdministrativa = this.props.info ? this.props.info.deudaAdministrativa : null;
-        const deudaJuicio = this.props.info ? this.props.info.deudaJuicio : null;
+        //deudaAdministrativa ó deudaJuicio contienen los mismos valores pero vienen en diferentes atributos
+        //Puede venir una u otra, no las dos juntas
+        const deudaTotales = this.props.info ? this.props.info.deudaAdministrativa || this.props.info.deudaJuicio : null;
 
         let valoresDeuda = {
-            valor1: (deudaAdministrativa && deudaAdministrativa.total) || (deudaJuicio && deudaJuicio.total) || 0,
-            valor2: (deudaAdministrativa && deudaAdministrativa.vencida) || (deudaJuicio && deudaJuicio.capital) || 0,
-            valor3: (deudaAdministrativa && deudaAdministrativa.aVencer) || (deudaJuicio && deudaJuicio.gastos) || 0,
+            valor1: deudaTotales && deudaTotales.total ? deudaTotales.total : 0,
+            valor2: (deudaTotales && (deudaTotales.vencida ? deudaTotales.vencida : deudaTotales.capital)) || 0,
+            valor3: (deudaTotales && (deudaTotales.aVencer ? deudaTotales.aVencer : deudaTotales.gastos)) || 0,
         }
 
+        //Datos para generar la grilla
         const rowList = this.props.info ? this.props.info.rowList : [];
         const rowsPerPage = (rowList.length <= 5 && 5) || (rowList.length > 5 && rowList.length <= 10 && 10) || (rowList.length > 10 && 25);
         const columnas = this.props.data.labels.columnas || null;
@@ -998,8 +1005,8 @@ class MisPagos extends React.PureComponent {
         const orderBy = this.props.data.orderBy || 'concepto';
         const noCheck = this.props.noCheck;
 
+        //Tributo y tipo de tributo para generar el cedulon
         const tributo = this.props.tributoActual;
-
         let tipoBien = (tributo == 'Automotores' && 1) || (tributo == 'Inmuebles' && 2) || (tributo == 'Comercios' && 3) || (tributo == 'Cementerios' && 4);
 
         return <div>
