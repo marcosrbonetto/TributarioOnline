@@ -3,8 +3,14 @@ import {
     GET_SOLICITUDES_PERMISOS, 
     GET_MIS_REPRESENTANTES, 
     GET_MIS_REPRESENTADOS, 
-    CANCELAR_SOLICITUD_PERMISOS 
+    CANCELAR_SOLICITUD_PERMISOS,
+    CAMBIAR_ESTADO_PERMISO
 } from "@ReduxSrc/Representantes/constants";
+
+export const cambiarEstadoPermiso = datos => ({ 
+    type: CAMBIAR_ESTADO_PERMISO, 
+    payload: datos
+});
 
 export const getTributosCUIT = datos => ({ 
     type: GET_TRIBUTOS_CUIT, 

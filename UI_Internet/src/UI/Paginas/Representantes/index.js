@@ -36,7 +36,8 @@ import MiLinkDialog from "@Componentes/MiLinkDialog";
 import {
   getTributosCUIT,
   getMisRepresentados,
-  getMisRepresentantes
+  getMisRepresentantes,
+  cambiarEstadoPermiso
 } from "@ReduxSrc/Representantes/actions";
 
 import servicesRepresentantes from '@Rules/Rules_Representantes';
@@ -66,6 +67,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setPropsMisRepresentantes: (datos) => {
     dispatch(getMisRepresentantes(datos));
+  },
+  setPropsCambiarEstadoPermiso: (datos) => {
+    dispatch(cambiarEstadoPermiso(datos));
   }
 });
 
@@ -75,6 +79,7 @@ class Representantes extends React.PureComponent {
 
     this.state = {
       inputCuit: '', //Input para la busqueda de representado
+      errorInputCuit: false,
       envioSolicitud: {
         representado: '', //Representado ya que es a quien envío la solicitud
         cuitRepresentado: '', //CUIT del representado
@@ -148,6 +153,13 @@ class Representantes extends React.PureComponent {
 
   buscarTributosCUIT = () => {
 
+    if(!/^[0-9]{11}$/.test(this.state.inputCuit)) {
+      this.setState({
+        errorInputCuit: true
+      });
+      return;
+    }
+
     //Servicios que setean los datos en las props del store de redux
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
@@ -158,7 +170,8 @@ class Representantes extends React.PureComponent {
         this.props.setPropsTributosCUIT(datos);
 
         this.setState({
-          inputCuit: ''
+          inputCuit: '',
+          errorInputCuit: false
         });
 
         this.props.mostrarCargando(false);
@@ -168,9 +181,12 @@ class Representantes extends React.PureComponent {
   }
 
   handleInputCuit = (event) => {
-    this.setState({
-      inputCuit: event.currentTarget.value
-    });
+
+    if (event.currentTarget.value.length <= 11 && /^[0-9]{0,11}$/.test(event.currentTarget.value)) { 
+      this.setState({
+        inputCuit: event.currentTarget.value
+      });
+    }
   }
 
   handleAddPermiso = (tipo, cantidad) => {
@@ -249,17 +265,10 @@ class Representantes extends React.PureComponent {
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
-        //this.props.setPropsSolicitudesPermiso(datos);
 
-        let datosGrillaMisRepresentantes = [...this.state.datosGrillaMisRepresentantes];
-        
-        let currentRow = datosGrillaMisRepresentantes[datosFila.id];
-
-        datosGrillaMisRepresentantes[datosFila.id].data.aceptado = !currentRow.data.aceptado;
-        
-debugger; /* SE ACTUALIZA EL STATE, PERO NO EL ICONO DE LA GRILLA */
-        this.setState({
-          datosGrillaMisRepresentantes
+        this.props.setPropsCambiarEstadoPermiso({
+          datosGrilla: this.props.datosMisRepresentantes,
+          datosFila: datosFila
         });
 
         this.props.mostrarCargando(false);
@@ -280,7 +289,12 @@ debugger; /* SE ACTUALIZA EL STATE, PERO NO EL ICONO DE LA GRILLA */
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
-        //this.props.setPropsSolicitudesPermiso(datos);
+        
+        this.props.setPropsCambiarEstadoPermiso({
+          datosGrilla: this.props.datosMisRepresentantes,
+          datosFila: datosFila
+        });
+
         this.props.mostrarCargando(false);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -497,6 +511,7 @@ debugger; /* SE ACTUALIZA EL STATE, PERO NO EL ICONO DE LA GRILLA */
                       margin="normal"
                       value={this.state.inputCuit}
                       onChange={this.handleInputCuit}
+                      error={this.state.errorInputCuit}
                     />
                   </Grid>
                   <Grid item md={3} className={classes.containerButton}>

@@ -1,9 +1,10 @@
-import { 
-    GET_TRIBUTOS_CUIT, 
-    GET_SOLICITUDES_PERMISOS, 
-    GET_MIS_REPRESENTANTES, 
-    GET_MIS_REPRESENTADOS, 
-    CANCELAR_SOLICITUD_PERMISOS 
+import {
+    GET_TRIBUTOS_CUIT,
+    GET_SOLICITUDES_PERMISOS,
+    GET_MIS_REPRESENTANTES,
+    GET_MIS_REPRESENTADOS,
+    CANCELAR_SOLICITUD_PERMISOS,
+    CAMBIAR_ESTADO_PERMISO
 } from "@ReduxSrc/Representantes/constants";
 import { debug } from "util";
 
@@ -39,7 +40,7 @@ const reducer = (state = initialState, action) => {
                     opciones: action.payload.return.inmuebles
                 };
             });
-            
+
             action.payload.return.comercios.length > 0 && Object.keys(action.payload.return.comercios).map((tributo) => {
                 datos.tributos['comercios'] = {
                     label: 'Comercios',
@@ -50,7 +51,7 @@ const reducer = (state = initialState, action) => {
                 };
             });
 
-            return Object.assign({...state}, state.datosEnvioSolicitudPermisos, {
+            return Object.assign({ ...state }, state.datosEnvioSolicitudPermisos, {
                 datosEnvioSolicitudPermisos: datos
             });
         }
@@ -73,7 +74,7 @@ const reducer = (state = initialState, action) => {
                 datos.push(newRepresentante);
             });
 
-            return Object.assign({...state}, state.datosPedidoSolicitudPermisos, {
+            return Object.assign({ ...state }, state.datosPedidoSolicitudPermisos, {
                 datosPedidoSolicitudPermisos: datos
             });
         }
@@ -82,7 +83,7 @@ const reducer = (state = initialState, action) => {
             var datos = action.payload.return.map((repr) => {
                 return {
                     usuario: repr.cuilRepresentante,
-                    tributo: repr.identificador+' - '+repr.tipoTributo,
+                    tributo: repr.identificador + ' - ' + repr.tipoTributo,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
                     data: {
                         aceptado: repr.aceptado,
@@ -92,7 +93,7 @@ const reducer = (state = initialState, action) => {
                 }
             });
 
-            return Object.assign({...state}, state.datosMisRepresentantes, {
+            return Object.assign({ ...state }, state.datosMisRepresentantes, {
                 datosMisRepresentantes: datos
             });
         }
@@ -101,7 +102,7 @@ const reducer = (state = initialState, action) => {
             var datos = action.payload.return.map((repr) => {
                 return {
                     usuario: repr.cuilRepresentado,
-                    tributo: repr.identificador+' - '+repr.tipoTributo,
+                    tributo: repr.identificador + ' - ' + repr.tipoTributo,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
                     data: {
                         aceptado: repr.aceptado,
@@ -111,14 +112,36 @@ const reducer = (state = initialState, action) => {
                 }
             });
 
-            return Object.assign({...state}, state.datosMisRepresentados, {
+            return Object.assign({ ...state }, state.datosMisRepresentados, {
                 datosMisRepresentados: datos
             });
         }
         case CANCELAR_SOLICITUD_PERMISOS: {
-            return Object.assign({...state}, state.datosEnvioSolicitudPermisos, {
+            return Object.assign({ ...state }, state.datosEnvioSolicitudPermisos, {
                 datosEnvioSolicitudPermisos: {}
             });
+        }
+        case CAMBIAR_ESTADO_PERMISO: {
+
+            var datos = action.payload.datosGrilla.map((repr) => {
+                if (action.payload.datosFila.id == repr.id) {
+                    return {
+                        ...repr,
+                        estado: !repr.data.aceptado ? 'Aceptado' : 'Rechazado',
+                        data: {
+                            ...repr.data,
+                            aceptado: !repr.data.aceptado
+                        }
+                    }
+                } else {
+                    return repr;
+                }
+            });
+
+            return Object.assign({ ...state }, state.datosMisRepresentantes, {
+                datosMisRepresentantes: datos
+            });
+
         }
         default:
             return state;
