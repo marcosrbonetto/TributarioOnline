@@ -121,6 +121,9 @@ const styles = theme => ({
       marginRight: '50px',
       cursor:'pointer'
     }
+  },
+  mensajeError: {
+    color: theme.color.error.main
   }
 });
 

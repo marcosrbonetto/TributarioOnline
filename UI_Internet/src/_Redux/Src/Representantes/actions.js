@@ -4,8 +4,14 @@ import {
     GET_MIS_REPRESENTANTES, 
     GET_MIS_REPRESENTADOS, 
     CANCELAR_SOLICITUD_PERMISOS,
-    CAMBIAR_ESTADO_PERMISO
+    CAMBIAR_ESTADO_PERMISO,
+    AGREGAR_REPRESENTADO_GRILLA
 } from "@ReduxSrc/Representantes/constants";
+
+export const agregarRegistroGrilla = datos => ({ 
+    type: AGREGAR_REPRESENTADO_GRILLA, 
+    payload: datos
+});
 
 export const cambiarEstadoPermiso = datos => ({ 
     type: CAMBIAR_ESTADO_PERMISO, 

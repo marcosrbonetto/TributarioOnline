@@ -4,7 +4,8 @@ import {
     GET_MIS_REPRESENTANTES,
     GET_MIS_REPRESENTADOS,
     CANCELAR_SOLICITUD_PERMISOS,
-    CAMBIAR_ESTADO_PERMISO
+    CAMBIAR_ESTADO_PERMISO,
+    AGREGAR_REPRESENTADO_GRILLA
 } from "@ReduxSrc/Representantes/constants";
 import { debug } from "util";
 
@@ -123,6 +124,10 @@ const reducer = (state = initialState, action) => {
         }
         case CAMBIAR_ESTADO_PERMISO: {
 
+            let grilla = 'datosMisRepresentados';
+            if(action.payload.grilla == 'MisRepresentantes')
+                grilla = 'datosMisRepresentantes';
+
             var datos = action.payload.datosGrilla.map((repr) => {
                 if (action.payload.datosFila.id == repr.id) {
                     return {
@@ -138,10 +143,27 @@ const reducer = (state = initialState, action) => {
                 }
             });
 
-            return Object.assign({ ...state }, state.datosMisRepresentantes, {
-                datosMisRepresentantes: datos
+            return Object.assign({ ...state }, state[grilla], {
+                [grilla]: datos
+            });
+        }
+        case AGREGAR_REPRESENTADO_GRILLA: {
+
+            let datosGrilla = [...state.datosMisRepresentados];
+            datosGrilla.push({
+                usuario: action.payload.cuilRepresentado,
+                tributo: action.payload.identificador + ' - ' + action.payload.tipoTributo,
+                estado: action.payload.aceptado ? 'Aceptado' : 'Rechazado',
+                data: {
+                    aceptado: action.payload.aceptado,
+                    identificador: action.payload.identificador,
+                    tipoTributo: action.payload.tipoTributo
+                }
             });
 
+            return Object.assign({ ...state }, state.datosMisRepresentados, {
+                datosMisRepresentados: datosGrilla
+            });
         }
         default:
             return state;

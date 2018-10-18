@@ -152,12 +152,42 @@ const getMisRepresentados = (token, identificador) => {
     });
 };
 
+const getTitularTributo = (token, param) => {
+    return new Promise((resolve, reject) => {
+
+        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Titular?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Token": token
+            }
+        })
+            .then(res => {
+
+                if (res.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+
+                return res.json();
+            })
+            .then(datos => {
+                resolve(datos);
+            })
+            .catch(err => {
+                reject("Error procesando la solicitud");
+            });
+    });
+};
+
 const services = {
     agregarSolicitudPermiso: agregarSolicitudPermiso,
     cancelarPermiso: cancelarPermiso,
     aceptarPermiso: aceptarPermiso,
     getMisRepresentantes: getMisRepresentantes,
-    getMisRepresentados: getMisRepresentados
+    getMisRepresentados: getMisRepresentados,
+    getTitularTributo: getTitularTributo
+    
 }
 
 export default services;
