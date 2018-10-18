@@ -22,7 +22,6 @@ class MiLinkDialog extends React.PureComponent {
   }
 
   getComponent(key) {
-debugger;
     if (typeof this.props.children == 'object')
       return this.props.children.filter((comp) => {
         return comp.key === key;
@@ -55,17 +54,31 @@ debugger;
     });
   };
 
+  handleAcceptEvent = (event) => {
+    if(this.props.acceptEvent)
+      this.props.acceptEvent(this.props.acceptEventData);
+
+    this.handleCloseModal();
+  };
+
+  handleCancelEvent = (event) => {
+    if(this.props.cancelEvent)
+      this.props.cancelEvent(this.props.cancelEventData);
+
+    this.handleCloseModal();
+  };
+
   render() {
     let { classes, titulo, textoLink } = this.props;
 
     return (
       <div>
-        {!this.getComponent('buttonAction') &&
+        {!this.props.buttonAction &&
           <Typography
             onClick={this.handleOpenModal}
             variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>{textoLink}</Typography>
         }
-        {this.getComponent('buttonAction') && 
+        {this.props.buttonAction && 
           <div onClick={this.handleOpenModal}>
             {this.getComponent('buttonAction')}
           </div>
@@ -86,10 +99,10 @@ debugger;
           <DialogActions>
             {(this.props.buttonOptions && 
             <div>
-              <Button onClick={this.handleCloseModal} color="secondary">
+              <Button onClick={this.handleCancelEvent} color="secondary">
                 {this.props.labelCancel ? this.props.labelCancel : 'Cancelar'}
               </Button>
-              <Button onClick={this.handleCloseModal} color="secondary">
+              <Button onClick={this.handleAcceptEvent} color="secondary">
                 {this.props.labelAccept ? this.props.labelAccept : 'Aceptar'}
               </Button>
             </div>

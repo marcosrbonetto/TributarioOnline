@@ -56,8 +56,8 @@ class MiSolicPermisos extends React.PureComponent {
               renderValue={selected => selected.join(', ')}
               MenuProps={MenuProps}
             >
-              {this.props.opciones && this.props.opciones.map(opcion => (
-                <MenuItem key={opcion} value={opcion}>
+              {this.props.opciones && this.props.opciones.map((opcion, index) => (
+                <MenuItem key={index} value={opcion}>
                   <Checkbox checked={this.state.checked.indexOf(opcion) > -1} />
                   <ListItemText primary={opcion} />
                 </MenuItem>

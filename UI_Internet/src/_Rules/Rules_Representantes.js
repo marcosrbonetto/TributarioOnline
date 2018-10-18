@@ -1,203 +1,161 @@
-const getTributosCUIT = (cuit, callback) => {
-    /*fetch('https://httpbin.org/get')
-    .then(res => {
-        if (res.status >= 400) {
-        throw new Error("Bad response from server");
-        }
-        return res.json()
-    })
-    .then(datos => {
-        callback(datos);
-    })
-    .catch(err => {
-        console.error(err);
-    });*/
+const agregarSolicitudPermiso = (token, body) => {
+    return new Promise((resolve, reject) => {
 
-    setTimeout(function () {
-        callback({
-            return: {
-                representado: 'Adrian Dotta',
-                cuitRepresentado: '20355266169',
-                tributos: {
-                    Automotores: [
-                        'HGF456',
-                        'WER345',
-                        'UIO678'
-                    ]
+        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/Agregar', {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Token": token
+            },
+            body: JSON.stringify({
+                "tipoTributo": body.tipoTributo,
+                "identificador": body.identificador
+            })
+        })
+            .then(res => {
+
+                if (res.status >= 400) {
+                    throw new Error("Bad response from server");
                 }
+
+                return res.json();
+            })
+            .then(datos => {
+                resolve(datos);
+            })
+            .catch(err => {
+                reject("Error procesando la solicitud");
+            });
+    });
+};
+
+const cancelarPermiso = (token, body) => {
+    return new Promise((resolve, reject) => {
+
+        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/Cancelar', {
+            method: "DELETE",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Token": token
+            },
+            body: JSON.stringify({
+                "cuilRepresentante": body.cuilRepresentante,
+                "tipoTributo": body.tipoTributo,
+                "identificador": body.identificador
+            })
+        })
+            .then(res => {
+
+                if (res.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+
+                return res.json();
+            })
+            .then(datos => {
+                resolve(datos);
+            })
+            .catch(err => {
+                reject("Error procesando la solicitud");
+            });
+    });
+};
+
+const aceptarPermiso = (token, body) => {
+    return new Promise((resolve, reject) => {
+
+        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/Aceptar', {
+            method: "PUT",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Token": token
+            },
+            body: JSON.stringify({
+                "cuilRepresentante": body.cuilRepresentante,
+                "tipoTributo": body.tipoTributo,
+                "identificador": body.identificador
+            })
+        })
+            .then(res => {
+
+                if (res.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+
+                return res.json();
+            })
+            .then(datos => {
+                resolve(datos);
+            })
+            .catch(err => {
+                reject("Error procesando la solicitud");
+            });
+    });
+};
+
+const getMisRepresentantes = (token, identificador) => {
+    return new Promise((resolve, reject) => {
+
+        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/MisRepresentantes', {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Token": token
             }
-        });
-    }, 2000);
+        })
+            .then(res => {
 
+                if (res.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+
+                return res.json();
+            })
+            .then(datos => {
+                resolve(datos);
+            })
+            .catch(err => {
+                reject("Error procesando la solicitud");
+            });
+    });
 };
 
+const getMisRepresentados = (token, identificador) => {
+    return new Promise((resolve, reject) => {
 
-const getSolicitudesPermiso = (cuit, callback) => {
-    /*fetch('https://httpbin.org/get')
-    .then(res => {
-        if (res.status >= 400) {
-        throw new Error("Bad response from server");
-        }
-        return res.json()
-    })
-    .then(datos => {
-        callback(datos);
-    })
-    .catch(err => {
-        console.error(err);
-    });*/
+        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/MisRepresentantados', {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Token": token
+            }
+        })
+            .then(res => {
 
-    setTimeout(function () {
-        callback({
-            return: [
-                {
-                    representante: 'Marcelo Gallarzo',
-                    cuitRepresentante: '20345688549',
-                    tributos: {
-                        Automotores: [
-                            'ASD234',
-                            'YUI768',
-                            'XCV345'
-                        ]
-                    }
-                },
-                {
-                    representante: 'Pedro Sanchez',
-                    cuitRepresentante: '20355644589',
-                    tributos: {
-                        Automotores: [
-                            'ASD134',
-                            'YUI168',
-                            'XCV145'
-                        ]
-                    }
-                },
-                {
-                    representante: 'Marcos Peña',
-                    cuitRepresentante: '20365421529',
-                    tributos: {
-                        Automotores: [
-                            'AAD234',
-                            'YAI268',
-                            'XAV245'
-                        ]
-                    }
+                if (res.status >= 400) {
+                    throw new Error("Bad response from server");
                 }
-            ]
-        });
-    }, 2000);
 
-};
-
-const getMisRepresentantes = (cuit, callback) => {
-    /*fetch('https://httpbin.org/get')
-    .then(res => {
-        if (res.status >= 400) {
-        throw new Error("Bad response from server");
-        }
-        return res.json()
-    })
-    .then(datos => {
-        callback(datos);
-    })
-    .catch(err => {
-        console.error(err);
-    });*/
-
-    setTimeout(function () {
-        callback({
-            "return": [
-                {
-                    "representante": "Oscar Dotta",
-                    "cuitRepresentante": "20355124512",
-                    "tributo": "Automotores",
-                    "identificador": "ASD234",
-                    "estado": "Aceptado"
-                },
-                {
-                    "representante": "Pedro Sanchez",
-                    "cuitRepresentante": "2021125456",
-                    "tributo": "Automotores",
-                    "identificador": "BSD224",
-                    "estado": "Pendiente"
-                },
-                {
-                    "representante": "Marcos Amato",
-                    "cuitRepresentante": "2044125456",
-                    "tributo": "Automotores",
-                    "identificador": "TSD254",
-                    "estado": "Aceptado"
-                },
-                {
-                    "representante": "Pedro Sanchez",
-                    "cuitRepresentante": "2034125456",
-                    "tributo": "Automotores",
-                    "identificador": "AHG274",
-                    "estado": "Aceptado"
-                }
-            ],
-            "error": null,
-            "ok": true
-        });
-    }, 2000);
-};
-
-const getMisRepresentados = (cuit, callback) => {
-    /*fetch('https://httpbin.org/get')
-    .then(res => {
-        if (res.status >= 400) {
-        throw new Error("Bad response from server");
-        }
-        return res.json()
-    })
-    .then(datos => {
-        callback(datos);
-    })
-    .catch(err => {
-        console.error(err);
-    });*/
-
-    setTimeout(function () {
-        callback({
-            "return": [
-                {
-                    "representado": "Marcos Amato",
-                    "cuitRepresentado": "2044125456",
-                    "tributo": "Automotores",
-                    "identificador": "TSD254",
-                    "estado": "Aceptado"
-                },
-                {
-                    "representado": "Pedro Sanchez",
-                    "cuitRepresentado": "2021125456",
-                    "tributo": "Automotores",
-                    "identificador": "BSD224",
-                    "estado": "Pendiente"
-                },
-                {
-                    "representado": "Oscar Dotta",
-                    "cuitRepresentado": "20355124512",
-                    "tributo": "Automotores",
-                    "identificador": "ASD234",
-                    "estado": "Aceptado"
-                },
-                {
-                    "representado": "Pedro Sanchez",
-                    "cuitRepresentado": "2034125456",
-                    "tributo": "Automotores",
-                    "identificador": "AHG274",
-                    "estado": "Aceptado"
-                }
-            ],
-            "error": null,
-            "ok": true
-        });
-    }, 2000);
+                return res.json();
+            })
+            .then(datos => {
+                resolve(datos);
+            })
+            .catch(err => {
+                reject("Error procesando la solicitud");
+            });
+    });
 };
 
 const services = {
-    getTributosCUIT: getTributosCUIT,
-    getSolicitudesPermiso: getSolicitudesPermiso,
+    agregarSolicitudPermiso: agregarSolicitudPermiso,
+    cancelarPermiso: cancelarPermiso,
+    aceptarPermiso: aceptarPermiso,
     getMisRepresentantes: getMisRepresentantes,
     getMisRepresentados: getMisRepresentados
 }

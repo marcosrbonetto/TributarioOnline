@@ -27,6 +27,34 @@ const getDatosUsuario = (token, callback) => {
   });
 };
 
+const getTributosByCUIT = (token, identificador) => {
+  return new Promise((resolve, reject) => {
+
+    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Tributos?cuil='+identificador, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      }
+    })
+    .then(res => {
+
+        if (res.status >= 400) {
+        throw new Error("Bad response from server");
+        }
+
+        return res.json();
+    })
+    .then(datos => {
+      resolve(datos);
+    })
+    .catch(err => {
+      reject("Error procesando la solicitud");
+    });
+  });
+};
+
 const getIdTributos = (token, callback) => {
   return new Promise((resolve, reject) => {
 
@@ -58,7 +86,7 @@ const getIdTributos = (token, callback) => {
 
 const getInfoContribucion = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Automotor/Tributos?identificador='+identificador, {
+    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Contribuciones?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -87,7 +115,7 @@ const getInfoContribucion = (token, identificador) => {
 
 const getInfoMultas = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Automotor/Multas?identificador='+identificador, {
+    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Multas?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -115,7 +143,7 @@ const getInfoMultas = (token, identificador) => {
 
 const getInfoJuiciosContribucion = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Automotor/JuiciosTributos?identificador='+identificador, {
+    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/JuiciosContribuciones?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -142,7 +170,7 @@ const getInfoJuiciosContribucion = (token, identificador) => {
 
 const getInfoJuiciosMulta = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Automotor/JuiciosMultas?identificador='+identificador, {
+    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/JuiciosMultas?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -169,7 +197,7 @@ const getInfoJuiciosMulta = (token, identificador) => {
 
 const getInfoPlanesPago = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Automotor/PlanesTributos?identificador='+identificador, {
+    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/PlanesContribuciones?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -230,6 +258,7 @@ const getCedulon = (token, body) => {
 
 const services = {
   getDatosUsuario: getDatosUsuario,
+  getTributosByCUIT: getTributosByCUIT,
   getIdTributos: getIdTributos,
   getInfoContribucion: getInfoContribucion,
   getInfoMultas: getInfoMultas,

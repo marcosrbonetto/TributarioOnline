@@ -112,6 +112,15 @@ const styles = theme => ({
       marginRight: '50px',
       cursor:'pointer'
     }
+  },
+  iconAgregarPermiso: {
+    width: '100%',
+    textAlign: 'center',
+    '& i': {
+      color: theme.color.ok.main,
+      marginRight: '50px',
+      cursor:'pointer'
+    }
   }
 });
 

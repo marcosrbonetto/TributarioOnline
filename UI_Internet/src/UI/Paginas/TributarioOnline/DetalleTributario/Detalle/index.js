@@ -51,7 +51,7 @@ import {
     getInfoPlanesPago
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 
-import services from '@Rules/Rules_TributarioOnline';
+import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
 //Funciones Útiles
 import { stringToFloat, stringToDate, diffDays } from "@Utils/functions"
@@ -187,34 +187,46 @@ class DetalleTributo extends React.PureComponent {
         const identificador = this.props.match.params.identificador;
 
         //Traemos los tributos asociados al Token
-        const service = services.getIdTributos(token)
+        const service = servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
                 this.props.setPropsIdTributos(datos);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        const service1 = services.getInfoContribucion(token, identificador)
+        const service1 = servicesTributarioOnline.getInfoContribucion(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoContribucion(datos);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        const service2 = services.getInfoMultas(token, identificador)
+        const service2 = servicesTributarioOnline.getInfoMultas(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoMultas(datos);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        const service3 = services.getInfoJuiciosContribucion(token, identificador)
+        const service3 = servicesTributarioOnline.getInfoJuiciosContribucion(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoJuiciosContribucion(datos);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        const service4 = services.getInfoJuiciosMulta(token, identificador)
+        const service4 = servicesTributarioOnline.getInfoJuiciosMulta(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoJuiciosMulta(datos);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        const service5 = services.getInfoPlanesPago(token, identificador)
+        const service5 = servicesTributarioOnline.getInfoPlanesPago(token, identificador)
             .then((datos) => {
                 this.props.setPropsInfoPlanesPago(datos);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
         Promise.all([service, service1, service2, service3, service4, service5]).then(() => {
@@ -356,10 +368,10 @@ class DetalleTributo extends React.PureComponent {
 
     //Función para setear en el state las filas seleccionadas de la seccion actual para generar cedulon
     setRegistrosSeleccionados = (menuItemSeleccionado, registrosSeleccionados) => {
-        
+
         let itemSeleccionado = Object.assign({}, this.state[menuItemSeleccionado]);
         itemSeleccionado.registrosSeleccionados = registrosSeleccionados;
-        
+
         this.setState({ [menuItemSeleccionado]: itemSeleccionado });
     };
 
@@ -733,9 +745,13 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
+                                    <div key="headerContent"></div>
+                                    <div key="mainContent">
                                         {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
                                             return <div key={index}>{item}</div>;
                                         })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
+                                    </div>
+                                    <div key="footerContent"></div>
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
@@ -927,16 +943,16 @@ class MisPagos extends React.PureComponent {
     //Totalizador de importe de filas seleccionadas
     getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
         let registrosSeleccionados = []
-        
+
         let importeTotal = 0;
         filas.map((item) => {
             importeTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
-            
-            if(idFilasSeleccionadas.indexOf(item.id) != -1)
+
+            if (idFilasSeleccionadas.indexOf(item.id) != -1)
                 registrosSeleccionados.push(item['concepto']);
         });
 
-        this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado,registrosSeleccionados);
+        this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
         this.setState({ importeAPagar: importeTotal.toFixed(2).replace('.', ',') });
     };
 
@@ -1061,10 +1077,10 @@ class MisPagos extends React.PureComponent {
                     />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
-                    <MiCedulon 
-                    registrosSeleccionados={this.props.registrosSeleccionados}
-                    tipoTributo={tipoTributo}
-                    identificador={this.props.identificadorActual}
+                    <MiCedulon
+                        registrosSeleccionados={this.props.registrosSeleccionados}
+                        tipoTributo={tipoTributo}
+                        identificador={this.props.identificadorActual}
                     />
 
                     <Button
@@ -1095,7 +1111,7 @@ class MisPagos extends React.PureComponent {
                 getFilasSeleccionadas={this.getFilasSeleccionadas}
                 customCell={this.getCustomCell}
                 check={check}
-                rowsPerPage={rowsPerPage} 
+                rowsPerPage={rowsPerPage}
             />
 
             <Grid container spacing={16}>
@@ -1115,10 +1131,10 @@ class MisPagos extends React.PureComponent {
                     />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
-                    <MiCedulon 
-                    registrosSeleccionados={this.props.registrosSeleccionados}
-                    tipoTributo={tipoTributo}
-                    identificador={this.props.identificadorActual}
+                    <MiCedulon
+                        registrosSeleccionados={this.props.registrosSeleccionados}
+                        tipoTributo={tipoTributo}
+                        identificador={this.props.identificadorActual}
                     />
 
                     <Button

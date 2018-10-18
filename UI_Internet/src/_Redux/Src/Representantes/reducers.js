@@ -16,15 +16,37 @@ const reducer = (state = initialState, action) => {
         case GET_TRIBUTOS_CUIT: {
 
             var datos = {};
-            datos.representado = action.payload.return.representado;
-            datos.cuitRepresentado = action.payload.return.cuitRepresentado;
+            datos.representado = action.payload.return.titular.titular;
+            datos.cuitRepresentado = action.payload.return.titular.cuit;
             datos.tributos = {};
-            Object.keys(action.payload.return.tributos).map((tributo) => {
-                datos.tributos[tributo] = {
-                    label: tributo,
-                    tipo: tributo,
+
+            action.payload.return.automotores.length > 0 && Object.keys(action.payload.return.automotores).map((tributo) => {
+                datos.tributos['automotores'] = {
+                    label: 'Automotores',
+                    tipo: 'automotores',
                     cantPermisos: 0,
-                    opciones: action.payload.return.tributos[tributo]
+                    tipoTributo: 1,
+                    opciones: action.payload.return.automotores
+                };
+            });
+
+            action.payload.return.inmuebles.length > 0 && Object.keys(action.payload.return.inmuebles).map((tributo) => {
+                datos.tributos['inmuebles'] = {
+                    label: 'Inmuebles',
+                    tipo: 'inmuebles',
+                    cantPermisos: 0,
+                    tipoTributo: 2,
+                    opciones: action.payload.return.inmuebles
+                };
+            });
+            
+            action.payload.return.comercios.length > 0 && Object.keys(action.payload.return.comercios).map((tributo) => {
+                datos.tributos['comercios'] = {
+                    label: 'Comercios',
+                    tipo: 'comercios',
+                    cantPermisos: 0,
+                    tipoTributo: 3,
+                    opciones: action.payload.return.comercios
                 };
             });
 
@@ -59,9 +81,14 @@ const reducer = (state = initialState, action) => {
 
             var datos = action.payload.return.map((repr) => {
                 return {
-                    usuario: repr.representante,
-                    tributo: repr.identificador+' - '+repr.tributo,
-                    estado: repr.estado
+                    usuario: repr.cuilRepresentante,
+                    tributo: repr.identificador+' - '+repr.tipoTributo,
+                    estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
+                    data: {
+                        aceptado: repr.aceptado,
+                        identificador: repr.identificador,
+                        tipoTributo: repr.tipoTributo
+                    }
                 }
             });
 
@@ -73,9 +100,14 @@ const reducer = (state = initialState, action) => {
 
             var datos = action.payload.return.map((repr) => {
                 return {
-                    usuario: repr.representado,
-                    tributo: repr.identificador+' - '+repr.tributo,
-                    estado: repr.estado
+                    usuario: repr.cuilRepresentado,
+                    tributo: repr.identificador+' - '+repr.tipoTributo,
+                    estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
+                    data: {
+                        aceptado: repr.aceptado,
+                        identificador: repr.identificador,
+                        tipoTributo: repr.tipoTributo
+                    }
                 }
             });
 

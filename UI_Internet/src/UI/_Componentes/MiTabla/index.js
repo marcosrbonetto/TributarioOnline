@@ -22,6 +22,7 @@ Props esperadas:
 
 ->columns - (obligatorio) - Array columnas - Ej.: { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: 'Concepto' },
 ->rows - (obligatorio) - Array de objetos con respectivas columnas
+    -atributo de objeto "data": con ese nombre se pueden pasar datos extra a la tabla que por ejemplo se podrán hacer uso en la función customCell como datos que vienen por parametro
 ->orderBy - (obligatorio) - id columna por la cual ordenar inicialmente
 ->order (defecto 'desc') - Sentido para ordenar
 ->getFilasSeleccionadas - Función que obtendrá las un array de filas y otro de los id de aquellas seleccionadas
@@ -139,10 +140,12 @@ class MiTabla extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        var data = (props.rows || []).map((row, key) => {
+        const gridRows = (props.rows || []);
+
+        var data = (gridRows.length > 0 && gridRows[0].id && gridRows.map((row, key) => {
             row.id = key;
             return row;
-        });
+        })) || gridRows;
 
         this.state = {
             order: this.props.order || 'desc',
