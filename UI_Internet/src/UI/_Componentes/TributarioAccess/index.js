@@ -110,16 +110,16 @@ class TributarioAccess extends React.PureComponent {
                                 </Select>
                             </Grid>
                             <Grid item md={3} className={classes.contentRight}>
-                                {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.length > 0 &&
                                 <Button
                                     type="enter"
                                     variant="contained"
                                     color="secondary"
                                     className={classes.buttonActions}
                                     onClick={this.eventRedirect}
+                                    disabled={!(Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.length > 0)}
                                 >
                                     Entrar
-                                </Button>}
+                                </Button>
                             </Grid>
                         </Grid>
                     </div>

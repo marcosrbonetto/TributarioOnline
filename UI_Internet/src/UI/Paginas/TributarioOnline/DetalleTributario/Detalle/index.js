@@ -59,7 +59,7 @@ import { stringToFloat, stringToDate, diffDays } from "@Utils/functions"
 const mapStateToProps = state => {
     return {
         loggedUser: state.MainContent.loggedUser,
-        identificadores: state.TributarioOnline.idsTributos.automotores,
+        idsTributos: state.TributarioOnline.idsTributos,
         infoContribucion: state.DetalleTributario.infoContribucion,
         infoMultas: state.DetalleTributario.infoMultas,
         infoJuiciosContribucion: state.DetalleTributario.infoJuiciosContribucion,
@@ -375,6 +375,17 @@ class DetalleTributo extends React.PureComponent {
         this.setState({ [menuItemSeleccionado]: itemSeleccionado });
     };
 
+    setDatosTributos = () => {
+        let arrayData = [...this.props.idsTributos[this.props.match.params.tributo]];
+        
+        //LLamar a this.props.datosMisRepresentados;
+        //y guardarlo bien
+    
+        this.setState({
+            identificadores: arrayData
+        });
+      }
+
     render() {
         const { classes } = this.props;
 
@@ -404,9 +415,10 @@ class DetalleTributo extends React.PureComponent {
                                     onChange={this.selectIdentificador}
                                 >
 
-                                    {this.props.identificadores && this.props.identificadores.map((tributo, index) => {
+                                    {this.state.identificadores && this.state.identificadores.map((tributo, index) => {
                                         return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}</MenuItem>
                                     })}
+                                    <MenuItem key={99} value={"CHT211"}>{"CHT211"}</MenuItem>
                                 </Select>
                                 - <b>{this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}</b>
                             </Typography>
@@ -1100,9 +1112,9 @@ class MisPagos extends React.PureComponent {
             {/* Tabla de detalle del tributo */}
             <MiTabla
                 columns={[
-                    { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: (columnas ? columnas[0] : 'Concepto') },
-                    { id: 'vencimiento', type: 'date', numeric: false, disablePadding: true, label: (columnas ? columnas[1] : 'Vencimiento') },
-                    { id: 'importe', type: 'string', numeric: false, disablePadding: true, label: (columnas ? columnas[2] : 'Importe ($)') },
+                    { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
+                    { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas[1] : 'Vencimiento') },
+                    { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[2] : 'Importe ($)') },
                     { id: 'detalle', type: 'customCell', numeric: false, disablePadding: true, label: 'Detalle' },
                 ]}
                 rows={rowList || []}

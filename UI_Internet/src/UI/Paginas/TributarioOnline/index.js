@@ -90,7 +90,7 @@ class TributarioOnline extends React.PureComponent {
 
     //Agregmos los tributos de nuestros representados
     this.props.datosMisRepresentados.map((representado) => {
-      debugger;
+
       switch (representado.data.tipoTributo) {
         case 1:
           if (representado.data.aceptado)
