@@ -1,7 +1,8 @@
+let deploy = false;
+
 var Config = {
   BASE_URL: "/TributarioOnline",
-  // BASE_URL_WS: "http://localhost:7294",
-  BASE_URL_WS: "https://servicios2.cordoba.gov.ar/WSVecinoVirtual_Bridge"
+  BASE_URL_WS: deploy ? "https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge" : "https://srv-dev04/WSTributarioOnline_Bridge"
 };
 
 module.export = Config; 

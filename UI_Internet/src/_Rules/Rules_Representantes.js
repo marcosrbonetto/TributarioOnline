@@ -1,7 +1,7 @@
 const agregarSolicitudPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/Agregar', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representante/Agregar', {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -33,7 +33,7 @@ const agregarSolicitudPermiso = (token, body) => {
 const cancelarPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/Cancelar', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representante/Cancelar', {
             method: "DELETE",
             headers: {
                 Accept: "application/json",
@@ -66,7 +66,7 @@ const cancelarPermiso = (token, body) => {
 const aceptarPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/Aceptar', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representante/Aceptar', {
             method: "PUT",
             headers: {
                 Accept: "application/json",
@@ -99,7 +99,7 @@ const aceptarPermiso = (token, body) => {
 const getMisRepresentantes = (token, identificador) => {
     return new Promise((resolve, reject) => {
 
-        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/MisRepresentantes', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representante/MisRepresentantes', {
             method: "GET",
             headers: {
                 Accept: "application/json",
@@ -127,7 +127,7 @@ const getMisRepresentantes = (token, identificador) => {
 const getMisRepresentados = (token, identificador) => {
     return new Promise((resolve, reject) => {
 
-        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Representante/MisRepresentantados', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representante/MisRepresentantados', {
             method: "GET",
             headers: {
                 Accept: "application/json",
@@ -155,7 +155,7 @@ const getMisRepresentados = (token, identificador) => {
 const getTitularTributo = (token, param) => {
     return new Promise((resolve, reject) => {
 
-        fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Titular?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+        fetch(window.Config.BASE_URL_WS+'/v1/Tributario/Titular?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
             method: "GET",
             headers: {
                 Accept: "application/json",

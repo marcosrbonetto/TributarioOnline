@@ -1,7 +1,7 @@
 const getDatosUsuario = (token, callback) => {
   return new Promise((resolve, reject) => {
     
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Usuario/Usuario', {
+    fetch(window.Config.BASE_URL_WS + '/v1/Usuario/Usuario', {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -30,7 +30,7 @@ const getDatosUsuario = (token, callback) => {
 const getTributosByCUIT = (token, identificador) => {
   return new Promise((resolve, reject) => {
 
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Tributos?cuil='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos?cuil='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -58,7 +58,7 @@ const getTributosByCUIT = (token, identificador) => {
 const getIdTributos = (token, callback) => {
   return new Promise((resolve, reject) => {
 
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/MisTributos', {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/MisTributos', {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -86,7 +86,7 @@ const getIdTributos = (token, callback) => {
 
 const getInfoContribucion = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Contribuciones?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -115,7 +115,7 @@ const getInfoContribucion = (token, identificador) => {
 
 const getInfoMultas = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Multas?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -143,7 +143,7 @@ const getInfoMultas = (token, identificador) => {
 
 const getInfoJuiciosContribucion = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/JuiciosContribuciones?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosContribuciones?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -170,7 +170,7 @@ const getInfoJuiciosContribucion = (token, identificador) => {
 
 const getInfoJuiciosMulta = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/JuiciosMultas?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosMultas?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -197,7 +197,7 @@ const getInfoJuiciosMulta = (token, identificador) => {
 
 const getInfoPlanesPago = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/PlanesContribuciones?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/PlanesContribuciones?tipoTributo=1&identificador='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -225,7 +225,7 @@ const getInfoPlanesPago = (token, identificador) => {
 const getCedulon = (token, body) => {
 
   return new Promise((resolve, reject) => {
-    fetch('https://servicios2.cordoba.gov.ar/WSTributarioOnline_Bridge/v1/Tributario/Cedulon', {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Cedulon', {
       method: "POST",
       headers: {
         Accept: "application/json",
