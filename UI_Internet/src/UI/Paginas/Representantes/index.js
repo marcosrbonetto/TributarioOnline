@@ -84,6 +84,7 @@ class Representantes extends React.PureComponent {
       inputCuit: '', //Input para la busqueda de representado
       selectTributos: '1',
       inputIdentificadorTributo: '',
+      errorInputIdentificador: false,
       errorInputCuit: false,
       envioSolicitud: {
         representado: null, //Representado ya que es a quien envío la solicitud
@@ -317,16 +318,16 @@ class Representantes extends React.PureComponent {
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
 
-    let cuil = "cuilRepresentado";
+    let cuil = this.props.loggedUser.datos.cuil;
     let datosGrilla = this.props.datosMisRepresentados;
     if (datosFila.data.grilla == 'MisRepresentantes') {
-      cuil = "cuilRepresentante";
+      cuil = datosFila.usuario;
       datosGrilla = this.props.datosMisRepresentantes;
     }
 
 
     const service = servicesRepresentantes.cancelarPermiso(token, {
-      [cuil]: datosFila.usuario,
+      "cuilRepresentante": cuil,
       "tipoTributo": datosFila.data.tipoTributo,
       "identificador": datosFila.data.identificador
     })
@@ -402,7 +403,7 @@ class Representantes extends React.PureComponent {
           ¿Está seguro que desea eliminar el permiso para este tributo?
       </div>
       </MiLinkDialog>
-    </div>) || <div className={classes.iconAgregarPermiso}>
+    </div>) || (datosExtra.data.grilla == 'MisRepresentantes' && <div className={classes.iconAgregarPermiso}>
         <MiLinkDialog
           textoLink={'Aceptar Permiso'}
           titulo={'Aceptar Permiso'}
@@ -422,10 +423,17 @@ class Representantes extends React.PureComponent {
             ¿Está seguro que desea aceptar el permiso para este tributo?
       </div>
         </MiLinkDialog>
-      </div>;
+    </div>);
   }
 
   buscarTributosIdentificador = () => {
+    if (this.state.inputIdentificadorTributo == '') {
+      this.setState({
+        errorInputIdentificador: true
+      });
+      return;
+    }
+
     //Servicios que setean los datos en las props del store de redux
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
@@ -438,6 +446,7 @@ class Representantes extends React.PureComponent {
 
         if(datos.ok) {
           this.setState({
+            errorInputIdentificador: false,
             busquedaTitular: {
               titular: datos.return.titular,
               cuitTitular: datos.return.cuit,
@@ -449,6 +458,7 @@ class Representantes extends React.PureComponent {
           this.handleCancelarSolicitudPermiso();
           
           this.setState({
+            errorInputIdentificador: false,
             busquedaTitular: {
               ...this.state.busquedaTitular,
               mensajeError: 'No se encontraron registros'
@@ -628,6 +638,7 @@ class Representantes extends React.PureComponent {
                     value={this.state.inputIdentificadorTributo}
                     onChange={this.handleInputIdentificador}
                     autoFocus={true}
+                    error={this.state.errorInputIdentificador}
                   />
                 </Grid>
                 <Grid item md={3} className={classes.containerButton}>

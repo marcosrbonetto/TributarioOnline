@@ -82,14 +82,15 @@ const reducer = (state = initialState, action) => {
         case GET_MIS_REPRESENTANTES: {
 
             var datos = action.payload.return.map((repr) => {
+                const nombreTributo = repr.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                 return {
                     usuario: repr.cuilRepresentante,
-                    tributo: repr.identificador + ' - ' + repr.tipoTributo,
+                    tributo: repr.identificador + ' - ' + nombreTributo,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
                     data: {
                         aceptado: repr.aceptado,
                         identificador: repr.identificador,
-                        tipoTributo: repr.tipoTributo
+                        tipoTributo: repr.tipoTributo.keyValue
                     }
                 }
             });
@@ -101,14 +102,15 @@ const reducer = (state = initialState, action) => {
         case GET_MIS_REPRESENTADOS: {
 
             var datos = action.payload.return.map((repr) => {
+                const nombreTributo = repr.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                 return {
                     usuario: repr.cuilRepresentado,
-                    tributo: repr.identificador + ' - ' + repr.tipoTributo,
+                    tributo: repr.identificador + ' - ' + nombreTributo,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
                     data: {
                         aceptado: repr.aceptado,
                         identificador: repr.identificador,
-                        tipoTributo: repr.tipoTributo
+                        tipoTributo: repr.tipoTributo.keyValue
                     }
                 }
             });
