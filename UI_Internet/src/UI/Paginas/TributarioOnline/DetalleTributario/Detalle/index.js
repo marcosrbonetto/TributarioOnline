@@ -50,8 +50,10 @@ import {
     getInfoJuiciosMulta,
     getInfoPlanesPago
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
+import { getMisRepresentados } from "@ReduxSrc/Representantes/actions";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
+import servicesRepresentantes from '@Rules/Rules_Representantes';
 
 //Funciones Útiles
 import { stringToFloat, stringToDate, diffDays } from "@Utils/functions"
@@ -64,7 +66,8 @@ const mapStateToProps = state => {
         infoMultas: state.DetalleTributario.infoMultas,
         infoJuiciosContribucion: state.DetalleTributario.infoJuiciosContribucion,
         infoJuiciosMulta: state.DetalleTributario.infoJuiciosMulta,
-        infoPlanesPago: state.DetalleTributario.infoPlanesPago
+        infoPlanesPago: state.DetalleTributario.infoPlanesPago,
+        datosMisRepresentados: state.Representantes.datosMisRepresentados
     };
 };
 
@@ -92,6 +95,9 @@ const mapDispatchToProps = dispatch => ({
     },
     redireccionar: url => {
         dispatch(replace(url));
+    },
+    setPropsMisRepresentados: (datos) => {
+      dispatch(getMisRepresentados(datos));
     }
 });
 
@@ -229,7 +235,19 @@ class DetalleTributo extends React.PureComponent {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        Promise.all([service, service1, service2, service3, service4, service5]).then(() => {
+        //Traemos los representados para mostrar las patentes en las que puedo ingresar
+        //Esto se cambiará luego haciendo que el servicio que trae las patentes (por ej.)
+        //Traiga las mias y las que represento y evitar todo esto
+        const service6 = servicesRepresentantes.getMisRepresentados(token)
+            .then((datos) => {
+              if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+              this.props.setPropsMisRepresentados(datos);
+            }).catch(err => {
+              console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
+
+        Promise.all([service, service1, service2, service3, service4, service5, service6]).then(() => {
+            this.setDatosTributos();
             this.props.mostrarCargando(false);
         });
     }
@@ -376,10 +394,17 @@ class DetalleTributo extends React.PureComponent {
     };
 
     setDatosTributos = () => {
-        let arrayData = [...this.props.idsTributos[this.props.match.params.tributo]];
+        const tributo = this.props.match.params.tributo.toLowerCase();
+        let arrayData = [...this.props.idsTributos[tributo]];
         
         //LLamar a this.props.datosMisRepresentados;
-        //y guardarlo bien
+        //Agregmos los tributos de nuestros representados
+        this.props.datosMisRepresentados.map((representado) => {
+            arrayData.push({
+                representado: representado.usuario,
+                identificador: representado.data.identificador
+            });
+        });
     
         this.setState({
             identificadores: arrayData
@@ -416,9 +441,8 @@ class DetalleTributo extends React.PureComponent {
                                 >
 
                                     {this.state.identificadores && this.state.identificadores.map((tributo, index) => {
-                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}</MenuItem>
+                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - '+tributo.representado}</MenuItem>
                                     })}
-                                    <MenuItem key={99} value={"CHT211"}>{"CHT211"}</MenuItem>
                                 </Select>
                                 - <b>{this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}</b>
                             </Typography>

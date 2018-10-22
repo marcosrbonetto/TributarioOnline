@@ -86,6 +86,9 @@ class TributarioOnline extends React.PureComponent {
   }
 
   setDatosTributos = () => {
+    //Traemos los representados para mostrar las patentes en las que puedo ingresar
+    //Esto se cambiará luego haciendo que el servicio que trae las patentes (por ej.)
+    //Traiga las mias y las que represento y evitar todo esto
     let arrayData = {...this.props.idsTributos};
 
     //Agregmos los tributos de nuestros representados
