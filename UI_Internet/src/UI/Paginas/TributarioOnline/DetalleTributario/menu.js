@@ -83,12 +83,12 @@ const Menu = [
     titulo: "Consulta por número de nexo",
   },
   {
-    url: "/MisRepresentantes",
-    exact: true,
+    url: "/Inicio",
+    exact: false,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Mis Representantes",
-    titulo: "Mis Representantes",
+    nombre: "Volver",
+    titulo: "Volver",
   }
 ];
 
