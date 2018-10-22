@@ -12,6 +12,15 @@ const Menu = [
     icono: "home"
   },
   {
+    url: "/Inicio/Representantes/:tributo",
+    exact: false,
+    mostrarEnMenu: false,
+    component: Representantes,
+    nombre: "Representantes",
+    titulo: "Representantes",
+    icono: "home"
+  },
+  {
     url: "/Inicio/Representantes",
     exact: false,
     mostrarEnMenu: true,

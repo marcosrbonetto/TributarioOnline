@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import classNames from "classnames";
+import { push } from "connected-react-router";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
@@ -21,12 +21,6 @@ import MiSolicPermisos from "@Componentes/MiSolicPermisos";
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -44,6 +38,8 @@ import {
 import servicesRepresentantes from '@Rules/Rules_Representantes';
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
+import { getIdTipoTributo } from "@Utils/functions"
+
 
 const mapStateToProps = state => {
 
@@ -57,6 +53,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  redireccionar: url => {
+    dispatch(push(url));
+  },
   mostrarCargando: (cargar) => {
     dispatch(mostrarCargando(cargar));
   },
@@ -141,6 +140,13 @@ class Representantes extends React.PureComponent {
         datosGrillaMisRepresentados: datosMisRepresentados
       });
     }
+  }
+
+  componentDidMount() {
+    const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+    idTipoTributo && this.setState({
+      selectTributos: idTipoTributo.toString()
+    });
   }
 
   componentWillMount() {
@@ -430,7 +436,6 @@ class Representantes extends React.PureComponent {
     })
       .then((datos) => {
 
-        this.handleCancelarSolicitudPermiso();
         if(datos.ok) {
           this.setState({
             busquedaTitular: {
@@ -441,6 +446,8 @@ class Representantes extends React.PureComponent {
             }
           });
         } else {
+          this.handleCancelarSolicitudPermiso();
+          
           this.setState({
             busquedaTitular: {
               ...this.state.busquedaTitular,
@@ -471,6 +478,10 @@ class Representantes extends React.PureComponent {
         tipoTributo:datos.return.tipoTributo
       });
       this.handleCancelarSolicitudPermiso();
+
+      //Redireccionamos solo si "agregamos" desde la pantalla Inicio
+      this.props.match.params.tributo && this.props.redireccionar('/Inicio');
+
       this.props.mostrarCargando(false);
     });
   }
@@ -616,6 +627,7 @@ class Representantes extends React.PureComponent {
                     margin="normal"
                     value={this.state.inputIdentificadorTributo}
                     onChange={this.handleInputIdentificador}
+                    autoFocus={true}
                   />
                 </Grid>
                 <Grid item md={3} className={classes.containerButton}>

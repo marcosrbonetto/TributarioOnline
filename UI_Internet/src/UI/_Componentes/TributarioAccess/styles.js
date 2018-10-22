@@ -19,6 +19,10 @@ const styles = theme => ({
         padding: '5px 0 7px',
       }
     },
+    buttonAddTributo: {
+      top: '7px',
+      right: '20px'
+    },
     buttonActions: {
       display: 'inline-block',
       minWidth: 'auto',

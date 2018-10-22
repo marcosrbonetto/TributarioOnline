@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
 import classNames from 'classnames';
 import { connect } from "react-redux";
+import { push } from "connected-react-router";
 
 import Button from "@material-ui/core/Button";
 import CardHeader from '@material-ui/core/CardHeader';
@@ -20,7 +21,9 @@ import Icon from '@material-ui/core/Icon';
 import MiCard from "@Componentes/MiCard";
 
 const mapDispatchToProps = dispatch => ({
-
+    redireccionar: url => {
+        dispatch(push(url));
+    },
 });
 
 class TributarioAccess extends React.PureComponent {
@@ -65,6 +68,11 @@ class TributarioAccess extends React.PureComponent {
         this.props.eventRedirect(this.props.tipo, this.state.opcionSeleccionada);
     };
 
+    handleOnClickAddTributo = (event) => {
+        const tributo = event.currentTarget.attributes.tributo.value;
+        this.props.redireccionar('/Inicio/Representantes/'+tributo);
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -84,6 +92,16 @@ class TributarioAccess extends React.PureComponent {
                             ||
                             (!this.props.icono && <div className={classes.iconSvg}>{this.props.iconoSvg}</div>)
                         }
+                        action={
+                            <Button 
+                            variant="outlined" 
+                            color="secondary" 
+                            className={classNames(classes.buttonActions,classes.buttonAddTributo)}
+                            tributo={this.props.tipo}
+                            onClick={this.handleOnClickAddTributo}>
+                                + Agregar
+                            </Button>
+                          }
                         title={
                             <Typography className={classes.title} variant="title">{this.props.tipo}</Typography>
                         }

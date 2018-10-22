@@ -55,8 +55,9 @@ import { getMisRepresentados } from "@ReduxSrc/Representantes/actions";
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 import servicesRepresentantes from '@Rules/Rules_Representantes';
 
+
 //Funciones Útiles
-import { stringToFloat, stringToDate, diffDays } from "@Utils/functions"
+import { stringToFloat, stringToDate, diffDays, getIdTipoTributo } from "@Utils/functions"
 
 const mapStateToProps = state => {
     return {
@@ -1059,7 +1060,7 @@ class MisPagos extends React.PureComponent {
 
         //Tributo y tipo de tributo para generar el cedulon
         const tributo = this.props.tributoActual;
-        let tipoTributo = (tributo == 'Automotores' && 1) || (tributo == 'Inmuebles' && 2) || (tributo == 'Comercios' && 3) || (tributo == 'Cementerios' && 4);
+        let tipoTributo = getIdTipoTributo(tributo);
 
         return <div>
             <Grid container className={classes.containerDeudaAdm}>
