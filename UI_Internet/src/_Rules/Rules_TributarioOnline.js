@@ -222,10 +222,10 @@ const getInfoPlanesPago = (token, identificador) => {
   });
 };
 
-const getCedulon = (token, body) => {
+const getReporteCedulon = (token, body) => {
 
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Cedulon', {
+    fetch(window.Config.BASE_URL_WS + '/v1/Reporte/CedulonContribucion', {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -256,6 +256,65 @@ const getCedulon = (token, body) => {
   });
 };
 
+const getInformeCuenta = (token, param) => {
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/InformeCuenta?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      }
+    })
+    .then(res => {
+
+        if (res.status >= 400) {
+        throw new Error("Bad response from server");
+        }
+
+        return res.json();
+    })
+    .then(datos => {
+      resolve(datos);
+    })
+    .catch(err => {
+      reject("Error procesando la solicitud");
+    });
+  });
+};
+
+const getReporteInformeCuenta = (token, body) => {
+
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeCuenta', {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      },
+      body: JSON.stringify({
+        "tipoTributo": body.tipoTributo,
+        "identificador": body.identificador
+      })
+    })
+    .then(res => {
+
+        if (res.status >= 400) {
+        throw new Error("Bad response from server");
+        }
+
+        return res.json();
+    })
+    .then(datos => {
+      resolve(datos);
+    })
+    .catch(err => {
+      reject("Error procesando la solicitud");
+    });
+  });
+};
+
 const services = {
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
@@ -265,7 +324,9 @@ const services = {
   getInfoJuiciosContribucion: getInfoJuiciosContribucion,
   getInfoJuiciosMulta: getInfoJuiciosMulta,
   getInfoPlanesPago: getInfoPlanesPago,
-  getCedulon: getCedulon,
+  getReporteCedulon: getReporteCedulon,
+  getInformeCuenta: getInformeCuenta,
+  getReporteInformeCuenta: getReporteInformeCuenta,
 }
 
 export default services;

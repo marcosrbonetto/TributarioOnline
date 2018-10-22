@@ -32,6 +32,7 @@ import Popover from '@material-ui/core/Popover';
 import MiCard from "@Componentes/MiCard";
 import MiTabla from "@Componentes/MiTabla";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
+import MiControledDialog from "@Componentes/MiControledDialog"
 import MiCedulon from "@Componentes/MiCedulon";
 
 //Imagenes
@@ -57,7 +58,7 @@ import servicesRepresentantes from '@Rules/Rules_Representantes';
 
 
 //Funciones Útiles
-import { stringToFloat, stringToDate, diffDays, getIdTipoTributo } from "@Utils/functions"
+import { stringToFloat, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
 const mapStateToProps = state => {
     return {
@@ -98,7 +99,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(replace(url));
     },
     setPropsMisRepresentados: (datos) => {
-      dispatch(getMisRepresentados(datos));
+        dispatch(getMisRepresentados(datos));
     }
 });
 
@@ -111,6 +112,22 @@ class DetalleTributo extends React.PureComponent {
             menuItemSeleccionado: 'contribucion',
             mostrarAlternativaPlan: false,
             infoDatosCuenta: '',
+            informeCuenta: {
+                deudaTotal: 0,
+                deudaVencida: {
+                    total: 0,
+                    administrativa: 0
+                },
+                deudaAVencer: {
+                    total: 0,
+                    administrativa: 0
+                },
+                modal: {
+                    open: false,
+                    showReporte: false
+                },
+                reporteBase64: ''
+            },
             contribucion: {
                 paramDatos: 'infoContribucion',
                 arrayResult: false,
@@ -241,10 +258,10 @@ class DetalleTributo extends React.PureComponent {
         //Traiga las mias y las que represento y evitar todo esto
         const service6 = servicesRepresentantes.getMisRepresentados(token)
             .then((datos) => {
-              if (!datos.ok) { this.props.mostrarCargando(false); return false; }
-              this.props.setPropsMisRepresentados(datos);
+                if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+                this.props.setPropsMisRepresentados(datos);
             }).catch(err => {
-              console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
         Promise.all([service, service1, service2, service3, service4, service5, service6]).then(() => {
@@ -395,22 +412,133 @@ class DetalleTributo extends React.PureComponent {
     };
 
     setDatosTributos = () => {
+        if (!this.props.idsTributos) return false;
+
         const tributo = this.props.match.params.tributo.toLowerCase();
         let arrayData = [...this.props.idsTributos[tributo]];
-        
-        //LLamar a this.props.datosMisRepresentados;
-        //Agregmos los tributos de nuestros representados
-        this.props.datosMisRepresentados.map((representado) => {
-            arrayData.push({
-                representado: representado.usuario,
-                identificador: representado.data.identificador
+
+        if (this.props.datosMisRepresentados) {
+            //LLamar a this.props.datosMisRepresentados;
+            //Agregmos los tributos de nuestros representados
+            this.props.datosMisRepresentados.map((representado) => {
+                arrayData.push({
+                    representado: representado.usuario,
+                    identificador: representado.data.identificador
+                });
             });
-        });
-    
+        }
+
         this.setState({
             identificadores: arrayData
         });
-      }
+    }
+
+    onInformeCuentaDialogoOpen = () => {
+        this.props.mostrarCargando(true);
+
+        const token = this.props.loggedUser.token;
+        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const identificador = this.props.match.params.identificador;
+
+        let dataSercicio1;
+        let dataSercicio2;
+
+        const servicio1 = servicesTributarioOnline.getInformeCuenta(token, {
+            tipoTributo: tributo,
+            identificador: identificador
+        }).then((datos) => {
+            if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+
+            dataSercicio1 = datos;
+
+        }).catch(err => {
+            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        });
+
+        const servicio2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
+            tipoTributo: tributo,
+            identificador: identificador
+        }).then((datos) => {
+            if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+debugger;
+            dataSercicio2 = datos;
+
+        }).catch(err => {
+            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        });
+
+        Promise.all([servicio1, servicio2]).then(() => {
+            if (!dataSercicio1 || !dataSercicio2) return false;
+
+            this.setState({
+                informeCuenta: {
+                    deudaTotal: dataSercicio1.return.total,
+                    deudaVencida: {
+                        total: dataSercicio1.return.totalVencida,
+                        administrativa: dataSercicio1.return.administrativaVencida
+                    },
+                    deudaAVencer: {
+                        total: dataSercicio1.return.totalAVencer,
+                        administrativa: dataSercicio1.return.administrativaAVencer
+                    },
+                    modal: {
+                        ...this.state.informeCuenta.modal,
+                        open: true
+                    },
+                    reporteBase64: dataSercicio2.return
+                }
+            });
+
+            this.props.mostrarCargando(false);
+        }).catch(err => {
+            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        });
+    }
+
+    onInformeCuentaDialogoClose = () => {
+        this.setState({
+            informeCuenta: {
+                deudaTotal: 0,
+                deudaVencida: {
+                    total: 0,
+                    administrativa: 0
+                },
+                deudaAVencer: {
+                    total: 0,
+                    administrativa: 0
+                },
+                modal: {
+                    open: false,
+                    showReporte: false
+                },
+                reporteBase64: ''
+            }
+        });
+    }
+
+    onInformeCuentaShowReporte = () => {
+        this.setState({
+            informeCuenta: {
+                ...this.state.informeCuenta,
+                modal: {
+                    ...this.state.informeCuenta.modal,
+                    showReporte: true
+                }
+            }
+        });
+    }
+
+    onInformeCuentaHideReporte = () => {
+        this.setState({
+            informeCuenta: {
+                ...this.state.informeCuenta,
+                modal: {
+                    ...this.state.informeCuenta.modal,
+                    showReporte: false
+                }
+            }
+        });
+    }
 
     render() {
         const { classes } = this.props;
@@ -442,7 +570,7 @@ class DetalleTributo extends React.PureComponent {
                                 >
 
                                     {this.state.identificadores && this.state.identificadores.map((tributo, index) => {
-                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - '+tributo.representado}</MenuItem>
+                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado}</MenuItem>
                                     })}
                                 </Select>
                                 - <b>{this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}</b>
@@ -562,6 +690,7 @@ class DetalleTributo extends React.PureComponent {
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
+                                            check={true}
                                             classes={classes}
                                             info={this.props.infoContribucion || null}
                                             menuItemSeleccionado={this.state.menuItemSeleccionado}
@@ -583,6 +712,7 @@ class DetalleTributo extends React.PureComponent {
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
+                                            check={true}
                                             classes={classes}
                                             info={this.props.infoMultas || null}
                                             menuItemSeleccionado={this.state.menuItemSeleccionado}
@@ -609,6 +739,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    check={true}
                                                     classes={classes}
                                                     info={juicio || null}
                                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
@@ -635,6 +766,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    check={true}
                                                     classes={classes}
                                                     info={juicio || null}
                                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
@@ -762,12 +894,92 @@ class DetalleTributo extends React.PureComponent {
                                     </svg>
                                 </Grid>
                                 <Grid item sm={10}>
-                                    <MiLinkDialog
+                                    <MiControledDialog
+                                        open={this.state.informeCuenta.modal.open}
+                                        onDialogoOpen={this.onInformeCuentaDialogoOpen}
+                                        onDialogoClose={this.onInformeCuentaDialogoClose}
                                         textoLink={'Informe de Cuenta'}
-                                        titulo={'Informe de Cuenta'}
+                                        titulo={'Informe de Cuenta al día ' + dateToString(new Date(), 'DD/MM/YYYY')}
                                     >
-                                        Contenido Informe de Cuenta!
-                                    </MiLinkDialog>
+                                        <div key="headerContent"></div>
+                                        <div key="mainContent">
+                                            {!this.state.informeCuenta.modal.showReporte && <div>
+                                                <Typography className={classes.title} variant="title">Deuda Total: <b>$ {stringToFloat(this.state.informeCuenta.deudaTotal, 2).toFixed(2)} </b></Typography>
+                                                <Divider className={classes.divider} />
+
+                                                <Typography className={classes.title} variant="title">Deuda vencida</Typography>
+                                                <Divider className={classes.divider} />
+
+                                                <Grid container spacing={16}>
+                                                    <Grid item sm={4}>
+                                                        <Typography variant="subheading" gutterBottom>Total: </Typography>
+                                                    </Grid>
+                                                    <Grid item sm={8}>
+                                                        <Typography variant="subheading" gutterBottom>
+                                                            <b>$ {stringToFloat(this.state.informeCuenta.deudaVencida.total, 2).toFixed(2)} </b>
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid container spacing={16}>
+                                                    <Grid item sm={4}>
+                                                        <Typography variant="subheading" gutterBottom>Administrativa: </Typography>
+                                                    </Grid>
+                                                    <Grid item sm={8}>
+                                                        <Typography variant="subheading" gutterBottom>
+                                                            <b>$ {stringToFloat(this.state.informeCuenta.deudaVencida.administrativa, 2).toFixed(2)} </b>
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                                <br />
+                                                <Typography className={classes.title} variant="title">Deuda a vencer</Typography>
+                                                <Divider className={classes.divider} />
+                                                <Grid container spacing={16}>
+                                                    <Grid item sm={4}>
+                                                        <Typography variant="subheading" gutterBottom>Total: </Typography>
+                                                    </Grid>
+                                                    <Grid item sm={8}>
+                                                        <Typography variant="subheading" gutterBottom>
+                                                            <b>$ {stringToFloat(this.state.informeCuenta.deudaAVencer.total, 2).toFixed(2)} </b>
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid container spacing={16}>
+                                                    <Grid item sm={4}>
+                                                        <Typography variant="subheading" gutterBottom>Administrativa: </Typography>
+                                                    </Grid>
+                                                    <Grid item sm={8}>
+                                                        <Typography variant="subheading" gutterBottom>
+                                                            <b>$ {stringToFloat(this.state.informeCuenta.deudaAVencer.administrativa, 2).toFixed(2)} </b>
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                            </div>}
+
+                                            {this.state.informeCuenta.modal.showReporte && <div>
+                                                {this.state.informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,'+this.state.informeCuenta.reporteBase64} height="342px" width="700px"></iframe>}
+                                                {!this.state.informeCuenta.reporteBase64 && 'Ocurrió un error al cargar el reporte'}
+                                            </div>}
+                                        </div>
+                                        <div key="footerContent" className={classes.buttonFotterDialog}>
+                                            {!this.state.informeCuenta.modal.showReporte && <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                className={classes.buttonActions}
+                                                onClick={this.onInformeCuentaShowReporte}
+                                            >
+                                                Imprimir Detalle
+                                        </Button>}
+
+                                            {this.state.informeCuenta.modal.showReporte && <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                className={classes.buttonActions}
+                                                onClick={this.onInformeCuentaHideReporte}
+                                            >
+                                                Mostrar Deudas
+                                        </Button>}
+                                        </div>
+                                    </MiControledDialog>
                                 </Grid>
                             </Grid>
 
@@ -782,13 +994,13 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
-                                    <div key="headerContent"></div>
-                                    <div key="mainContent">
-                                        {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
-                                            return <div key={index}>{item}</div>;
-                                        })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
-                                    </div>
-                                    <div key="footerContent"></div>
+                                        <div key="headerContent"></div>
+                                        <div key="mainContent">
+                                            {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
+                                                return <div key={index}>{item}</div>;
+                                            })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
+                                        </div>
+                                        <div key="footerContent"></div>
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
@@ -1072,7 +1284,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>Total: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {valoresDeuda.valor1}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {stringToFloat(valoresDeuda.valor1, 2).toFixed(2)}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -1082,7 +1294,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>{this.props.data.labels.vencida}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {valoresDeuda.valor2}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {stringToFloat(valoresDeuda.valor2, 2).toFixed(2)}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -1092,7 +1304,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>{this.props.data.labels.aVencer}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {valoresDeuda.valor3}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {stringToFloat(valoresDeuda.valor3, 2).toFixed(2)}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -1118,6 +1330,7 @@ class MisPagos extends React.PureComponent {
                         registrosSeleccionados={this.props.registrosSeleccionados}
                         tipoTributo={tipoTributo}
                         identificador={this.props.identificadorActual}
+                        disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
                     />
 
                     <Button
@@ -1172,6 +1385,7 @@ class MisPagos extends React.PureComponent {
                         registrosSeleccionados={this.props.registrosSeleccionados}
                         tipoTributo={tipoTributo}
                         identificador={this.props.identificadorActual}
+                        disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
                     />
 
                     <Button

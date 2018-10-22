@@ -34,15 +34,6 @@ class MiLinkDialog extends React.PureComponent {
   
   handleOpenModal = event => {
 
-    if(this.props.promiseBeforeOpen) {
-      return this.props.promiseBeforeOpen()
-      .then(() => {
-        this.setState({
-          open: true
-        });
-      });
-    }
-
     this.setState({
       open: true
     });

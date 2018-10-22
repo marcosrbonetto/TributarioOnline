@@ -142,7 +142,7 @@ class MiTabla extends React.PureComponent {
 
         const gridRows = (props.rows || []);
 
-        var data = (gridRows.length > 0 && gridRows[0].id && gridRows.map((row, key) => {
+        var data = (gridRows.length > 0 && !gridRows[0].id && gridRows.map((row, key) => {
             row.id = key;
             return row;
         })) || gridRows;

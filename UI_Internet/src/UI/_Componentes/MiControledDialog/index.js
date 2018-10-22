@@ -52,14 +52,17 @@ class MiControledDialog extends React.PureComponent {
 
     return (
       <div>
-        {!this.getComponent('buttonAction') &&
+        {!this.props.buttonAction &&
           <Typography
             onClick={this.handleOpenModal}
             variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>{textoLink}</Typography>
         }
-        {this.getComponent('buttonAction')}
+        {this.props.buttonAction && 
+          <div>
+            {this.getComponent('buttonAction')}
+          </div>
+        }
         <Dialog
-          onClose={this.handleCloseModal}
           open={this.props.open}
           scroll='paper'
           aria-labelledby="scroll-dialog-title"
@@ -68,7 +71,7 @@ class MiControledDialog extends React.PureComponent {
           }}
         >
           <DialogTitle id="scroll-dialog-title">{titulo}</DialogTitle>
-          <DialogContent>
+          <DialogContent className={classes.content}>
             <DialogContentText>
               {this.getComponent('headerContent')}
               {this.getComponent('mainContent')}
@@ -99,6 +102,9 @@ const styles = theme => ({
   },
   maxWidth: {
     maxWidth: '748px'
+  },
+  content: {
+    paddingBottom: '0px'
   }
 });
 

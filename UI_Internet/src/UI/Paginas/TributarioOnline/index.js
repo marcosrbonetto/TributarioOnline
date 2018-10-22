@@ -86,39 +86,43 @@ class TributarioOnline extends React.PureComponent {
   }
 
   setDatosTributos = () => {
+    if (!this.props.idsTributos) return false;
+
     //Traemos los representados para mostrar las patentes en las que puedo ingresar
     //Esto se cambiará luego haciendo que el servicio que trae las patentes (por ej.)
     //Traiga las mias y las que represento y evitar todo esto
-    let arrayData = {...this.props.idsTributos};
+    let arrayData = { ...this.props.idsTributos };
 
     //Agregmos los tributos de nuestros representados
-    this.props.datosMisRepresentados.map((representado) => {
+    if (this.props.datosMisRepresentados) {
+      this.props.datosMisRepresentados.map((representado) => {
 
-      switch (representado.data.tipoTributo) {
-        case 1:
-          if (representado.data.aceptado)
-            arrayData.automotores.push({
-              representado: representado.usuario,
-              identificador: representado.data.identificador
-            });
-          break;
-        case 2:
-          if (representado.data.aceptado)
-            arrayData.inmuebles.push({
-              representado: representado.usuario,
-              identificador: representado.data.identificador
-            });
-          break;
-        case 3:
-          if (representado.data.aceptado)
-            arrayData.comercios.push({
-              representado: representado.usuario,
-              identificador: representado.data.identificador
-            });
-          break;
-      }
+        switch (representado.data.tipoTributo) {
+          case 1:
+            if (representado.data.aceptado)
+              arrayData.automotores.push({
+                representado: representado.usuario,
+                identificador: representado.data.identificador
+              });
+            break;
+          case 2:
+            if (representado.data.aceptado)
+              arrayData.inmuebles.push({
+                representado: representado.usuario,
+                identificador: representado.data.identificador
+              });
+            break;
+          case 3:
+            if (representado.data.aceptado)
+              arrayData.comercios.push({
+                representado: representado.usuario,
+                identificador: representado.data.identificador
+              });
+            break;
+        }
 
-    });
+      });
+    }
 
     this.setState({
       idsTributos: arrayData

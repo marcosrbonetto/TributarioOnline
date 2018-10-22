@@ -31,8 +31,18 @@ class MiCedulon extends React.PureComponent {
 
     this.state = {
       anchorEl: null,
-      base64Cedulon: ''
+      base64Cedulon: '',
+      disabled: true
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    if (JSON.stringify(this.props.disabled) != JSON.stringify(nextProps.disabled)) {
+      this.setState({
+        disabled: nextProps.disabled
+      });
+    }
   }
 
   handleClick = event => {
@@ -54,7 +64,7 @@ class MiCedulon extends React.PureComponent {
     const opcion = event.currentTarget.attributes.opcion.value;
 
     if (registros.length > 0) {
-      services.getCedulon(token,
+      services.getReporteCedulon(token,
         {
           "tipoTributo": parseInt(this.props.tipoTributo),
           "identificador": this.props.identificador,
@@ -98,6 +108,7 @@ class MiCedulon extends React.PureComponent {
           open={this.state.dialogoOpen}
           onDialogoOpen={this.onDialogoOpen}
           onDialogoClose={this.onDialogoClose}
+          buttonAction={true}
           textoLink={'Cedulon'}
           titulo={'Cedulon'}
         >
@@ -107,6 +118,7 @@ class MiCedulon extends React.PureComponent {
               color="secondary"
               className={classes.buttonActions}
               onClick={this.handleClick}
+              disabled={this.state.disabled}
             >
               CEDULÓN
           <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
@@ -125,7 +137,7 @@ class MiCedulon extends React.PureComponent {
 
           <div key="mainContent">
             {this.state.base64Cedulon != '' && <iframe src={this.state.base64Cedulon} height="410px" width="700px"></iframe>}
-            {this.state.base64Cedulon == '' && 'Debe seleccionar alcún concepto'}
+            {this.state.base64Cedulon == '' && 'Debe seleccionar algún concepto'}
           </div>
         </MiControledDialog>
       </div>

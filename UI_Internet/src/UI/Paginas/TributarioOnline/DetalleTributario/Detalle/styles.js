@@ -209,6 +209,10 @@ const styles = theme => ({
         right: '4px',
         cursor: 'pointer'
       }
+    },
+    buttonFotterDialog: {
+      textAlign: 'center',
+      paddingTop: '10px'
     }
   });
 
