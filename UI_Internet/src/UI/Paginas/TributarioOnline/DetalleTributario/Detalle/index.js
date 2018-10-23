@@ -201,7 +201,7 @@ class DetalleTributo extends React.PureComponent {
         //Traemos los tributos asociados al Token
         const service = servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Tributos: '+datos.error); this.props.mostrarCargando(false); return false; }
 
                 this.props.setPropsIdTributos(datos);
             }).catch(err => {
@@ -210,7 +210,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service1 = servicesTributarioOnline.getInfoContribucion(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Períodos: '+datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -218,7 +218,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Multas: '+datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoMultas(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -226,7 +226,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service3 = servicesTributarioOnline.getInfoJuiciosContribucion(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Juicios: '+datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoJuiciosContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -234,7 +234,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service4 = servicesTributarioOnline.getInfoJuiciosMulta(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Juicios: '+datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoJuiciosMulta(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -242,7 +242,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service5 = servicesTributarioOnline.getInfoPlanesPago(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Planes Pago: '+datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoPlanesPago(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -253,7 +253,7 @@ class DetalleTributo extends React.PureComponent {
         //Traiga las mias y las que represento y evitar todo esto
         const service6 = servicesRepresentantes.getMisRepresentados(token)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Tributos Representados: '+datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsMisRepresentados(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -449,7 +449,7 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo: tributo,
             identificador: identificador
         }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+            if (!datos.ok) { mostrarAlerta('Informe de Cuenta: '+datos.error); this.props.mostrarCargando(false); return false; }
 
             dataSercicio1 = datos;
 
@@ -461,7 +461,7 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo: tributo,
             identificador: identificador
         }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+            if (!datos.ok) { mostrarAlerta('Reporte Informe de Cuenta: '+datos.error); this.props.mostrarCargando(false); return false; }
             
             dataSercicio2 = datos;
 
@@ -596,13 +596,13 @@ class DetalleTributo extends React.PureComponent {
                                         classes={{ flexContainer: classes.flexContainersMenu, scrollButtons: classes.scrollButtonsMenu }}
                                     >
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Períodos</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Períodos</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoMultas ? infoMultas.length : 0}><div>Multas</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoMultas ? infoMultas.length : 0}><div>Multas</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuicios ? infoJuicios.length : 0}><div>Juicios</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={infoJuicios ? infoJuicios.length : 0}><div>Juicios</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes</div></Badge>} />
 
                                     </Tabs>
 
@@ -629,12 +629,12 @@ class DetalleTributo extends React.PureComponent {
 
                                             {/* Juicio por Contribución */}
                                             {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.map((juicio) => {
-                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeRed }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                             })}
 
                                             {/* Juicio por Multa */}
                                             {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.map((juicio) => {
-                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeRed }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                             })}
 
                                         </Tabs>

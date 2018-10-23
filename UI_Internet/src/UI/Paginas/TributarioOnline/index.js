@@ -68,7 +68,7 @@ class TributarioOnline extends React.PureComponent {
 
     const service1 = servicesTributarioOnline.getIdTributos(token)
       .then((datos) => {
-        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta('Tributos: '+datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsIdTributos(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -76,7 +76,7 @@ class TributarioOnline extends React.PureComponent {
 
     const service2 = servicesRepresentantes.getMisRepresentados(token)
       .then((datos) => {
-        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta('Tributos Representados: '+datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentados(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");

@@ -74,7 +74,7 @@ class MiCedulon extends React.PureComponent {
           "periodos": registros
         })
         .then((datos) => {
-          if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+          if (!datos.ok) { mostrarAlerta('Reporte Cedulón: '+datos.error); this.props.mostrarCargando(false); return false; }
           
           this.setState({
             base64Cedulon: datos.return ? 'data:application/pdf;base64,' + datos.return : '',

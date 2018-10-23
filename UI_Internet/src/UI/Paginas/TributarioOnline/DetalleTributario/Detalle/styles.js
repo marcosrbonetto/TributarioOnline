@@ -135,12 +135,12 @@ const styles = theme => ({
         borderRadius: '12px',
       }
     },
-    badgeMenu: {
+    badgeGreen: {
       background: theme.color.ok.main,
       top: '-4px',
       right: '0px',
     },
-    badgeJuicioMenu: {
+    badgeRed: {
       background: theme.color.error.main,
       top: '-4px',
       right: '0px',
