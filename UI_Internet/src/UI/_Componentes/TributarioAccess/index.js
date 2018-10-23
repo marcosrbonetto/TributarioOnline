@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import ListItemText from '@material-ui/core/ListItemText';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -123,11 +123,14 @@ class TributarioAccess extends React.PureComponent {
                                         <em>{Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.length > 0 ? 'Seleccione' : 'No se encontraron '+this.props.tipo}</em>
                                     </MenuItem>
                                     {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.map((data, index) => {
-                                        return <MenuItem key={index} value={data.identificador}>{data.identificador}{data.representado && ' - '+data.representado}</MenuItem>
+                                        return <MenuItem key={index} value={data.identificador}>
+                                                {data.identificador}{data.representado && ' - '+data.representado}  
+                                                <ListItemText secondary="Deuda: $ 3344,34" />
+                                            </MenuItem>
                                     })}
                                 </Select>
                             </Grid>
-                            <Grid item md={3} className={classes.contentRight}>
+                            <Grid item md={3} className={classes.containerButton}>
                                 <Button
                                     type="enter"
                                     variant="contained"

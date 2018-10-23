@@ -81,34 +81,36 @@ class Representantes extends React.PureComponent {
     super(props);
 
     this.state = {
-      inputCuit: '', //Input para la busqueda de representado
-      selectTributos: '1',
-      inputIdentificadorTributo: '',
-      errorInputIdentificador: false,
-      errorInputCuit: false,
-      envioSolicitud: {
-        representado: null, //Representado ya que es a quien envío la solicitud
-        cuitRepresentado: null, //CUIT del representado
-        tributos: undefined, //Tributos para el uso del envío de solicitud
+      inputCuit: '', //Input de busqueda por CUIT
+      selectTributos: '1', //Select de busqueda por Tributo
+      inputIdentificadorTributo: '', //Input de busqueda por Tributo
+      errorInputIdentificador: false, //Error en busqueda por Tributo
+      errorInputCuit: false, //Error en busqueda por CUIT
+      busquedaCUIT: { //Busqueda por CUIT
+        representado: null,
+        cuitRepresentado: null,
+        tributos: undefined,
         mensajeError: null
       },
-      busquedaTitular: {
+      busquedaTributo: { //Busqueda por Tributo
         titular: null,
         cuitTitular: null,
         tipoTributo: null,
         identificador: null,
         mensajeError: null
       },
-      datosGrillaMisRepresentantes: [],
-      datosGrillaMisRepresentados: []
+      datosGrillaMisRepresentantes: [], //Datos grilla mir representantes
+      datosGrillaMisRepresentados: [] //Datos grilla mir representados
     };
   }
 
+  //Obtenemos las props desde redux(async) y actualizamos nuestro state
+  //Tributos de CUIT buscado
   componentWillReceiveProps(nextProps) {
 
     if (JSON.stringify(this.props.datosEnvioSolicitudPermisos) != JSON.stringify(nextProps.datosEnvioSolicitudPermisos)) {
       this.setState({
-        envioSolicitud: {
+        busquedaCUIT: {
           representado: nextProps.datosEnvioSolicitudPermisos.representado,
           cuitRepresentado: nextProps.datosEnvioSolicitudPermisos.cuitRepresentado,
           tributos: nextProps.datosEnvioSolicitudPermisos.tributos
@@ -116,7 +118,9 @@ class Representantes extends React.PureComponent {
       });
     }
 
-    if (JSON.stringify(this.props.datosMisRepresentantes) != JSON.stringify(nextProps.datosMisRepresentantes)) {
+    //Obtenemos las props desde redux(async) y actualizamos nuestro state
+    //Datos de mir representantes - agregamos datos adicionales
+    if (this.state.datosGrillaMisRepresentantes.length == 0 || JSON.stringify(this.props.datosMisRepresentantes) != JSON.stringify(nextProps.datosMisRepresentantes)) {
 
       var datosMisRepresentantes = (nextProps.datosMisRepresentantes || []).map((row, key) => {
         row.id = key;
@@ -129,7 +133,9 @@ class Representantes extends React.PureComponent {
       });
     }
 
-    if (JSON.stringify(this.props.datosMisRepresentados) != JSON.stringify(nextProps.datosMisRepresentados)) {
+    //Obtenemos las props desde redux(async) y actualizamos nuestro state
+    //Datos de mir representados - agregamos datos adicionales
+    if (this.state.datosGrillaMisRepresentados.length == 0 || JSON.stringify(this.props.datosMisRepresentados) != JSON.stringify(nextProps.datosMisRepresentados)) {
 
       var datosMisRepresentados = (nextProps.datosMisRepresentados || []).map((row, key) => {
         row.id = key;
@@ -143,6 +149,7 @@ class Representantes extends React.PureComponent {
     }
   }
 
+  //En caso que se precione "+ Agregar" desde Menu, se setea el combo en el tributo seleccionado
   componentDidMount() {
     const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
     idTipoTributo && this.setState({
@@ -150,14 +157,15 @@ class Representantes extends React.PureComponent {
     });
   }
 
+  //Servicios que setean los datos en las props del store de redux
   componentWillMount() {
-    //Servicios que setean los datos en las props del store de redux
+
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
 
     const service1 = servicesRepresentantes.getMisRepresentantes(token)
       .then((datos) => {
-        if(!datos.ok) {this.props.mostrarCargando(false); return false;}
+        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentantes(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -165,7 +173,7 @@ class Representantes extends React.PureComponent {
 
     const service2 = servicesRepresentantes.getMisRepresentados(token)
       .then((datos) => {
-        if(!datos.ok) {this.props.mostrarCargando(false); return false;}
+        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentados(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -176,6 +184,8 @@ class Representantes extends React.PureComponent {
     });
   }
 
+  //Servicios que setean los datos en las props del store de redux
+  //Busqueda de tributos por CUIT
   buscarTributosCUIT = () => {
 
     if (!/^[0-9]{11}$/.test(this.state.inputCuit)) {
@@ -185,16 +195,15 @@ class Representantes extends React.PureComponent {
       return;
     }
 
-    //Servicios que setean los datos en las props del store de redux
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
     const identificador = this.state.inputCuit;
 
     const service = servicesTributarioOnline.getTributosByCUIT(token, identificador)
       .then((datos) => {
-        
+
         this.handleCancelarSolicitudPermiso();
-        if(datos.ok && datos.return.titular) {
+        if (datos.ok && datos.return.titular) {
           this.props.setPropsTributosCUIT(datos);
 
           this.setState({
@@ -205,8 +214,8 @@ class Representantes extends React.PureComponent {
           this.setState({
             inputCuit: '',
             errorInputCuit: false,
-            envioSolicitud: {
-              ...this.state.envioSolicitud,
+            busquedaCUIT: {
+              ...this.state.busquedaCUIT,
               mensajeError: 'No se encontraron registros'
             },
           });
@@ -218,6 +227,7 @@ class Representantes extends React.PureComponent {
       });
   }
 
+  //Validación input CUIT
   handleInputCuit = (event) => {
 
     if (event.currentTarget.value.length <= 11 && /^[0-9]{0,11}$/.test(event.currentTarget.value)) {
@@ -227,25 +237,28 @@ class Representantes extends React.PureComponent {
     }
   }
 
+  //Agregamos permisos antes de aceptarlos
   handleAddPermiso = (tipo, cantidad) => {
+
     var newState = { ...this.state };
-    newState.envioSolicitud.tributos[tipo].cantPermisos = cantidad;
+    newState.busquedaCUIT.tributos[tipo].cantPermisos = cantidad;
     this.setState({ newState });
   }
 
+  //Limpiamos estado luego de cancelar o aceptar permisos exitosamente
   handleCancelarSolicitudPermiso = () => {
 
     this.setState({
       inputCuit: '',
       selectTributos: '1',
       inputIdentificadorTributo: '',
-      envioSolicitud: {
+      busquedaCUIT: {
         representado: null,
         cuitRepresentado: null,
         tributos: undefined,
         mensajeError: null
       },
-      busquedaTitular: {
+      busquedaTributo: {
         titular: null,
         cuitTitular: null,
         tipoTributo: null,
@@ -255,12 +268,12 @@ class Representantes extends React.PureComponent {
     });
   }
 
+  //Servicios que setean los datos en las props del store de redux
+  //Aceptación de permisos seleccionados
   handleAceptarSolicitudPermiso = () => {
-
-    //Servicios que setean los datos en las props del store de redux
     this.props.mostrarCargando(true);
 
-    const tributos = this.state.envioSolicitud.tributos;
+    const tributos = this.state.busquedaCUIT.tributos;
     let services = [];
     Object.keys(tributos).length > 0 &&
       Object.keys(tributos).map((tributo, index) => {
@@ -272,13 +285,13 @@ class Representantes extends React.PureComponent {
               tipoTributo: tributos[tributo].tipoTributo,
               identificador: identificador
             }, (datos) => {
-              if(!datos.ok) {this.props.mostrarCargando(false); return false;}
-              
+              if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+
               this.props.setPropsAgregarRegistroGrilla({
                 cuilRepresentado: datos.return.cuilRepresentado,
                 identificador: datos.return.identificador,
                 aceptado: datos.return.aceptado,
-                tipoTributo:datos.return.tipoTributo
+                tipoTributo: datos.return.tipoTributo
               });
             });
 
@@ -296,6 +309,7 @@ class Representantes extends React.PureComponent {
     });
   }
 
+  //Función útilizada tanto cuando se acepta permisos en busqueda por CUIT como por Tributo
   servicioAgregarSolicitudPermiso = (param, callback) => {
     const token = this.props.loggedUser.token;
 
@@ -304,20 +318,22 @@ class Representantes extends React.PureComponent {
       "identificador": param.identificador
     })
       .then((datos) => {
-        if(!datos.ok) {this.props.mostrarCargando(false); return false;}
-        if(typeof callback === "function")
+        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+        if (typeof callback === "function")
           callback(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
       });
   }
 
+  //Servicios que setean los datosFila en las props del store de redux
+  //Cancelamos permiso - en MisRepresentantes y en MisRepresentados
   handleCancelarPermiso = (datosFila) => {
 
-    //Servicios que setean los datosFila en las props del store de redux
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
 
+    //De acuerdo en que gruilla se precionó el botón
     let cuil = this.props.loggedUser.datos.cuil;
     let datosGrilla = this.props.datosMisRepresentados;
     if (datosFila.data.grilla == 'MisRepresentantes') {
@@ -332,7 +348,7 @@ class Representantes extends React.PureComponent {
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
-        if(!datos.ok) {this.props.mostrarCargando(false); return false;}
+        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
 
         this.props.setPropsCambiarEstadoPermiso({
           grilla: datosFila.data.grilla,
@@ -346,9 +362,10 @@ class Representantes extends React.PureComponent {
       });
   }
 
+  //Servicios que setean los datos en las props del store de redux
+  //Aceptamos permiso - solo en MisRepresentantes
   handleAceptarPermiso = (datosFila) => {
 
-    //Servicios que setean los datos en las props del store de redux
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
 
@@ -365,7 +382,7 @@ class Representantes extends React.PureComponent {
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
-        if(!datos.ok) {this.props.mostrarCargando(false); return false;}
+        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
 
         this.props.setPropsCambiarEstadoPermiso({
           grilla: datosFila.data.grilla,
@@ -379,7 +396,7 @@ class Representantes extends React.PureComponent {
       });
   }
 
-  //Link "Detalle" que se mostrará en la grilla y se pasara al componente MiTabla
+  //Botón Cancelar ó Aceptar que se mostrará en la grilla y se pasara al componente MiTabla en "customCell"
   getCustomCell = (datosExtra) => {
     const { classes } = this.props;
 
@@ -404,28 +421,29 @@ class Representantes extends React.PureComponent {
       </div>
       </MiLinkDialog>
     </div>) || (datosExtra.data.grilla == 'MisRepresentantes' && <div className={classes.iconAgregarPermiso}>
-        <MiLinkDialog
-          textoLink={'Aceptar Permiso'}
-          titulo={'Aceptar Permiso'}
-          buttonOptions={true}
-          buttonAction={true}
-          labelCancel={'No'}
-          labelAccept={'Si'}
-          acceptEvent={this.handleAceptarPermiso}
-          acceptEventData={datosExtra}
-        >
-          <div key='buttonAction'>
-            <i class="material-icons" title="Aceptar Permiso">
-              check_circle
+      <MiLinkDialog
+        textoLink={'Aceptar Permiso'}
+        titulo={'Aceptar Permiso'}
+        buttonOptions={true}
+        buttonAction={true}
+        labelCancel={'No'}
+        labelAccept={'Si'}
+        acceptEvent={this.handleAceptarPermiso}
+        acceptEventData={datosExtra}
+      >
+        <div key='buttonAction'>
+          <i class="material-icons" title="Aceptar Permiso">
+            check_circle
         </i>
-          </div>
-          <div key='mainContent'>
-            ¿Está seguro que desea aceptar el permiso para este tributo?
+        </div>
+        <div key='mainContent'>
+          ¿Está seguro que desea aceptar el permiso para este tributo?
       </div>
-        </MiLinkDialog>
+      </MiLinkDialog>
     </div>);
   }
 
+  //Buscando Titular por Tributos
   buscarTributosIdentificador = () => {
     if (this.state.inputIdentificadorTributo == '') {
       this.setState({
@@ -444,10 +462,10 @@ class Representantes extends React.PureComponent {
     })
       .then((datos) => {
 
-        if(datos.ok) {
+        if (datos.ok) {
           this.setState({
             errorInputIdentificador: false,
-            busquedaTitular: {
+            busquedaTributo: {
               titular: datos.return.titular,
               cuitTitular: datos.return.cuit,
               tipoTributo: this.state.selectTributos,
@@ -456,11 +474,11 @@ class Representantes extends React.PureComponent {
           });
         } else {
           this.handleCancelarSolicitudPermiso();
-          
+
           this.setState({
             errorInputIdentificador: false,
-            busquedaTitular: {
-              ...this.state.busquedaTitular,
+            busquedaTributo: {
+              ...this.state.busquedaTributo,
               mensajeError: 'No se encontraron registros'
             }
           });
@@ -472,6 +490,7 @@ class Representantes extends React.PureComponent {
       });
   }
 
+  //Aceptando solicitud en busca por Tributo
   handleAceptarSolicitudPermisoTitular = () => {
     this.props.mostrarCargando(true);
 
@@ -479,13 +498,13 @@ class Representantes extends React.PureComponent {
       tipoTributo: this.state.selectTributos,
       identificador: this.state.inputIdentificadorTributo
     }, (datos) => {
-      if(!datos.ok) {this.props.mostrarCargando(false); return false;}
-      
+      if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+
       this.props.setPropsAgregarRegistroGrilla({
         cuilRepresentado: datos.return.cuilRepresentado,
         identificador: datos.return.identificador,
         aceptado: datos.return.aceptado,
-        tipoTributo:datos.return.tipoTributo
+        tipoTributo: datos.return.tipoTributo
       });
       this.handleCancelarSolicitudPermiso();
 
@@ -496,12 +515,14 @@ class Representantes extends React.PureComponent {
     });
   }
 
+  //Seleccion tipoTributo en busqueda por Tributo
   handleSelectTipoTributo = (event) => {
     this.setState({
       selectTributos: event.target.value
     });
   }
 
+  //Ingreso de identificador en busqueda por Tributo
   handleInputIdentificador = (event) => {
     this.setState({
       inputIdentificadorTributo: event.target.value
@@ -515,6 +536,7 @@ class Representantes extends React.PureComponent {
       <div className={classes.mainContainer}>
         <Grid container className={classes.root} spacing={16}>
           <Grid item xs={8}>
+            {/* Tabla Mis Representantes */}
             <MiCard>
               <Typography className={classes.title} variant="title">Mis Representantes</Typography>
               {/*<Divider className={classes.divider} />*/}
@@ -534,6 +556,7 @@ class Representantes extends React.PureComponent {
               />
             </MiCard>
             <br />
+            {/* Tabla Mis Representados */}
             <MiCard>
               <Typography className={classes.title} variant="title">Mis Representados</Typography>
               {/*<Divider className={classes.divider} />*/}
@@ -556,6 +579,7 @@ class Representantes extends React.PureComponent {
           </Grid>
 
           <Grid item xs={4}>
+            {/* SE COMENTA LA ACEPTACIÖN DE SOLICITUDES DE PERMISOS PARA MAS ADELANTE */}
             {/*<MiCard>
               <Typography className={classes.title} variant="title">Solicitudes de representantes</Typography>
               <Divider className={classes.divider} />
@@ -595,6 +619,8 @@ class Representantes extends React.PureComponent {
               </List>
 
               </MiCard>*/}
+
+            {/* Busqueda por Tributo */}
             <MiCard>
               <Typography className={classes.title} variant="title">Agregar solicitud por Tributo</Typography>
               <Divider className={classes.divider} />
@@ -607,7 +633,7 @@ class Representantes extends React.PureComponent {
               <InputLabel className={classes.labelInput}>Tipo Tributo:</InputLabel>
               <Select
                 value={this.state.selectTributos}
-                onChange={this.selectOnChangeTipoTributo}
+                onChange={this.handleSelectTipoTributo}
                 inputProps={{
                   name: 'tipo_tributo',
                   id: 'tipo_tributo',
@@ -653,15 +679,15 @@ class Representantes extends React.PureComponent {
                 </Grid>
               </Grid>
 
-              {this.state.busquedaTitular.titular && this.state.busquedaTitular.cuitTitular &&
+              {this.state.busquedaTributo.titular && this.state.busquedaTributo.cuitTitular &&
                 <div><Grid container spacing={0} className={classes.textRepresentante}>
                   <Grid item md={6}>
                     <Typography variant="subheading" gutterBottom>Titular:</Typography>
                   </Grid>
                   <Grid item md={6}>
                     <b>
-                      <Typography className={classes.cuitData} variant="subheading">{this.state.busquedaTitular.titular}</Typography>
-                      <Typography className={classes.cuitData} variant="subheading">{this.state.busquedaTitular.cuitTitular}</Typography>
+                      <Typography className={classes.cuitData} variant="subheading">{this.state.busquedaTributo.titular}</Typography>
+                      <Typography className={classes.cuitData} variant="subheading">{this.state.busquedaTributo.cuitTitular}</Typography>
                     </b>
                   </Grid>
                 </Grid>
@@ -678,12 +704,13 @@ class Representantes extends React.PureComponent {
                   </ExpansionPanelActions>
                 </div>}
 
-              {this.state.busquedaTitular.mensajeError && <div>
-                <Typography className={classes.mensajeError} variant="subheading">{this.state.busquedaTitular.mensajeError}</Typography>
+              {this.state.busquedaTributo.mensajeError && <div>
+                <Typography className={classes.mensajeError} variant="subheading">{this.state.busquedaTributo.mensajeError}</Typography>
               </div>}
 
             </MiCard>
             <br />
+            {/* Busqueda por CUIT */}
             <MiCard>
               <Typography className={classes.title} variant="title">Agregar solicitud por CUIT</Typography>
               <Divider className={classes.divider} />
@@ -693,7 +720,7 @@ class Representantes extends React.PureComponent {
               `}
               </Typography>
 
-              {!this.state.envioSolicitud.representado && !this.state.envioSolicitud.cuitRepresentado &&
+              {!this.state.busquedaCUIT.representado && !this.state.busquedaCUIT.cuitRepresentado &&
                 <Grid container spacing={0}>
                   <Grid item md={9}>
                     <TextField
@@ -719,27 +746,27 @@ class Representantes extends React.PureComponent {
                 </Grid>}
 
 
-              {this.state.envioSolicitud.representado && this.state.envioSolicitud.cuitRepresentado &&
+              {this.state.busquedaCUIT.representado && this.state.busquedaCUIT.cuitRepresentado &&
                 <div><Grid container spacing={0} className={classes.textRepresentante}>
                   <Grid item md={6}>
                     <Typography variant="subheading" gutterBottom>Representado:</Typography>
                   </Grid>
                   <Grid item md={6}>
                     <b>
-                      <Typography className={classes.cuitData} variant="subheading">{this.state.envioSolicitud.representado}</Typography>
-                      <Typography className={classes.cuitData} variant="subheading">{this.state.envioSolicitud.cuitRepresentado}</Typography>
+                      <Typography className={classes.cuitData} variant="subheading">{this.state.busquedaCUIT.representado}</Typography>
+                      <Typography className={classes.cuitData} variant="subheading">{this.state.busquedaCUIT.cuitRepresentado}</Typography>
                     </b>
                   </Grid>
                 </Grid>
                   <Divider className={classes.divider} />
 
-                  {this.state.envioSolicitud.tributos && Object.keys(this.state.envioSolicitud.tributos).map(tributo => {
+                  {this.state.busquedaCUIT.tributos && Object.keys(this.state.busquedaCUIT.tributos).map(tributo => {
                     return <MiSolicPermisos
-                      label={this.state.envioSolicitud.tributos[tributo].label}
-                      tipo={this.state.envioSolicitud.tributos[tributo].tipo}
-                      opciones={this.state.envioSolicitud.tributos[tributo].opciones}
+                      label={this.state.busquedaCUIT.tributos[tributo].label}
+                      tipo={this.state.busquedaCUIT.tributos[tributo].tipo}
+                      opciones={this.state.busquedaCUIT.tributos[tributo].opciones}
                       addPermiso={this.handleAddPermiso}
-                      cantPermisos={this.state.envioSolicitud.tributos[tributo].cantPermisos}
+                      cantPermisos={this.state.busquedaCUIT.tributos[tributo].cantPermisos}
                     />
                   })}
                   <ExpansionPanelActions className={classes.actionButtons}>
@@ -753,10 +780,10 @@ class Representantes extends React.PureComponent {
                   </ExpansionPanelActions>
                 </div>}
 
-                {this.state.envioSolicitud.mensajeError && <div>
-                  <Typography className={classes.mensajeError} variant="subheading">{this.state.envioSolicitud.mensajeError}</Typography>
-                </div>}
-                
+              {this.state.busquedaCUIT.mensajeError && <div>
+                <Typography className={classes.mensajeError} variant="subheading">{this.state.busquedaCUIT.mensajeError}</Typography>
+              </div>}
+
             </MiCard>
           </Grid>
         </Grid>

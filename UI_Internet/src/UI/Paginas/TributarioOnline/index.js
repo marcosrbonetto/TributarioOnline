@@ -25,7 +25,7 @@ const mapStateToProps = state => {
   return {
     loggedUser: state.MainContent.loggedUser,
     idsTributos: state.TributarioOnline.idsTributos,
-    datosMisRepresentados: state.Representantes.datosMisRepresentados,
+    datosRepresentados: state.Representantes.datosMisRepresentados,
   };
 };
 
@@ -94,8 +94,9 @@ class TributarioOnline extends React.PureComponent {
     let arrayData = { ...this.props.idsTributos };
 
     //Agregmos los tributos de nuestros representados
-    if (this.props.datosMisRepresentados) {
-      this.props.datosMisRepresentados.map((representado) => {
+    if (this.props.datosRepresentados) {
+      
+      this.props.datosRepresentados.map((representado) => {
 
         switch (representado.data.tipoTributo) {
           case 1:

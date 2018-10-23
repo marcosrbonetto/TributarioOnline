@@ -33,8 +33,13 @@ const styles = theme => ({
         marginRight: '10px'
       }
     },
-    contentRight: {
-        textAlign: 'right'
+    containerButton: {
+        position: 'relative',
+        '& button': {
+          position: 'absolute',
+          bottom: '0px',
+          right: '0px'
+        }
     },
     header: {
       fontSize: 'large',

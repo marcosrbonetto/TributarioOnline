@@ -108,11 +108,11 @@ class DetalleTributo extends React.PureComponent {
         super(props);
 
         this.state = {
-            identificadorActual: this.props.match.params.identificador,
-            menuItemSeleccionado: 'contribucion',
-            mostrarAlternativaPlan: false,
-            infoDatosCuenta: '',
-            informeCuenta: {
+            identificadorActual: this.props.match.params.identificador, //El elejido en el combo del header
+            menuItemSeleccionado: 'contribucion', //Menu seleccionado que muestra contenido MisPagos
+            mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
+            infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
+            informeCuenta: { //Información utilizada para mostrar informe de cuenta
                 deudaTotal: 0,
                 deudaVencida: {
                     total: 0,
@@ -128,7 +128,7 @@ class DetalleTributo extends React.PureComponent {
                 },
                 reporteBase64: ''
             },
-            contribucion: {
+            contribucion: { //Item Menu e información
                 paramDatos: 'infoContribucion',
                 arrayResult: false,
                 order: 'asc',
@@ -142,7 +142,7 @@ class DetalleTributo extends React.PureComponent {
                 },
                 registrosSeleccionados: []
             },
-            multas: {
+            multas: { //Item Menu e información
                 paramDatos: 'infoMultas',
                 arrayResult: false,
                 order: 'asc',
@@ -156,7 +156,7 @@ class DetalleTributo extends React.PureComponent {
                 },
                 registrosSeleccionados: []
             },
-            juicioContribucion: {
+            juicioContribucion: { //Item Menu e información
                 paramDatos: 'infoJuiciosContribucion',
                 arrayResult: true,
                 order: 'asc',
@@ -171,7 +171,7 @@ class DetalleTributo extends React.PureComponent {
                 menuItemSeleccionado: '',
                 registrosSeleccionados: []
             },
-            juicioMultas: {
+            juicioMultas: { //Item Menu e información
                 paramDatos: 'infoJuiciosMulta',
                 arrayResult: true,
                 order: 'asc',
@@ -186,7 +186,7 @@ class DetalleTributo extends React.PureComponent {
                 menuItemSeleccionado: '',
                 registrosSeleccionados: []
             },
-            planesPago: {
+            planesPago: { //Item Menu e información
                 paramDatos: 'infoPlanesPago',
                 arrayResult: true,
                 order: 'asc',
@@ -411,6 +411,8 @@ class DetalleTributo extends React.PureComponent {
         this.setState({ [menuItemSeleccionado]: itemSeleccionado });
     };
 
+    //Como el WS no trae los tributos que represento, lo tengo que traer y agregarlos
+    //En un futuro hay que cambiarlo
     setDatosTributos = () => {
         if (!this.props.idsTributos) return false;
 
@@ -421,10 +423,11 @@ class DetalleTributo extends React.PureComponent {
             //LLamar a this.props.datosMisRepresentados;
             //Agregmos los tributos de nuestros representados
             this.props.datosMisRepresentados.map((representado) => {
-                arrayData.push({
-                    representado: representado.usuario,
-                    identificador: representado.data.identificador
-                });
+                if (representado.data.aceptado)
+                    arrayData.push({
+                        representado: representado.usuario,
+                        identificador: representado.data.identificador
+                    });
             });
         }
 
