@@ -3,6 +3,9 @@ import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
+//Alert
+import { mostrarAlerta } from "@Utils/functions";
+
 import { Typography } from "@material-ui/core";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -62,7 +65,6 @@ class MiCedulon extends React.PureComponent {
     const registros = this.props.registrosSeleccionados;
     const token = this.props.loggedUser.token;
     const opcion = event.currentTarget.attributes.opcion.value;
-
     if (registros.length > 0) {
       services.getReporteCedulon(token,
         {
@@ -72,7 +74,8 @@ class MiCedulon extends React.PureComponent {
           "periodos": registros
         })
         .then((datos) => {
-
+          if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+          
           this.setState({
             base64Cedulon: datos.return ? 'data:application/pdf;base64,' + datos.return : '',
             dialogoOpen: true

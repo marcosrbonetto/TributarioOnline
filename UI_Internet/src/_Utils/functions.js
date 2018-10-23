@@ -1,5 +1,17 @@
+//Alert
+import Store from "@Redux/Store/index";
+import { mostrarAlertaRoja } from "@Redux/Actions/alerta";
+
+export const mostrarAlerta = (texto) => {
+	Store.dispatch(mostrarAlertaRoja({
+		mostrarIconoCerrar: true,
+		icono: 'error_outline',
+		texto: texto
+	}));
+}
+
 export const getIdTipoTributo = (tributo) => {
-	if(typeof tributo !== "string") return false;
+	if (typeof tributo !== "string") return false;
 
 	tributo = tributo.toLowerCase();
 	return (tributo == 'automotores' && 1) || (tributo == 'inmuebles' && 2) || (tributo == 'comercios' && 3) || (tributo == 'cementerios' && 4) || false;

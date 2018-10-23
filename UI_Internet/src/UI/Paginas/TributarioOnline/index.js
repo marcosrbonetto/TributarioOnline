@@ -21,6 +21,9 @@ import { getMisRepresentados } from "@ReduxSrc/Representantes/actions";
 import servicesRepresentantes from '@Rules/Rules_Representantes';
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline.js';
 
+//Alerta
+import { mostrarAlerta } from "@Utils/functions";
+
 const mapStateToProps = state => {
   return {
     loggedUser: state.MainContent.loggedUser,
@@ -65,7 +68,7 @@ class TributarioOnline extends React.PureComponent {
 
     const service1 = servicesTributarioOnline.getIdTributos(token)
       .then((datos) => {
-        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsIdTributos(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -73,7 +76,7 @@ class TributarioOnline extends React.PureComponent {
 
     const service2 = servicesRepresentantes.getMisRepresentados(token)
       .then((datos) => {
-        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentados(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");

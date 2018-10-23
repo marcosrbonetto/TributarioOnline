@@ -2,6 +2,9 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { push } from "connected-react-router";
 
+//Alert
+import { mostrarAlerta } from "@Utils/functions";
+
 //Styles
 import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
@@ -165,7 +168,7 @@ class Representantes extends React.PureComponent {
 
     const service1 = servicesRepresentantes.getMisRepresentantes(token)
       .then((datos) => {
-        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentantes(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -173,7 +176,7 @@ class Representantes extends React.PureComponent {
 
     const service2 = servicesRepresentantes.getMisRepresentados(token)
       .then((datos) => {
-        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentados(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -201,7 +204,8 @@ class Representantes extends React.PureComponent {
 
     const service = servicesTributarioOnline.getTributosByCUIT(token, identificador)
       .then((datos) => {
-
+        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+        
         this.handleCancelarSolicitudPermiso();
         if (datos.ok && datos.return.titular) {
           this.props.setPropsTributosCUIT(datos);
@@ -285,7 +289,7 @@ class Representantes extends React.PureComponent {
               tipoTributo: tributos[tributo].tipoTributo,
               identificador: identificador
             }, (datos) => {
-              if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+              if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
 
               this.props.setPropsAgregarRegistroGrilla({
                 cuilRepresentado: datos.return.cuilRepresentado,
@@ -318,7 +322,7 @@ class Representantes extends React.PureComponent {
       "identificador": param.identificador
     })
       .then((datos) => {
-        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
         if (typeof callback === "function")
           callback(datos);
       }).catch(err => {
@@ -348,7 +352,7 @@ class Representantes extends React.PureComponent {
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
-        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
 
         this.props.setPropsCambiarEstadoPermiso({
           grilla: datosFila.data.grilla,
@@ -382,7 +386,7 @@ class Representantes extends React.PureComponent {
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
-        if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
 
         this.props.setPropsCambiarEstadoPermiso({
           grilla: datosFila.data.grilla,
@@ -498,7 +502,7 @@ class Representantes extends React.PureComponent {
       tipoTributo: this.state.selectTributos,
       identificador: this.state.inputIdentificadorTributo
     }, (datos) => {
-      if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+      if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
 
       this.props.setPropsAgregarRegistroGrilla({
         cuilRepresentado: datos.return.cuilRepresentado,

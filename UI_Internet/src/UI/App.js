@@ -68,7 +68,7 @@ class App extends React.Component {
     //Traemos datos de usuario para guardarlos en las props de redux
     services.getDatosUsuario(cookies.get('token')) //this.props.loggedUser.token
       .then((datos) => {
-
+        
         //Seteamos las props
         this.props.setLoggedUser({
           datos: datos.return

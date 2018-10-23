@@ -1,5 +1,8 @@
 import React from "react";
 
+//Alert
+import { mostrarAlerta } from "@Utils/functions";
+
 //Styles
 import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
@@ -213,6 +216,8 @@ class DetalleTributo extends React.PureComponent {
         //Traemos los tributos asociados al Token
         const service = servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
+                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+
                 this.props.setPropsIdTributos(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -220,6 +225,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service1 = servicesTributarioOnline.getInfoContribucion(token, identificador)
             .then((datos) => {
+                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -227,6 +233,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, identificador)
             .then((datos) => {
+                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoMultas(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -234,6 +241,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service3 = servicesTributarioOnline.getInfoJuiciosContribucion(token, identificador)
             .then((datos) => {
+                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoJuiciosContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -241,6 +249,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service4 = servicesTributarioOnline.getInfoJuiciosMulta(token, identificador)
             .then((datos) => {
+                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoJuiciosMulta(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -248,6 +257,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service5 = servicesTributarioOnline.getInfoPlanesPago(token, identificador)
             .then((datos) => {
+                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoPlanesPago(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -258,7 +268,7 @@ class DetalleTributo extends React.PureComponent {
         //Traiga las mias y las que represento y evitar todo esto
         const service6 = servicesRepresentantes.getMisRepresentados(token)
             .then((datos) => {
-                if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsMisRepresentados(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -450,7 +460,7 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo: tributo,
             identificador: identificador
         }).then((datos) => {
-            if (!datos.ok) { this.props.mostrarCargando(false); return false; }
+            if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
 
             dataSercicio1 = datos;
 
@@ -462,8 +472,8 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo: tributo,
             identificador: identificador
         }).then((datos) => {
-            if (!datos.ok) { this.props.mostrarCargando(false); return false; }
-debugger;
+            if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+            
             dataSercicio2 = datos;
 
         }).catch(err => {
