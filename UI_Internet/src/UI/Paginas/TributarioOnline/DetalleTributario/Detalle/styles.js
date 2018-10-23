@@ -146,8 +146,19 @@ const styles = theme => ({
       right: '0px',
       color: '#fff'
     },
+    badgeSubTab: {
+      width: '140px',
+      height: '36px',
+      '& > div': {
+        margin: '0px auto',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)'
+      }
+    },
     badgeTab: {
-      width: '160px',
+      width: '107px',
       height: '36px',
       '& > div': {
         margin: '0px auto',
@@ -164,8 +175,11 @@ const styles = theme => ({
         borderBottom: '1px solid #bbb',
       }
     },
-    itemMenu: {
-      width: '100px',
+    itemSubMenu: {
+      minWidth: '140px',
+    },
+    labelItemMenu: {
+      padding: '0px'
     },
     tabsRoot: {
       color: theme.color.error.main,
@@ -213,6 +227,12 @@ const styles = theme => ({
     buttonFotterDialog: {
       textAlign: 'center',
       paddingTop: '10px'
+    },
+    flexContainersMenu: {
+      width: '825px',
+      left: '50%',
+      position: 'relative',
+      transform: 'translateX(-50%)',
     }
   });
 

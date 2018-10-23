@@ -137,7 +137,7 @@ class DetalleTributo extends React.PureComponent {
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
-                    detalleTitulo: 'Contribución por Período',
+                    detalleTitulo: 'Períodos',
                     totalesDeuda: 'Administrativa',
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
@@ -159,28 +159,13 @@ class DetalleTributo extends React.PureComponent {
                 },
                 registrosSeleccionados: []
             },
-            juicioContribucion: { //Item Menu e información
-                paramDatos: 'infoJuiciosContribucion',
+            juicios: { //Item Menu e información
+                paramDatos: 'infoJuicios',
                 arrayResult: true,
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
-                    detalleTitulo: 'Juicio por Contribucion',
-                    totalesDeuda: 'del Juicio',
-                    vencida: 'Capital',
-                    aVencer: 'Gastos',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
-                },
-                menuItemSeleccionado: '',
-                registrosSeleccionados: []
-            },
-            juicioMultas: { //Item Menu e información
-                paramDatos: 'infoJuiciosMulta',
-                arrayResult: true,
-                order: 'asc',
-                orderBy: 'concepto',
-                labels: {
-                    detalleTitulo: 'Juicio por Multas',
+                    detalleTitulo: 'Juicios',
                     totalesDeuda: 'del Juicio',
                     vencida: 'Capital',
                     aVencer: 'Gastos',
@@ -195,7 +180,7 @@ class DetalleTributo extends React.PureComponent {
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
-                    detalleTitulo: 'Planes de Pago',
+                    detalleTitulo: 'Planes',
                     totalesDeuda: 'Administrativa',
                     vencida: 'Vencida',
                     aVencer: 'A vencer',
@@ -275,9 +260,16 @@ class DetalleTributo extends React.PureComponent {
             });
 
         Promise.all([service, service1, service2, service3, service4, service5, service6]).then(() => {
-            this.setDatosTributos();
             this.props.mostrarCargando(false);
         });
+
+        Promise.all([service, service6]).then(() => {
+            this.setDatosTributos();
+        });
+    }
+
+    componentDidUpdate() {
+        this.props.mostrarCargando(false);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -292,16 +284,16 @@ class DetalleTributo extends React.PureComponent {
 
         //Seteo de el primer item de los juicios de contribucion el cual es el primero que se mostrará
         if (JSON.stringify(this.props.infoJuiciosContribucion) != JSON.stringify(nextProps.infoJuiciosContribucion)) {
-            let juicioContribucion = Object.assign({}, this.state.juicioContribucion);
-            juicioContribucion.menuItemSeleccionado = (nextProps.infoJuiciosContribucion.lista > 0 && nextProps.infoJuiciosContribucion.lista[0].idJuicio) || '';
-            this.setState({ juicioContribucion });
+            let juicios = Object.assign({}, this.state.juicios);
+            juicios.menuItemSeleccionado = (nextProps.infoJuiciosContribucion.lista > 0 && nextProps.infoJuiciosContribucion.lista[0].idJuicio) || '';
+            this.setState({ juicios });
         }
 
         //Seteo de el primer item de los juicios de multas el cual es el primero que se mostrará
         if (JSON.stringify(this.props.infoJuiciosMulta) != JSON.stringify(nextProps.infoJuiciosMulta)) {
-            let juicioMultas = Object.assign({}, this.state.juicioMultas);
-            juicioMultas.menuItemSeleccionado = (nextProps.infoJuiciosMulta.lista > 0 && nextProps.infoJuiciosMulta.lista[0].idJuicio) || '';
-            this.setState({ juicioMultas });
+            let juicios = Object.assign({}, this.state.juicios);
+            juicios.menuItemSeleccionado = (nextProps.infoJuiciosMulta.lista > 0 && nextProps.infoJuiciosMulta.lista[0].idJuicio) || '';
+            this.setState({ juicios });
         }
 
         //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
@@ -344,10 +336,6 @@ class DetalleTributo extends React.PureComponent {
     selectIdentificador = event => {
         if (event.target.value == '0')
             return false;
-
-        this.setState({
-            identificadorActual: event.target.value
-        });
 
         this.props.mostrarCargando(true);
         this.props.redireccionar('/DetalleTributario/' + this.props.match.params.tributo + '/' + event.target.value);
@@ -427,7 +415,7 @@ class DetalleTributo extends React.PureComponent {
         if (!this.props.idsTributos) return false;
 
         const tributo = this.props.match.params.tributo.toLowerCase();
-        let arrayData = [...this.props.idsTributos[tributo]];
+        let arrayData = this.props.idsTributos[tributo] ? [...this.props.idsTributos[tributo]] : [];
 
         if (this.props.datosMisRepresentados) {
             //LLamar a this.props.datosMisRepresentados;
@@ -446,6 +434,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Abrimos modal informe de cuentas trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {
         this.props.mostrarCargando(true);
 
@@ -508,6 +497,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Cerramos modal informe de cuentas seteando los valores iniciales del state
     onInformeCuentaDialogoClose = () => {
         this.setState({
             informeCuenta: {
@@ -529,6 +519,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Mostramos el reporte en el modal de informe de cuentas
     onInformeCuentaShowReporte = () => {
         this.setState({
             informeCuenta: {
@@ -541,6 +532,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Ocultamos el reporte en el modal de informe de cuentas
     onInformeCuentaHideReporte = () => {
         this.setState({
             informeCuenta: {
@@ -560,8 +552,9 @@ class DetalleTributo extends React.PureComponent {
         //lista - lista de tributos que contienen rowLists para mostrar en la grilla
         const infoContribucion = this.props.infoContribucion ? this.props.infoContribucion.rowList : [];
         const infoMultas = this.props.infoMultas ? this.props.infoMultas.rowList : [];
-        const infoJuiciosContribucion = this.props.infoJuiciosContribucion ? this.props.infoJuiciosContribucion.lista : [];
-        const infoJuiciosMulta = this.props.infoJuiciosMulta ? this.props.infoJuiciosMulta.lista : [];
+        let infoJuicios = [];
+        infoJuicios = this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista ? infoJuicios.concat(this.props.infoJuiciosContribucion.lista) : infoJuicios;
+        infoJuicios = this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista ? infoJuicios.concat(this.props.infoJuiciosMulta.lista) : infoJuicios;
         const infoPlanesPago = this.props.infoPlanesPago ? this.props.infoPlanesPago.lista : [];
 
         return (
@@ -598,20 +591,18 @@ class DetalleTributo extends React.PureComponent {
                                         onChange={this.handleMenuChange}
                                         indicatorColor="secondary"
                                         textColor="secondary"
-                                        scrollable
+                                        centered
                                         scrollButtons="auto"
-                                        classes={{ scrollButtons: classes.scrollButtonsMenu }}
+                                        classes={{ flexContainer: classes.flexContainersMenu, scrollButtons: classes.scrollButtonsMenu }}
                                     >
 
-                                        <Tab className={classes.itemMenu} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Contribución por período</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Períodos</div></Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoMultas ? infoMultas.length : 0}><div>Multas</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoMultas ? infoMultas.length : 0}><div>Multas</div></Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="juicioContribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuiciosContribucion ? infoJuiciosContribucion.length : 0}><div>Juicios por contribución</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuicios ? infoJuicios.length : 0}><div>Juicios</div></Badge>} />
 
-                                        <Tab className={classes.itemMenu} value="juicioMultas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoJuiciosMulta ? infoJuiciosMulta.length : 0}><div>Juicios por multas</div></Badge>} />
-
-                                        <Tab className={classes.itemMenu} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes de pago</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes</div></Badge>} />
 
                                     </Tabs>
 
@@ -620,46 +611,30 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Sub Menus */}
 
-                            {/* Juicio por Contribucion */}
-                            {this.state.menuItemSeleccionado == 'juicioContribucion' && this.props.infoJuiciosContribucion.lista.length > 0 && <div>
+                            {/* Juicio */}
+                            {this.state.menuItemSeleccionado == 'juicios' && 
+                            ((this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.length > 0) || (this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.length > 0)) &&
+                            <div>
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
                                         {/* SubMenu */}
                                         <Tabs
-                                            value={this.state.juicioContribucion.menuItemSeleccionado}
+                                            value={this.state.juicios.menuItemSeleccionado}
                                             onChange={this.handleSubMenuChange}
                                             classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
                                             scrollable
                                             scrollButtons="auto"
                                         >
 
-                                            {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista.map((juicio) => {
-                                                return <Tab className={classes.itemMenu} value={juicio.idJuicio} label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                            {/* Juicio por Contribución */}
+                                            {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.map((juicio) => {
+                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                             })}
 
-                                        </Tabs>
-
-                                    </Grid>
-                                </Grid>
-                            </div>}
-
-                            {/* Juicio por Multas */}
-                            {this.state.menuItemSeleccionado == 'juicioMultas' && this.props.infoJuiciosMulta.lista.length > 0 && <div>
-
-                                <Grid container spacing={16}>
-                                    <Grid item sm={12} className={classes.tabMenu}>
-                                        {/* SubMenu */}
-                                        <Tabs
-                                            value={this.state.juicioMultas.menuItemSeleccionado}
-                                            onChange={this.handleSubMenuChange}
-                                            classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
-                                            scrollable
-                                            scrollButtons="auto"
-                                        >
-
-                                            {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista.map((juicio) => {
-                                                return <Tab className={classes.itemMenu} value={juicio.idJuicio} label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                            {/* Juicio por Multa */}
+                                            {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.map((juicio) => {
+                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeJuicioMenu }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                             })}
 
                                         </Tabs>
@@ -683,7 +658,7 @@ class DetalleTributo extends React.PureComponent {
                                         >
 
                                             {this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
-                                                return <Tab className={classes.itemMenu} value={plan.idPlan} label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
                                             })}
 
                                         </Tabs>
@@ -741,12 +716,12 @@ class DetalleTributo extends React.PureComponent {
                             {/* Sub Secciones */}
 
                             {/* Juicio por Contribucion */}
-                            {this.state.menuItemSeleccionado == 'juicioContribucion' &&
+                            {this.state.menuItemSeleccionado == 'juicios' &&
                                 this.props.infoJuiciosContribucion.lista &&
                                 this.props.infoJuiciosContribucion.lista.length > 0 &&
                                 this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista.map((juicio) => {
                                     return <div>
-                                        {this.state.juicioContribucion.menuItemSeleccionado == juicio.idJuicio &&
+                                        {this.state.juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
@@ -768,12 +743,12 @@ class DetalleTributo extends React.PureComponent {
                                 })}
 
                             {/* Juicio por Multas */}
-                            {this.state.menuItemSeleccionado == 'juicioMultas' &&
+                            {this.state.menuItemSeleccionado == 'juicios' &&
                                 this.props.infoJuiciosMulta.lista &&
                                 this.props.infoJuiciosMulta.lista.length > 0 &&
                                 this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista.map((juicio) => {
                                     return <div>
-                                        {this.state.juicioMultas.menuItemSeleccionado == juicio.idJuicio &&
+                                        {this.state.juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
