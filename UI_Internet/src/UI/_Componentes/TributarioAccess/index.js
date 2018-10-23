@@ -125,7 +125,7 @@ class TributarioAccess extends React.PureComponent {
                                     {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.map((data, index) => {
                                         return <MenuItem key={index} value={data.identificador}>
                                                 {data.identificador}{data.representado && ' - '+data.representado}  
-                                                <ListItemText secondary="Deuda: $ 3344,34" />
+                                                <ListItemText secondary={"Deuda: $ "+(data.deuda ? data.deuda : '-')} />
                                             </MenuItem>
                                     })}
                                 </Select>

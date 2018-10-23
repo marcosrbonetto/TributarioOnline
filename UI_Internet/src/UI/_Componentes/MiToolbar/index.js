@@ -1,6 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import { push } from "connected-react-router";
 
 //Componentes
 import AppBar from "@material-ui/core/AppBar";
@@ -20,7 +21,7 @@ import { cerrarSesion } from "@Redux/Actions/usuario";
 import Icon from '@material-ui/core/Icon';
 
 const mapStateToProps = state => {
-  return { 
+  return {
     usuario: state.Usuario.usuario,
     loggedUser: state.MainContent.loggedUser
   };
@@ -30,7 +31,10 @@ const mapDispatchToProps = dispatch => {
   return {
     cerrarSesion: () => {
       dispatch(cerrarSesion());
-    }
+    },
+    redireccionar: url => {
+      dispatch(push(url));
+    },
   };
 };
 
@@ -46,7 +50,7 @@ class MiToolbar extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (JSON.stringify(this.props.loggedUser.datos) != JSON.stringify(nextProps.loggedUser.datos)) {
-      this.setState({ 
+      this.setState({
         datosUsuario: nextProps.loggedUser.datos
       });
     }
@@ -84,7 +88,10 @@ class MiToolbar extends React.Component {
     }
   };
 
-  
+  handleClickLogo = () => {
+    this.props.redireccionar('/Inicio');
+  }
+
   render() {
     let { classes, titulo } = this.props;
 
@@ -109,6 +116,7 @@ class MiToolbar extends React.Component {
 
           {/* Logo muni */}
           {<img
+            onClick={this.handleClickLogo}
             className={classes.logoMuni}
             src="https://www.cordoba.gob.ar/wp-content/uploads/2016/07/logo-oscuro-01.png"
           />}
@@ -153,7 +161,7 @@ class MiToolbar extends React.Component {
             />
             <Typography align="center" variant="subheading" color="inherit">
               {this.state.datosUsuario &&
-              this.state.datosUsuario.apellido+', '+this.state.datosUsuario.nombre}
+                this.state.datosUsuario.apellido + ', ' + this.state.datosUsuario.nombre}
             </Typography>
           </div>
 
@@ -200,7 +208,8 @@ const styles = theme => {
     },
     logoMuni: {
       width: '140px',
-      marginRight: '20px'
+      marginRight: '20px',
+      cursor: 'pointer'
     },
     title: {
       borderLeft: '1px solid rgba(0,0,0,0.2)',
