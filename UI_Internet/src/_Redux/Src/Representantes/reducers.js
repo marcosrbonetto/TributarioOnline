@@ -87,6 +87,7 @@ const reducer = (state = initialState, action) => {
                     usuario: repr.cuilRepresentante,
                     tributo: repr.identificador + ' - ' + nombreTributo,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
+                    eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica
                     data: {
                         aceptado: repr.aceptado,
                         identificador: repr.identificador,
@@ -107,6 +108,7 @@ const reducer = (state = initialState, action) => {
                     usuario: repr.cuilRepresentado,
                     tributo: repr.identificador + ' - ' + nombreTributo,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
+                    eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica
                     data: {
                         aceptado: repr.aceptado,
                         identificador: repr.identificador,
@@ -135,6 +137,7 @@ const reducer = (state = initialState, action) => {
                     return {
                         ...repr,
                         estado: !repr.data.aceptado ? 'Aceptado' : 'Rechazado',
+                        eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica
                         data: {
                             ...repr.data,
                             aceptado: !repr.data.aceptado
@@ -156,6 +159,7 @@ const reducer = (state = initialState, action) => {
                 usuario: action.payload.cuilRepresentado,
                 tributo: action.payload.identificador + ' - ' + action.payload.tipoTributo,
                 estado: action.payload.aceptado ? 'Aceptado' : 'Rechazado',
+                eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica
                 data: {
                     aceptado: action.payload.aceptado,
                     identificador: action.payload.identificador,

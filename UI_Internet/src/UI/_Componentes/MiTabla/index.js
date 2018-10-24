@@ -22,11 +22,10 @@ Props esperadas:
 
 ->columns - (obligatorio) - Array columnas - Ej.: { id: 'concepto', type: 'string', numeric: false, disablePadding: true, label: 'Concepto' },
 ->rows - (obligatorio) - Array de objetos con respectivas columnas
-    -atributo de objeto "data": con ese nombre se pueden pasar datos extra a la tabla que por ejemplo se podrán hacer uso en la función customCell como datos que vienen por parametro
+    -atributo de objeto "data": con ese nombre se pueden pasar datos extra a la tabla
 ->orderBy - (obligatorio) - id columna por la cual ordenar inicialmente
 ->order (defecto 'desc') - Sentido para ordenar
 ->getFilasSeleccionadas - Función que obtendrá las un array de filas y otro de los id de aquellas seleccionadas
-->customCell - Funcion que retornara el contenido de la columna del tipo  type: 'customCell', y estará al último
 ->rowType - (defecto 'Concepto') - String que dice el tipo de filas que hay 
 ->check - Boolean que determina si la grilla muestra los checks o no
 ->rowsPerPage (defecto 25) - numero de filas por pagina
@@ -262,7 +261,6 @@ class MiTabla extends React.PureComponent {
                                         classes={classes}
                                         onClick={this.handleClick}
                                         isSelected={isSelected}
-                                        customCell={this.props.customCell}
                                     />
                                 })) || <TableRow>
                                     <TableCell colSpan={6}>No se encontraron registros</TableCell>
@@ -331,22 +329,8 @@ class MiRow extends React.PureComponent {
                 if (cell == 'data') return; //'data' son datos extras para utilizar
                 return cell != 'id' && <TableCell key={cell} padding="default">{this.props.data[cell]}</TableCell>
             })}
-            {this.renderCustomCell()}
         </TableRow>
     }
-
-
-    renderCustomCell = () => {
-        return (
-            <TableCell padding="none">{this.renderCustomCellContent()}</TableCell>
-        );
-    }
-
-    renderCustomCellContent = () => {
-        if (this.props.customCell == undefined) return null;
-        return this.props.customCell(this.props.data);
-    }
-
 }
 
 

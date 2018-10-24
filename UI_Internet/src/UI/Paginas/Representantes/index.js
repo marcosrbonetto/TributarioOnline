@@ -128,6 +128,7 @@ class Representantes extends React.PureComponent {
       var datosMisRepresentantes = (nextProps.datosMisRepresentantes || []).map((row, key) => {
         row.id = key;
         row.data.grilla = 'MisRepresentantes';
+        row.eliminarPermiso = this.botonAgregarCancelarPermisos(row);//Agregamos columna "custom"
         return row;
       });
 
@@ -143,6 +144,7 @@ class Representantes extends React.PureComponent {
       var datosMisRepresentados = (nextProps.datosMisRepresentados || []).map((row, key) => {
         row.id = key;
         row.data.grilla = 'MisRepresentados';
+        row.eliminarPermiso = this.botonAgregarCancelarPermisos(row);//Agregamos columna "custom"
         return row;
       });
 
@@ -400,9 +402,10 @@ class Representantes extends React.PureComponent {
   }
 
   //Botón Cancelar ó Aceptar que se mostrará en la grilla y se pasara al componente MiTabla en "customCell"
-  getCustomCell = (datosExtra) => {
+  botonAgregarCancelarPermisos = (datosExtra) => {
     const { classes } = this.props;
-
+    const datosFila = {...datosExtra};
+    
     return (datosExtra.data.aceptado && <div className={classes.iconEliminarPermiso}>
       <MiLinkDialog
         textoLink={'Cancelar Permiso'}
@@ -412,7 +415,7 @@ class Representantes extends React.PureComponent {
         labelCancel={'No'}
         labelAccept={'Si'}
         acceptEvent={this.handleCancelarPermiso}
-        acceptEventData={datosExtra}
+        acceptEventData={datosFila}
       >
         <div key='buttonAction'>
           <i class="material-icons" title="Cancelar Permiso">
@@ -432,7 +435,7 @@ class Representantes extends React.PureComponent {
         labelCancel={'No'}
         labelAccept={'Si'}
         acceptEvent={this.handleAceptarPermiso}
-        acceptEventData={datosExtra}
+        acceptEventData={datosFila}
       >
         <div key='buttonAction'>
           <i class="material-icons" title="Aceptar Permiso">
@@ -548,11 +551,10 @@ class Representantes extends React.PureComponent {
                   { id: 'usuario', type: 'string', numeric: false, label: 'Representante' },
                   { id: 'tributo', type: 'date', numeric: false, label: 'Permiso' },
                   { id: 'estado', type: 'string', numeric: false, label: 'Estado' },
-                  { id: 'eliminarPermiso', type: 'customCell', numeric: false, label: '' },
+                  { id: 'eliminarPermiso', type: 'custom', numeric: false, label: '' },
                 ]}
                 rows={this.state.datosGrillaMisRepresentantes || []}
                 orderBy={'usuario'}
-                customCell={this.getCustomCell}
                 check={false}
                 rowsPerPage={5}
               />
@@ -569,11 +571,10 @@ class Representantes extends React.PureComponent {
                   { id: 'usuario', type: 'string', numeric: false, label: 'Representados' },
                   { id: 'tributo', type: 'date', numeric: false, label: 'Permiso' },
                   { id: 'estado', type: 'string', numeric: false, label: 'Estado' },
-                  { id: 'eliminarPermiso', type: 'customCell', numeric: false, label: '' },
+                  { id: 'eliminarPermiso', type: 'custom', numeric: false, label: '' },
                 ]}
                 rows={this.state.datosGrillaMisRepresentados || []}
                 orderBy={'usuario'}
-                customCell={this.getCustomCell}
                 check={false}
                 rowsPerPage={5}
               />
