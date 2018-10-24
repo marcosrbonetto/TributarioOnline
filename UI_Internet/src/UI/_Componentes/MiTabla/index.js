@@ -250,9 +250,9 @@ class MiTabla extends React.PureComponent {
                             check={check}
                         />
                         <TableBody>
-                            {stableSort(data, getSorting(order, orderBy, orderType))
+                            {(data.length > 0 && stableSort(data, getSorting(order, orderBy, orderType))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((n,index) => {
+                                .map((n, index) => {
                                     const isSelected = this.isSelected(n.id);
 
                                     return <MiRow
@@ -264,7 +264,9 @@ class MiTabla extends React.PureComponent {
                                         isSelected={isSelected}
                                         customCell={this.props.customCell}
                                     />
-                                })}
+                                })) || <TableRow>
+                                    <TableCell colSpan={6}>No se encontraron registros</TableCell>
+                                </TableRow>}
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 49 * emptyRows }}>
                                     <TableCell colSpan={6} />
@@ -326,7 +328,7 @@ class MiRow extends React.PureComponent {
                     <Checkbox checked={this.props.isSelected || false} />
                 </TableCell>}
             {Object.keys(this.props.data).map((cell, key) => {
-                if(cell == 'data') return; //'data' son datos extras para utilizar
+                if (cell == 'data') return; //'data' son datos extras para utilizar
                 return cell != 'id' && <TableCell key={cell} padding="default">{this.props.data[cell]}</TableCell>
             })}
             {this.renderCustomCell()}
