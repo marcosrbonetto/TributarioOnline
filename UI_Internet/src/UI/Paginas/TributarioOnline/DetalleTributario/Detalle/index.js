@@ -135,7 +135,6 @@ class DetalleTributo extends React.PureComponent {
                 },
                 reporteBase64: ''
             },
-            infoUltimosPagos: [],
             contribucion: { //Item Menu e información
                 paramDatos: 'infoContribucion',
                 arrayResult: false,
@@ -452,7 +451,7 @@ class DetalleTributo extends React.PureComponent {
     //Abrimos modal informe de cuentas trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {
         this.props.mostrarCargando(true);
-        debugger;
+        
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
