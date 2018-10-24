@@ -3,6 +3,7 @@ import React from "react";
 //Styles
 import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
+import './styles.css';
 
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -144,7 +145,7 @@ class TributarioOnline extends React.PureComponent {
       <div className={classes.mainContainer}>
         <Grid container className={classes.root} spacing={16}>
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Automotores') &&
-            <Grid item xs={6}>
+            <Grid item xs={6} classes={{"grid-xs-6": "tributarioAccess"}} >
               <TributarioAccess
                 id="automotores"
                 tipo="Automotores"
@@ -156,7 +157,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Inmuebles') &&
-            <Grid item xs={6}>
+            <Grid item xs={6} classes={{"grid-xs-6": "tributarioAccess"}} >
               <TributarioAccess
                 id="inmuebles"
                 tipo="Inmuebles"
@@ -166,7 +167,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercios') &&
-            <Grid item xs={6}>
+            <Grid item xs={6} classes={{"grid-xs-6": "tributarioAccess"}} >
               <TributarioAccess
                 id="comercios"
                 tipo="Comercios"
@@ -177,7 +178,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerios') &&
-            <Grid item xs={6}>
+            <Grid item xs={6} classes={{"grid-xs-6": "tributarioAccess"}} >
               <TributarioAccess
                 id="cementerios"
                 tipo="Cementerios"
