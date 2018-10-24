@@ -6,6 +6,7 @@ import { mostrarAlerta } from "@Utils/functions";
 //Styles
 import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
+import './styles.css';
 import classNames from 'classnames';
 import { connect } from "react-redux";
 
@@ -583,7 +584,7 @@ class DetalleTributo extends React.PureComponent {
         return (
             <div className={classes.mainContainer}>
                 <Grid container className={classes.root} spacing={16}>
-                    <Grid item xs={8}>
+                    <Grid item xs={8} className={"container"}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}
                             <Typography className={classes.title} variant="title">Dominio:
@@ -820,9 +821,9 @@ class DetalleTributo extends React.PureComponent {
 
                         </MiCard>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} className={"container"}>
                         {/* Bloque Datos Generales */}
-                        <MiCard>
+                        <MiCard rootClassName={"leftBox"}>
                             <Typography className={classes.title} variant="title">Datos Generales</Typography>
                             <Divider className={classes.divider} />
                             <Grid container spacing={16}>
@@ -892,8 +893,8 @@ class DetalleTributo extends React.PureComponent {
                             </Grid>
 
                         </MiCard>
-                        <br />
-                        <MiCard>
+
+                        <MiCard rootClassName={"otrasOperaciones rightBox"}>
                             {/* Bloque Otras Operaciones */}
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
                             <Divider className={classes.divider} />

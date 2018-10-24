@@ -1,0 +1,24 @@
+.otrasOperaciones {
+    margin-top: 20px;
+}
+
+@media only screen and (max-width: 1135px) {
+    .container {
+        min-width: 100%;
+    }
+    .leftBox {
+        width: 49%;
+        margin-right: 1%;
+        display: inline-block;
+        vertical-align: top;
+    }
+    .rightBox{
+        width: 49%;
+        margin-left: 1%;
+        display: inline-block;
+        vertical-align: top;
+    }
+    .otrasOperaciones {
+        margin-top: 0px;
+    }
+} 
