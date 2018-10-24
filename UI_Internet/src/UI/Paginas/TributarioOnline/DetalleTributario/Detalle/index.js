@@ -207,7 +207,7 @@ class DetalleTributo extends React.PureComponent {
         //Traemos los tributos asociados al Token
         const service = servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); return false; }
 
                 this.props.setPropsIdTributos(datos);
             }).catch(err => {
@@ -216,7 +216,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service1 = servicesTributarioOnline.getInfoContribucion(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Períodos: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Períodos: ' + datos.error); return false; }
                 this.props.setPropsInfoContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -224,7 +224,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Multas: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Multas: ' + datos.error); return false; }
                 this.props.setPropsInfoMultas(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -232,7 +232,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service3 = servicesTributarioOnline.getInfoJuiciosContribucion(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Juicios: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Juicios: ' + datos.error); return false; }
                 this.props.setPropsInfoJuiciosContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -240,7 +240,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service4 = servicesTributarioOnline.getInfoJuiciosMulta(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Juicios: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Juicios: ' + datos.error); return false; }
                 this.props.setPropsInfoJuiciosMulta(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -248,7 +248,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service5 = servicesTributarioOnline.getInfoPlanesPago(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Planes Pago: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Planes Pago: ' + datos.error); return false; }
                 this.props.setPropsInfoPlanesPago(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -259,7 +259,7 @@ class DetalleTributo extends React.PureComponent {
             identificador: identificador
         })
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
                 this.props.setPropsInfoUltimosPagos(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -270,7 +270,7 @@ class DetalleTributo extends React.PureComponent {
         //Traiga las mias y las que represento y evitar todo esto
         const service7 = servicesRepresentantes.getMisRepresentados(token)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Tributos Representados: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Tributos Representados: ' + datos.error); return false; }
                 this.props.setPropsMisRepresentados(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -283,10 +283,6 @@ class DetalleTributo extends React.PureComponent {
         Promise.all([service, service7]).then(() => {
             this.setDatosTributos();
         });
-    }
-
-    componentDidUpdate() {
-        this.props.mostrarCargando(false);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -473,7 +469,7 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo: tributo,
             identificador: identificador
         }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta('Informe de Cuenta: ' + datos.error); this.props.mostrarCargando(false); return false; }
+            if (!datos.ok) { mostrarAlerta('Informe de Cuenta: ' + datos.error); return false; }
 
             dataSercicio1 = datos;
 
@@ -485,7 +481,7 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo: tributo,
             identificador: identificador
         }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta('Reporte Informe de Cuenta: ' + datos.error); this.props.mostrarCargando(false); return false; }
+            if (!datos.ok) { mostrarAlerta('Reporte Informe de Cuenta: ' + datos.error); return false; }
 
             dataSercicio2 = datos;
 
