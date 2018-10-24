@@ -145,7 +145,7 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'Administrativa',
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe']
+                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
                 },
                 registrosSeleccionados: []
             },
@@ -173,7 +173,7 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'del Juicio',
                     vencida: 'Capital',
                     aVencer: 'Gastos',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe']
+                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
                 },
                 menuItemSeleccionado: '',
                 registrosSeleccionados: []
@@ -1030,7 +1030,7 @@ class DetalleTributo extends React.PureComponent {
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
                                                 { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
-                                                { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe' },
+                                                { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe ($)' },
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
                                             rows={this.props.infoUltimosPagos || []}
@@ -1343,7 +1343,7 @@ class MisPagos extends React.PureComponent {
                 columns={[
                     { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
                     { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas[1] : 'Vencimiento') },
-                    { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[2] : 'Importe') },
+                    { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[2] : 'Importe ($)') },
                     { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                 ]}
                 rows={rowList || []}

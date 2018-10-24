@@ -32,7 +32,7 @@ const reducer = (state = initialState, action) => {
                     return {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                        importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
+                        importe: stringToFloat(concepto.importe.total,2).toFixed(2),
                         detalle: <MiControledPopover textoLink="Detalle">
                                     <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
                                     <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
@@ -61,7 +61,7 @@ const reducer = (state = initialState, action) => {
                     return {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                        importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
+                        importe: stringToFloat(concepto.importe.total,2).toFixed(2),
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
                 });
@@ -85,7 +85,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                            importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
+                            importe: stringToFloat(concepto.importe.total,2).toFixed(2),
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
                     })
@@ -116,7 +116,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                            importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
+                            importe: stringToFloat(concepto.importe.total,2).toFixed(2),
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
                     });
@@ -147,7 +147,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                            importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
+                            importe: stringToFloat(concepto.importe.total,2).toFixed(2),
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
                     })
@@ -175,7 +175,7 @@ const reducer = (state = initialState, action) => {
                 return {
                     concepto: pago.concepto,
                     fecha: dateToString(new Date(pago.fecha),'DD/MM/YYYY'),
-                    importe: '$ '+stringToFloat(pago.importe.total,2).toFixed(2),
+                    importe: stringToFloat(pago.importe.total,2).toFixed(2),
                     detalle: <MiControledPopover textoLink="Detalle">
                                     <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
                                     <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
