@@ -315,6 +315,33 @@ const getReporteInformeCuenta = (token, body) => {
   });
 };
 
+const getUltimosPagos = (token, param) => {
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Recaudacion/UltimosPagos?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      }
+    })
+    .then(res => {
+
+        if (res.status >= 400) {
+        throw new Error("Bad response from server");
+        }
+
+        return res.json();
+    })
+    .then(datos => {
+      resolve(datos);
+    })
+    .catch(err => {
+      reject("Error procesando la solicitud");
+    });
+  });
+};
+
 const services = {
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
@@ -327,6 +354,7 @@ const services = {
   getReporteCedulon: getReporteCedulon,
   getInformeCuenta: getInformeCuenta,
   getReporteInformeCuenta: getReporteInformeCuenta,
+  getUltimosPagos: getUltimosPagos,
 }
 
 export default services;

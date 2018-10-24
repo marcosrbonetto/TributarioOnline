@@ -3,7 +3,8 @@ import {
     GET_INFO_MULTAS,
     GET_INFO_JUICIOS_CONTR,
     GET_INFO_JUICIOS_MULTAS,
-    GET_INFO_PLANES_PAGO
+    GET_INFO_PLANES_PAGO,
+    GET_INFO_ULTIMOS_PAGOS
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 
 export const getInfoContribucion = datos => ({ 
@@ -28,5 +29,10 @@ export const getInfoJuiciosMulta = datos => ({
 
 export const getInfoPlanesPago = datos => ({ 
     type: GET_INFO_PLANES_PAGO,
+    payload: datos
+});
+
+export const getInfoUltimosPagos = datos => ({ 
+    type: GET_INFO_ULTIMOS_PAGOS,
     payload: datos
 });

@@ -19,7 +19,7 @@ class MiControledDialog extends React.PureComponent {
 
   getComponent(key) {
 
-    if (typeof this.props.children == 'object')
+    if (this.props.children.filter((seccion)=>{return seccion.key == "mainContent"}).length > 0)
       return this.props.children.filter((comp) => {
         return comp.key === key;
       });

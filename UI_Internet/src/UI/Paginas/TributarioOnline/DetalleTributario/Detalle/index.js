@@ -28,8 +28,6 @@ import Badge from '@material-ui/core/Badge';
 import Modal from '@material-ui/core/Modal';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Paper from '@material-ui/core/Paper';
-import Popover from '@material-ui/core/Popover';
 
 //Custom Components
 import MiCard from "@Componentes/MiCard";
@@ -37,6 +35,7 @@ import MiTabla from "@Componentes/MiTabla";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiControledDialog from "@Componentes/MiControledDialog"
 import MiCedulon from "@Componentes/MiCedulon";
+import MiControledPopover from "@Componentes/MiControledPopover";
 
 //Imagenes
 import cedulonFoto from './img/cedulon.png';
@@ -52,7 +51,8 @@ import {
     getInfoMultas,
     getInfoJuiciosContribucion,
     getInfoJuiciosMulta,
-    getInfoPlanesPago
+    getInfoPlanesPago,
+    getInfoUltimosPagos
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 import { getMisRepresentados } from "@ReduxSrc/Representantes/actions";
 
@@ -72,6 +72,7 @@ const mapStateToProps = state => {
         infoJuiciosContribucion: state.DetalleTributario.infoJuiciosContribucion,
         infoJuiciosMulta: state.DetalleTributario.infoJuiciosMulta,
         infoPlanesPago: state.DetalleTributario.infoPlanesPago,
+        infoUltimosPagos: state.DetalleTributario.infoUltimosPagos,
         datosMisRepresentados: state.Representantes.datosMisRepresentados
     };
 };
@@ -97,6 +98,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setPropsInfoPlanesPago: (datos) => {
         dispatch(getInfoPlanesPago(datos));
+    },
+    setPropsInfoUltimosPagos: (datos) => {
+        dispatch(getInfoUltimosPagos(datos));
     },
     redireccionar: url => {
         dispatch(replace(url));
@@ -131,6 +135,7 @@ class DetalleTributo extends React.PureComponent {
                 },
                 reporteBase64: ''
             },
+            infoUltimosPagos: [],
             contribucion: { //Item Menu e información
                 paramDatos: 'infoContribucion',
                 arrayResult: false,
@@ -196,12 +201,13 @@ class DetalleTributo extends React.PureComponent {
         //Servicios que setean los datos en las props del store de redux
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
+        const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
 
         //Traemos los tributos asociados al Token
         const service = servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Tributos: '+datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); this.props.mostrarCargando(false); return false; }
 
                 this.props.setPropsIdTributos(datos);
             }).catch(err => {
@@ -210,7 +216,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service1 = servicesTributarioOnline.getInfoContribucion(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Períodos: '+datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Períodos: ' + datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -218,7 +224,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Multas: '+datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Multas: ' + datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoMultas(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -226,7 +232,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service3 = servicesTributarioOnline.getInfoJuiciosContribucion(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Juicios: '+datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Juicios: ' + datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoJuiciosContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -234,7 +240,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service4 = servicesTributarioOnline.getInfoJuiciosMulta(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Juicios: '+datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Juicios: ' + datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoJuiciosMulta(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -242,8 +248,19 @@ class DetalleTributo extends React.PureComponent {
 
         const service5 = servicesTributarioOnline.getInfoPlanesPago(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Planes Pago: '+datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Planes Pago: ' + datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsInfoPlanesPago(datos);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
+
+        const service6 = servicesTributarioOnline.getUltimosPagos(token, {
+            tipoTributo: tributo,
+            identificador: identificador
+        })
+            .then((datos) => {
+                if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                this.props.setPropsInfoUltimosPagos(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -251,19 +268,19 @@ class DetalleTributo extends React.PureComponent {
         //Traemos los representados para mostrar las patentes en las que puedo ingresar
         //Esto se cambiará luego haciendo que el servicio que trae las patentes (por ej.)
         //Traiga las mias y las que represento y evitar todo esto
-        const service6 = servicesRepresentantes.getMisRepresentados(token)
+        const service7 = servicesRepresentantes.getMisRepresentados(token)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Tributos Representados: '+datos.error); this.props.mostrarCargando(false); return false; }
+                if (!datos.ok) { mostrarAlerta('Tributos Representados: ' + datos.error); this.props.mostrarCargando(false); return false; }
                 this.props.setPropsMisRepresentados(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        Promise.all([service, service1, service2, service3, service4, service5, service6]).then(() => {
+        Promise.all([service, service1, service2, service3, service4, service5, service6, service7]).then(() => {
             this.props.mostrarCargando(false);
         });
 
-        Promise.all([service, service6]).then(() => {
+        Promise.all([service, service7]).then(() => {
             this.setDatosTributos();
         });
     }
@@ -301,6 +318,13 @@ class DetalleTributo extends React.PureComponent {
             let planesPago = Object.assign({}, this.state.planesPago);
             planesPago.menuItemSeleccionado = (nextProps.infoPlanesPago.lista > 0 && nextProps.infoPlanesPago.lista[0].idPlan) || '';
             this.setState({ planesPago });
+        }
+
+        //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
+        if (JSON.stringify(this.props.infoUltimosPagos) != JSON.stringify(nextProps.infoUltimosPagos)) {
+            let infoUltimosPagos = Object.assign({}, this.state.infoUltimosPagos);
+            infoUltimosPagos = nextProps.infoUltimosPagos;
+            this.setState({ infoUltimosPagos });
         }
     }
 
@@ -437,7 +461,7 @@ class DetalleTributo extends React.PureComponent {
     //Abrimos modal informe de cuentas trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {
         this.props.mostrarCargando(true);
-
+debugger;
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
@@ -449,7 +473,7 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo: tributo,
             identificador: identificador
         }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta('Informe de Cuenta: '+datos.error); this.props.mostrarCargando(false); return false; }
+            if (!datos.ok) { mostrarAlerta('Informe de Cuenta: ' + datos.error); this.props.mostrarCargando(false); return false; }
 
             dataSercicio1 = datos;
 
@@ -461,8 +485,8 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo: tributo,
             identificador: identificador
         }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta('Reporte Informe de Cuenta: '+datos.error); this.props.mostrarCargando(false); return false; }
-            
+            if (!datos.ok) { mostrarAlerta('Reporte Informe de Cuenta: ' + datos.error); this.props.mostrarCargando(false); return false; }
+
             dataSercicio2 = datos;
 
         }).catch(err => {
@@ -596,13 +620,13 @@ class DetalleTributo extends React.PureComponent {
                                         classes={{ flexContainer: classes.flexContainersMenu, scrollButtons: classes.scrollButtonsMenu }}
                                     >
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Períodos</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Períodos</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoMultas ? infoMultas.length : 0}><div>Multas</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoMultas ? infoMultas.length : 0}><div>Multas</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={infoJuicios ? infoJuicios.length : 0}><div>Juicios</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={infoJuicios ? infoJuicios.length : 0}><div>Juicios</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu}} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes</div></Badge>} />
 
                                     </Tabs>
 
@@ -612,36 +636,36 @@ class DetalleTributo extends React.PureComponent {
                             {/* Sub Menus */}
 
                             {/* Juicio */}
-                            {this.state.menuItemSeleccionado == 'juicios' && 
-                            ((this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.length > 0) || (this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.length > 0)) &&
-                            <div>
+                            {this.state.menuItemSeleccionado == 'juicios' &&
+                                ((this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.length > 0) || (this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.length > 0)) &&
+                                <div>
 
-                                <Grid container spacing={16}>
-                                    <Grid item sm={12} className={classes.tabMenu}>
-                                        {/* SubMenu */}
-                                        <Tabs
-                                            value={this.state.juicios.menuItemSeleccionado}
-                                            onChange={this.handleSubMenuChange}
-                                            classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
-                                            scrollable
-                                            scrollButtons="auto"
-                                        >
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={12} className={classes.tabMenu}>
+                                            {/* SubMenu */}
+                                            <Tabs
+                                                value={this.state.juicios.menuItemSeleccionado}
+                                                onChange={this.handleSubMenuChange}
+                                                classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+                                                scrollable
+                                                scrollButtons="auto"
+                                            >
 
-                                            {/* Juicio por Contribución */}
-                                            {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.map((juicio) => {
-                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeRed }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
-                                            })}
+                                                {/* Juicio por Contribución */}
+                                                {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.map((juicio) => {
+                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeRed }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                })}
 
-                                            {/* Juicio por Multa */}
-                                            {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.map((juicio) => {
-                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeRed }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
-                                            })}
+                                                {/* Juicio por Multa */}
+                                                {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.map((juicio) => {
+                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeRed }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                })}
 
-                                        </Tabs>
+                                            </Tabs>
 
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </div>}
+                                </div>}
 
                             {/* Planes de Pago */}
                             {this.state.menuItemSeleccionado == 'planesPago' && this.props.infoPlanesPago.lista.length > 0 && <div>
@@ -658,7 +682,7 @@ class DetalleTributo extends React.PureComponent {
                                         >
 
                                             {this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
-                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu}} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
                                             })}
 
                                         </Tabs>
@@ -944,7 +968,7 @@ class DetalleTributo extends React.PureComponent {
                                             </div>}
 
                                             {this.state.informeCuenta.modal.showReporte && <div>
-                                                {this.state.informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,'+this.state.informeCuenta.reporteBase64} height="342px" width="700px"></iframe>}
+                                                {this.state.informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + this.state.informeCuenta.reporteBase64} height="342px" width="700px"></iframe>}
                                                 {!this.state.informeCuenta.reporteBase64 && 'Ocurrió un error al cargar el reporte'}
                                             </div>}
                                         </div>
@@ -1208,32 +1232,12 @@ class MisPagos extends React.PureComponent {
         const { classes } = this.props;
 
         return <div>
-            <Typography
-                onClick={this.handlePopoverOpen}
-                className={classes.link}
-            >Detalle</Typography>
-            <Popover
-                id="simple-popper"
-                open={Boolean(this.state.anchorEl)}
-                anchorEl={this.state.anchorEl}
-                onClose={this.handlePopoverClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-            >
-                <Paper className={classes.contaninerDetalle}>
-                    <div class="closePopover" onClick={this.handlePopoverClose}>x</div>
-                    <Typography className={classes.typography}>Base: <b>$ {datosExtra.data.importe.base}</b></Typography>
-                    <Typography className={classes.typography}>Recargo: <b>$ {datosExtra.data.importe.recargo}</b></Typography>
-                    <Typography className={classes.typography}>Deducción: <b>$ {datosExtra.data.importe.deduccion}</b></Typography>
-                    <Typography className={classes.typography}>Referencia: <b>{datosExtra.data.referencia}</b></Typography>
-                </Paper>
-            </Popover>
+            <MiControledPopover textoLink="Detalle">
+                <Typography className={classes.typography}>Base: <b>$ {datosExtra.data.importe.base}</b></Typography>
+                <Typography className={classes.typography}>Recargo: <b>$ {datosExtra.data.importe.recargo}</b></Typography>
+                <Typography className={classes.typography}>Deducción: <b>$ {datosExtra.data.importe.deduccion}</b></Typography>
+                <Typography className={classes.typography}>Referencia: <b>{datosExtra.data.referencia}</b></Typography>
+            </MiControledPopover>
         </div>;
     }
 

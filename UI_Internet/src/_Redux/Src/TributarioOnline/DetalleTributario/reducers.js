@@ -3,7 +3,8 @@ import {
     GET_INFO_MULTAS,
     GET_INFO_JUICIOS_CONTR,
     GET_INFO_JUICIOS_MULTAS,
-    GET_INFO_PLANES_PAGO
+    GET_INFO_PLANES_PAGO,
+    GET_INFO_ULTIMOS_PAGOS
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
@@ -12,7 +13,8 @@ const initialState = {
     infoMultas: [],
     infoJuiciosContribucion: [],
     infoJuiciosMulta: [],
-    infoPlanesPago: []
+    infoPlanesPago: [],
+    infoUltimosPagos: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -107,7 +109,7 @@ const reducer = (state = initialState, action) => {
                             importe: stringToFloat(concepto.importe.total,2).toFixed(2),
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
-                    })
+                    });
 
                     return {
                         ...juicio,
@@ -154,6 +156,22 @@ const reducer = (state = initialState, action) => {
 
             return Object.assign({...state}, state.infoPlanesPago, {
                 infoPlanesPago: action.payload.return
+            });
+        }
+        case GET_INFO_ULTIMOS_PAGOS: {
+
+            let rowList = (action.payload.return && action.payload.return.map((pago) => {
+                    
+                return {
+                    concepto: pago.concepto,
+                    fecha: dateToString(new Date(pago.fecha),'DD/MM/YYYY'),
+                    importe: stringToFloat(pago.importe.total,2).toFixed(2),
+                    data: pago //atributo "data" no se muestra en MiTabla
+                }
+            })) || [];
+
+            return Object.assign({...state}, state.infoUltimosPagos, {
+                infoUltimosPagos: rowList
             });
         }
         default:

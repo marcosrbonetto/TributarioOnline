@@ -1,3 +1,7 @@
 /*eslint-disable no-undef*/
-__webpack_public_path__ = window.Config.BASE_URL + "/";
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    // dev code
+} else {
+    _webpack_public_path_ = window.Config.BASE_URL + "/"; 
+}
 /*eslint-enable no-undef*/
