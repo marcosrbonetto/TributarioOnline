@@ -8,6 +8,10 @@ import {
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
+import React from "react";
+import { Typography } from "@material-ui/core";
+import MiControledPopover from "@Componentes/MiControledPopover";
+
 const initialState = {
     infoContribucion: [],
     infoMultas: [],
@@ -28,7 +32,13 @@ const reducer = (state = initialState, action) => {
                     return {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                        importe: stringToFloat(concepto.importe.total,2).toFixed(2),
+                        importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
+                        detalle: <MiControledPopover textoLink="Detalle">
+                                    <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                    <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                    <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                    <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                </MiControledPopover>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
                 });
@@ -51,7 +61,7 @@ const reducer = (state = initialState, action) => {
                     return {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                        importe: stringToFloat(concepto.importe.total,2).toFixed(2),
+                        importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
                 });
@@ -75,7 +85,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                            importe: stringToFloat(concepto.importe.total,2).toFixed(2),
+                            importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
                     })
@@ -106,7 +116,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                            importe: stringToFloat(concepto.importe.total,2).toFixed(2),
+                            importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
                     });
@@ -137,7 +147,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
-                            importe: stringToFloat(concepto.importe.total,2).toFixed(2),
+                            importe: '$ '+stringToFloat(concepto.importe.total,2).toFixed(2),
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
                     })
@@ -165,7 +175,16 @@ const reducer = (state = initialState, action) => {
                 return {
                     concepto: pago.concepto,
                     fecha: dateToString(new Date(pago.fecha),'DD/MM/YYYY'),
-                    importe: stringToFloat(pago.importe.total,2).toFixed(2),
+                    importe: '$ '+stringToFloat(pago.importe.total,2).toFixed(2),
+                    detalle: <MiControledPopover textoLink="Detalle">
+                                    <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
+                                    <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
+                                    <Typography>Deducción: <b>$ {pago.importe.deduccion}</b></Typography>
+                                    <Typography>Citación: <b>{pago.citacion}</b></Typography>
+                                    <Typography>CTL: <b>$ {pago.ctl}</b></Typography>
+                                    <Typography>Estado: <b>$ {pago.estado}</b></Typography>
+                                    <Typography>Caja: <b>$ {pago.caja}</b></Typography>
+                                </MiControledPopover>,
                     data: pago //atributo "data" no se muestra en MiTabla
                 }
             })) || [];

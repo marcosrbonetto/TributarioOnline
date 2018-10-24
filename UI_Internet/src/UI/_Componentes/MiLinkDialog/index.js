@@ -22,7 +22,8 @@ class MiLinkDialog extends React.PureComponent {
   }
 
   getComponent(key) {
-    if (typeof this.props.children == 'object')
+
+    if (Array.isArray(this.props.children) && this.props.children.filter((seccion)=>{return seccion.key == "mainContent"}).length > 0)
       return this.props.children.filter((comp) => {
         return comp.key === key;
       });
@@ -78,6 +79,9 @@ class MiLinkDialog extends React.PureComponent {
           open={this.state.open || false}
           scroll='paper'
           aria-labelledby="scroll-dialog-title"
+          classes={{
+              paper: classes.root
+          }}
         >
           <DialogTitle id="scroll-dialog-title">{titulo}</DialogTitle>
           <DialogContent>

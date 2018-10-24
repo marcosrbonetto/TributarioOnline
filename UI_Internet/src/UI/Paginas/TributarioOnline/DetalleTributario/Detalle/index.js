@@ -146,7 +146,7 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'Administrativa',
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                    columnas: ['Concepto', 'Vencimiento', 'Importe']
                 },
                 registrosSeleccionados: []
             },
@@ -174,7 +174,7 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'del Juicio',
                     vencida: 'Capital',
                     aVencer: 'Gastos',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                    columnas: ['Concepto', 'Vencimiento', 'Importe']
                 },
                 menuItemSeleccionado: '',
                 registrosSeleccionados: []
@@ -461,7 +461,7 @@ class DetalleTributo extends React.PureComponent {
     //Abrimos modal informe de cuentas trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {
         this.props.mostrarCargando(true);
-debugger;
+        debugger;
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
@@ -1006,13 +1006,9 @@ debugger;
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
-                                        <div key="headerContent"></div>
-                                        <div key="mainContent">
-                                            {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
-                                                return <div key={index}>{item}</div>;
-                                            })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
-                                        </div>
-                                        <div key="footerContent"></div>
+                                        {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
+                                            return <div key={index}>{item}</div>;
+                                        })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
@@ -1027,9 +1023,27 @@ debugger;
                                     <MiLinkDialog
                                         textoLink={'Últimos pagos'}
                                         titulo={'Últimos pagos'}
+                                        classes={{
+                                            root: classes.dialogUltimosPagos
+                                        }}
                                     >
-                                        Contenido Últimos pagos!
-                                        </MiLinkDialog>
+                                        <MiTabla
+                                            columns={[
+                                                { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
+                                                { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
+                                                { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe' },
+                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                            ]}
+                                            rows={this.state.infoUltimosPagos || []}
+                                            order='desc'
+                                            orderBy='vencimiento'
+                                            check={false}
+                                            rowsPerPage={5}
+                                            classes={{
+                                                root: classes.tablaUltimosPagos
+                                            }}
+                                        />
+                                    </MiLinkDialog>
                                 </Grid>
                             </Grid>
 
@@ -1227,20 +1241,6 @@ class MisPagos extends React.PureComponent {
         this.setState({ anchorEl: null });
     };
 
-    //Link "Detalle" que se mostrará en la grilla y se pasara al componente MiTabla
-    getCustomCell = (datosExtra) => {
-        const { classes } = this.props;
-
-        return <div>
-            <MiControledPopover textoLink="Detalle">
-                <Typography className={classes.typography}>Base: <b>$ {datosExtra.data.importe.base}</b></Typography>
-                <Typography className={classes.typography}>Recargo: <b>$ {datosExtra.data.importe.recargo}</b></Typography>
-                <Typography className={classes.typography}>Deducción: <b>$ {datosExtra.data.importe.deduccion}</b></Typography>
-                <Typography className={classes.typography}>Referencia: <b>{datosExtra.data.referencia}</b></Typography>
-            </MiControledPopover>
-        </div>;
-    }
-
     render() {
         const classes = this.props.classes;
 
@@ -1344,14 +1344,13 @@ class MisPagos extends React.PureComponent {
                 columns={[
                     { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
                     { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas[1] : 'Vencimiento') },
-                    { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[2] : 'Importe ($)') },
-                    { id: 'detalle', type: 'customCell', numeric: false, disablePadding: true, label: 'Detalle' },
+                    { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[2] : 'Importe') },
+                    { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                 ]}
                 rows={rowList || []}
                 order={order}
                 orderBy={orderBy}
                 getFilasSeleccionadas={this.getFilasSeleccionadas}
-                customCell={this.getCustomCell}
                 check={check}
                 rowsPerPage={rowsPerPage}
             />
