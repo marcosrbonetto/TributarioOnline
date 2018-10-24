@@ -316,12 +316,7 @@ class DetalleTributo extends React.PureComponent {
             this.setState({ planesPago });
         }
 
-        //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
-        if (JSON.stringify(this.props.infoUltimosPagos) != JSON.stringify(nextProps.infoUltimosPagos)) {
-            let infoUltimosPagos = Object.assign({}, this.state.infoUltimosPagos);
-            infoUltimosPagos = nextProps.infoUltimosPagos;
-            this.setState({ infoUltimosPagos });
-        }
+       
     }
 
     //Cada vez que se cambia de sección se checkean y actualizan datos
@@ -1030,7 +1025,7 @@ class DetalleTributo extends React.PureComponent {
                                                 { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe' },
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
-                                            rows={this.state.infoUltimosPagos || []}
+                                            rows={this.props.infoUltimosPagos || []}
                                             order='desc'
                                             orderBy='vencimiento'
                                             check={false}
