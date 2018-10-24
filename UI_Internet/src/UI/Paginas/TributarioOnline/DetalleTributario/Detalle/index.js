@@ -213,6 +213,28 @@ class DetalleTributo extends React.PureComponent {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
+        //Traemos los representados para mostrar las patentes en las que puedo ingresar
+        //Esto se cambiará luego haciendo que el servicio que trae las patentes (por ej.)
+        //Traiga las mias y las que represento y evitar todo esto
+        const service7 = servicesRepresentantes.getMisRepresentados(token)
+            .then((datos) => {
+                if (!datos.ok) { mostrarAlerta('Tributos Representados: ' + datos.error); return false; }
+                this.props.setPropsMisRepresentados(datos);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
+
+        Promise.all([service, service7]).then(() => {
+            const tributos = this.setDatosTributos();
+            //Redireccionamos si no hay concidencia del identificador seleccionado con los que tengo acceso
+            if (tributos.filter((tributo) => { return tributo.identificador == identificador }).length == 0)
+                this.props.redireccionar('/Inicio');
+            else
+                this.iniciarServicios(token, tributo, identificador);
+        });
+    }
+
+    iniciarServicios = (token, tributo, identificador) => {
         const service1 = servicesTributarioOnline.getInfoContribucion(token, identificador)
             .then((datos) => {
                 if (!datos.ok) { mostrarAlerta('Períodos: ' + datos.error); return false; }
@@ -264,23 +286,8 @@ class DetalleTributo extends React.PureComponent {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        //Traemos los representados para mostrar las patentes en las que puedo ingresar
-        //Esto se cambiará luego haciendo que el servicio que trae las patentes (por ej.)
-        //Traiga las mias y las que represento y evitar todo esto
-        const service7 = servicesRepresentantes.getMisRepresentados(token)
-            .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Tributos Representados: ' + datos.error); return false; }
-                this.props.setPropsMisRepresentados(datos);
-            }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-            });
-
-        Promise.all([service, service1, service2, service3, service4, service5, service6, service7]).then(() => {
+        Promise.all([service1, service2, service3, service4, service5, service6]).then(() => {
             this.props.mostrarCargando(false);
-        });
-
-        Promise.all([service, service7]).then(() => {
-            this.setDatosTributos();
         });
     }
 
@@ -315,7 +322,7 @@ class DetalleTributo extends React.PureComponent {
             this.setState({ planesPago });
         }
 
-       
+
     }
 
     //Cada vez que se cambia de sección se checkean y actualizan datos
@@ -446,12 +453,14 @@ class DetalleTributo extends React.PureComponent {
         this.setState({
             identificadores: arrayData
         });
+
+        return arrayData;
     }
 
     //Abrimos modal informe de cuentas trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {
         this.props.mostrarCargando(true);
-        
+
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
