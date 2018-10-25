@@ -1,4 +1,5 @@
 import { GET_ID_TRIBUTOS } from "@ReduxSrc/TributarioOnline/constants";
+import _ from "lodash";
 
 const initialState = {
     idsTributos: []
@@ -9,38 +10,28 @@ const reducer = (state = initialState, action) => {
         case GET_ID_TRIBUTOS: {
             let IdsTributos = {}
 
-            IdsTributos['comercios'] =  (action.payload.return.comercios && action.payload.return.comercios.map((identificador) => {
+            var arrayAutomotores = _.filter(action.payload.return, {tipoTributo: 1});
+            var arrayInmuebles = _.filter(action.payload.return, {tipoTributo: 2});
+            var arrayComercios = _.filter(action.payload.return, {tipoTributo: 3});
+            
+            IdsTributos['comercios'] =  (arrayComercios && arrayComercios.map((tributo) => {
                 return {
-                    representado: null,
-                    identificador: identificador
+                    representado: tributo.soyTitular ? null : tributo.titular.titular,
+                    identificador: tributo.identificador
                 }
             })) || [];
 
-            IdsTributos['inmuebles'] =  (action.payload.return.inmuebles && action.payload.return.inmuebles.map((identificador) => {
+            IdsTributos['inmuebles'] =  (arrayInmuebles && arrayInmuebles.map((tributo) => {
                 return {
-                    representado: null,
-                    identificador: identificador
+                    representado: tributo.soyTitular ? null : tributo.titular.titular,
+                    identificador: tributo.identificador
                 }
             })) || [];
 
-            /*IdsTributos['juicios'] =  (action.payload.return.cuitJuicios && action.payload.return.cuitJuicios.map((identificador) => {
+            IdsTributos['automotores'] =  (arrayAutomotores && arrayAutomotores.map((tributo) => {
                 return {
-                    representado: null,
-                    identificador: identificador
-                }
-            })) || [];*/
-
-            /*IdsTributos['planes'] =  (action.payload.return.cuitPlanes && action.payload.return.cuitPlanes.map((identificador) => {
-                return {
-                    representado: null,
-                    identificador: identificador
-                }
-            })) || [];*/
-
-            IdsTributos['automotores'] =  (action.payload.return.automotores && action.payload.return.automotores.map((identificador) => {
-                return {
-                    representado: null,
-                    identificador: identificador
+                    representado: tributo.soyTitular ? null : tributo.titular.titular,
+                    identificador: tributo.identificador
                 }
             })) || [];
             

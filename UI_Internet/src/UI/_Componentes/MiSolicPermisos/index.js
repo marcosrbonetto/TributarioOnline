@@ -33,7 +33,7 @@ class MiSolicPermisos extends React.PureComponent {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    this.props.addPermiso(this.props.tipo, nextState.checked.length);
+    this.props.addPermiso(this.state.checked, this.props.tipo, nextState.checked.length);
   }
 
   handleChange = event => {
@@ -57,9 +57,9 @@ class MiSolicPermisos extends React.PureComponent {
               MenuProps={MenuProps}
             >
               {this.props.opciones && this.props.opciones.map((opcion, index) => (
-                <MenuItem key={index} value={opcion}>
-                  <Checkbox checked={this.state.checked.indexOf(opcion) > -1} />
-                  <ListItemText primary={opcion} />
+                <MenuItem key={index} value={opcion.identificador}>
+                  <Checkbox checked={this.state.checked.indexOf(opcion.identificador) > -1} />
+                  <ListItemText primary={opcion.identificador} />
                 </MenuItem>
               ))}
             </Select>

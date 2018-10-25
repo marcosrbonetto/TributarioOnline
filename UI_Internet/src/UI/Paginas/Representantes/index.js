@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { push } from "connected-react-router";
+import _ from "lodash";
 
 //Alert
 import { mostrarAlerta } from "@Utils/functions";
@@ -95,7 +96,8 @@ class Representantes extends React.PureComponent {
         representado: null,
         cuitRepresentado: null,
         tributos: undefined,
-        mensajeError: null
+        mensajeError: null,
+        hayPermisosSeleccionados: false
       },
       busquedaTributo: { //Busqueda por Tributo
         titular: null,
@@ -194,8 +196,11 @@ class Representantes extends React.PureComponent {
   //Servicios que setean los datos en las props del store de redux
   //Busqueda de tributos por CUIT
   buscarTributosCUIT = () => {
+    
+    //Corroboramos que no se ingrese le cuit loggeado
+    const cuilLog = this.props.loggedUser.datos.cuil;
 
-    if (!/^[0-9]{11}$/.test(this.state.inputCuit)) {
+    if (!/^[0-9]{11}$/.test(this.state.inputCuit) || cuilLog == this.state.inputCuit) {
       this.setState({
         errorInputCuit: true
       });
@@ -211,7 +216,7 @@ class Representantes extends React.PureComponent {
         if (!datos.ok) { mostrarAlerta('Busqueda por CUIT: '+datos.error); this.props.mostrarCargando(false); return false; }
         
         this.handleCancelarSolicitudPermiso();
-        if (datos.ok && datos.return.titular) {
+        if (Array.isArray(datos.return) && datos.return.length > 0) {
           this.props.setPropsTributosCUIT(datos);
 
           this.setState({
@@ -246,10 +251,15 @@ class Representantes extends React.PureComponent {
   }
 
   //Agregamos permisos antes de aceptarlos
-  handleAddPermiso = (tipo, cantidad) => {
+  handleAddPermiso = (arraySeleccionados, tipo, cantidad) => {
 
     var newState = { ...this.state };
     newState.busquedaCUIT.tributos[tipo].cantPermisos = cantidad;
+    newState.busquedaCUIT.tributos[tipo].tributosSelec = arraySeleccionados;
+
+    const tributos = newState.busquedaCUIT.tributos; 
+    newState.busquedaCUIT.hayPermisosSeleccionados = _.filter(Object.keys(tributos), function(tributo){ return tributos[tributo].cantPermisos > 0 }).length > 0;
+
     this.setState({ newState });
   }
 
@@ -278,16 +288,17 @@ class Representantes extends React.PureComponent {
 
   //Servicios que setean los datos en las props del store de redux
   //Aceptación de permisos seleccionados
-  handleAceptarSolicitudPermiso = () => {
+  handleAceptarSolicitudPermisoCUIT = () => {
     this.props.mostrarCargando(true);
 
     const tributos = this.state.busquedaCUIT.tributos;
+
     let services = [];
     Object.keys(tributos).length > 0 &&
       Object.keys(tributos).map((tributo, index) => {
 
-        if (tributos[tributo].opciones.length > 0) {
-          tributos[tributo].opciones.map((identificador, index) => {
+        if (tributos[tributo].cantPermisos > 0) {
+          tributos[tributo].tributosSelec.map((identificador, index) => {
 
             const service = this.servicioAgregarSolicitudPermiso({
               tipoTributo: tributos[tributo].tipoTributo,
@@ -298,7 +309,7 @@ class Representantes extends React.PureComponent {
                 cuilRepresentado: datos.return.cuilRepresentado,
                 identificador: datos.return.identificador,
                 aceptado: datos.return.aceptado,
-                tipoTributo: datos.return.tipoTributo
+                tipoTributo: datos.return.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())
               });
             });
 
@@ -325,6 +336,7 @@ class Representantes extends React.PureComponent {
       "identificador": param.identificador
     })
       .then((datos) => {
+        
         if (!datos.ok) { mostrarAlerta('Agregar Permiso: '+datos.error); this.props.mostrarCargando(false); return false; }
         if (typeof callback === "function")
           callback(datos);
@@ -463,6 +475,7 @@ class Representantes extends React.PureComponent {
     //Servicios que setean los datos en las props del store de redux
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
+    const cuilLog = this.props.loggedUser.datos.cuil;
 
     const service = servicesRepresentantes.getTitularTributo(token, {
       "tipoTributo": this.state.selectTributos,
@@ -470,7 +483,7 @@ class Representantes extends React.PureComponent {
     })
       .then((datos) => {
 
-        if (datos.ok) {
+        if (datos.ok && cuilLog != datos.return.cuit) {
           this.setState({
             errorInputIdentificador: false,
             busquedaTributo: {
@@ -478,6 +491,16 @@ class Representantes extends React.PureComponent {
               cuitTitular: datos.return.cuit,
               tipoTributo: this.state.selectTributos,
               identificador: this.state.inputIdentificadorTributo
+            }
+          });
+        } else if(datos.ok && cuilLog == datos.return.cuit) {
+          this.handleCancelarSolicitudPermiso();
+
+          this.setState({
+            errorInputIdentificador: false,
+            busquedaTributo: {
+              ...this.state.busquedaTributo,
+              mensajeError: 'El tributo seleccionado le pertenece'
             }
           });
         } else {
@@ -511,7 +534,7 @@ class Representantes extends React.PureComponent {
         cuilRepresentado: datos.return.cuilRepresentado,
         identificador: datos.return.identificador,
         aceptado: datos.return.aceptado,
-        tipoTributo: datos.return.tipoTributo
+        tipoTributo: datos.return.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())
       });
       this.handleCancelarSolicitudPermiso();
 
@@ -779,7 +802,8 @@ class Representantes extends React.PureComponent {
                     <Button
                       size="small"
                       color="secondary"
-                      onClick={this.handleAceptarSolicitudPermiso}>
+                      onClick={this.handleAceptarSolicitudPermisoCUIT}
+                      disabled={!this.state.busquedaCUIT.hayPermisosSeleccionados}>
                       Agregar Permiso
                   </Button>
                   </ExpansionPanelActions>

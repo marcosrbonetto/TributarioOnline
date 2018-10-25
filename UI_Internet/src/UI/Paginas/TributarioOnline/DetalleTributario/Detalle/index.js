@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 //Alert
 import { mostrarAlerta } from "@Utils/functions";
@@ -36,7 +37,6 @@ import MiTabla from "@Componentes/MiTabla";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiControledDialog from "@Componentes/MiControledDialog"
 import MiCedulon from "@Componentes/MiCedulon";
-import MiControledPopover from "@Componentes/MiControledPopover";
 
 //Imagenes
 import cedulonFoto from './img/cedulon.png';
@@ -55,11 +55,8 @@ import {
     getInfoPlanesPago,
     getInfoUltimosPagos
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
-import { getMisRepresentados } from "@ReduxSrc/Representantes/actions";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
-import servicesRepresentantes from '@Rules/Rules_Representantes';
-
 
 //Funciones Útiles
 import { stringToFloat, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
@@ -105,9 +102,6 @@ const mapDispatchToProps = dispatch => ({
     },
     redireccionar: url => {
         dispatch(replace(url));
-    },
-    setPropsMisRepresentados: (datos) => {
-        dispatch(getMisRepresentados(datos));
     }
 });
 
@@ -209,30 +203,16 @@ class DetalleTributo extends React.PureComponent {
             .then((datos) => {
                 if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); return false; }
 
-                this.props.setPropsIdTributos(datos);
+                if(_.filter(datos.return, {identificador: identificador}).length == 0)
+                    this.props.redireccionar('/Inicio');
+                else {
+                    this.props.setPropsIdTributos(datos);
+                    this.iniciarServicios(token, tributo, identificador);
+                }
+                
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
-
-        //Traemos los representados para mostrar las patentes en las que puedo ingresar
-        //Esto se cambiará luego haciendo que el servicio que trae las patentes (por ej.)
-        //Traiga las mias y las que represento y evitar todo esto
-        const service7 = servicesRepresentantes.getMisRepresentados(token)
-            .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Tributos Representados: ' + datos.error); return false; }
-                this.props.setPropsMisRepresentados(datos);
-            }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-            });
-
-        Promise.all([service, service7]).then(() => {
-            const tributos = this.setDatosTributos();
-            //Redireccionamos si no hay concidencia del identificador seleccionado con los que tengo acceso
-            if (tributos.filter((tributo) => { return tributo.identificador == identificador }).length == 0)
-                this.props.redireccionar('/Inicio');
-            else
-                this.iniciarServicios(token, tributo, identificador);
-        });
     }
 
     iniciarServicios = (token, tributo, identificador) => {
@@ -294,6 +274,12 @@ class DetalleTributo extends React.PureComponent {
 
     componentWillReceiveProps(nextProps) {
         //Al setearse las props de redux llevamos a cabo estas acciones
+
+        if (JSON.stringify(this.props.idsTributos) != JSON.stringify(nextProps.idsTributos)) {
+            this.setState({
+                identificadores: nextProps.idsTributos
+            });
+        }
 
         //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
         if (JSON.stringify(this.props.infoContribucion) != JSON.stringify(nextProps.infoContribucion)) {
@@ -430,33 +416,6 @@ class DetalleTributo extends React.PureComponent {
 
         this.setState({ [menuItemSeleccionado]: itemSeleccionado });
     };
-
-    //Como el WS no trae los tributos que represento, lo tengo que traer y agregarlos
-    //En un futuro hay que cambiarlo
-    setDatosTributos = () => {
-        if (!this.props.idsTributos) return false;
-
-        const tributo = this.props.match.params.tributo.toLowerCase();
-        let arrayData = this.props.idsTributos[tributo] ? [...this.props.idsTributos[tributo]] : [];
-
-        if (this.props.datosMisRepresentados) {
-            //LLamar a this.props.datosMisRepresentados;
-            //Agregmos los tributos de nuestros representados
-            this.props.datosMisRepresentados.map((representado) => {
-                if (representado.data.aceptado)
-                    arrayData.push({
-                        representado: representado.usuario,
-                        identificador: representado.data.identificador
-                    });
-            });
-        }
-
-        this.setState({
-            identificadores: arrayData
-        });
-
-        return arrayData;
-    }
 
     //Abrimos modal informe de cuentas trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {

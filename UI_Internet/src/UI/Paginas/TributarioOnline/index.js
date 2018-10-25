@@ -17,9 +17,7 @@ import { push } from "connected-react-router";
 import TributarioAccess from '@Componentes/TributarioAccess';
 
 import { getIdTributos } from "@ReduxSrc/TributarioOnline/actions";
-import { getMisRepresentados } from "@ReduxSrc/Representantes/actions";
 
-import servicesRepresentantes from '@Rules/Rules_Representantes';
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline.js';
 
 //Alerta
@@ -29,7 +27,6 @@ const mapStateToProps = state => {
   return {
     loggedUser: state.MainContent.loggedUser,
     idsTributos: state.TributarioOnline.idsTributos,
-    datosRepresentados: state.Representantes.datosMisRepresentados,
   };
 };
 
@@ -46,9 +43,6 @@ const mapDispatchToProps = dispatch => {
     },
     setLoggedUser: (data) => {
       dispatch(loginUser(data));
-    },
-    setPropsMisRepresentados: (datos) => {
-      dispatch(getMisRepresentados(datos));
     }
   };
 };
@@ -66,72 +60,25 @@ class TributarioOnline extends React.PureComponent {
     this.props.mostrarCargando(true);
 
     const token = this.props.loggedUser.token;
-
+    
     const service1 = servicesTributarioOnline.getIdTributos(token)
       .then((datos) => {
         if (!datos.ok) { mostrarAlerta('Tributos: '+datos.error); this.props.mostrarCargando(false); return false; }
+
         this.props.setPropsIdTributos(datos);
+
+        this.props.mostrarCargando(false);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
       });
-
-    const service2 = servicesRepresentantes.getMisRepresentados(token)
-      .then((datos) => {
-        if (!datos.ok) { mostrarAlerta('Tributos Representados: '+datos.error); this.props.mostrarCargando(false); return false; }
-        this.props.setPropsMisRepresentados(datos);
-      }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-      });
-
-    Promise.all([service1, service2]).then(() => {
-      this.setDatosTributos();
-      this.props.mostrarCargando(false);
-    });
   }
 
-  setDatosTributos = () => {
-    if (!this.props.idsTributos) return false;
-
-    //Traemos los representados para mostrar las patentes en las que puedo ingresar
-    //Esto se cambiará luego haciendo que el servicio que trae las patentes (por ej.)
-    //Traiga las mias y las que represento y evitar todo esto
-    let arrayData = { ...this.props.idsTributos };
-
-    //Agregmos los tributos de nuestros representados
-    if (this.props.datosRepresentados) {
-      
-      this.props.datosRepresentados.map((representado) => {
-
-        switch (representado.data.tipoTributo) {
-          case 1:
-            if (representado.data.aceptado)
-              arrayData.automotores.push({
-                representado: representado.usuario,
-                identificador: representado.data.identificador
-              });
-            break;
-          case 2:
-            if (representado.data.aceptado)
-              arrayData.inmuebles.push({
-                representado: representado.usuario,
-                identificador: representado.data.identificador
-              });
-            break;
-          case 3:
-            if (representado.data.aceptado)
-              arrayData.comercios.push({
-                representado: representado.usuario,
-                identificador: representado.data.identificador
-              });
-            break;
-        }
-
-      });
+  componentWillReceiveProps(nextProps) {
+    if (JSON.stringify(this.props.idsTributos) != JSON.stringify(nextProps.idsTributos)) {
+        this.setState({
+          idsTributos: nextProps.idsTributos
+        });
     }
-
-    this.setState({
-      idsTributos: arrayData
-    });
   }
 
   eventRedirect = (tipoTributo, identificador) => {

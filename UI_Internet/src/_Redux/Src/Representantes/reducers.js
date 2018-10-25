@@ -7,7 +7,7 @@ import {
     CAMBIAR_ESTADO_PERMISO,
     AGREGAR_REPRESENTADO_GRILLA
 } from "@ReduxSrc/Representantes/constants";
-import { debug } from "util";
+import _ from "lodash";
 
 const initialState = {
     GET_TRIBUTOS_CUIT: []
@@ -18,39 +18,49 @@ const reducer = (state = initialState, action) => {
         case GET_TRIBUTOS_CUIT: {
 
             var datos = {};
-            datos.representado = action.payload.return.titular.titular;
-            datos.cuitRepresentado = action.payload.return.titular.cuit;
-            datos.tributos = {};
 
-            action.payload.return.automotores.length > 0 && Object.keys(action.payload.return.automotores).map((tributo) => {
-                datos.tributos['automotores'] = {
-                    label: 'Automotores',
-                    tipo: 'automotores',
-                    cantPermisos: 0,
-                    tipoTributo: 1,
-                    opciones: action.payload.return.automotores
-                };
-            });
+            if(Array.isArray(action.payload.return) && action.payload.return.length > 0) {
+                datos.representado = action.payload.return[0].titular.titular;
+                datos.cuitRepresentado = action.payload.return[0].titular.cuit;
+                datos.tributos = {};
 
-            action.payload.return.inmuebles.length > 0 && Object.keys(action.payload.return.inmuebles).map((tributo) => {
-                datos.tributos['inmuebles'] = {
-                    label: 'Inmuebles',
-                    tipo: 'inmuebles',
-                    cantPermisos: 0,
-                    tipoTributo: 2,
-                    opciones: action.payload.return.inmuebles
-                };
-            });
+                var arrayAutomotores = _.filter(action.payload.return, {tipoTributo: 1});
+                var arrayInmuebles = _.filter(action.payload.return, {tipoTributo: 2});
+                var arrayComercios = _.filter(action.payload.return, {tipoTributo: 3});
 
-            action.payload.return.comercios.length > 0 && Object.keys(action.payload.return.comercios).map((tributo) => {
-                datos.tributos['comercios'] = {
-                    label: 'Comercios',
-                    tipo: 'comercios',
-                    cantPermisos: 0,
-                    tipoTributo: 3,
-                    opciones: action.payload.return.comercios
-                };
-            });
+                arrayAutomotores.length > 0 && Object.keys(arrayAutomotores).map((tributo) => {
+                    datos.tributos['automotores'] = {
+                        label: 'Automotores',
+                        tipo: 'automotores',
+                        cantPermisos: 0,
+                        tributosSelec: [],
+                        tipoTributo: 1,
+                        opciones: arrayAutomotores
+                    };
+                });
+
+                arrayInmuebles.length > 0 && Object.keys(arrayInmuebles).map((tributo) => {
+                    datos.tributos['inmuebles'] = {
+                        label: 'Inmuebles',
+                        tipo: 'inmuebles',
+                        cantPermisos: 0,
+                        tributosSelec: [],
+                        tipoTributo: 2,
+                        opciones: arrayInmuebles
+                    };
+                });
+
+                arrayComercios.length > 0 && Object.keys(arrayComercios).map((tributo) => {
+                    datos.tributos['comercios'] = {
+                        label: 'Comercios',
+                        tipo: 'comercios',
+                        cantPermisos: 0,
+                        tributosSelec: [],
+                        tipoTributo: 3,
+                        opciones: arrayComercios
+                    };
+                });
+            }
 
             return Object.assign({ ...state }, state.datosEnvioSolicitudPermisos, {
                 datosEnvioSolicitudPermisos: datos

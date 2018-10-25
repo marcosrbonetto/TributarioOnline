@@ -30,7 +30,7 @@ const getDatosUsuario = (token, callback) => {
 const getTributosByCUIT = (token, identificador) => {
   return new Promise((resolve, reject) => {
 
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos?cuil='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/SusTributos?cuil='+identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -58,7 +58,7 @@ const getTributosByCUIT = (token, identificador) => {
 const getIdTributos = (token, callback) => {
   return new Promise((resolve, reject) => {
 
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/MisTributos', {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos', {
       method: "GET",
       headers: {
         Accept: "application/json",

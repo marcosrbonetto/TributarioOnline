@@ -1,7 +1,7 @@
 const agregarSolicitudPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representante/Agregar', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Agregar', {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -33,7 +33,7 @@ const agregarSolicitudPermiso = (token, body) => {
 const cancelarPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representante/Cancelar', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Cancelar', {
             method: "DELETE",
             headers: {
                 Accept: "application/json",
@@ -66,7 +66,7 @@ const cancelarPermiso = (token, body) => {
 const aceptarPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representante/Aceptar', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Aceptar', {
             method: "PUT",
             headers: {
                 Accept: "application/json",
@@ -99,7 +99,7 @@ const aceptarPermiso = (token, body) => {
 const getMisRepresentantes = (token, identificador) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representante/MisRepresentantes', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/MisRepresentantes', {
             method: "GET",
             headers: {
                 Accept: "application/json",
@@ -127,7 +127,7 @@ const getMisRepresentantes = (token, identificador) => {
 const getMisRepresentados = (token, identificador) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representante/MisRepresentantados', {
+        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/MisRepresentantados', {
             method: "GET",
             headers: {
                 Accept: "application/json",
