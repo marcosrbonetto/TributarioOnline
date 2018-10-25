@@ -199,20 +199,28 @@ class DetalleTributo extends React.PureComponent {
         const identificador = this.props.match.params.identificador;
 
         //Traemos los tributos asociados al Token
-        const service = servicesTributarioOnline.getIdTributos(token)
-            .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); return false; }
+        if (!this.props.idsTributos) {
+            const service = servicesTributarioOnline.getIdTributos(token)
+                .then((datos) => {
+                    if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); return false; }
 
-                if(_.filter(datos.return, {identificador: identificador}).length == 0)
-                    this.props.redireccionar('/Inicio');
-                else {
-                    this.props.setPropsIdTributos(datos);
-                    this.iniciarServicios(token, tributo, identificador);
-                }
-                
-            }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    if (_.filter(datos.return, { identificador: identificador }).length == 0)
+                        this.props.redireccionar('/Inicio');
+                    else {
+                        this.props.setPropsIdTributos(datos);
+                        this.iniciarServicios(token, tributo, identificador);
+                    }
+
+                }).catch(err => {
+                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                });
+        } else {
+            this.setState({
+                identificadores: this.props.idsTributos[this.props.match.params.tributo.toLowerCase()]
             });
+
+            this.iniciarServicios(token, tributo, identificador);
+        }
     }
 
     iniciarServicios = (token, tributo, identificador) => {
@@ -541,7 +549,7 @@ class DetalleTributo extends React.PureComponent {
         const infoPlanesPago = this.props.infoPlanesPago ? this.props.infoPlanesPago.lista : [];
 
         return (
-            <div className={classNames(classes.mainContainer,"contentDetalleTributo")}>
+            <div className={classNames(classes.mainContainer, "contentDetalleTributo")}>
                 <Grid container className={classes.root} spacing={16}>
                     <Grid item xs={8} className={"container"}>
                         <MiCard>

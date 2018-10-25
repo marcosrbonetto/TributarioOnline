@@ -1,9 +1,7 @@
 import { GET_ID_TRIBUTOS } from "@ReduxSrc/TributarioOnline/constants";
 import _ from "lodash";
 
-const initialState = {
-    idsTributos: []
-};
+const initialState = {};
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {

@@ -38,6 +38,16 @@ class TributarioAccess extends React.PureComponent {
         }
     }
 
+    componentDidMount() {
+        const propsTributo = (this.props.opciones && this.props.opciones[this.props.id]) ? this.props.opciones[this.props.id] : null;
+        if(propsTributo){
+            this.setState({
+                opcionSeleccionada: propsTributo.length > 0 ? propsTributo[0].identificador : null,
+                opcionesTributos: propsTributo
+            });
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         const nextPropsTributo = (nextProps.opciones && nextProps.opciones[this.props.id]) ? nextProps.opciones[this.props.id] : null;
         const propsTributo = (this.props.opciones && this.props.opciones[this.props.id]) ? this.props.opciones[this.props.id] : null;

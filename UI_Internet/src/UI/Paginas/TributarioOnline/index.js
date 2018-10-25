@@ -60,17 +60,24 @@ class TributarioOnline extends React.PureComponent {
     this.props.mostrarCargando(true);
 
     const token = this.props.loggedUser.token;
-    
-    const service1 = servicesTributarioOnline.getIdTributos(token)
-      .then((datos) => {
-        if (!datos.ok) { mostrarAlerta('Tributos: '+datos.error); this.props.mostrarCargando(false); return false; }
 
-        this.props.setPropsIdTributos(datos);
+    if(!this.props.idsTributos) {
+      servicesTributarioOnline.getIdTributos(token)
+        .then((datos) => {
+          if (!datos.ok) { mostrarAlerta('Tributos: '+datos.error); this.props.mostrarCargando(false); return false; }
 
+          this.props.setPropsIdTributos(datos);
+
+          this.props.mostrarCargando(false);
+        }).catch(err => {
+          console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        });
+      } else {
+        this.setState({
+          idsTributos: this.props.idsTributos
+        });
         this.props.mostrarCargando(false);
-      }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-      });
+      }
   }
 
   componentWillReceiveProps(nextProps) {
