@@ -1,24 +1,24 @@
-.contentDetalleTributo .otrasOperaciones {
+.contentRepresentantes .busquedaCUIT {
     margin-top: 20px;
 }
 
-@media only screen and (max-width: 1135px) {
-    .contentDetalleTributo .container {
+@media only screen and (max-width: 1030px) {
+    .contentRepresentantes .container {
         min-width: 100%;
     }
-    .contentDetalleTributo .leftBox {
+    .contentRepresentantes .leftBox {
         width: 49%;
         margin-right: 1%;
         display: inline-block;
         vertical-align: top;
     }
-    .contentDetalleTributo .rightBox{
+    .contentRepresentantes .rightBox {
         width: 49%;
         margin-left: 1%;
         display: inline-block;
         vertical-align: top;
     }
-    .contentDetalleTributo .otrasOperaciones {
-        margin-top: 0px;
+    .contentRepresentantes .busquedaCUIT {
+        margin-top: 0px !important;
     }
 } 

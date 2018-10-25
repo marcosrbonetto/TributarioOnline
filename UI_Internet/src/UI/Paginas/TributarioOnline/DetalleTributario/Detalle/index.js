@@ -582,7 +582,7 @@ class DetalleTributo extends React.PureComponent {
         const infoPlanesPago = this.props.infoPlanesPago ? this.props.infoPlanesPago.lista : [];
 
         return (
-            <div className={classes.mainContainer}>
+            <div className={classNames(classes.mainContainer,"contentDetalleTributo")}>
                 <Grid container className={classes.root} spacing={16}>
                     <Grid item xs={8} className={"container"}>
                         <MiCard>

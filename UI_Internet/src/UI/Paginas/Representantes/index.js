@@ -8,7 +8,9 @@ import { mostrarAlerta } from "@Utils/functions";
 //Styles
 import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
+import './styles.css';
 import { connect } from "react-redux";
+import classNames from "classnames";
 
 //Redux
 import { mostrarCargando } from '@Redux/Actions/mainContent'
@@ -538,9 +540,9 @@ class Representantes extends React.PureComponent {
     const { classes } = this.props;
 
     return (
-      <div className={classes.mainContainer}>
+      <div className={classNames(classes.mainContainer, "contentRepresentantes")}>
         <Grid container className={classes.root} spacing={16}>
-          <Grid item xs={8}>
+          <Grid item xs={8} className="container">
             {/* Tabla Mis Representantes */}
             <MiCard>
               <Typography className={classes.title} variant="title">Mis Representantes</Typography>
@@ -581,7 +583,7 @@ class Representantes extends React.PureComponent {
             </MiCard>
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item xs={4} className="container">
             {/* SE COMENTA LA ACEPTACIÖN DE SOLICITUDES DE PERMISOS PARA MAS ADELANTE */}
             {/*<MiCard>
               <Typography className={classes.title} variant="title">Solicitudes de representantes</Typography>
@@ -624,7 +626,7 @@ class Representantes extends React.PureComponent {
               </MiCard>*/}
 
             {/* Busqueda por Tributo */}
-            <MiCard>
+            <MiCard rootClassName={"leftBox"}>
               <Typography className={classes.title} variant="title">Agregar solicitud por Tributo</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.infoTexto}>
@@ -712,9 +714,9 @@ class Representantes extends React.PureComponent {
               </div>}
 
             </MiCard>
-            <br />
+
             {/* Busqueda por CUIT */}
-            <MiCard>
+            <MiCard rootClassName={"busquedaCUIT rightBox"}>
               <Typography className={classes.title} variant="title">Agregar solicitud por CUIT</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.infoTexto}>
