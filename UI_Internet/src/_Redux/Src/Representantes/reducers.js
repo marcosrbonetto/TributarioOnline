@@ -94,7 +94,7 @@ const reducer = (state = initialState, action) => {
             var datos = action.payload.return.map((repr) => {
                 const nombreTributo = repr.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                 return {
-                    usuario: repr.cuilRepresentante,
+                    usuario: repr.representante,
                     tributo: repr.identificador + ' - ' + nombreTributo,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
                     eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica
@@ -115,7 +115,7 @@ const reducer = (state = initialState, action) => {
             var datos = action.payload.return.map((repr) => {
                 const nombreTributo = repr.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                 return {
-                    usuario: repr.cuilRepresentado,
+                    usuario: repr.representado,
                     tributo: repr.identificador + ' - ' + nombreTributo,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
                     eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica

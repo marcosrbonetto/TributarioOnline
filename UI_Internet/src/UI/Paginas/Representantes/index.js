@@ -306,7 +306,7 @@ class Representantes extends React.PureComponent {
             }, (datos) => {
 
               this.props.setPropsAgregarRegistroGrilla({
-                cuilRepresentado: datos.return.cuilRepresentado,
+                cuilRepresentado: datos.return.representado,
                 identificador: datos.return.identificador,
                 aceptado: datos.return.aceptado,
                 tipoTributo: datos.return.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())
@@ -531,7 +531,7 @@ class Representantes extends React.PureComponent {
     }, (datos) => {
       
       this.props.setPropsAgregarRegistroGrilla({
-        cuilRepresentado: datos.return.cuilRepresentado,
+        cuilRepresentado: datos.return.representado,
         identificador: datos.return.identificador,
         aceptado: datos.return.aceptado,
         tipoTributo: datos.return.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())
