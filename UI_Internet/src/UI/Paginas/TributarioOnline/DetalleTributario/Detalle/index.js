@@ -277,7 +277,7 @@ class DetalleTributo extends React.PureComponent {
 
         if (JSON.stringify(this.props.idsTributos) != JSON.stringify(nextProps.idsTributos)) {
             this.setState({
-                identificadores: nextProps.idsTributos
+                identificadores: nextProps.idsTributos[this.props.match.params.tributo.toLowerCase()]
             });
         }
 
