@@ -6,7 +6,9 @@ import {
     GET_INFO_PLANES_PAGO,
     GET_INFO_ULTIMOS_PAGOS,
     GET_INFORME_ANTECEDENTES,
-    GET_INFORME_REMAT
+    GET_INFORME_REMAT,
+    GET_INFORME_CUENTA,
+    GET_REPORTE_INFORME_CUENTA
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
@@ -246,6 +248,16 @@ const reducer = (state = initialState, action) => {
 
             return Object.assign({...state}, state.infoInformeREMAT, {
                 infoInformeREMAT: rowList
+            });
+        }
+        case GET_INFORME_CUENTA: {
+            return Object.assign({ ...state }, state.infoInformeCuenta, {
+                infoInformeCuenta: action.payload.return
+            });
+        }
+        case GET_REPORTE_INFORME_CUENTA: {
+            return Object.assign({ ...state }, state.infoReporteInformeCuenta, {
+                infoReporteInformeCuenta: action.payload.return
             });
         }
         default:

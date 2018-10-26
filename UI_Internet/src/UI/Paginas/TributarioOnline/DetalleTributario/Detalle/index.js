@@ -55,7 +55,9 @@ import {
     getInfoPlanesPago,
     getInfoUltimosPagos,
     getInfoInformeAntecedentes,
-    getInfoInformeREMAT
+    getInfoInformeREMAT,
+    getInfoInformeCuenta,
+    getInfoReporteInformeCuenta
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
@@ -75,6 +77,8 @@ const mapStateToProps = state => {
         infoUltimosPagos: state.DetalleTributario.infoUltimosPagos,
         infoInformeAntecedentes: state.DetalleTributario.infoInformeAntecedentes,
         infoInformeREMAT: state.DetalleTributario.infoInformeREMAT,
+        infoInformeCuenta: state.DetalleTributario.infoInformeCuenta,
+        infoReporteInformeCuenta: state.DetalleTributario.infoReporteInformeCuenta,
         datosMisRepresentados: state.Representantes.datosMisRepresentados
     };
 };
@@ -109,6 +113,12 @@ const mapDispatchToProps = dispatch => ({
     },
     setPropsInfoInformeREMAT: (datos) => {
         dispatch(getInfoInformeREMAT(datos));
+    },
+    setPropsInfoInformeCuenta: (datos) => {
+        dispatch(getInfoInformeCuenta(datos));
+    },
+    setPropsInfoReporteInformeCuenta: (datos) => {
+        dispatch(getInfoReporteInformeCuenta(datos));
     },
     redireccionar: url => {
         dispatch(replace(url));
@@ -299,6 +309,26 @@ class DetalleTributo extends React.PureComponent {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
+        const service9 = servicesTributarioOnline.getInformeCuenta(token, {
+            tipoTributo: tributo,
+            identificador: identificador
+        }).then((datos) => {
+            if (!datos.ok) { mostrarAlerta('Informe de Cuenta: ' + datos.error); return false; }
+            this.props.setPropsInfoInformeCuenta(datos);
+        }).catch(err => {
+            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        });
+
+        const service10 = servicesTributarioOnline.getReporteInformeCuenta(token, {
+            tipoTributo: tributo,
+            identificador: identificador
+        }).then((datos) => {
+            if (!datos.ok) { mostrarAlerta('Reporte Informe de Cuenta: ' + datos.error); return false; }
+            this.props.setPropsInfoReporteInformeCuenta(datos);
+        }).catch(err => {
+            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        });
+
         Promise.all([service1,
             service2,
             service3,
@@ -306,7 +336,9 @@ class DetalleTributo extends React.PureComponent {
             service5,
             service6,
             service7,
-            service8]).then(() => {
+            service8,
+            service9,
+            service10]).then(() => {
                 this.props.mostrarCargando(false);
             });
     }
@@ -318,7 +350,7 @@ class DetalleTributo extends React.PureComponent {
             this.setState({
                 identificadores: nextProps.idsTributos[this.props.match.params.tributo.toLowerCase()]
             });
-        } else if(this.props.idsTributos) {
+        } else if (this.props.idsTributos) {
             //Si ya se encuentran cargados los registros en esta página o en otra
             this.setState({
                 identificadores: this.props.idsTributos[this.props.match.params.tributo.toLowerCase()]
@@ -353,7 +385,39 @@ class DetalleTributo extends React.PureComponent {
             this.setState({ planesPago });
         }
 
+        //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
+        if (JSON.stringify(this.props.infoInformeCuenta) != JSON.stringify(nextProps.infoInformeCuenta)) {
+            
+            this.setState({
+                informeCuenta: {
+                    ...this.state.informeCuenta,
+                    deudaTotal: nextProps.infoInformeCuenta.total,
+                    deudaVencida: {
+                        total: nextProps.infoInformeCuenta.totalVencida,
+                        administrativa: nextProps.infoInformeCuenta.administrativaVencida
+                    },
+                    deudaAVencer: {
+                        total: nextProps.infoInformeCuenta.totalAVencer,
+                        administrativa: nextProps.infoInformeCuenta.administrativaAVencer
+                    },
+                    modal: {
+                        ...this.state.informeCuenta.modal,
+                        open: false
+                    }
+                }
+            });
+        }
 
+        //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
+        if (JSON.stringify(this.props.infoReporteInformeCuenta) != JSON.stringify(nextProps.infoReporteInformeCuenta)) {
+            
+            this.setState({
+                informeCuenta: {
+                    ...this.state.informeCuenta,
+                    reporteBase64: nextProps.infoReporteInformeCuenta
+                }
+            });
+        }
     }
 
     //Cada vez que se cambia de sección se checkean y actualizan datos
@@ -463,64 +527,14 @@ class DetalleTributo extends React.PureComponent {
 
     //Abrimos modal informe de cuentas trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {
-        this.props.mostrarCargando(true);
-
-        const token = this.props.loggedUser.token;
-        const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.props.match.params.identificador;
-
-        let dataSercicio1;
-        let dataSercicio2;
-
-        const servicio1 = servicesTributarioOnline.getInformeCuenta(token, {
-            tipoTributo: tributo,
-            identificador: identificador
-        }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta('Informe de Cuenta: ' + datos.error); return false; }
-
-            dataSercicio1 = datos;
-
-        }).catch(err => {
-            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-        });
-
-        const servicio2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
-            tipoTributo: tributo,
-            identificador: identificador
-        }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta('Reporte Informe de Cuenta: ' + datos.error); return false; }
-
-            dataSercicio2 = datos;
-
-        }).catch(err => {
-            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-        });
-
-        Promise.all([servicio1, servicio2]).then(() => {
-            if (!dataSercicio1 || !dataSercicio2) return false;
-
-            this.setState({
-                informeCuenta: {
-                    deudaTotal: dataSercicio1.return.total,
-                    deudaVencida: {
-                        total: dataSercicio1.return.totalVencida,
-                        administrativa: dataSercicio1.return.administrativaVencida
-                    },
-                    deudaAVencer: {
-                        total: dataSercicio1.return.totalAVencer,
-                        administrativa: dataSercicio1.return.administrativaAVencer
-                    },
-                    modal: {
-                        ...this.state.informeCuenta.modal,
-                        open: true
-                    },
-                    reporteBase64: dataSercicio2.return
+        this.setState({
+            informeCuenta: {
+                ...this.state.informeCuenta,
+                modal: {
+                    ...this.state.informeCuenta.modal,
+                    open: true
                 }
-            });
-
-            this.props.mostrarCargando(false);
-        }).catch(err => {
-            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            }
         });
     }
 
@@ -528,20 +542,11 @@ class DetalleTributo extends React.PureComponent {
     onInformeCuentaDialogoClose = () => {
         this.setState({
             informeCuenta: {
-                deudaTotal: 0,
-                deudaVencida: {
-                    total: 0,
-                    administrativa: 0
-                },
-                deudaAVencer: {
-                    total: 0,
-                    administrativa: 0
-                },
+                ...this.state.informeCuenta,
                 modal: {
                     open: false,
                     showReporte: false
-                },
-                reporteBase64: ''
+                }
             }
         });
     }

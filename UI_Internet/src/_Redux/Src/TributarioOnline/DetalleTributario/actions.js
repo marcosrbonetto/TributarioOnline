@@ -7,6 +7,8 @@ import {
     GET_INFO_ULTIMOS_PAGOS,
     GET_INFORME_ANTECEDENTES,
     GET_INFORME_REMAT,
+    GET_INFORME_CUENTA,
+    GET_REPORTE_INFORME_CUENTA
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 
 export const getInfoContribucion = datos => ({ 
@@ -40,11 +42,22 @@ export const getInfoUltimosPagos = datos => ({
 });
 
 export const getInfoInformeAntecedentes = datos => ({ 
-    type: GET_INFO_ULTIMOS_PAGOS,
+    type: GET_INFORME_ANTECEDENTES,
     payload: datos
 });
 
 export const getInfoInformeREMAT = datos => ({ 
-    type: GET_INFO_ULTIMOS_PAGOS,
+    type: GET_INFORME_REMAT,
     payload: datos
 });
+
+export const getInfoInformeCuenta = datos => ({ 
+    type: GET_INFORME_CUENTA,
+    payload: datos
+});
+
+export const getInfoReporteInformeCuenta = datos => ({ 
+    type: GET_REPORTE_INFORME_CUENTA,
+    payload: datos
+});
+
