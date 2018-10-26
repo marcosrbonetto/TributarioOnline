@@ -4,7 +4,9 @@ import {
     GET_INFO_JUICIOS_CONTR,
     GET_INFO_JUICIOS_MULTAS,
     GET_INFO_PLANES_PAGO,
-    GET_INFO_ULTIMOS_PAGOS
+    GET_INFO_ULTIMOS_PAGOS,
+    GET_INFORME_ANTECEDENTES,
+    GET_INFORME_REMAT
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
@@ -25,9 +27,10 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_INFO_CONTRIBUCION: {
 
+            let data = action.payload.return;
             //Corroboramos que existan registros
-            if(action.payload.return && action.payload.return.periodos.length > 0) {
-                action.payload.return['rowList'] =  action.payload.return.periodos.map((concepto) => {
+            if(data && data.periodos.length > 0) {
+                data['rowList'] =  data.periodos.map((concepto) => {
                     
                     return {
                         concepto: concepto.concepto,
@@ -43,20 +46,22 @@ const reducer = (state = initialState, action) => {
                     }
                 });
             } else {
-                action.payload.return = {
+                data = {
+                    ...data,
                     rowList: []
                 }
             }
 
             return Object.assign({...state}, state.infoContribucion, {
-                infoContribucion: action.payload.return
+                infoContribucion: data
             });
         }
         case GET_INFO_MULTAS: {
 
+            let data = action.payload.return;
             //Corroboramos que existan registros
-            if(action.payload.return && action.payload.return.periodos.length > 0) {
-                action.payload.return['rowList'] =  action.payload.return.periodos.map((concepto) => {
+            if(data && data.periodos.length > 0) {
+                data['rowList'] =  data.periodos.map((concepto) => {
                     
                     return {
                         concepto: concepto.concepto,
@@ -66,19 +71,21 @@ const reducer = (state = initialState, action) => {
                     }
                 });
             } else {
-                action.payload.return = {
+                data = {
+                    ...data,
                     rowList: []
                 }
             }
 
             return Object.assign({...state}, state.infoMultas, {
-                infoMultas: action.payload.return
+                infoMultas: data
             });
         }
         case GET_INFO_JUICIOS_CONTR: {
 
-            if(action.payload.return && action.payload.return.length > 0) {    
-                action.payload.return['lista'] =  action.payload.return.map((juicio) => {
+            let data = action.payload.return;
+            if(data && data.length > 0) {    
+                data['lista'] =  data.map((juicio) => {
 
                     let rowList = juicio.periodos && juicio.periodos.map((concepto) => {
                     
@@ -97,19 +104,21 @@ const reducer = (state = initialState, action) => {
                     } 
                 });
                 } else {
-                    action.payload.return = {
+                    data = {
+                        ...data,
                         lista: []
                     }
             }
 
             return Object.assign({...state}, state.infoJuiciosContribucion, {
-                infoJuiciosContribucion: action.payload.return
+                infoJuiciosContribucion: data
             });
         }
         case GET_INFO_JUICIOS_MULTAS: {
 
-            if(action.payload.return && action.payload.return.length > 0) {    
-                action.payload.return['lista'] =  action.payload.return.map((juicio) => {
+            let data = action.payload.return;
+            if(data && data.length > 0) {    
+                data['lista'] =  data.map((juicio) => {
 
                     let rowList = juicio.periodos && juicio.periodos.map((concepto) => {
                     
@@ -128,19 +137,21 @@ const reducer = (state = initialState, action) => {
                     } 
                 });
                 } else {
-                    action.payload.return = {
+                    data = {
+                        ...data,
                         lista: []
                     }
             }
 
             return Object.assign({...state}, state.infoJuiciosMulta, {
-                infoJuiciosMulta: action.payload.return
+                infoJuiciosMulta: data
             });
         }
         case GET_INFO_PLANES_PAGO: {
 
-            if(action.payload.return && action.payload.return.length > 0) {    
-                action.payload.return['lista'] =  action.payload.return.map((plan) => {
+            let data = action.payload.return;
+            if(data && data.length > 0) {    
+                data['lista'] =  data.map((plan) => {
 
                     let rowList = plan.periodos.map((concepto) => {
                     
@@ -159,13 +170,14 @@ const reducer = (state = initialState, action) => {
                     } 
                 });
                 } else {
-                    action.payload.return = {
+                    data = {
+                        ...data,
                         lista: []
                     }
             }
 
             return Object.assign({...state}, state.infoPlanesPago, {
-                infoPlanesPago: action.payload.return
+                infoPlanesPago: data
             });
         }
         case GET_INFO_ULTIMOS_PAGOS: {
@@ -191,6 +203,49 @@ const reducer = (state = initialState, action) => {
 
             return Object.assign({...state}, state.infoUltimosPagos, {
                 infoUltimosPagos: rowList
+            });
+        }
+        case GET_INFORME_ANTECEDENTES: {
+
+            let rowList = (action.payload.return && action.payload.return.map((row) => {
+                    
+                return {
+                    causa: row.causa,
+                    fecha: dateToString(new Date(row.fecha),'DD/MM/YYYY'),
+                    infraccion: row.infraccion,
+                    detalle: <MiControledPopover textoLink="Detalle">
+                                    <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
+                                    <Typography>Fallo: <b>$ {row.fallo}</b></Typography>
+                                    <Typography>Cad.: <b>$ {row.caducidad}</b></Typography>
+                                    <Typography>Acumulada: <b>$ {row.acumulada}</b></Typography>
+                                </MiControledPopover>,
+                    data: row //atributo "data" no se muestra en MiTabla
+                }
+            })) || [];
+
+            return Object.assign({...state}, state.infoInformeAntecedentes, {
+                infoInformeAntecedentes: rowList
+            });
+        }
+        case GET_INFORME_REMAT: {
+
+            let rowList = (action.payload.return && action.payload.return.map((row) => {
+                    
+                return {
+                    causa: row.causa,
+                    fecha: dateToString(new Date(row.fecha),'DD/MM/YYYY'),
+                    infraccion: row.infraccion,
+                    detalle: <MiControledPopover textoLink="Detalle">
+                                    <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
+                                    <Typography>Fallo: <b>$ {row.fallo}</b></Typography>
+                                    <Typography>Acumulada: <b>$ {row.acumulada}</b></Typography>
+                                </MiControledPopover>,
+                    data: row //atributo "data" no se muestra en MiTabla
+                }
+            })) || [];
+
+            return Object.assign({...state}, state.infoInformeREMAT, {
+                infoInformeREMAT: rowList
             });
         }
         default:

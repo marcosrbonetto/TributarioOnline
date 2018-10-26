@@ -234,10 +234,10 @@ const styles = theme => ({
       position: 'relative',
       transform: 'translateX(-50%)',
     },
-    tablaUltimosPagos: {
+    miTabla: {
       marginTop: '0px'
     },
-    dialogUltimosPagos: {
+    miLinkDialog: {
       minWidth: '700px'
     }
   });
