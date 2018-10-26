@@ -342,20 +342,15 @@ const getUltimosPagos = (token, param) => {
   });
 };
 
-const getInformeAntecedentes = (token, body) => {
-
+const getInformeAntecedentes = (token, param) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeCuenta', {
-      method: "POST",
+    fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeAntecedente?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "Token": token
-      },
-      body: JSON.stringify({
-        "tipoTributo": body.tipoTributo,
-        "identificador": body.identificador
-      })
+      }
     })
     .then(res => {
 
@@ -374,20 +369,15 @@ const getInformeAntecedentes = (token, body) => {
   });
 };
 
-const getInformeREMAT = (token, body) => {
-
+const getInformeREMAT = (token, param) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeCuenta', {
-      method: "POST",
+    fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeRemat?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+      method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "Token": token
-      },
-      body: JSON.stringify({
-        "tipoTributo": body.tipoTributo,
-        "identificador": body.identificador
-      })
+      }
     })
     .then(res => {
 
