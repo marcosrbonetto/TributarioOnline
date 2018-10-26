@@ -61,30 +61,30 @@ class TributarioOnline extends React.PureComponent {
 
     const token = this.props.loggedUser.token;
 
-    if(!this.props.idsTributos) {
-      servicesTributarioOnline.getIdTributos(token)
-        .then((datos) => {
-          if (!datos.ok) { mostrarAlerta('Tributos: '+datos.error); this.props.mostrarCargando(false); return false; }
 
-          this.props.setPropsIdTributos(datos);
+    servicesTributarioOnline.getIdTributos(token)
+      .then((datos) => {
+        if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); this.props.mostrarCargando(false); return false; }
 
-          this.props.mostrarCargando(false);
-        }).catch(err => {
-          console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-        });
-      } else {
-        this.setState({
-          idsTributos: this.props.idsTributos
-        });
+        this.props.setPropsIdTributos(datos);
+
         this.props.mostrarCargando(false);
-      }
+      }).catch(err => {
+        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+      });
   }
 
   componentWillReceiveProps(nextProps) {
     if (JSON.stringify(this.props.idsTributos) != JSON.stringify(nextProps.idsTributos)) {
-        this.setState({
-          idsTributos: nextProps.idsTributos
-        });
+      //Si se carga por primera vez o si vienen nuevos registros del WS
+      this.setState({
+        idsTributos: nextProps.idsTributos
+      });
+    } else if(this.props.idsTributos) {
+      //Si ya se encuentran cargados los registros en esta página o en otra
+      this.setState({
+        idsTributos: this.props.idsTributos
+      });
     }
   }
 
@@ -99,7 +99,7 @@ class TributarioOnline extends React.PureComponent {
       <div className={classes.mainContainer}>
         <Grid container className={classes.root} spacing={16}>
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Automotores') &&
-            <Grid item xs={6} classes={{"grid-xs-6": "tributarioAccess"}} >
+            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="automotores"
                 tipo="Automotores"
@@ -111,7 +111,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Inmuebles') &&
-            <Grid item xs={6} classes={{"grid-xs-6": "tributarioAccess"}} >
+            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="inmuebles"
                 tipo="Inmuebles"
@@ -121,7 +121,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercios') &&
-            <Grid item xs={6} classes={{"grid-xs-6": "tributarioAccess"}} >
+            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="comercios"
                 tipo="Comercios"
@@ -132,7 +132,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerios') &&
-            <Grid item xs={6} classes={{"grid-xs-6": "tributarioAccess"}} >
+            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="cementerios"
                 tipo="Cementerios"

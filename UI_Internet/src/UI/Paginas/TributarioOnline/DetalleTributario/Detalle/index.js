@@ -209,28 +209,20 @@ class DetalleTributo extends React.PureComponent {
         const identificador = this.props.match.params.identificador;
 
         //Traemos los tributos asociados al Token
-        if (!this.props.idsTributos) {
-            const service = servicesTributarioOnline.getIdTributos(token)
-                .then((datos) => {
-                    if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); return false; }
+        const service = servicesTributarioOnline.getIdTributos(token)
+            .then((datos) => {
+                if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); return false; }
 
-                    if (_.filter(datos.return, { identificador: identificador }).length == 0)
-                        this.props.redireccionar('/Inicio');
-                    else {
-                        this.props.setPropsIdTributos(datos);
-                        this.iniciarServicios(token, tributo, identificador);
-                    }
+                if (_.filter(datos.return, { identificador: identificador }).length == 0)
+                    this.props.redireccionar('/Inicio');
+                else {
+                    this.props.setPropsIdTributos(datos);
+                    this.iniciarServicios(token, tributo, identificador);
+                }
 
-                }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-                });
-        } else {
-            this.setState({
-                identificadores: this.props.idsTributos[this.props.match.params.tributo.toLowerCase()]
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
-
-            this.iniciarServicios(token, tributo, identificador);
-        }
     }
 
     iniciarServicios = (token, tributo, identificador) => {
@@ -321,10 +313,15 @@ class DetalleTributo extends React.PureComponent {
 
     componentWillReceiveProps(nextProps) {
         //Al setearse las props de redux llevamos a cabo estas acciones
-
         if (JSON.stringify(this.props.idsTributos) != JSON.stringify(nextProps.idsTributos)) {
+            //Si se carga por primera vez o si vienen nuevos registros del WS
             this.setState({
                 identificadores: nextProps.idsTributos[this.props.match.params.tributo.toLowerCase()]
+            });
+        } else if(this.props.idsTributos) {
+            //Si ya se encuentran cargados los registros en esta página o en otra
+            this.setState({
+                identificadores: this.props.idsTributos[this.props.match.params.tributo.toLowerCase()]
             });
         }
 
@@ -688,7 +685,7 @@ class DetalleTributo extends React.PureComponent {
                                         >
 
                                             {this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
-                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeMenu }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
                                             })}
 
                                         </Tabs>
