@@ -294,39 +294,6 @@ class DetalleTributo extends React.PureComponent {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        {/*
-
-        const service8 = servicesTributarioOnline.getInformeREMAT(token, {
-            tipoTributo: tributo,
-            identificador: identificador
-        })
-            .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
-                this.props.setPropsInfoInformeREMAT(datos);
-            }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-            });
-
-        const service9 = servicesTributarioOnline.getInformeCuenta(token, {
-            tipoTributo: tributo,
-            identificador: identificador
-        }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta('Informe de Cuenta: ' + datos.error); return false; }
-            this.props.setPropsInfoInformeCuenta(datos);
-        }).catch(err => {
-            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-        });
-
-        const service10 = servicesTributarioOnline.getReporteInformeCuenta(token, {
-            tipoTributo: tributo,
-            identificador: identificador
-        }).then((datos) => {
-            if (!datos.ok) { mostrarAlerta('Reporte Informe de Cuenta: ' + datos.error); return false; }
-            this.props.setPropsInfoReporteInformeCuenta(datos);
-        }).catch(err => {
-            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-        });*/}
-
         Promise.all([service1,
             service2,
             service3,
@@ -567,58 +534,6 @@ class DetalleTributo extends React.PureComponent {
     };
 
     //Abrimos modal informe de cuentas trayendo datos del WS
-    onInformeCuentaDialogoOpen = () => {
-        this.setState({
-            informeCuenta: {
-                ...this.state.informeCuenta,
-                modal: {
-                    ...this.state.informeCuenta.modal,
-                    open: true
-                }
-            }
-        });
-    }
-
-    //Cerramos modal informe de cuentas seteando los valores iniciales del state
-    onInformeCuentaDialogoClose = () => {
-        this.setState({
-            informeCuenta: {
-                ...this.state.informeCuenta,
-                modal: {
-                    open: false,
-                    showReporte: false
-                }
-            }
-        });
-    }
-
-    //Mostramos el reporte en el modal de informe de cuentas
-    onInformeCuentaShowReporte = () => {
-        this.setState({
-            informeCuenta: {
-                ...this.state.informeCuenta,
-                modal: {
-                    ...this.state.informeCuenta.modal,
-                    showReporte: true
-                }
-            }
-        });
-    }
-
-    //Ocultamos el reporte en el modal de informe de cuentas
-    onInformeCuentaHideReporte = () => {
-        this.setState({
-            informeCuenta: {
-                ...this.state.informeCuenta,
-                modal: {
-                    ...this.state.informeCuenta.modal,
-                    showReporte: false
-                }
-            }
-        });
-    }
-
-    //Abrimos modal informe de cuentas trayendo datos del WS
     onUltimosPagosDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
@@ -749,6 +664,95 @@ class DetalleTributo extends React.PureComponent {
                 ...this.state.informeREMAT,
                 modal: {
                     open: false
+                }
+            }
+        });
+    }
+
+
+    //Abrimos modal informe de cuentas trayendo datos del WS
+    onInformeCuentaDialogoOpen = () => {
+        this.props.mostrarCargando(true);
+        const token = this.props.loggedUser.token;
+        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const identificador = this.props.match.params.identificador;
+
+        let arrayService = [];
+        if (!this.state.informeCuenta.reporteBase64) {
+            const service1 = servicesTributarioOnline.getInformeCuenta(token, {
+                tipoTributo: tributo,
+                identificador: identificador
+            })
+                .then((datos) => {
+                    if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
+                    this.props.setPropsInfoInformeCuenta(datos);
+                }).catch(err => {
+                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                });
+
+            arrayService.push(service1);
+        
+            const service2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
+                tipoTributo: tributo,
+                identificador: identificador
+            })
+                .then((datos) => {
+                    if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
+                    this.props.setPropsInfoReporteInformeCuenta(datos);
+                }).catch(err => {
+                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                });
+
+            arrayService.push(service2);
+        }
+
+        Promise.all(arrayService).then(() => {
+            this.handleInformeCuentaCloseDialog();
+            this.props.mostrarCargando(false);
+        });
+    }
+
+    handleInformeCuentaCloseDialog = () => {
+        let newState = { ...this.state };
+        newState.informeCuenta.modal.open = true;
+        this.setState(newState);
+
+        this.props.mostrarCargando(false);
+    }
+
+    //Cerramos modal informe de cuentas seteando los valores iniciales del state
+    onInformeCuentaDialogoClose = () => {
+        this.setState({
+            informeCuenta: {
+                ...this.state.informeCuenta,
+                modal: {
+                    open: false
+                }
+            }
+        });
+    }
+
+    //Mostramos el reporte en el modal de informe de cuentas
+    onInformeCuentaShowReporte = () => {
+        this.setState({
+            informeCuenta: {
+                ...this.state.informeCuenta,
+                modal: {
+                    ...this.state.informeCuenta.modal,
+                    showReporte: true
+                }
+            }
+        });
+    }
+
+    //Ocultamos el reporte en el modal de informe de cuentas
+    onInformeCuentaHideReporte = () => {
+        this.setState({
+            informeCuenta: {
+                ...this.state.informeCuenta,
+                modal: {
+                    ...this.state.informeCuenta.modal,
+                    showReporte: false
                 }
             }
         });
