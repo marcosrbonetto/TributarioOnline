@@ -223,9 +223,9 @@ const reducer = (state = initialState, action) => {
                     infraccion: row.infraccion,
                     detalle: <MiControledPopover textoLink="Detalle">
                                     <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
-                                    <Typography>Fallo: <b>$ {row.fallo}</b></Typography>
-                                    <Typography>Cad.: <b>$ {row.caducidad}</b></Typography>
-                                    <Typography>Acumulada: <b>$ {row.acumulada}</b></Typography>
+                                    <Typography>Fallo: <b>{row.fallo}</b></Typography>
+                                    <Typography>Cad.: <b>{row.caducidad}</b></Typography>
+                                    <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
                                 </MiControledPopover>,
                     data: row //atributo "data" no se muestra en MiTabla
                 }
@@ -245,8 +245,8 @@ const reducer = (state = initialState, action) => {
                     infraccion: row.infraccion,
                     detalle: <MiControledPopover textoLink="Detalle">
                                     <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
-                                    <Typography>Fallo: <b>$ {row.fallo}</b></Typography>
-                                    <Typography>Acumulada: <b>$ {row.acumulada}</b></Typography>
+                                    <Typography>Fallo: <b>{row.fallo}</b></Typography>
+                                    <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
                                 </MiControledPopover>,
                     data: row //atributo "data" no se muestra en MiTabla
                 }
