@@ -150,6 +150,12 @@ class DetalleTributo extends React.PureComponent {
                 },
                 reporteBase64: ''
             },
+            ultimosPagos: {
+                modal: {
+                    open: false
+                },
+                infoGrilla: []
+            },
             contribucion: { //Item Menu e información
                 paramDatos: 'infoContribucion',
                 arrayResult: false,
@@ -276,18 +282,7 @@ class DetalleTributo extends React.PureComponent {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        const service6 = servicesTributarioOnline.getUltimosPagos(token, {
-            tipoTributo: tributo,
-            identificador: identificador
-        })
-            .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
-                this.props.setPropsInfoUltimosPagos(datos);
-            }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-            });
-
-        const service7 = servicesTributarioOnline.getInformeAntecedentes(token, {
+        {/*const service7 = servicesTributarioOnline.getInformeAntecedentes(token, {
             tipoTributo: tributo,
             identificador: identificador
         })
@@ -327,18 +322,13 @@ class DetalleTributo extends React.PureComponent {
             this.props.setPropsInfoReporteInformeCuenta(datos);
         }).catch(err => {
             console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-        });
+        });*/}
 
         Promise.all([service1,
             service2,
             service3,
             service4,
-            service5,
-            service6,
-            service7,
-            service8,
-            service9,
-            service10]).then(() => {
+            service5]).then(() => {
                 this.props.mostrarCargando(false);
             });
     }
@@ -385,9 +375,25 @@ class DetalleTributo extends React.PureComponent {
             this.setState({ planesPago });
         }
 
+        if (JSON.stringify(this.props.infoUltimosPagos) != JSON.stringify(nextProps.infoUltimosPagos)) {
+            this.setState({
+                ultimosPagos: {
+                    ...this.state.ultimosPagos,
+                    infoGrilla: nextProps.infoUltimosPagos
+                }
+            });
+        } else if (this.props.infoUltimosPagos) {
+            this.setState({
+                ultimosPagos: {
+                    ...this.state.ultimosPagos,
+                    infoGrilla: this.props.infoUltimosPagos
+                }
+            });
+        }
+
         //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
         if (JSON.stringify(this.props.infoInformeCuenta) != JSON.stringify(nextProps.infoInformeCuenta)) {
-            
+
             this.setState({
                 informeCuenta: {
                     ...this.state.informeCuenta,
@@ -410,7 +416,7 @@ class DetalleTributo extends React.PureComponent {
 
         //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
         if (JSON.stringify(this.props.infoReporteInformeCuenta) != JSON.stringify(nextProps.infoReporteInformeCuenta)) {
-            
+
             this.setState({
                 informeCuenta: {
                     ...this.state.informeCuenta,
@@ -572,6 +578,51 @@ class DetalleTributo extends React.PureComponent {
                 modal: {
                     ...this.state.informeCuenta.modal,
                     showReporte: false
+                }
+            }
+        });
+    }
+
+    //Abrimos modal informe de cuentas trayendo datos del WS
+    onUltimosPagosDialogoOpen = () => {
+        this.props.mostrarCargando(true);
+        const token = this.props.loggedUser.token;
+        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const identificador = this.props.match.params.identificador;
+
+        if (this.state.ultimosPagos.infoGrilla.length == 0) {
+            servicesTributarioOnline.getUltimosPagos(token, {
+                tipoTributo: tributo,
+                identificador: identificador
+            })
+                .then((datos) => {
+                    if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
+                    this.props.setPropsInfoUltimosPagos(datos);
+
+                    this.handleUltimosPagosCloseDialog();
+                }).catch(err => {
+                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                });
+        } else {
+            this.handleUltimosPagosCloseDialog();
+        }
+    }
+
+    handleUltimosPagosCloseDialog = () => {
+        let newState = {...this.state};
+        newState.ultimosPagos.modal.open = true;
+        this.setState(newState);
+
+        this.props.mostrarCargando(false);
+    }
+
+    //Cerramos modal informe de cuentas seteando los valores iniciales del state
+    onUltimosPagosDialogoClose = () => {
+        this.setState({
+            ultimosPagos: {
+                ...this.state.ultimosPagos,
+                modal: {
+                    open: false
                 }
             }
         });
@@ -1014,11 +1065,11 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
-                                    <div className={classes.textJustify}>
-                                        {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
-                                            return <div key={index}>{item}</div>;
-                                        })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
-                                    </div>
+                                        <div className={classes.textJustify}>
+                                            {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
+                                                return <div key={index}>{item}</div>;
+                                            })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
+                                        </div>
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
@@ -1030,7 +1081,10 @@ class DetalleTributo extends React.PureComponent {
                                     </svg>
                                 </Grid>
                                 <Grid item sm={10}>
-                                    <MiLinkDialog
+                                    <MiControledDialog
+                                        open={this.state.ultimosPagos.modal.open}
+                                        onDialogoOpen={this.onUltimosPagosDialogoOpen}
+                                        onDialogoClose={this.onUltimosPagosDialogoClose}
                                         textoLink={'Últimos pagos'}
                                         titulo={'Últimos pagos'}
                                         classes={{
@@ -1044,7 +1098,7 @@ class DetalleTributo extends React.PureComponent {
                                                 { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe ($)' },
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
-                                            rows={this.props.infoUltimosPagos || []}
+                                            rows={this.state.ultimosPagos.infoGrilla || []}
                                             order='desc'
                                             orderBy='vencimiento'
                                             check={false}
@@ -1053,7 +1107,7 @@ class DetalleTributo extends React.PureComponent {
                                                 root: classes.miTabla
                                             }}
                                         />
-                                    </MiLinkDialog>
+                                    </MiControledDialog>
                                 </Grid>
                             </Grid>
 
