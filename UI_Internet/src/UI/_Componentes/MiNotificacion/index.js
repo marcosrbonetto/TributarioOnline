@@ -9,7 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
 import Badge from "@material-ui/core/Badge";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import Popper from "@material-ui/core/Popper";
+import Popover from "@material-ui/core/Popover";
 
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -36,11 +36,8 @@ class MiNotificacion extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.handleToggleLista = this.handleToggleLista.bind(this);
-
     this.state = {
       anchorEl: null,
-      openListado: false,
       openNotificacion: false,
       notificacion: {
         tituloNotificacion: '',
@@ -49,13 +46,17 @@ class MiNotificacion extends React.PureComponent {
     };
   }
 
-  handleToggleLista = event => {
-    const { currentTarget } = event;
+  handleClick  = event => {
     this.setState({
-      anchorEl: currentTarget,
-      openListado: !this.state.openListado
+      anchorEl: event.currentTarget
     });
   }
+
+  handleClose = () => {
+    this.setState({
+      anchorEl: null,
+    });
+  };
 
   handleChange = panel => (event, expanded) => {
     this.setState({
@@ -70,7 +71,7 @@ class MiNotificacion extends React.PureComponent {
   }
 
   handleClickItemLista = event => {
-    this.handleToggleLista(event);
+    this.handleClick (event);
     this.setState({
       notificacion: {
         tituloNotificacion: 'Notificacion 1',
@@ -120,7 +121,8 @@ class MiNotificacion extends React.PureComponent {
   render() {
     let { classes } = this.props;
 
-    const { openListado, openNotificacion, anchorEl, expanded } = this.state;
+    const { openNotificacion, anchorEl, expanded } = this.state;
+    const openListado = Boolean(anchorEl);
 
     return (
       <div>
@@ -128,15 +130,29 @@ class MiNotificacion extends React.PureComponent {
         <IconButton
           className={classes.marginIcon}
           color="inherit"
-          onClick={this.handleToggleLista}
+          onClick={this.handleClick}
         >
           <Badge badgeContent={4} color="secondary" >
             <NotificationsIcon />
           </Badge>
         </IconButton>
 
-        <Popper open={openListado} anchorEl={anchorEl} transition disablePortal>
-          {openListado && <MiCard padding={false}>
+        <Popover 
+        open={openListado} 
+        anchorEl={anchorEl} 
+        onClose={this.handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        classes={{ 
+          paper: classes.contentPopover
+        }}>
+          <MiCard padding={false}>
             <Typography className={classes.titleMiCard} variant="subheading"><b>Notificaciones</b></Typography>
 
             <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
@@ -187,8 +203,8 @@ class MiNotificacion extends React.PureComponent {
               </ExpansionPanel>
             </Badge>
 
-          </MiCard>}
-        </Popper>
+          </MiCard>
+        </Popover>
 
 
         <Dialog
@@ -247,6 +263,9 @@ const styles = theme => {
     badgeNotificaciones: {
       top: '12px',
       right: '46px',
+    },
+    contentPopover: {
+      borderRadius: '16px'
     }
   };
 };
