@@ -154,7 +154,19 @@ class DetalleTributo extends React.PureComponent {
                 modal: {
                     open: false
                 },
-                infoGrilla: []
+                infoGrilla: undefined
+            },
+            informeAntecedentes: {
+                modal: {
+                    open: false
+                },
+                infoGrilla: undefined
+            },
+            informeREMAT: {
+                modal: {
+                    open: false
+                },
+                infoGrilla: undefined
             },
             contribucion: { //Item Menu e información
                 paramDatos: 'infoContribucion',
@@ -282,16 +294,7 @@ class DetalleTributo extends React.PureComponent {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
-        {/*const service7 = servicesTributarioOnline.getInformeAntecedentes(token, {
-            tipoTributo: tributo,
-            identificador: identificador
-        })
-            .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Informe Antecedentes: ' + datos.error); return false; }
-                this.props.setPropsInfoInformeAntecedentes(datos);
-            }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
-            });
+        {/*
 
         const service8 = servicesTributarioOnline.getInformeREMAT(token, {
             tipoTributo: tributo,
@@ -387,6 +390,38 @@ class DetalleTributo extends React.PureComponent {
                 ultimosPagos: {
                     ...this.state.ultimosPagos,
                     infoGrilla: this.props.infoUltimosPagos
+                }
+            });
+        }
+
+        if (JSON.stringify(this.props.infoInformeAntecedentes) != JSON.stringify(nextProps.infoInformeAntecedentes)) {
+            this.setState({
+                informeAntecedentes: {
+                    ...this.state.informeAntecedentes,
+                    infoGrilla: nextProps.infoInformeAntecedentes
+                }
+            });
+        } else if (this.props.infoInformeAntecedentes) {
+            this.setState({
+                informeAntecedentes: {
+                    ...this.state.informeAntecedentes,
+                    infoGrilla: this.props.infoInformeAntecedentes
+                }
+            });
+        }
+
+        if (JSON.stringify(this.props.infoInformeREMAT) != JSON.stringify(nextProps.infoInformeREMAT)) {
+            this.setState({
+                informeREMAT: {
+                    ...this.state.informeREMAT,
+                    infoGrilla: nextProps.infoInformeREMAT
+                }
+            });
+        } else if (this.props.infoInformeREMAT) {
+            this.setState({
+                informeREMAT: {
+                    ...this.state.informeREMAT,
+                    infoGrilla: this.props.infoInformeREMAT
                 }
             });
         }
@@ -590,7 +625,7 @@ class DetalleTributo extends React.PureComponent {
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
 
-        if (this.state.ultimosPagos.infoGrilla.length == 0) {
+        if (!Array.isArray(this.state.ultimosPagos.infoGrilla)) {
             servicesTributarioOnline.getUltimosPagos(token, {
                 tipoTributo: tributo,
                 identificador: identificador
@@ -609,7 +644,7 @@ class DetalleTributo extends React.PureComponent {
     }
 
     handleUltimosPagosCloseDialog = () => {
-        let newState = {...this.state};
+        let newState = { ...this.state };
         newState.ultimosPagos.modal.open = true;
         this.setState(newState);
 
@@ -621,6 +656,97 @@ class DetalleTributo extends React.PureComponent {
         this.setState({
             ultimosPagos: {
                 ...this.state.ultimosPagos,
+                modal: {
+                    open: false
+                }
+            }
+        });
+    }
+
+    //Abrimos modal informe de cuentas trayendo datos del WS
+    onInformeAntecedentesDialogoOpen = () => {
+        this.props.mostrarCargando(true);
+        const token = this.props.loggedUser.token;
+        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const identificador = this.props.match.params.identificador;
+
+        if (!Array.isArray(this.state.informeAntecedentes.infoGrilla)) {
+            servicesTributarioOnline.getInformeAntecedentes(token, {
+                tipoTributo: tributo,
+                identificador: identificador
+            })
+                .then((datos) => {
+                    if (!datos.ok) { mostrarAlerta('Informe Antecedentes: ' + datos.error); return false; }
+                    this.props.setPropsInfoInformeAntecedentes(datos);
+
+                    this.handleInformeAntecedentesCloseDialog();
+                }).catch(err => {
+                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                });
+        } else {
+            this.handleInformeAntecedentesCloseDialog();
+        }
+    }
+
+    handleInformeAntecedentesCloseDialog = () => {
+        let newState = { ...this.state };
+        newState.informeAntecedentes.modal.open = true;
+        this.setState(newState);
+
+        this.props.mostrarCargando(false);
+    }
+
+    //Cerramos modal informe de cuentas seteando los valores iniciales del state
+    onInformeAntecedentesDialogoClose = () => {
+        this.setState({
+            informeAntecedentes: {
+                ...this.state.informeAntecedentes,
+                modal: {
+                    open: false
+                }
+            }
+        });
+    }
+
+
+    //Abrimos modal informe de cuentas trayendo datos del WS
+    onInformeREMATDialogoOpen = () => {
+        this.props.mostrarCargando(true);
+        const token = this.props.loggedUser.token;
+        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const identificador = this.props.match.params.identificador;
+
+        if (!Array.isArray(this.state.informeREMAT.infoGrilla)) {
+            servicesTributarioOnline.getInformeREMAT(token, {
+                tipoTributo: tributo,
+                identificador: identificador
+            })
+                .then((datos) => {
+                    if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
+                    this.props.setPropsInfoInformeREMAT(datos);
+
+                    this.handleInformeREMATCloseDialog();
+                }).catch(err => {
+                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                });
+        } else {
+            this.handleInformeREMATCloseDialog();
+        }
+    }
+
+    handleInformeREMATCloseDialog = () => {
+        let newState = { ...this.state };
+        newState.informeREMAT.modal.open = true;
+        this.setState(newState);
+
+        this.props.mostrarCargando(false);
+    }
+
+    //Cerramos modal informe de cuentas seteando los valores iniciales del state
+    onInformeREMATDialogoClose = () => {
+        this.setState({
+            informeREMAT: {
+                ...this.state.informeREMAT,
                 modal: {
                     open: false
                 }
@@ -1142,7 +1268,10 @@ class DetalleTributo extends React.PureComponent {
                                         </svg>
                                     </Grid>
                                     <Grid item sm={10}>
-                                        <MiLinkDialog
+                                        <MiControledDialog
+                                            open={this.state.informeAntecedentes.modal.open}
+                                            onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
+                                            onDialogoClose={this.onInformeAntecedentesDialogoClose}
                                             textoLink={'Informe Antecedentes'}
                                             titulo={'Informe Antecedentes'}
                                             classes={{
@@ -1165,7 +1294,7 @@ class DetalleTributo extends React.PureComponent {
                                                     root: classes.miTabla
                                                 }}
                                             />
-                                        </MiLinkDialog>
+                                        </MiControledDialog>
                                     </Grid>
                                 </Grid>
 
@@ -1179,7 +1308,10 @@ class DetalleTributo extends React.PureComponent {
                                         </svg>
                                     </Grid>
                                     <Grid item sm={10}>
-                                        <MiLinkDialog
+                                        <MiControledDialog
+                                            open={this.state.informeREMAT.modal.open}
+                                            onDialogoOpen={this.onInformeREMATDialogoOpen}
+                                            onDialogoClose={this.onInformeREMATDialogoClose}
                                             textoLink={'Informe REMAT'}
                                             titulo={'Informe REMAT'}
                                             classes={{
@@ -1202,7 +1334,7 @@ class DetalleTributo extends React.PureComponent {
                                                     root: classes.miTabla
                                                 }}
                                             />
-                                        </MiLinkDialog>
+                                        </MiControledDialog>
                                     </Grid>
                                 </Grid>
                             </div>}
