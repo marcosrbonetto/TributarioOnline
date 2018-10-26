@@ -101,7 +101,7 @@ const styles = theme => ({
     }
   },
   maxWidth: {
-    maxWidth: '748px'
+    maxWidth: '900px'
   },
   content: {
     paddingBottom: '0px'

@@ -239,6 +239,9 @@ const styles = theme => ({
     },
     miLinkDialog: {
       minWidth: '700px'
+    },
+    textJustify: {
+      textAlign: 'justify'
     }
   });
 

@@ -976,7 +976,7 @@ class DetalleTributo extends React.PureComponent {
                                             </div>}
 
                                             {this.state.informeCuenta.modal.showReporte && <div>
-                                                {this.state.informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + this.state.informeCuenta.reporteBase64} height="342px" width="700px"></iframe>}
+                                                {this.state.informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + this.state.informeCuenta.reporteBase64} height="342px" width="856px"></iframe>}
                                                 {!this.state.informeCuenta.reporteBase64 && 'Ocurrió un error al cargar el reporte'}
                                             </div>}
                                         </div>
@@ -1014,9 +1014,11 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
+                                    <div className={classes.textJustify}>
                                         {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
                                             return <div key={index}>{item}</div>;
                                         })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
+                                    </div>
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
@@ -1067,10 +1069,10 @@ class DetalleTributo extends React.PureComponent {
                                         </Grid>
                                         <Grid item sm={10}>
                                             <MiLinkDialog
-                                                textoLink={'Alternativa de plan'}
-                                                titulo={'Alternativa de plan'}
+                                                textoLink={'Simular Plan de Pagos'}
+                                                titulo={'Simular Plan de Pagos'}
                                             >
-                                                Contenido Alternativa de plan!
+                                                Contenido Simular Plan de Pagos!
                                             </MiLinkDialog>
                                         </Grid>
                                     </Grid>

@@ -139,7 +139,7 @@ class MiCedulon extends React.PureComponent {
           </div>
 
           <div key="mainContent">
-            {this.state.base64Cedulon != '' && <iframe src={this.state.base64Cedulon} height="410px" width="700px"></iframe>}
+            {this.state.base64Cedulon != '' && <iframe src={this.state.base64Cedulon} height="410px" width="856px"></iframe>}
             {this.state.base64Cedulon == '' && 'Debe seleccionar algún concepto'}
           </div>
         </MiControledDialog>
