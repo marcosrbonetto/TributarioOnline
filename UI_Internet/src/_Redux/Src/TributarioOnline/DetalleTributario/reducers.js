@@ -69,6 +69,12 @@ const reducer = (state = initialState, action) => {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha),'DD/MM/YYYY'),
                         importe: stringToFloat(concepto.importe.total,2).toFixed(2),
+                        detalle: <MiControledPopover textoLink="Detalle">
+                                    <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                    <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                    <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                    <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                </MiControledPopover>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
                 });
