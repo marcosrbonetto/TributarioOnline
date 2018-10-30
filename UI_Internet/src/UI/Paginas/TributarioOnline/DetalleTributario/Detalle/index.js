@@ -27,7 +27,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
 import Badge from '@material-ui/core/Badge';
-import Modal from '@material-ui/core/Modal';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
@@ -37,10 +36,10 @@ import MiTabla from "@Componentes/MiTabla";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiControledDialog from "@Componentes/MiControledDialog"
 import MiCedulon from "@Componentes/MiCedulon";
+import MiMercadoPago from "@Componentes/MiMercadoPago";
 
-//Imagenes
-import cedulonFoto from './img/cedulon.png';
-import cedulonFoto2 from './img/MP4.png';
+//Funciones
+import { getAllUrlParams } from "@Utils/functions"
 
 //Actions - Redux
 import {
@@ -229,7 +228,13 @@ class DetalleTributo extends React.PureComponent {
         };
     }
 
+    componentDidMount() {
+        const param = getAllUrlParams(window.location.href);
+        debugger;
+    }
+
     componentWillMount() {
+        debugger;
         //Servicios que setean los datos en las props del store de redux
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
@@ -1427,36 +1432,9 @@ class MisPagos extends React.PureComponent {
         super(props);
 
         this.state = {
-            importeAPagar: '0,00',
-            anchorEl: null,
-            modals: {
-                MercadoPago: false
-            },
+            importeAPagar: '0,00'
         };
     }
-
-    //Evento para mostrar modal deleccionado del state.modals
-    handleOpenModal = (event) => {
-        let modal = event.currentTarget.attributes.modal.value;
-
-        this.setState({
-            modals: {
-                [modal]: true
-            }
-        });
-    };
-
-    //Evento para ocultar modal deleccionado del state.modals
-    handleCloseModal = (event) => {
-        let modal = event.currentTarget.attributes.modal.value;
-
-        this.setState({
-            modals: {
-                [modal]: false
-            }
-        });
-    };
-
 
     //Totalizador de importe de filas seleccionadas
     getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
@@ -1472,16 +1450,6 @@ class MisPagos extends React.PureComponent {
 
         this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
         this.setState({ importeAPagar: importeTotal.toFixed(2).replace('.', ',') });
-    };
-
-    //Totalizador de filas seleccionadas
-    handlePopoverOpen = event => {
-        this.setState({ anchorEl: event.currentTarget });
-    };
-
-    //Evento para ocultar detalle de fila
-    handlePopoverClose = () => {
-        this.setState({ anchorEl: null });
     };
 
     render() {
@@ -1568,17 +1536,12 @@ class MisPagos extends React.PureComponent {
                         disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
                     />
 
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classNames(classes.buttonActions, classes.buttonMercadoLibre)}
-                        onClick={this.handleOpenModal}
-                        modal={'MercadoPago'}
-                    >
-                        <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
-                            Pago Online
-                    </Typography>
-                    </Button>
+                    <MiMercadoPago
+                        registrosSeleccionados={this.props.registrosSeleccionados}
+                        tipoTributo={tipoTributo}
+                        identificador={this.props.identificadorActual}
+                        disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
+                    />
                 </Grid>
             </Grid>
 
@@ -1622,41 +1585,15 @@ class MisPagos extends React.PureComponent {
                         disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
                     />
 
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classNames(classes.buttonActions, classes.buttonMercadoLibre)}
-                        onClick={this.handleOpenModal}
-                        modal={'MercadoPago'}
-                    >
-                        <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
-                            Pago Online
-                    </Typography>
-                    </Button>
+                    <MiMercadoPago
+                        registrosSeleccionados={this.props.registrosSeleccionados}
+                        tipoTributo={tipoTributo}
+                        identificador={this.props.identificadorActual}
+                        disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
+                    />
                 </Grid>
             </Grid>
 
-            {/* Modal de Cedulon */}
-            <Modal
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                open={this.state.modals['Cedulon'] || false}
-                onClose={this.handleCloseModal}
-                modal={'Cedulon'}
-            >
-                <img modal={'Cedulon'} src={cedulonFoto} className={classes.imgPago} onClick={this.handleCloseModal} />
-            </Modal>
-
-            {/* Modal de Mercado Pago */}
-            <Modal
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                open={this.state.modals['MercadoPago'] || false}
-                onClose={this.handleCloseModal}
-                modal={'MercadoPago'}
-            >
-                <img modal={'MercadoPago'} src={cedulonFoto2} className={classes.imgPago2} onClick={this.handleCloseModal} />
-            </Modal>
         </div>
     }
 
