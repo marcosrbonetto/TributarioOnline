@@ -59,6 +59,13 @@ const styles = theme => ({
     },
     title: {
       paddingBottom: '12px'
+    },
+    navList: {
+      height: '152px',
+      overflowY: 'auto',
+    },
+    iconColor: {
+      color: '#149257'
     }
   });
 
