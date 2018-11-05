@@ -44,7 +44,6 @@ class MiControledDialog extends React.PureComponent {
 
   handleCloseModal = (event) => {
     this.props.onDialogoClose && this.props.onDialogoClose();
-
   };
 
   render() {

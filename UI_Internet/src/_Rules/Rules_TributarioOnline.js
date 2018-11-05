@@ -225,7 +225,7 @@ const getInfoPlanesPago = (token, identificador) => {
 const getReporteCedulon = (token, body) => {
 
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Reporte/CedulonContribucion', {
+    fetch(window.Config.BASE_URL_WS + '/v1/Cedulon/Contribuciones', {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -236,7 +236,8 @@ const getReporteCedulon = (token, body) => {
         "tipoTributo": body.tipoTributo,
         "identificador": body.identificador,
         "opcionVencimiento": body.opcionVencimiento,
-        "periodos": body.periodos
+        "periodos": body.periodos,
+        "tipoCedulon": 1
       })
     })
     .then(res => {
@@ -396,6 +397,44 @@ const getInformeREMAT = (token, param) => {
   });
 };
 
+const pagoMercadoPago = (token, body) => {
+
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/Pagar', {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      },
+      body: JSON.stringify({
+        "nexo": body.nexo,
+        "tipoTributo": body.tipoTributo,
+        "identificador": body.identificador,
+        "token": body.token,
+        "metodoPago": body.metodoPago,
+        "emisor": body.emisor,
+        "cuotas": body.cuotas,
+        "tipoCedulon": 1 //Contribucion
+      })
+    })
+    .then(res => {
+
+        if (res.status >= 400) {
+        throw new Error("Bad response from server");
+        }
+
+        return res.json();
+    })
+    .then(datos => {
+      resolve(datos);
+    })
+    .catch(err => {
+      reject("Error procesando la solicitud");
+    });
+  });
+};
+
 const services = {
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
@@ -411,6 +450,7 @@ const services = {
   getUltimosPagos: getUltimosPagos,
   getInformeAntecedentes: getInformeAntecedentes,
   getInformeREMAT: getInformeREMAT,
+  pagoMercadoPago: pagoMercadoPago
 }
 
 export default services;

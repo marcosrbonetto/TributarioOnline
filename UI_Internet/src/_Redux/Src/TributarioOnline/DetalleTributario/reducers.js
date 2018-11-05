@@ -8,7 +8,8 @@ import {
     GET_INFORME_ANTECEDENTES,
     GET_INFORME_REMAT,
     GET_INFORME_CUENTA,
-    GET_REPORTE_INFORME_CUENTA
+    GET_REPORTE_INFORME_CUENTA,
+    SET_PAGOS_MERCADO_PAGO
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
@@ -23,6 +24,11 @@ const initialState = {
     infoJuiciosMulta: [],
     infoPlanesPago: [],
     infoUltimosPagos: [],
+    infoInformeAntecedentes: [],
+    infoInformeREMAT: [],
+    infoInformeCuenta: [],
+    infoReporteInformeCuenta: [],
+    infoPagosMercadoPago: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -264,6 +270,11 @@ const reducer = (state = initialState, action) => {
         case GET_REPORTE_INFORME_CUENTA: {
             return Object.assign({ ...state }, state.infoReporteInformeCuenta, {
                 infoReporteInformeCuenta: action.payload.return
+            });
+        }
+        case SET_PAGOS_MERCADO_PAGO: {
+            return Object.assign({ ...state }, state.infoPagosMercadoPago, {
+                infoPagosMercadoPago: action.payload
             });
         }
         default:

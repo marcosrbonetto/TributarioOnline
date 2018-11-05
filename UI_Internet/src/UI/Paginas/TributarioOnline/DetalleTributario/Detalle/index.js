@@ -56,7 +56,8 @@ import {
     getInfoInformeAntecedentes,
     getInfoInformeREMAT,
     getInfoInformeCuenta,
-    getInfoReporteInformeCuenta
+    getInfoReporteInformeCuenta,
+    setPagosMercadoPago
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
@@ -78,7 +79,8 @@ const mapStateToProps = state => {
         infoInformeREMAT: state.DetalleTributario.infoInformeREMAT,
         infoInformeCuenta: state.DetalleTributario.infoInformeCuenta,
         infoReporteInformeCuenta: state.DetalleTributario.infoReporteInformeCuenta,
-        datosMisRepresentados: state.Representantes.datosMisRepresentados
+        datosMisRepresentados: state.Representantes.datosMisRepresentados,
+        infoPagosMercadoPago: state.DetalleTributario.infoPagosMercadoPago,
     };
 };
 
@@ -121,6 +123,9 @@ const mapDispatchToProps = dispatch => ({
     },
     redireccionar: url => {
         dispatch(replace(url));
+    },
+    setPropsUpdatePagosMercadoPago: (arrayNexos) => {
+        dispatch(setPagosMercadoPago(arrayNexos));
     }
 });
 
@@ -179,7 +184,8 @@ class DetalleTributo extends React.PureComponent {
                     aVencer: 'A vencer',
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
                 },
-                registrosSeleccionados: []
+                registrosSeleccionados: [],
+                datosNexos: {} //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             multas: { //Item Menu e información
                 paramDatos: 'infoMultas',
@@ -193,7 +199,8 @@ class DetalleTributo extends React.PureComponent {
                     aVencer: 'A vencer',
                     columnas: ['Causa', 'Fecha', 'Total ($)']
                 },
-                registrosSeleccionados: []
+                registrosSeleccionados: [],
+                datosNexos: {} //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             juicios: { //Item Menu e información
                 paramDatos: 'infoJuicios',
@@ -208,7 +215,8 @@ class DetalleTributo extends React.PureComponent {
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
                 },
                 menuItemSeleccionado: '',
-                registrosSeleccionados: []
+                registrosSeleccionados: [],
+                datosNexos: {} //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             planesPago: { //Item Menu e información
                 paramDatos: 'infoPlanesPago',
@@ -223,18 +231,82 @@ class DetalleTributo extends React.PureComponent {
                     columnas: ['Concepto', 'Fecha', 'Total ($)']
                 },
                 menuItemSeleccionado: '',
-                registrosSeleccionados: []
+                registrosSeleccionados: [],
+                datosNexos: {} //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             }
         };
     }
 
     componentDidMount() {
-        const param = getAllUrlParams(window.location.href);
-        debugger;
+        /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
+        /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
+
+        const mercadoPago = getAllUrlParams(window.location.href).mercadoPago; //Ej.: true
+        const seccionDetalleTributo = getAllUrlParams(window.location.href).seccionDetalleTributo; //Ej.: contribucion
+        const nexo = getAllUrlParams(window.location.href).nexo; //Ej.: 183060018127
+        const tipoTributo = getAllUrlParams(window.location.href).tipoTributo; //Ej.: 1
+        const identificador = getAllUrlParams(window.location.href).identificador; //Ej.: HCJ675
+        const token = getAllUrlParams(window.location.href).token; //Ej.: c643dcdeae55ee341509701473ae202d
+        const emisor = getAllUrlParams(window.location.href).issuer_id; //Ej.: 310
+        const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
+        const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
+
+        //Esto se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
+        if (mercadoPago) {
+            if (this.props.infoPagosMercadoPago) {
+
+                const result = _.filter(this.props.infoPagosMercadoPago.arrayNexos, {
+                    nexo: nexo,
+                    tipoTributo: parseInt(tipoTributo),
+                    identificador: identificador
+                });
+
+                if (result.length == 0) return false;
+
+                let nexoActual = result[0];
+
+                servicesTributarioOnline.pagoMercadoPago(token, {
+                    nexo: nexoActual.nexo,
+                    tipoTributo: parseInt(tipoTributo),
+                    identificador: identificador,
+                    token: token,
+                    metodoPago: metodoPago,
+                    emisor: emisor,
+                    cuotas: cuotas
+                })
+                    .then((datos) => {
+                        if (!datos.ok) { mostrarAlerta('Pago MercadoPago: ' + datos.error); return false; }
+                        
+                        nexoActual.token = token;
+                        nexoActual.metodoPago = metodoPago;
+                        nexoActual.emisor = emisor;
+                        nexoActual.cuotas = cuotas;
+                        nexoActual.pagado = true;
+
+                        this.setState({
+                            [seccionDetalleTributo]: {
+                                ...this.state[seccionDetalleTributo],
+                                datosNexos: this.props.infoPagosMercadoPago
+                            }
+                        });
+
+                    }).catch(err => {
+                        this.setState({
+                            [seccionDetalleTributo]: {
+                                ...this.state[seccionDetalleTributo],
+                                datosNexos: this.props.infoPagosMercadoPago
+                            }
+                        });
+                        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    });
+            }
+        }
+
+        /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
+        /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
     }
 
     componentWillMount() {
-        debugger;
         //Servicios que setean los datos en las props del store de redux
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
@@ -309,6 +381,7 @@ class DetalleTributo extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
+
         //Al setearse las props de redux llevamos a cabo estas acciones
         if (JSON.stringify(this.props.idsTributos) != JSON.stringify(nextProps.idsTributos)) {
             //Si se carga por primera vez o si vienen nuevos registros del WS
@@ -326,6 +399,13 @@ class DetalleTributo extends React.PureComponent {
         if (JSON.stringify(this.props.infoContribucion) != JSON.stringify(nextProps.infoContribucion)) {
             this.refreshValoresPantalla({
                 listaDatos: nextProps.infoContribucion
+            });
+        }
+
+        //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
+        if (JSON.stringify(this.props.infoMultas) != JSON.stringify(nextProps.infoMultas)) {
+            this.refreshValoresPantalla({
+                listaDatos: nextProps.infoMultas
             });
         }
 
@@ -696,7 +776,7 @@ class DetalleTributo extends React.PureComponent {
                 });
 
             arrayService.push(service1);
-        
+
             const service2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
                 tipoTributo: tributo,
                 identificador: identificador
@@ -763,8 +843,31 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    handleDeleteDataNexos = (seccionDetalleTributo) => {
+        this.setState({
+            [seccionDetalleTributo]: {
+                ...this.state[seccionDetalleTributo],
+                datosNexos: []
+            }
+        });
+    }
+
     render() {
         const { classes } = this.props;
+
+        //El Store se manteiene a lo largo de las sesiones (por localStorage)
+        //En el caso de las grillas se tiene que recalcular los datos cada vez q se recarge la pagina
+        //En las grillas se setea un boton "Detalle" el cual es un componente de React, no se puede almacenar
+        //en el localStorage por lo que si vienen datos del localStorage ANTES de que se recalculen de nuevo
+        //los eliminamos para que no salte error al crear la grilla por culpa del componente "Dealle" que se
+        //guarda erroneamente en el localStorage
+        if (this.props.infoContribucion.rowList[0] && !this.props.infoContribucion.rowList[0].detalle.$$typeof) {
+            this.props.infoContribucion.rowList = [];
+        }
+
+        if (this.props.infoMultas.rowList[0] && !this.props.infoMultas.rowList[0].detalle.$$typeof) {
+            this.props.infoMultas.rowList = [];
+        }
 
         //rowList - Filas de grilla
         //lista - lista de tributos que contienen rowLists para mostrar en la grilla
@@ -896,6 +999,8 @@ class DetalleTributo extends React.PureComponent {
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
+                                            deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
+                                            datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                             check={true}
                                             classes={classes}
                                             info={this.props.infoContribucion || null}
@@ -918,6 +1023,8 @@ class DetalleTributo extends React.PureComponent {
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
+                                            deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
+                                            datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                             check={true}
                                             classes={classes}
                                             info={this.props.infoMultas || null}
@@ -945,6 +1052,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
+                                                    datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                                     check={true}
                                                     classes={classes}
                                                     info={juicio || null}
@@ -972,6 +1081,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
+                                                    datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                                     check={true}
                                                     classes={classes}
                                                     info={juicio || null}
@@ -999,6 +1110,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
+                                                    datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                                     classes={classes}
                                                     info={plan || null}
                                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
@@ -1536,11 +1649,16 @@ class MisPagos extends React.PureComponent {
                         disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
                     />
 
+                    {/* 'datosNexos' y 'deleteDataNexos' se pasa solo en este boton para levantar solo una vez el modal 
+                    para hacer el N+1 Pago de Nexo, de lo contrario se levanta dos veces */}
                     <MiMercadoPago
+                        deleteDataNexos={this.props.deleteDataNexos}
+                        seccionDetalleTributo={this.props.menuItemSeleccionado}
                         registrosSeleccionados={this.props.registrosSeleccionados}
                         tipoTributo={tipoTributo}
                         identificador={this.props.identificadorActual}
                         disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
+                        datosNexos={this.props.datosNexos}
                     />
                 </Grid>
             </Grid>
@@ -1586,6 +1704,7 @@ class MisPagos extends React.PureComponent {
                     />
 
                     <MiMercadoPago
+                        seccionDetalleTributo={this.props.menuItemSeleccionado}
                         registrosSeleccionados={this.props.registrosSeleccionados}
                         tipoTributo={tipoTributo}
                         identificador={this.props.identificadorActual}

@@ -326,8 +326,8 @@ class MiRow extends React.PureComponent {
                     <Checkbox checked={this.props.isSelected || false} />
                 </TableCell>}
             {Object.keys(this.props.data).map((cell, key) => {
-                if (cell == 'data') return; //'data' son datos extras para utilizar
-                return cell != 'id' && <TableCell key={cell} padding="default">{this.props.data[cell]}</TableCell>
+                if (cell == 'data' || cell == 'id') return; //'id' y 'data' son datos extras para utilizar
+                return <TableCell key={cell} padding="default">{this.props.data[cell]}</TableCell>
             })}
         </TableRow>
     }

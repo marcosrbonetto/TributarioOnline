@@ -8,7 +8,9 @@ import {
     GET_INFORME_ANTECEDENTES,
     GET_INFORME_REMAT,
     GET_INFORME_CUENTA,
-    GET_REPORTE_INFORME_CUENTA
+    GET_REPORTE_INFORME_CUENTA,
+    SET_PAGOS_MERCADO_PAGO,
+    GET_PAGOS_MERCADO_PAGO
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 
 export const getInfoContribucion = datos => ({ 
@@ -61,3 +63,7 @@ export const getInfoReporteInformeCuenta = datos => ({
     payload: datos
 });
 
+export const setPagosMercadoPago = datos => ({ 
+    type: SET_PAGOS_MERCADO_PAGO,
+    payload: datos
+});

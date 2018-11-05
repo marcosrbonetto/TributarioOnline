@@ -65,6 +65,7 @@ class MiCedulon extends React.PureComponent {
     const registros = this.props.registrosSeleccionados;
     const token = this.props.loggedUser.token;
     const opcion = event.currentTarget.attributes.opcion.value;
+
     if (registros.length > 0) {
       services.getReporteCedulon(token,
         {
@@ -76,8 +77,10 @@ class MiCedulon extends React.PureComponent {
         .then((datos) => {
           if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
           
+          const resultData = datos.return;
+
           this.setState({
-            base64Cedulon: datos.return ? 'data:application/pdf;base64,' + datos.return : '',
+            base64Cedulon: resultData && resultData.reporte ? 'data:application/pdf;base64,' + resultData.reporte : '',
             dialogoOpen: true
           });
         })
