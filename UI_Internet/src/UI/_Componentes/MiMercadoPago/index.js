@@ -70,79 +70,22 @@ class MiMercadoPago extends React.PureComponent {
 
     this.props.mostrarCargando(true);
 
-    const registros = this.props.registrosSeleccionados;
-    const token = this.props.loggedUser.token;
-    const opcion = "1"; // Hoy
-
     //Determinamos si hay nexos cargados, de lo contrario se los carga
     if (Object.keys(this.props.datosNexos).length == 0) {
 
-      //Carga de todos los nexos
-      if (registros.length > 0) {
-        services.getReporteCedulon(token,
-          {
-            "tipoTributo": parseInt(this.props.tipoTributo),
-            "identificador": this.props.identificador,
-            "opcionVencimiento": parseInt(opcion),
-            "periodos": registros
-          })
-          .then((datos) => {
-            if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
-
-            const resultData = datos.return;
-            let arrayNexos = [];
-            _.each(resultData.nexos, (nexo) => {
-              var itemNexo = { ...nexo };
-              itemNexo.totalPeriodo = 0;
-
-              _.each(nexo.periodos, (periodo) => {
-                itemNexo.totalPeriodo += periodo.importe.total;
-              });
-
-              arrayNexos.push(itemNexo);
-            });
-
-            _.each(resultData.nexos, (nexo) => {
-              var itemNexo = { ...nexo };
-              itemNexo.totalPeriodo = 0;
-
-              _.each(nexo.periodos, (periodo) => {
-                itemNexo.totalPeriodo += periodo.importe.total;
-              });
-
-              itemNexo.nexo = '1';
-              arrayNexos.push(itemNexo);
-            });
-
-            this.setState({
-              ...this.state,
-              base64Cedulon: resultData && resultData.reporte ? 'data:application/pdf;base64,' + resultData.reporte : '',
-              dialogoOpen: true,
-              arrayNexos: arrayNexos
-            });
-
-            this.props.setPropsUpdatePagosMercadoPago({
-              reporte: resultData.reporte,
-              arrayNexos: arrayNexos
-            });
-          })
-          .catch((err) => { console.log(err); })
-          .finally(() => {
-            this.props.mostrarCargando(false);
-          });
-      } else {
-        this.setState({
-          ...this.state,
-          base64Cedulon: '',
-          dialogoOpen: false,
-          arrayNexos: []
-        });
-        this.props.mostrarCargando(false);
-      }
+      //Carga de todos los nexos y mostramos para pagar el primero de ellos
+      this.cargarNexos();
+      
     } else {
       //Cada vez que se paga un nexo mostramos el modal para pagar los siguientes
       const arrayNexos = this.props.datosNexos.arrayNexos;
       const reporte = this.props.datosNexos.reporte;
+
+      //Actualizamos los nexos guardados en el store de redux que utilizamos para luego de cada pago
+      this.props.setPropsUpdatePagosMercadoPago({
+        reporte: reporte,
+        arrayNexos: arrayNexos
+      });
 
       const allNexosPagos = _.filter(arrayNexos, function (nexo) {
         return !nexo.pagado;
@@ -158,6 +101,74 @@ class MiMercadoPago extends React.PureComponent {
         dialogoOpen: true,
         arrayNexos: arrayNexos
       });
+    }
+  }
+
+  cargarNexos = () => {
+    const registros = this.props.registrosSeleccionados;
+    const token = this.props.loggedUser.token;
+    const opcion = "1"; // Hoy
+
+    if (registros.length > 0) {
+      services.getReporteCedulon(token,
+        {
+          "tipoTributo": parseInt(this.props.tipoTributo),
+          "identificador": this.props.identificador,
+          "opcionVencimiento": parseInt(opcion),
+          "periodos": registros
+        })
+        .then((datos) => {
+          if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+
+          const resultData = datos.return;
+          let arrayNexos = [];
+          _.each(resultData.nexos, (nexo) => {
+            var itemNexo = { ...nexo };
+            itemNexo.totalPeriodo = 0;
+
+            _.each(nexo.periodos, (periodo) => {
+              itemNexo.totalPeriodo += periodo.importe.total;
+            });
+
+            arrayNexos.push(itemNexo);
+          });
+
+          _.each(resultData.nexos, (nexo) => {
+            var itemNexo = { ...nexo };
+            itemNexo.totalPeriodo = 0;
+
+            _.each(nexo.periodos, (periodo) => {
+              itemNexo.totalPeriodo += periodo.importe.total;
+            });
+
+            itemNexo.nexo = '1';
+            arrayNexos.push(itemNexo);
+          });
+
+          this.setState({
+            ...this.state,
+            base64Cedulon: resultData && resultData.reporte ? 'data:application/pdf;base64,' + resultData.reporte : '',
+            dialogoOpen: true,
+            arrayNexos: arrayNexos
+          });
+
+          this.props.setPropsUpdatePagosMercadoPago({
+            reporte: resultData.reporte,
+            arrayNexos: arrayNexos
+          });
+        })
+        .catch((err) => { console.log(err); })
+        .finally(() => {
+          this.props.mostrarCargando(false);
+        });
+    } else {
+      this.setState({
+        ...this.state,
+        base64Cedulon: '',
+        dialogoOpen: false,
+        arrayNexos: []
+      });
+      this.props.mostrarCargando(false);
     }
   }
 

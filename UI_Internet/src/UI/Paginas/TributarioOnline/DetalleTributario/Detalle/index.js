@@ -241,6 +241,8 @@ class DetalleTributo extends React.PureComponent {
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
 
+        /* NOTA: 'this.props.infoPagosMercadoPago' tiene los nexos a pagar a partir de ellos se lo actualizará para realizar los pagos */
+        
         const mercadoPago = getAllUrlParams(window.location.href).mercadoPago; //Ej.: true
         const seccionDetalleTributo = getAllUrlParams(window.location.href).seccionDetalleTributo; //Ej.: contribucion
         const nexo = getAllUrlParams(window.location.href).nexo; //Ej.: 183060018127
@@ -277,12 +279,15 @@ class DetalleTributo extends React.PureComponent {
                     .then((datos) => {
                         if (!datos.ok) { mostrarAlerta('Pago MercadoPago: ' + datos.error); return false; }
                         
+                        //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
+                        //Y muestre los nexos actualizados
                         nexoActual.token = token;
                         nexoActual.metodoPago = metodoPago;
                         nexoActual.emisor = emisor;
                         nexoActual.cuotas = cuotas;
                         nexoActual.pagado = true;
 
+                        //Al setear el "datosNexos"
                         this.setState({
                             [seccionDetalleTributo]: {
                                 ...this.state[seccionDetalleTributo],
