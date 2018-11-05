@@ -253,7 +253,7 @@ class DetalleTributo extends React.PureComponent {
         const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
         const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
 
-        //Esto se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
+        //Se realiza el pago del nexo y se procede a mostrar los siguientes para pagarlos
         if (mercadoPago) {
             if (this.props.infoPagosMercadoPago) {
 
@@ -274,9 +274,10 @@ class DetalleTributo extends React.PureComponent {
                     token: token,
                     metodoPago: metodoPago,
                     emisor: emisor,
-                    cuotas: cuotas
+                    cuotas: parseInt(cuotas)
                 })
                     .then((datos) => {
+                        
                         if (!datos.ok) { mostrarAlerta('Pago MercadoPago: ' + datos.error); return false; }
                         
                         //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
@@ -296,6 +297,7 @@ class DetalleTributo extends React.PureComponent {
                         });
 
                     }).catch(err => {
+                        
                         this.setState({
                             [seccionDetalleTributo]: {
                                 ...this.state[seccionDetalleTributo],
