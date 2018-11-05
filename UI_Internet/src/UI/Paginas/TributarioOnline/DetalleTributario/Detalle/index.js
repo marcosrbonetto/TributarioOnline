@@ -242,13 +242,14 @@ class DetalleTributo extends React.PureComponent {
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
 
         /* NOTA: 'this.props.infoPagosMercadoPago' tiene los nexos a pagar a partir de ellos se lo actualizará para realizar los pagos */
-        
+        const token = this.props.loggedUser.token;
+
         const mercadoPago = getAllUrlParams(window.location.href).mercadoPago; //Ej.: true
         const seccionDetalleTributo = getAllUrlParams(window.location.href).seccionDetalleTributo; //Ej.: contribucion
         const nexo = getAllUrlParams(window.location.href).nexo; //Ej.: 183060018127
         const tipoTributo = getAllUrlParams(window.location.href).tipoTributo; //Ej.: 1
         const identificador = getAllUrlParams(window.location.href).identificador; //Ej.: HCJ675
-        const token = getAllUrlParams(window.location.href).token; //Ej.: c643dcdeae55ee341509701473ae202d
+        const tokenNexo = getAllUrlParams(window.location.href).token; //Ej.: c643dcdeae55ee341509701473ae202d
         const emisor = getAllUrlParams(window.location.href).issuer_id; //Ej.: 310
         const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
         const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
@@ -271,7 +272,7 @@ class DetalleTributo extends React.PureComponent {
                     nexo: nexoActual.nexo,
                     tipoTributo: parseInt(tipoTributo),
                     identificador: identificador,
-                    token: token,
+                    token: tokenNexo,
                     metodoPago: metodoPago,
                     emisor: emisor,
                     cuotas: parseInt(cuotas)
