@@ -48,11 +48,6 @@ class MiMercadoPago extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
-    if (this.props.datosNexos)
-      this.onBotonCedulonClick();
-  }
-
   componentWillReceiveProps(nextProps) {
 
     if (JSON.stringify(this.props.disabled) != JSON.stringify(nextProps.disabled)) {
@@ -61,25 +56,30 @@ class MiMercadoPago extends React.PureComponent {
         disabled: nextProps.disabled
       });
     }
+
+    if (JSON.stringify(this.props.datosNexos) != JSON.stringify(nextProps.datosNexos)) {
+      this.onBotonCedulonClick(nextProps.datosNexos);
+    }
   }
 
-  onBotonCedulonClick = () => {
+  onBotonCedulonClick = (paramDatosNexos) => {
     //Vemos si se esta pagando el siguiente Nexo (si es que hay mas de uno)
     //Modal tiene que abrirse luego de realizar el pago del primer nexo
     //Si viene vacio se continua con normalidad
 
     this.props.mostrarCargando(true);
+    const datosNexos = paramDatosNexos ? paramDatosNexos : this.props.datosNexos;
 
     //Determinamos si hay nexos cargados, de lo contrario se los carga
-    if (Object.keys(this.props.datosNexos).length == 0) {
+    if (Object.keys(datosNexos).length == 0) {
 
       //Carga de todos los nexos y mostramos para pagar el primero de ellos
       this.cargarNexos();
       
     } else {
       //Cada vez que se paga un nexo mostramos el modal para pagar los siguientes
-      const arrayNexos = this.props.datosNexos.arrayNexos;
-      const reporte = this.props.datosNexos.reporte;
+      const arrayNexos = datosNexos.arrayNexos;
+      const reporte = datosNexos.reporte;
 
       //Actualizamos los nexos guardados en el store de redux que utilizamos para luego de cada pago
       this.props.setPropsUpdatePagosMercadoPago({
@@ -233,7 +233,7 @@ class MiMercadoPago extends React.PureComponent {
               variant="contained"
               color="secondary"
               className={classNames(classes.buttonActions, classes.buttonMercadoLibre)}
-              onClick={this.onBotonCedulonClick}
+              onClick={() => {this.onBotonCedulonClick()}}
               disabled={this.state.disabled}
               modal={'MercadoPago'}
             >

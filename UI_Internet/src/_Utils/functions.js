@@ -1,11 +1,19 @@
 //Alert
 import Store from "@Redux/Store/index";
-import { mostrarAlertaRoja } from "@Redux/Actions/alerta";
+import { mostrarAlertaRoja, mostrarAlertaVerde } from "@Redux/Actions/alerta";
 
 export const mostrarAlerta = (texto) => {
 	Store.dispatch(mostrarAlertaRoja({
 		mostrarIconoCerrar: true,
 		icono: 'error_outline',
+		texto: texto
+	}));
+}
+
+export const mostrarMensaje = (texto) => {
+	Store.dispatch(mostrarAlertaVerde({
+		mostrarIconoCerrar: true,
+		icono: 'check_circle_outline',
 		texto: texto
 	}));
 }

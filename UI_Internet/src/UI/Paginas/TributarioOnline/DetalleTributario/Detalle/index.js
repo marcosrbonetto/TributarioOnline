@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 
 //Alert
-import { mostrarAlerta } from "@Utils/functions";
+import { mostrarAlerta, mostrarMensaje } from "@Utils/functions";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
@@ -185,7 +185,7 @@ class DetalleTributo extends React.PureComponent {
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
                 },
                 registrosSeleccionados: [],
-                datosNexos: {} //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
+                datosNexos: [] //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             multas: { //Item Menu e información
                 paramDatos: 'infoMultas',
@@ -200,7 +200,7 @@ class DetalleTributo extends React.PureComponent {
                     columnas: ['Causa', 'Fecha', 'Total ($)']
                 },
                 registrosSeleccionados: [],
-                datosNexos: {} //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
+                datosNexos: [] //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             juicios: { //Item Menu e información
                 paramDatos: 'infoJuicios',
@@ -216,7 +216,7 @@ class DetalleTributo extends React.PureComponent {
                 },
                 menuItemSeleccionado: '',
                 registrosSeleccionados: [],
-                datosNexos: {} //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
+                datosNexos: [] //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             planesPago: { //Item Menu e información
                 paramDatos: 'infoPlanesPago',
@@ -232,7 +232,7 @@ class DetalleTributo extends React.PureComponent {
                 },
                 menuItemSeleccionado: '',
                 registrosSeleccionados: [],
-                datosNexos: {} //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
+                datosNexos: [] //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             }
         };
     }
@@ -288,7 +288,7 @@ class DetalleTributo extends React.PureComponent {
                         nexoActual.emisor = emisor;
                         nexoActual.cuotas = cuotas;
                         nexoActual.pagado = true;
-
+                        
                         //Al setear el "datosNexos"
                         this.setState({
                             [seccionDetalleTributo]: {
@@ -296,6 +296,8 @@ class DetalleTributo extends React.PureComponent {
                                 datosNexos: this.props.infoPagosMercadoPago
                             }
                         });
+
+                        mostrarMensaje('Pago MercadoPago: Pago realizado exitosamente');
 
                     }).catch(err => {
                         
@@ -862,20 +864,6 @@ class DetalleTributo extends React.PureComponent {
 
     render() {
         const { classes } = this.props;
-
-        //El Store se manteiene a lo largo de las sesiones (por localStorage)
-        //En el caso de las grillas se tiene que recalcular los datos cada vez q se recarge la pagina
-        //En las grillas se setea un boton "Detalle" el cual es un componente de React, no se puede almacenar
-        //en el localStorage por lo que si vienen datos del localStorage ANTES de que se recalculen de nuevo
-        //los eliminamos para que no salte error al crear la grilla por culpa del componente "Dealle" que se
-        //guarda erroneamente en el localStorage
-        if (this.props.infoContribucion.rowList[0] && !this.props.infoContribucion.rowList[0].detalle.$$typeof) {
-            this.props.infoContribucion.rowList = [];
-        }
-
-        if (this.props.infoMultas.rowList[0] && !this.props.infoMultas.rowList[0].detalle.$$typeof) {
-            this.props.infoMultas.rowList = [];
-        }
 
         //rowList - Filas de grilla
         //lista - lista de tributos que contienen rowLists para mostrar en la grilla
