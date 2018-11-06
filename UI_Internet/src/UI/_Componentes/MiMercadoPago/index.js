@@ -92,8 +92,15 @@ class MiMercadoPago extends React.PureComponent {
       });
 
       //Corroboramos si todos los nexos estan pagos, procedemos a no mostrar el modal de pagos online
-      if (allNexosPagos.length == 0)
+      if (allNexosPagos.length == 0) {
+        this.props.setPropsUpdatePagosMercadoPago({
+          reporte: '',
+          arrayNexos: []
+        });
+
+        this.props.mostrarCargando(false);
         return false;
+      }
 
       this.setState({
         ...this.state,
@@ -101,6 +108,7 @@ class MiMercadoPago extends React.PureComponent {
         dialogoOpen: true,
         arrayNexos: arrayNexos
       });
+      this.props.mostrarCargando(false);
     }
   }
 
@@ -130,18 +138,6 @@ class MiMercadoPago extends React.PureComponent {
               itemNexo.totalPeriodo += periodo.importe.total;
             });
 
-            arrayNexos.push(itemNexo);
-          });
-
-          _.each(resultData.nexos, (nexo) => {
-            var itemNexo = { ...nexo };
-            itemNexo.totalPeriodo = 0;
-
-            _.each(nexo.periodos, (periodo) => {
-              itemNexo.totalPeriodo += periodo.importe.total;
-            });
-
-            itemNexo.nexo = '1';
             arrayNexos.push(itemNexo);
           });
 
