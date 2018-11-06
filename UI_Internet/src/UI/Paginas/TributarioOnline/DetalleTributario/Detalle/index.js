@@ -256,7 +256,9 @@ class DetalleTributo extends React.PureComponent {
 
         //Se realiza el pago del nexo y se procede a mostrar los siguientes para pagarlos
         if (mercadoPago) {
-            if (this.props.infoPagosMercadoPago) {
+            if (this.props.infoPagosMercadoPago && 
+                this.props.infoPagosMercadoPago.arrayNexos &&
+                this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
 
                 const result = _.filter(this.props.infoPagosMercadoPago.arrayNexos, {
                     nexo: nexo,
