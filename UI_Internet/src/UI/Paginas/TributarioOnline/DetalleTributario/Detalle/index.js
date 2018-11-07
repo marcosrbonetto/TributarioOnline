@@ -416,9 +416,7 @@ class DetalleTributo extends React.PureComponent {
 
         //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
         if (JSON.stringify(this.props.infoMultas) != JSON.stringify(nextProps.infoMultas)) {
-            this.refreshValoresPantalla({
-                listaDatos: nextProps.infoMultas
-            });
+            //Nada por aquí
         }
 
         //Seteo de el primer item de los juicios de contribucion el cual es el primero que se mostrará
@@ -1311,7 +1309,7 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
-                                        <div className={classes.textJustify}>
+                                        <div className={classes.textDatosCuenta}>
                                             {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
                                                 return <div key={index}>{item}</div>;
                                             })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}

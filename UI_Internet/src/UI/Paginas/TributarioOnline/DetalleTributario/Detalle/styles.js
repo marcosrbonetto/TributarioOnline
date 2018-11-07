@@ -225,8 +225,8 @@ const styles = theme => ({
     miLinkDialog: {
       minWidth: '700px'
     },
-    textJustify: {
-      textAlign: 'justify'
+    textDatosCuenta: {
+      fontFamily: "\"Courier New\", Courier, \"Lucida Sans Typewriter\", \"Lucida Typewriter\", monospace"
     }
   });
 
