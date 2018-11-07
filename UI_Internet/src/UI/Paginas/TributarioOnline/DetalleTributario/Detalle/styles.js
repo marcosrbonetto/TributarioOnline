@@ -131,6 +131,9 @@ const styles = theme => ({
       right: '0px',
       color: '#fff'
     },
+    badgeJuicios: {
+      display: 'none'
+    },
     badgeSubTab: {
       width: '140px',
       height: '36px',

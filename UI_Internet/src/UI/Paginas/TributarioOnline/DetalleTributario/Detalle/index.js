@@ -986,12 +986,12 @@ class DetalleTributo extends React.PureComponent {
 
                                                 {/* Juicio por Contribución */}
                                                 {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.map((juicio) => {
-                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeRed }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios,classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                 })}
 
                                                 {/* Juicio por Multa */}
                                                 {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.map((juicio) => {
-                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeRed }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios,classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                 })}
 
                                             </Tabs>
