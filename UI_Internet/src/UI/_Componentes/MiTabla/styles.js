@@ -12,6 +12,11 @@ export const styles = theme => ({
   },
   paddingLeft: {
     paddingLeft: '20px'
+  },
+  fontSize: {
+    '& td':{
+    fontSize: '15px !important'
+    }
   }
 });
 

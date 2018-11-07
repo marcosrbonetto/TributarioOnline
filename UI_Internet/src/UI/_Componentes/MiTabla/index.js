@@ -236,7 +236,7 @@ class MiTabla extends React.PureComponent {
         return (
             <Paper className={classes.root}>
                 <div className={classes.tableWrapper}>
-                    <Table aria-labelledby="tableTitle">
+                    <Table aria-labelledby="tableTitle" className={classes.fontSize}>
                         <EnhancedTableHead
                             columns={this.props.columns}
                             numSelected={selected.length}

@@ -337,7 +337,7 @@ class Representantes extends React.PureComponent {
     })
       .then((datos) => {
         
-        if (!datos.ok) { mostrarAlerta('Agregar Permiso: '+datos.error); this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta('Agregar: '+datos.error); this.props.mostrarCargando(false); return false; }
         if (typeof callback === "function")
           callback(datos);
       }).catch(err => {
@@ -650,11 +650,11 @@ class Representantes extends React.PureComponent {
 
             {/* Busqueda por Tributo */}
             <MiCard rootClassName={"leftBox"}>
-              <Typography className={classes.title} variant="title">Agregar solicitud por Tributo</Typography>
+              <Typography className={classes.title} variant="title">Agregar Representacion por Tributo</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.infoTexto}>
                 {`
-                Debe ingresar el tipo de tributo y el identificador que desee operar
+                Debe ingresar el tipo de tributo y el identificador que desee representar
               `}
               </Typography>
 
@@ -727,7 +727,7 @@ class Representantes extends React.PureComponent {
                       size="small"
                       color="secondary"
                       onClick={this.handleAceptarSolicitudPermisoTitular}>
-                      Agregar Permiso
+                      Agregar
                   </Button>
                   </ExpansionPanelActions>
                 </div>}
@@ -740,7 +740,7 @@ class Representantes extends React.PureComponent {
 
             {/* Busqueda por CUIT */}
             <MiCard rootClassName={"busquedaCUIT rightBox"}>
-              <Typography className={classes.title} variant="title">Agregar solicitud por CUIT</Typography>
+              <Typography className={classes.title} variant="title">Agregar Representacion por CUIT</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.infoTexto}>
                 {`
@@ -804,7 +804,7 @@ class Representantes extends React.PureComponent {
                       color="secondary"
                       onClick={this.handleAceptarSolicitudPermisoCUIT}
                       disabled={!this.state.busquedaCUIT.hayPermisosSeleccionados}>
-                      Agregar Permiso
+                      Agregar
                   </Button>
                   </ExpansionPanelActions>
                 </div>}

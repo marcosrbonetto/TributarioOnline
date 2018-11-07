@@ -437,7 +437,7 @@ class DetalleTributo extends React.PureComponent {
             
             //Rellenamos "infoJuicios" ya que se comparte con juiciosMulta
             if(juicios.infoJuicios && juicios.infoJuicios.lista)
-                juicios.infoJuicios.lista = nextProps.infoJuiciosContribucion.concat(juicios.infoJuicios.lista);
+                juicios.infoJuicios.lista = nextProps.infoJuiciosContribucion.lista.concat(juicios.infoJuicios.lista);
             else
                 juicios.infoJuicios = {
                     lista: nextProps.infoJuiciosContribucion.lista
@@ -452,7 +452,7 @@ class DetalleTributo extends React.PureComponent {
             
             //Rellenamos "infoJuicios" ya que se comparte con juiciosContribucion
             if(juicios.infoJuicios && juicios.infoJuicios.lista)
-                juicios.infoJuicios.lista = juicios.infoJuicios.lista.concat(nextProps.infoJuiciosMulta);
+                juicios.infoJuicios.lista = juicios.infoJuicios.lista.concat(nextProps.infoJuiciosMulta.lista);
             else
                 juicios.infoJuicios = {
                     lista: nextProps.infoJuiciosMulta.lista
@@ -1090,7 +1090,7 @@ class DetalleTributo extends React.PureComponent {
                                                 <MisPagos
                                                     deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
                                                     datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
-                                                    check={true}
+                                                    check={false}
                                                     classes={classes}
                                                     info={juicio || null}
                                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
@@ -1119,7 +1119,7 @@ class DetalleTributo extends React.PureComponent {
                                                 <MisPagos
                                                     deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
                                                     datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
-                                                    check={true}
+                                                    check={false}
                                                     classes={classes}
                                                     info={juicio || null}
                                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
