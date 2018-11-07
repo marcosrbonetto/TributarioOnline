@@ -260,7 +260,7 @@ class DetalleTributo extends React.PureComponent {
 
         //Se realiza el pago del nexo y se procede a mostrar los siguientes para pagarlos
         if (mercadoPago) {
-            if (this.props.infoPagosMercadoPago && 
+            if (this.props.infoPagosMercadoPago &&
                 this.props.infoPagosMercadoPago.arrayNexos &&
                 this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
 
@@ -284,9 +284,9 @@ class DetalleTributo extends React.PureComponent {
                     cuotas: parseInt(cuotas)
                 })
                     .then((datos) => {
-                        
+
                         if (!datos.ok) { mostrarAlerta('Pago MercadoPago: ' + datos.error); return false; }
-                        
+
                         //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
                         //Y muestre los nexos actualizados
                         nexoActual.token = token;
@@ -294,7 +294,7 @@ class DetalleTributo extends React.PureComponent {
                         nexoActual.emisor = emisor;
                         nexoActual.cuotas = cuotas;
                         nexoActual.pagado = true;
-                        
+
                         //Al setear el "datosNexos"
                         this.setState({
                             [seccionDetalleTributo]: {
@@ -306,7 +306,7 @@ class DetalleTributo extends React.PureComponent {
                         mostrarMensaje('Pago MercadoPago: Pago realizado exitosamente');
 
                     }).catch(err => {
-                        
+
                         this.setState({
                             [seccionDetalleTributo]: {
                                 ...this.state[seccionDetalleTributo],
@@ -332,7 +332,7 @@ class DetalleTributo extends React.PureComponent {
         //Traemos los tributos asociados al Token
         const service = servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); return false; }
+                if (!datos.ok) { return false; } //mostrarAlerta('Tributos: ' + datos.error); return false; }
 
                 if (_.filter(datos.return, { identificador: identificador }).length == 0)
                     this.props.redireccionar('/Inicio');
@@ -349,7 +349,7 @@ class DetalleTributo extends React.PureComponent {
     iniciarServicios = (token, tributo, identificador) => {
         const service1 = servicesTributarioOnline.getInfoContribucion(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Períodos: ' + datos.error); return false; }
+                if (!datos.ok) { return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
                 this.props.setPropsInfoContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -357,7 +357,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Multas: ' + datos.error); return false; }
+                if (!datos.ok) { return false; } //mostrarAlerta('Multas: ' + datos.error); return false; }
                 this.props.setPropsInfoMultas(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -365,7 +365,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service3 = servicesTributarioOnline.getInfoJuiciosContribucion(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Juicios: ' + datos.error); return false; }
+                if (!datos.ok) { return false; } //mostrarAlerta('Juicios: ' + datos.error); return false; }
                 this.props.setPropsInfoJuiciosContribucion(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -373,7 +373,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service4 = servicesTributarioOnline.getInfoJuiciosMulta(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Juicios: ' + datos.error); return false; }
+                if (!datos.ok) { return false; } //mostrarAlerta('Juicios: ' + datos.error); return false; }
                 this.props.setPropsInfoJuiciosMulta(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -381,7 +381,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service5 = servicesTributarioOnline.getInfoPlanesPago(token, identificador)
             .then((datos) => {
-                if (!datos.ok) { mostrarAlerta('Planes Pago: ' + datos.error); return false; }
+                if (!datos.ok) { return false; } //mostrarAlerta('Planes Pago: ' + datos.error); return false; }
                 this.props.setPropsInfoPlanesPago(datos);
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -413,7 +413,7 @@ class DetalleTributo extends React.PureComponent {
 
         //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
         if (JSON.stringify(this.props.infoContribucion) != JSON.stringify(nextProps.infoContribucion)) {
-            
+
             this.setState({
                 infoContribucion: nextProps.infoContribucion
             });
@@ -434,9 +434,9 @@ class DetalleTributo extends React.PureComponent {
         if (JSON.stringify(this.props.infoJuiciosContribucion) != JSON.stringify(nextProps.infoJuiciosContribucion)) {
             let juicios = Object.assign({}, this.state.juicios);
             juicios.menuItemSeleccionado = (nextProps.infoJuiciosContribucion.lista > 0 && nextProps.infoJuiciosContribucion.lista[0].idJuicio) || '';
-            
+
             //Rellenamos "infoJuicios" ya que se comparte con juiciosMulta
-            if(juicios.infoJuicios && juicios.infoJuicios.lista)
+            if (juicios.infoJuicios && juicios.infoJuicios.lista)
                 juicios.infoJuicios.lista = nextProps.infoJuiciosContribucion.lista.concat(juicios.infoJuicios.lista);
             else
                 juicios.infoJuicios = {
@@ -449,9 +449,9 @@ class DetalleTributo extends React.PureComponent {
         if (JSON.stringify(this.props.infoJuiciosMulta) != JSON.stringify(nextProps.infoJuiciosMulta)) {
             let juicios = Object.assign({}, this.state.juicios);
             juicios.menuItemSeleccionado = (nextProps.infoJuiciosMulta.lista > 0 && nextProps.infoJuiciosMulta.lista[0].idJuicio) || '';
-            
+
             //Rellenamos "infoJuicios" ya que se comparte con juiciosContribucion
-            if(juicios.infoJuicios && juicios.infoJuicios.lista)
+            if (juicios.infoJuicios && juicios.infoJuicios.lista)
                 juicios.infoJuicios.lista = juicios.infoJuicios.lista.concat(nextProps.infoJuiciosMulta.lista);
             else
                 juicios.infoJuicios = {
@@ -602,7 +602,7 @@ class DetalleTributo extends React.PureComponent {
 
         //En caso que tenga submenu, se selecciona el primero que aparece
         //Seleccionamos el item del SUBMENU
-        if(this.state[value].arrayResult && listaDatos.rowList.length > 0) {
+        if (this.state[value].arrayResult && listaDatos.rowList && listaDatos.rowList.length > 0) {
             let seccionState = Object.assign({}, this.state[value]);
             seccionState.menuItemSeleccionado = listaDatos.identificador;
             this.setState({
@@ -902,6 +902,11 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    handleOnClickAddTributo = (event) => {
+        const tributo = this.props.match.params.tributo;
+        this.props.redireccionar('/Inicio/Representantes/' + tributo + '/DetalleTributario');
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -969,7 +974,7 @@ class DetalleTributo extends React.PureComponent {
                             {/* Sub Menus */}
 
                             {/* Juicio */}
-                            {this.state.menuItemSeleccionado == 'juicios' &&
+                            {(this.state.menuItemSeleccionado == 'juicios' &&
                                 ((this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.length > 0) || (this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.length > 0)) &&
                                 <div>
 
@@ -986,22 +991,26 @@ class DetalleTributo extends React.PureComponent {
 
                                                 {/* Juicio por Contribución */}
                                                 {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.map((juicio) => {
-                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios,classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                 })}
 
                                                 {/* Juicio por Multa */}
                                                 {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.map((juicio) => {
-                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios,classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                 })}
 
                                             </Tabs>
 
                                         </Grid>
                                     </Grid>
-                                </div>}
+                                </div>)
+                                || this.state.menuItemSeleccionado == 'juicios' &&
+                                <Typography className={classes.infoTexto}>
+                                    {`Le informamos que no posee juicios`}
+                                </Typography>}
 
                             {/* Planes de Pago */}
-                            {this.state.menuItemSeleccionado == 'planesPago' && this.props.infoPlanesPago.lista.length > 0 && <div>
+                            {(this.state.menuItemSeleccionado == 'planesPago' && this.props.infoPlanesPago.lista.length > 0 && <div>
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
@@ -1022,7 +1031,12 @@ class DetalleTributo extends React.PureComponent {
 
                                     </Grid>
                                 </Grid>
-                            </div>}
+                            </div>)
+                                ||
+                                this.state.menuItemSeleccionado == 'planesPago' &&
+                                <Typography className={classes.infoTexto}>
+                                    {`Le informamos que no posee planes de pago`}
+                                </Typography>}
 
                             {/* Secciones */}
 
@@ -1249,140 +1263,218 @@ class DetalleTributo extends React.PureComponent {
                                     </svg>
                                 </Grid>
                                 <Grid item sm={10}>
-                                    <MiControledDialog
-                                        open={this.state.informeCuenta.modal.open}
-                                        onDialogoOpen={this.onInformeCuentaDialogoOpen}
-                                        onDialogoClose={this.onInformeCuentaDialogoClose}
-                                        textoLink={'Informe de Cuenta'}
-                                        titulo={'Informe de Cuenta al día ' + dateToString(new Date(), 'DD/MM/YYYY')}
-                                    >
-                                        <div key="headerContent"></div>
-                                        <div key="mainContent">
-                                            {!this.state.informeCuenta.modal.showReporte && <div>
-                                                <Typography className={classes.title} variant="title">Deuda Total: <b>$ {stringToFloat(this.state.informeCuenta.deudaTotal, 2).toFixed(2)} </b></Typography>
-                                                <Divider className={classes.divider} />
-
-                                                <Typography className={classes.title} variant="title">Deuda vencida</Typography>
-                                                <Divider className={classes.divider} />
-
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Total: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {stringToFloat(this.state.informeCuenta.deudaVencida.total, 2).toFixed(2)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Administrativa: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {stringToFloat(this.state.informeCuenta.deudaVencida.administrativa, 2).toFixed(2)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <br />
-                                                <Typography className={classes.title} variant="title">Deuda a vencer</Typography>
-                                                <Divider className={classes.divider} />
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Total: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {stringToFloat(this.state.informeCuenta.deudaAVencer.total, 2).toFixed(2)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Administrativa: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {stringToFloat(this.state.informeCuenta.deudaAVencer.administrativa, 2).toFixed(2)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                            </div>}
-
-                                            {this.state.informeCuenta.modal.showReporte && <div>
-                                                {this.state.informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + this.state.informeCuenta.reporteBase64} height="342px" width="856px"></iframe>}
-                                                {!this.state.informeCuenta.reporteBase64 && 'Ocurrió un error al cargar el reporte'}
-                                            </div>}
-                                        </div>
-                                        <div key="footerContent" className={classes.buttonFotterDialog}>
-                                            {!this.state.informeCuenta.modal.showReporte && <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                className={classes.buttonActions}
-                                                onClick={this.onInformeCuentaShowReporte}
-                                            >
-                                                Imprimir Detalle
-                                        </Button>}
-
-                                            {this.state.informeCuenta.modal.showReporte && <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                className={classes.buttonActions}
-                                                onClick={this.onInformeCuentaHideReporte}
-                                            >
-                                                Mostrar Deudas
-                                        </Button>}
-                                        </div>
-                                    </MiControledDialog>
-                                </Grid>
+                                    <Typography
+                                    onClick={this.handleOnClickAddTributo}
+                                    variant="subheading" 
+                                    className={classNames(classes.textList, classes.link)} 
+                                    gutterBottom>
+                                    Agregar nuevo tributo
+                                    </Typography>
                             </Grid>
+                            </Grid>
+
+                        <Grid container spacing={16}>
+                            <Grid item sm={2}>
+                                <svg className={classes.icon} viewBox="0 0 24 24">
+                                    <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                </svg>
+                            </Grid>
+                            <Grid item sm={10}>
+                                <MiControledDialog
+                                    open={this.state.informeCuenta.modal.open}
+                                    onDialogoOpen={this.onInformeCuentaDialogoOpen}
+                                    onDialogoClose={this.onInformeCuentaDialogoClose}
+                                    textoLink={'Informe de Cuenta'}
+                                    titulo={'Informe de Cuenta al día ' + dateToString(new Date(), 'DD/MM/YYYY')}
+                                >
+                                    <div key="headerContent"></div>
+                                    <div key="mainContent">
+                                        {!this.state.informeCuenta.modal.showReporte && <div>
+                                            <Typography className={classes.title} variant="title">Deuda Total: <b>$ {stringToFloat(this.state.informeCuenta.deudaTotal, 2).toFixed(2)} </b></Typography>
+                                            <Divider className={classes.divider} />
+
+                                            <Typography className={classes.title} variant="title">Deuda vencida</Typography>
+                                            <Divider className={classes.divider} />
+
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={4}>
+                                                    <Typography variant="subheading" gutterBottom>Total: </Typography>
+                                                </Grid>
+                                                <Grid item sm={8}>
+                                                    <Typography variant="subheading" gutterBottom>
+                                                        <b>$ {stringToFloat(this.state.informeCuenta.deudaVencida.total, 2).toFixed(2)} </b>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={4}>
+                                                    <Typography variant="subheading" gutterBottom>Administrativa: </Typography>
+                                                </Grid>
+                                                <Grid item sm={8}>
+                                                    <Typography variant="subheading" gutterBottom>
+                                                        <b>$ {stringToFloat(this.state.informeCuenta.deudaVencida.administrativa, 2).toFixed(2)} </b>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <Typography className={classes.title} variant="title">Deuda a vencer</Typography>
+                                            <Divider className={classes.divider} />
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={4}>
+                                                    <Typography variant="subheading" gutterBottom>Total: </Typography>
+                                                </Grid>
+                                                <Grid item sm={8}>
+                                                    <Typography variant="subheading" gutterBottom>
+                                                        <b>$ {stringToFloat(this.state.informeCuenta.deudaAVencer.total, 2).toFixed(2)} </b>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={4}>
+                                                    <Typography variant="subheading" gutterBottom>Administrativa: </Typography>
+                                                </Grid>
+                                                <Grid item sm={8}>
+                                                    <Typography variant="subheading" gutterBottom>
+                                                        <b>$ {stringToFloat(this.state.informeCuenta.deudaAVencer.administrativa, 2).toFixed(2)} </b>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </div>}
+
+                                        {this.state.informeCuenta.modal.showReporte && <div>
+                                            {this.state.informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + this.state.informeCuenta.reporteBase64} height="342px" width="856px"></iframe>}
+                                            {!this.state.informeCuenta.reporteBase64 && 'Ocurrió un error al cargar el reporte'}
+                                        </div>}
+                                    </div>
+                                    <div key="footerContent" className={classes.buttonFotterDialog}>
+                                        {!this.state.informeCuenta.modal.showReporte && <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            className={classes.buttonActions}
+                                            onClick={this.onInformeCuentaShowReporte}
+                                        >
+                                            Imprimir Detalle
+                                        </Button>}
+
+                                        {this.state.informeCuenta.modal.showReporte && <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            className={classes.buttonActions}
+                                            onClick={this.onInformeCuentaHideReporte}
+                                        >
+                                            Mostrar Deudas
+                                        </Button>}
+                                    </div>
+                                </MiControledDialog>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={16}>
+                            <Grid item sm={2}>
+                                <svg className={classes.icon} viewBox="0 0 24 24">
+                                    <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                </svg>
+                            </Grid>
+                            <Grid item sm={10}>
+                                <MiLinkDialog
+                                    textoLink={'Datos de Cuenta'}
+                                    titulo={'Datos de Cuenta'}
+                                >
+                                    <div className={classes.textDatosCuenta}>
+                                        {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
+                                            return <div key={index}>{item}</div>;
+                                        })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
+                                    </div>
+                                </MiLinkDialog>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container spacing={16}>
+                            <Grid item sm={2}>
+                                <svg className={classes.icon} viewBox="0 0 24 24">
+                                    <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                </svg>
+                            </Grid>
+                            <Grid item sm={10}>
+                                <MiControledDialog
+                                    open={this.state.ultimosPagos.modal.open}
+                                    onDialogoOpen={this.onUltimosPagosDialogoOpen}
+                                    onDialogoClose={this.onUltimosPagosDialogoClose}
+                                    textoLink={'Últimos pagos'}
+                                    titulo={'Últimos pagos'}
+                                    classes={{
+                                        root: classes.miLinkDialog
+                                    }}
+                                >
+                                    <MiTabla
+                                        columns={[
+                                            { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
+                                            { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
+                                            { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe ($)' },
+                                            { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                        ]}
+                                        rows={this.state.ultimosPagos.infoGrilla || []}
+                                        order='desc'
+                                        orderBy='vencimiento'
+                                        check={false}
+                                        rowsPerPage={5}
+                                        classes={{
+                                            root: classes.miTabla
+                                        }}
+                                    />
+                                </MiControledDialog>
+                            </Grid>
+                        </Grid>
+
+                        {/* Cuando no este seleccionado Planes de Pago */}
+                        {this.state.menuItemSeleccionado != 'planesPago' && <div>
+
+                            {this.state.mostrarAlternativaPlan && <div>
+                                <Grid container spacing={16}>
+                                    <Grid item sm={2}>
+                                        <svg className={classes.icon} viewBox="0 0 24 24">
+                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                        </svg>
+                                    </Grid>
+                                    <Grid item sm={10}>
+                                        <MiLinkDialog
+                                            textoLink={'Simular Plan de Pagos'}
+                                            titulo={'Simular Plan de Pagos'}
+                                        >
+                                            Contenido Simular Plan de Pagos!
+                                            </MiLinkDialog>
+                                    </Grid>
+                                </Grid>
+                            </div>}
 
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>
+                                    {/*<svg className={classes.icon} viewBox="0 0 24 24">
+                                            <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
+                                        </svg>*/}
                                     <svg className={classes.icon} viewBox="0 0 24 24">
                                         <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
                                     </svg>
                                 </Grid>
                                 <Grid item sm={10}>
-                                    <MiLinkDialog
-                                        textoLink={'Datos de Cuenta'}
-                                        titulo={'Datos de Cuenta'}
-                                    >
-                                        <div className={classes.textDatosCuenta}>
-                                            {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
-                                                return <div key={index}>{item}</div>;
-                                            })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
-                                        </div>
-                                    </MiLinkDialog>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={2}>
-                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                    </svg>
-                                </Grid>
-                                <Grid item sm={10}>
                                     <MiControledDialog
-                                        open={this.state.ultimosPagos.modal.open}
-                                        onDialogoOpen={this.onUltimosPagosDialogoOpen}
-                                        onDialogoClose={this.onUltimosPagosDialogoClose}
-                                        textoLink={'Últimos pagos'}
-                                        titulo={'Últimos pagos'}
+                                        open={this.state.informeAntecedentes.modal.open}
+                                        onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
+                                        onDialogoClose={this.onInformeAntecedentesDialogoClose}
+                                        textoLink={'Informe Antecedentes'}
+                                        titulo={'Informe Antecedentes'}
                                         classes={{
                                             root: classes.miLinkDialog
                                         }}
                                     >
                                         <MiTabla
                                             columns={[
-                                                { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
-                                                { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
-                                                { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe ($)' },
+                                                { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
+                                                { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
-                                            rows={this.state.ultimosPagos.infoGrilla || []}
+                                            rows={this.props.infoInformeAntecedentes || []}
                                             order='desc'
                                             orderBy='vencimiento'
                                             check={false}
@@ -1395,182 +1487,121 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                             </Grid>
 
-                            {/* Cuando no este seleccionado Planes de Pago */}
-                            {this.state.menuItemSeleccionado != 'planesPago' && <div>
-
-                                {this.state.mostrarAlternativaPlan && <div>
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={2}>
-                                            <svg className={classes.icon} viewBox="0 0 24 24">
-                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                            </svg>
-                                        </Grid>
-                                        <Grid item sm={10}>
-                                            <MiLinkDialog
-                                                textoLink={'Simular Plan de Pagos'}
-                                                titulo={'Simular Plan de Pagos'}
-                                            >
-                                                Contenido Simular Plan de Pagos!
-                                            </MiLinkDialog>
-                                        </Grid>
-                                    </Grid>
-                                </div>}
-
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        {/*<svg className={classes.icon} viewBox="0 0 24 24">
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    {/*<svg className={classes.icon} viewBox="0 0 24 24">
                                             <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
                                         </svg>*/}
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <MiControledDialog
-                                            open={this.state.informeAntecedentes.modal.open}
-                                            onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
-                                            onDialogoClose={this.onInformeAntecedentesDialogoClose}
-                                            textoLink={'Informe Antecedentes'}
-                                            titulo={'Informe Antecedentes'}
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                    </svg>
+                                </Grid>
+                                <Grid item sm={10}>
+                                    <MiControledDialog
+                                        open={this.state.informeREMAT.modal.open}
+                                        onDialogoOpen={this.onInformeREMATDialogoOpen}
+                                        onDialogoClose={this.onInformeREMATDialogoClose}
+                                        textoLink={'Informe REMAT'}
+                                        titulo={'Informe REMAT'}
+                                        classes={{
+                                            root: classes.miLinkDialog
+                                        }}
+                                    >
+                                        <MiTabla
+                                            columns={[
+                                                { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
+                                                { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
+                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                            ]}
+                                            rows={this.props.infoInformeREMAT || []}
+                                            order='desc'
+                                            orderBy='vencimiento'
+                                            check={false}
+                                            rowsPerPage={5}
                                             classes={{
-                                                root: classes.miLinkDialog
+                                                root: classes.miTabla
                                             }}
-                                        >
-                                            <MiTabla
-                                                columns={[
-                                                    { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
-                                                    { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                    { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
-                                                    { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
-                                                ]}
-                                                rows={this.props.infoInformeAntecedentes || []}
-                                                order='desc'
-                                                orderBy='vencimiento'
-                                                check={false}
-                                                rowsPerPage={5}
-                                                classes={{
-                                                    root: classes.miTabla
-                                                }}
-                                            />
-                                        </MiControledDialog>
-                                    </Grid>
+                                        />
+                                    </MiControledDialog>
                                 </Grid>
+                            </Grid>
+                        </div>}
 
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        {/*<svg className={classes.icon} viewBox="0 0 24 24">
+                        {/* Cuando no este seleccionado Planes de Pago */}
+                        {this.state.menuItemSeleccionado == 'planesPago' && <div>
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    {/*<svg className={classes.icon} viewBox="0 0 24 24">
                                             <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
                                         </svg>*/}
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <MiControledDialog
-                                            open={this.state.informeREMAT.modal.open}
-                                            onDialogoOpen={this.onInformeREMATDialogoOpen}
-                                            onDialogoClose={this.onInformeREMATDialogoClose}
-                                            textoLink={'Informe REMAT'}
-                                            titulo={'Informe REMAT'}
-                                            classes={{
-                                                root: classes.miLinkDialog
-                                            }}
-                                        >
-                                            <MiTabla
-                                                columns={[
-                                                    { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
-                                                    { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                    { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
-                                                    { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
-                                                ]}
-                                                rows={this.props.infoInformeREMAT || []}
-                                                order='desc'
-                                                orderBy='vencimiento'
-                                                check={false}
-                                                rowsPerPage={5}
-                                                classes={{
-                                                    root: classes.miTabla
-                                                }}
-                                            />
-                                        </MiControledDialog>
-                                    </Grid>
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                    </svg>
                                 </Grid>
-                            </div>}
-
-                            {/* Cuando no este seleccionado Planes de Pago */}
-                            {this.state.menuItemSeleccionado == 'planesPago' && <div>
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        {/*<svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
-                                        </svg>*/}
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <MiLinkDialog
-                                            textoLink={'Perìodos Adeudados'}
-                                            titulo={'Perìodos Adeudados'}
-                                        >
-                                            Contenido Perìodos Adeudados!
+                                <Grid item sm={10}>
+                                    <MiLinkDialog
+                                        textoLink={'Perìodos Adeudados'}
+                                        titulo={'Perìodos Adeudados'}
+                                    >
+                                        Contenido Perìodos Adeudados!
                                         </MiLinkDialog>
-                                    </Grid>
                                 </Grid>
+                            </Grid>
 
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <MiLinkDialog
-                                            textoLink={'Perìodos Bloqueados'}
-                                            titulo={'Perìodos Bloqueados'}
-                                        >
-                                            Contenido Perìodos Bloqueados!
-                                        </MiLinkDialog>
-                                    </Grid>
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                    </svg>
                                 </Grid>
+                                <Grid item sm={10}>
+                                    <MiLinkDialog
+                                        textoLink={'Perìodos Bloqueados'}
+                                        titulo={'Perìodos Bloqueados'}
+                                    >
+                                        Contenido Perìodos Bloqueados!
+                                        </MiLinkDialog>
+                                </Grid>
+                            </Grid>
 
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <MiLinkDialog
-                                            textoLink={'Simulación de Caducidad'}
-                                            titulo={'Simulación de Caducidad'}
-                                        >
-                                            Contenido Simulación de Caducidad!
-                                        </MiLinkDialog>
-                                    </Grid>
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                    </svg>
                                 </Grid>
+                                <Grid item sm={10}>
+                                    <MiLinkDialog
+                                        textoLink={'Simulación de Caducidad'}
+                                        titulo={'Simulación de Caducidad'}
+                                    >
+                                        Contenido Simulación de Caducidad!
+                                        </MiLinkDialog>
+                                </Grid>
+                            </Grid>
 
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <MiLinkDialog
-                                            textoLink={'Imprimir Solicitud'}
-                                            titulo={'Imprimir Solicitud'}
-                                        >
-                                            Contenido Imprimir Solicitud!
-                                        </MiLinkDialog>
-                                    </Grid>
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
+                                    </svg>
                                 </Grid>
-                            </div>}
+                                <Grid item sm={10}>
+                                    <MiLinkDialog
+                                        textoLink={'Imprimir Solicitud'}
+                                        titulo={'Imprimir Solicitud'}
+                                    >
+                                        Contenido Imprimir Solicitud!
+                                        </MiLinkDialog>
+                                </Grid>
+                            </Grid>
+                        </div>}
                         </MiCard>
 
-                    </Grid>
                 </Grid>
-            </div>
+                </Grid>
+            </div >
         );
     }
 }

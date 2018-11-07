@@ -230,7 +230,19 @@ const styles = theme => ({
     },
     textDatosCuenta: {
       fontFamily: "\"Courier New\", Courier, \"Lucida Sans Typewriter\", \"Lucida Typewriter\", monospace"
-    }
+    },
+    textList: {
+      lineHeight: '28px',
+      position: 'relative',
+      top: '2px'
+    },
+    link: {
+      color: theme.color.info.main,
+      cursor: 'pointer',
+      '&:hover': {
+        textDecoration: 'underline'
+      }
+    },
   });
 
   

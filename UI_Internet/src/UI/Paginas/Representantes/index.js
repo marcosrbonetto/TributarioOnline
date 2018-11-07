@@ -159,8 +159,10 @@ class Representantes extends React.PureComponent {
   }
 
   //En caso que se precione "+ Agregar" desde Menu, se setea el combo en el tributo seleccionado
+  //O desde pantalla DetalleTributo
   componentDidMount() {
     const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+
     idTipoTributo && this.setState({
       selectTributos: idTipoTributo.toString()
     });
@@ -537,6 +539,11 @@ class Representantes extends React.PureComponent {
         tipoTributo: datos.return.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())
       });
       this.handleCancelarSolicitudPermiso();
+
+      //Redireccionamos solo si "agregamos" desde la pantalla que se pasa como parametro redirect
+      this.props.match.params.tributo && 
+      this.props.match.params.redirect && 
+      this.props.redireccionar('/'+this.props.match.params.redirect+'/'+this.props.match.params.tributo+'/'+datos.return.identificador);
 
       //Redireccionamos solo si "agregamos" desde la pantalla Inicio
       this.props.match.params.tributo && this.props.redireccionar('/Inicio');
