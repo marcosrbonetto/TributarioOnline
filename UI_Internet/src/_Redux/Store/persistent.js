@@ -19,6 +19,8 @@ const storePersistent = {
                 console.log("[TO] Error al convertir el DetalleTributario a JSON")
                 return params.state;
             }
+        } else {
+            return params.state;
         }
     },
     setStorePersistent : (params) => { //Persiste los datos para que no se pierdan al actualizar la página
