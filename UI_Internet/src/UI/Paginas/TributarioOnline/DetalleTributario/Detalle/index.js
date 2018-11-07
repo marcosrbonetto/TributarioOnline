@@ -720,7 +720,7 @@ class DetalleTributo extends React.PureComponent {
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
 
-        if (!Array.isArray(this.state.informeAntecedentes.infoGrilla)) {
+        if (this.state.informeAntecedentes.infoGrilla.length == 0) {
             servicesTributarioOnline.getInformeAntecedentes(token, {
                 tipoTributo: tributo,
                 identificador: identificador
@@ -766,7 +766,7 @@ class DetalleTributo extends React.PureComponent {
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
 
-        if (!Array.isArray(this.state.informeREMAT.infoGrilla)) {
+        if (this.state.informeREMAT.infoGrilla.length == 0) {
             servicesTributarioOnline.getInformeREMAT(token, {
                 tipoTributo: tributo,
                 identificador: identificador

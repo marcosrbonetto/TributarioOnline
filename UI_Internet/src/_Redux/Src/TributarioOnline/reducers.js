@@ -14,21 +14,21 @@ const reducer = (state = initialState, action) => {
             
             IdsTributos['comercios'] =  (arrayComercios && arrayComercios.map((tributo) => {
                 return {
-                    representado: tributo.soyTitular ? null : tributo.titular.titular,
+                    representado: tributo.titular.titular,
                     identificador: tributo.identificador
                 }
             })) || [];
 
             IdsTributos['inmuebles'] =  (arrayInmuebles && arrayInmuebles.map((tributo) => {
                 return {
-                    representado: tributo.soyTitular ? null : tributo.titular.titular,
+                    representado: tributo.titular.titular,
                     identificador: tributo.identificador
                 }
             })) || [];
 
             IdsTributos['automotores'] =  (arrayAutomotores && arrayAutomotores.map((tributo) => {
                 return {
-                    representado: tributo.soyTitular ? null : tributo.titular.titular,
+                    representado: tributo.titular.titular,
                     identificador: tributo.identificador
                 }
             })) || [];
