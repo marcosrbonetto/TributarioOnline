@@ -140,18 +140,6 @@ class MiMercadoPago extends React.PureComponent {
             arrayNexos.push(itemNexo);
           });
 
-          _.each(resultData.nexos, (nexo) => {
-            var itemNexo = { ...nexo };
-            itemNexo.totalPeriodo = 0;
-
-            _.each(nexo.periodos, (periodo) => {
-              itemNexo.totalPeriodo += stringToFloat(periodo.importe.total, 2);
-            });
-
-            itemNexo.nexo = 1;
-            arrayNexos.push(itemNexo);
-          });
-
           this.setState({
             ...this.state,
             dialogoOpen: true,
@@ -230,8 +218,9 @@ class MiMercadoPago extends React.PureComponent {
           open={this.state.dialogoOpen}
           onDialogoClose={this.onDialogoClose}
           buttonAction={true}
-          textoLink={'Pago Online'}
-          titulo={'Pago Online'}
+          textoLink={'Plataforma Online de MercadoPago'}
+          titulo={'Plataforma Online de MercadoPago'}
+          classMaxWidth={classes.maxWidth}
         >
           <div key="buttonAction">
             <Button
@@ -248,7 +237,12 @@ class MiMercadoPago extends React.PureComponent {
             </Button>
           </div>
 
-          <div key="headerContent"></div>
+          <div key="headerContent">
+            <Typography variant="subheading" gutterBottom>
+              <b>Atención: </b> Usted está a punto de pagar online ingresando los datos de la tarjeta de débito o crédito.
+              Los mismos serán tomados por la plataforma de MercadoPago por lo que la Municipalidad de Córdoba no tendrá responsabilidad sobre ellos.
+                    </Typography>
+          </div>
 
           <div key="mainContent">
             <Stepper
@@ -262,7 +256,7 @@ class MiMercadoPago extends React.PureComponent {
                     <StepLabel
                       StepIconProps={{
                         classes: { root: classes.stepIcon }
-                      }}>Nexo: {nexo.nexo}</StepLabel>
+                      }}>Cedulón: {nexo.nexo}</StepLabel>
                     <StepContent>
                       <Grid container spacing={0}>
                         <Grid item md={12}>
@@ -356,6 +350,9 @@ const styles = theme => ({
       fill: '#fff'
     }
   },
+  maxWidth: {
+    maxWidth: '520px'
+  }
 });
 
 let componente = MiMercadoPago;

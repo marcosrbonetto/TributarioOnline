@@ -66,7 +66,7 @@ class MiControledDialog extends React.PureComponent {
           scroll='paper'
           aria-labelledby="scroll-dialog-title"
           classes={{
-            paper: classes.maxWidth
+            paper: this.props.classMaxWidth ? this.props.classMaxWidth : classes.maxWidth
           }}
         >
           <DialogTitle id="scroll-dialog-title">{titulo}</DialogTitle>
