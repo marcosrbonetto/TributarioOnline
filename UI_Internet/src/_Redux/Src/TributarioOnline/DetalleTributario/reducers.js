@@ -9,7 +9,8 @@ import {
     GET_INFORME_REMAT,
     GET_INFORME_CUENTA,
     GET_REPORTE_INFORME_CUENTA,
-    SET_PAGOS_MERCADO_PAGO
+    SET_PAGOS_MERCADO_PAGO,
+    RESET_INFO_DETALLE_TRIBUTO
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 import { stringToFloat, dateToString } from "@Utils/functions"
 
@@ -330,6 +331,22 @@ const reducer = (state = initialState, action) => {
                 state: state,
                 sectionReducer: 'infoPagosMercadoPago',
                 info: action.payload
+            });
+        }
+        case RESET_INFO_DETALLE_TRIBUTO: {
+            //Se resetean todos lo valores de la pantalla.
+            return Object.assign({ ...state }, state.infoReporteInformeCuenta, {
+                infoContribucion: [],
+                infoMultas: [],
+                infoJuiciosContribucion: [],
+                infoJuiciosMulta: [],
+                infoPlanesPago: [],
+                infoUltimosPagos: [],
+                infoInformeAntecedentes: [],
+                infoInformeREMAT: [],
+                infoInformeCuenta: [],
+                infoReporteInformeCuenta: [],
+                infoPagosMercadoPago: []
             });
         }
         default:

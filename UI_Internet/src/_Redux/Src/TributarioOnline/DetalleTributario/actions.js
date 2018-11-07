@@ -10,7 +10,8 @@ import {
     GET_INFORME_CUENTA,
     GET_REPORTE_INFORME_CUENTA,
     SET_PAGOS_MERCADO_PAGO,
-    GET_PAGOS_MERCADO_PAGO
+    GET_PAGOS_MERCADO_PAGO,
+    RESET_INFO_DETALLE_TRIBUTO
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 
 export const getInfoContribucion = datos => ({ 
@@ -65,5 +66,10 @@ export const getInfoReporteInformeCuenta = datos => ({
 
 export const setPagosMercadoPago = datos => ({ 
     type: SET_PAGOS_MERCADO_PAGO,
+    payload: datos
+});
+
+export const resetInfoDetalleTributo = datos => ({ 
+    type: RESET_INFO_DETALLE_TRIBUTO,
     payload: datos
 });

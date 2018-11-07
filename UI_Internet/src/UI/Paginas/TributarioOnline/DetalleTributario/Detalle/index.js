@@ -57,7 +57,8 @@ import {
     getInfoInformeREMAT,
     getInfoInformeCuenta,
     getInfoReporteInformeCuenta,
-    setPagosMercadoPago
+    setPagosMercadoPago,
+    resetInfoDetalleTributo
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
@@ -126,6 +127,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setPropsUpdatePagosMercadoPago: (arrayNexos) => {
         dispatch(setPagosMercadoPago(arrayNexos));
+    },
+    resetInfoDetalleTributo: () => {
+        dispatch(resetInfoDetalleTributo());
     }
 });
 
@@ -242,6 +246,10 @@ class DetalleTributo extends React.PureComponent {
     }
 
     componentDidMount() {
+        //Reseteamos Valores de DetalleTributario (Redux)
+        this.props.resetInfoDetalleTributo();
+
+
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
 
