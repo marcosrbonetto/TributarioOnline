@@ -173,6 +173,7 @@ class DetalleTributo extends React.PureComponent {
                 infoGrilla: undefined
             },
             contribucion: { //Item Menu e información
+                infoContribucion: undefined,
                 paramDatos: 'infoContribucion',
                 arrayResult: false,
                 order: 'asc',
@@ -188,6 +189,7 @@ class DetalleTributo extends React.PureComponent {
                 datosNexos: [] //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             multas: { //Item Menu e información
+                infoMultas: undefined,
                 paramDatos: 'infoMultas',
                 arrayResult: false,
                 order: 'asc',
@@ -203,6 +205,7 @@ class DetalleTributo extends React.PureComponent {
                 datosNexos: [] //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             juicios: { //Item Menu e información
+                infoJuicios: undefined,
                 paramDatos: 'infoJuicios',
                 arrayResult: true,
                 order: 'asc',
@@ -219,6 +222,7 @@ class DetalleTributo extends React.PureComponent {
                 datosNexos: [] //Este dato se utiliza para traer los datos para los pagos de nexos siguientes al pago del primero
             },
             planesPago: { //Item Menu e información
+                infoPlanesPago: undefined,
                 paramDatos: 'infoPlanesPago',
                 arrayResult: true,
                 order: 'asc',
@@ -409,6 +413,11 @@ class DetalleTributo extends React.PureComponent {
 
         //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
         if (JSON.stringify(this.props.infoContribucion) != JSON.stringify(nextProps.infoContribucion)) {
+            
+            this.setState({
+                infoContribucion: nextProps.infoContribucion
+            });
+
             this.refreshValoresPantalla({
                 listaDatos: nextProps.infoContribucion
             });
@@ -416,13 +425,23 @@ class DetalleTributo extends React.PureComponent {
 
         //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
         if (JSON.stringify(this.props.infoMultas) != JSON.stringify(nextProps.infoMultas)) {
-            //Nada por aquí
+            this.setState({
+                infoMultas: nextProps.infoMultas
+            });
         }
 
         //Seteo de el primer item de los juicios de contribucion el cual es el primero que se mostrará
         if (JSON.stringify(this.props.infoJuiciosContribucion) != JSON.stringify(nextProps.infoJuiciosContribucion)) {
             let juicios = Object.assign({}, this.state.juicios);
             juicios.menuItemSeleccionado = (nextProps.infoJuiciosContribucion.lista > 0 && nextProps.infoJuiciosContribucion.lista[0].idJuicio) || '';
+            
+            //Rellenamos "infoJuicios" ya que se comparte con juiciosMulta
+            if(juicios.infoJuicios && juicios.infoJuicios.lista)
+                juicios.infoJuicios.lista = nextProps.infoJuiciosContribucion.concat(juicios.infoJuicios.lista);
+            else
+                juicios.infoJuicios = {
+                    lista: nextProps.infoJuiciosContribucion.lista
+                };
             this.setState({ juicios });
         }
 
@@ -430,6 +449,14 @@ class DetalleTributo extends React.PureComponent {
         if (JSON.stringify(this.props.infoJuiciosMulta) != JSON.stringify(nextProps.infoJuiciosMulta)) {
             let juicios = Object.assign({}, this.state.juicios);
             juicios.menuItemSeleccionado = (nextProps.infoJuiciosMulta.lista > 0 && nextProps.infoJuiciosMulta.lista[0].idJuicio) || '';
+            
+            //Rellenamos "infoJuicios" ya que se comparte con juiciosContribucion
+            if(juicios.infoJuicios && juicios.infoJuicios.lista)
+                juicios.infoJuicios.lista = juicios.infoJuicios.lista.concat(nextProps.infoJuiciosMulta);
+            else
+                juicios.infoJuicios = {
+                    lista: nextProps.infoJuiciosMulta.lista
+                };
             this.setState({ juicios });
         }
 
@@ -437,6 +464,7 @@ class DetalleTributo extends React.PureComponent {
         if (JSON.stringify(this.props.infoPlanesPago) != JSON.stringify(nextProps.infoPlanesPago)) {
             let planesPago = Object.assign({}, this.state.planesPago);
             planesPago.menuItemSeleccionado = (nextProps.infoPlanesPago.lista > 0 && nextProps.infoPlanesPago.lista[0].idPlan) || '';
+            planesPago.infoPlanesPago = nextProps.infoPlanesPago;
             this.setState({ planesPago });
         }
 
@@ -523,7 +551,7 @@ class DetalleTributo extends React.PureComponent {
         }
     }
 
-    //Cada vez que se cambia de sección se checkean y actualizan datos
+    //Cada vez que se cambia de sección se checkean y cargamos datos en la grilla
     //Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días ( mostrarAlternativaPlan )
     //La información de "Datos de Cuenta" varia respecto a cada seccion ( infoDatosCuenta )
     refreshValoresPantalla(parametros) {
@@ -561,7 +589,7 @@ class DetalleTributo extends React.PureComponent {
         window.location.reload();//Recargamos la pagina con la nueva url
     };
 
-    //Evento cuando se cambia de sección
+    //Evento cuando se cambia de sección del MENU
     handleMenuChange = (event, value) => {
 
         this.setState({
@@ -570,7 +598,18 @@ class DetalleTributo extends React.PureComponent {
 
         //Seteamos valores que varias de acuerdo a la sección seleccionada
         const infoSeccion = this.state[value].paramDatos;
-        const listaDatos = this.state[value].arrayResult ? this.getListaDatosLista(this.props[infoSeccion]) : this.props[infoSeccion];
+        const listaDatos = this.state[value].arrayResult ? this.getListaDatosLista(this.state[value][infoSeccion]) : this.state[value][infoSeccion];
+
+        //En caso que tenga submenu, se selecciona el primero que aparece
+        //Seleccionamos el item del SUBMENU
+        if(this.state[value].arrayResult && listaDatos.rowList.length > 0) {
+            let seccionState = Object.assign({}, this.state[value]);
+            seccionState.menuItemSeleccionado = listaDatos.identificador;
+            this.setState({
+                [value]: seccionState
+            });
+        }
+
         this.refreshValoresPantalla({
             listaDatos: listaDatos
         });
@@ -600,11 +639,12 @@ class DetalleTributo extends React.PureComponent {
         return listaDatosJuicio;
     }
 
-    //Evento cuando se cambia de subsección
+    //Evento cuando se cambia de subsección (SUBMENU)
     handleSubMenuChange = (event, identificador) => {
 
         const seccionActual = this.state.menuItemSeleccionado;
 
+        //Seleccionamos el item del SUBMENU
         let seccionState = Object.assign({}, this.state[seccionActual]);
         seccionState.menuItemSeleccionado = identificador;
         this.setState({
@@ -613,7 +653,7 @@ class DetalleTributo extends React.PureComponent {
 
         //Seteamos valores que varias de acuerdo a la sección seleccionada
         const infoSeccion = this.state[seccionActual].paramDatos;
-        const listaDatos = this.getListaDatosLista(this.props[infoSeccion], identificador);
+        const listaDatos = this.getListaDatosLista(this.state[seccionActual][infoSeccion], identificador);
         this.refreshValoresPantalla({
             listaDatos: listaDatos
         });
