@@ -16,7 +16,9 @@ import { stringToFloat, dateToString } from "@Utils/functions"
 import React from "react";
 import storePersistent from "@Redux/Store/persistent";
 import { Typography } from "@material-ui/core";
+
 import MiControledPopover from "@Componentes/MiControledPopover";
+import MiTooltip from "@Componentes/MiTooltip";
 
 let initialState = {
     infoContribucion: [],
@@ -39,6 +41,14 @@ initialState = storePersistent.getStorePersistent({
     state: initialState
 });
 
+const styles = {
+    root: {
+        background: 'red',
+        color: 'blue',
+        fontSize: 11,
+    },
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_INFO_CONTRIBUCION: {
@@ -52,12 +62,15 @@ const reducer = (state = initialState, action) => {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
                         importe: stringToFloat(concepto.importe.total, 2).toFixed(2),
-                        detalle: <MiControledPopover textoLink="Detalle">
-                            <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
-                            <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
-                            <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
-                            <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
-                        </MiControledPopover>,
+                        detalle: <MiTooltip
+                            contenidoDetalle={<div>
+                                <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                            </div>}>
+                            <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                        </MiTooltip>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
                 });
@@ -83,12 +96,15 @@ const reducer = (state = initialState, action) => {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
                         importe: stringToFloat(concepto.importe.total, 2).toFixed(2),
-                        detalle: <MiControledPopover textoLink="Detalle">
-                            <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
-                            <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
-                            <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
-                            <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
-                        </MiControledPopover>,
+                        detalle: <MiTooltip
+                            contenidoDetalle={<div>
+                                <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                            </div>}>
+                            <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                        </MiTooltip>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
                 });
@@ -210,15 +226,18 @@ const reducer = (state = initialState, action) => {
                     concepto: pago.concepto,
                     fecha: dateToString(new Date(pago.fecha), 'DD/MM/YYYY'),
                     importe: stringToFloat(pago.importe.total, 2).toFixed(2),
-                    detalle: <MiControledPopover textoLink="Detalle">
-                        <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
-                        <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
-                        <Typography>Deducción: <b>$ {pago.importe.deduccion}</b></Typography>
-                        <Typography>Citación: <b>{pago.citacion}</b></Typography>
-                        <Typography>CTL: <b>$ {pago.ctl}</b></Typography>
-                        <Typography>Estado: <b>$ {pago.estado}</b></Typography>
-                        <Typography>Caja: <b>$ {pago.caja}</b></Typography>
-                    </MiControledPopover>,
+                    detalle: <MiTooltip
+                        contenidoDetalle={<div>
+                            <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
+                            <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
+                            <Typography>Deducción: <b>$ {pago.importe.deduccion}</b></Typography>
+                            <Typography>Citación: <b>{pago.citacion}</b></Typography>
+                            <Typography>CTL: <b>$ {pago.ctl}</b></Typography>
+                            <Typography>Estado: <b>$ {pago.estado}</b></Typography>
+                            <Typography>Caja: <b>$ {pago.caja}</b></Typography>
+                        </div>}>
+                        <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                    </MiTooltip>,
                     data: pago //atributo "data" no se muestra en MiTabla
                 }
             })) || [];
@@ -235,12 +254,15 @@ const reducer = (state = initialState, action) => {
                     causa: row.causa,
                     fecha: dateToString(new Date(row.fecha), 'DD/MM/YYYY'),
                     infraccion: row.infraccion,
-                    detalle: <MiControledPopover textoLink="Detalle">
-                        <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
-                        <Typography>Fallo: <b>{row.fallo}</b></Typography>
-                        <Typography>Cad.: <b>{row.caducidad}</b></Typography>
-                        <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
-                    </MiControledPopover>,
+                    detalle: <MiTooltip
+                        contenidoDetalle={<div>
+                            <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
+                            <Typography>Fallo: <b>{row.fallo}</b></Typography>
+                            <Typography>Cad.: <b>{row.caducidad}</b></Typography>
+                            <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
+                        </div>}>
+                        <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                    </MiTooltip>,
                     data: row //atributo "data" no se muestra en MiTabla
                 }
             })) || [];
@@ -257,11 +279,14 @@ const reducer = (state = initialState, action) => {
                     causa: row.causa,
                     fecha: dateToString(new Date(row.fecha), 'DD/MM/YYYY'),
                     infraccion: row.infraccion,
-                    detalle: <MiControledPopover textoLink="Detalle">
-                        <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
-                        <Typography>Fallo: <b>{row.fallo}</b></Typography>
-                        <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
-                    </MiControledPopover>,
+                    detalle: <MiTooltip
+                        contenidoDetalle={<div>
+                            <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
+                            <Typography>Fallo: <b>{row.fallo}</b></Typography>
+                            <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
+                        </div>}>
+                        <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                    </MiTooltip>,
                     data: row //atributo "data" no se muestra en MiTabla
                 }
             })) || [];
