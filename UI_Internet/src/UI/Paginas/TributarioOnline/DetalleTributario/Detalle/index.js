@@ -1190,6 +1190,7 @@ class DetalleTributo extends React.PureComponent {
                                                     tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
                                                     deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
                                                     datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
+                                                    check={true}
                                                     classes={classes}
                                                     info={plan || null}
                                                     menuItemSeleccionado={this.state.menuItemSeleccionado}
@@ -1688,7 +1689,8 @@ class MisPagos extends React.PureComponent {
         //Determinamos si el Cedulon tiene que estar deshabilitado
         let disabledCedulon = !(stringToFloat(this.state.importeAPagar) > 0);
         
-        //En caso de ser juicio cambia cedulon siempre habilitado y el monto a pagar se setea el total (ya q la grilla no tiene checks)
+        //En caso de ser juicio cambia cedulon siempre habilitado y 
+        //el monto a pagar se setea el total (ya q la grilla no tiene checks)
         const esJuicio = this.props.menuItemSeleccionado == 'juicios';
         let auxImporteAPagar;
         if(esJuicio) {
