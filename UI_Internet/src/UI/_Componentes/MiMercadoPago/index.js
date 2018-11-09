@@ -116,16 +116,18 @@ class MiMercadoPago extends React.PureComponent {
     const token = this.props.loggedUser.token;
     const opcion = "1"; // Hoy
 
-    if (registros.length > 0) {
+    if (registros.length > 0 || this.props.esJuicio) {
       services.getReporteCedulon(token,
         {
           "tipoTributo": parseInt(this.props.tipoTributo),
           "identificador": this.props.identificador,
           "opcionVencimiento": parseInt(opcion),
-          "periodos": registros
+          "periodos": registros,
+          "tipoCedulon": this.props.tipoCedulon,
+          "subItem": this.props.subItemSeleccionado
         })
         .then((datos) => {
-          if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
+          if (!datos.ok) { this.props.mostrarCargando(false); return false; } //mostrarAlerta(datos.error);
 
           const resultData = datos.return;
           let arrayNexos = [];
@@ -166,7 +168,7 @@ class MiMercadoPago extends React.PureComponent {
 
   onDialogoClose = () => {
 
-    this.props.deleteDataNexos && this.props.deleteDataNexos();
+    this.props.leteDataNexos && this.props.deleteDataNexos();
 
     this.setState({
       ...this.state,

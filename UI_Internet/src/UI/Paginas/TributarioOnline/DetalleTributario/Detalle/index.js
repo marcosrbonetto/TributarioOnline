@@ -180,6 +180,7 @@ class DetalleTributo extends React.PureComponent {
                 infoContribucion: undefined,
                 paramDatos: 'infoContribucion',
                 arrayResult: false,
+                tipoCedulon: 'Contribuciones',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -196,6 +197,7 @@ class DetalleTributo extends React.PureComponent {
                 infoMultas: undefined,
                 paramDatos: 'infoMultas',
                 arrayResult: false,
+                tipoCedulon: 'Multas',
                 order: 'asc',
                 orderBy: 'vencimiento',
                 labels: {
@@ -212,6 +214,7 @@ class DetalleTributo extends React.PureComponent {
                 infoJuicios: undefined,
                 paramDatos: 'infoJuicios',
                 arrayResult: true,
+                tipoCedulon: 'JuiciosContribuciones',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -229,6 +232,7 @@ class DetalleTributo extends React.PureComponent {
                 infoPlanesPago: undefined,
                 paramDatos: 'infoPlanesPago',
                 arrayResult: true,
+                tipoCedulon: 'PlanesContribuciones',
                 order: 'asc',
                 orderBy: 'concepto',
                 labels: {
@@ -443,12 +447,13 @@ class DetalleTributo extends React.PureComponent {
             let juicios = Object.assign({}, this.state.juicios);
             juicios.menuItemSeleccionado = (nextProps.infoJuiciosContribucion.lista > 0 && nextProps.infoJuiciosContribucion.lista[0].idJuicio) || '';
 
+            var listaInfoJuiciosContribucion = _.each(nextProps.infoJuiciosContribucion.lista,(x) => { return x.tipoCedulon = 'JuiciosContribuciones';});
             //Rellenamos "infoJuicios" ya que se comparte con juiciosMulta
             if (juicios.infoJuicios && juicios.infoJuicios.lista)
-                juicios.infoJuicios.lista = nextProps.infoJuiciosContribucion.lista.concat(juicios.infoJuicios.lista);
+                juicios.infoJuicios.lista = listaInfoJuiciosContribucion.concat(juicios.infoJuicios.lista);
             else
                 juicios.infoJuicios = {
-                    lista: nextProps.infoJuiciosContribucion.lista
+                    lista: listaInfoJuiciosContribucion
                 };
             this.setState({ juicios });
         }
@@ -458,12 +463,13 @@ class DetalleTributo extends React.PureComponent {
             let juicios = Object.assign({}, this.state.juicios);
             juicios.menuItemSeleccionado = (nextProps.infoJuiciosMulta.lista > 0 && nextProps.infoJuiciosMulta.lista[0].idJuicio) || '';
 
+            var listaInfoJuiciosMulta = _.each(nextProps.infoJuiciosMulta.lista,(x) => { return x.tipoCedulon = 'JuiciosMultas';});
             //Rellenamos "infoJuicios" ya que se comparte con juiciosContribucion
             if (juicios.infoJuicios && juicios.infoJuicios.lista)
-                juicios.infoJuicios.lista = juicios.infoJuicios.lista.concat(nextProps.infoJuiciosMulta.lista);
+                juicios.infoJuicios.lista = juicios.infoJuicios.lista.concat(listaInfoJuiciosMulta);
             else
                 juicios.infoJuicios = {
-                    lista: nextProps.infoJuiciosMulta.lista
+                    lista: listaInfoJuiciosMulta
                 };
             this.setState({ juicios });
         }
@@ -655,6 +661,15 @@ class DetalleTributo extends React.PureComponent {
         //Seleccionamos el item del SUBMENU
         let seccionState = Object.assign({}, this.state[seccionActual]);
         seccionState.menuItemSeleccionado = identificador;
+
+        //En caso de juicios actualizamos el tipo de cedulon de acuerdo al subitem seleccionado
+        if(seccionActual == 'juicios') {
+            var subItemSeleccionado = _.filter(seccionState.infoJuicios.lista, {identificador: identificador})[0];
+
+            if(subItemSeleccionado)
+                seccionState.tipoCedulon = subItemSeleccionado.tipoCedulon;
+        }
+
         this.setState({
             [seccionActual]: seccionState
         });
@@ -1057,6 +1072,7 @@ class DetalleTributo extends React.PureComponent {
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
+                                            tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
                                             deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
                                             datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                             check={true}
@@ -1081,6 +1097,7 @@ class DetalleTributo extends React.PureComponent {
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
+                                            tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
                                             deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
                                             datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                             check={true}
@@ -1110,6 +1127,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
                                                     deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
                                                     datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                                     check={false}
@@ -1139,6 +1157,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
                                                     deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
                                                     datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                                     check={false}
@@ -1168,6 +1187,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
                                                     deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
                                                     datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                                     classes={classes}
@@ -1653,6 +1673,9 @@ class MisPagos extends React.PureComponent {
             valor3: (deudaTotales && (deudaTotales.aVencer ? deudaTotales.aVencer : deudaTotales.gastos)) || 0,
         }
 
+        const esJuicio = this.props.menuItemSeleccionado == 'juicios';
+        let disabledCedulon = esJuicio ? false : !(stringToFloat(this.state.importeAPagar) > 0);
+
         //Datos para generar la grilla
         const rowList = this.props.info ? this.props.info.rowList : [];
         const rowsPerPage = (rowList.length <= 5 && 5) || (rowList.length > 5 && rowList.length <= 10 && 10) || (rowList.length > 10 && 25);
@@ -1719,9 +1742,12 @@ class MisPagos extends React.PureComponent {
                 <Grid item sm={5} className={classes.buttonActionsContent}>
                     <MiCedulon
                         registrosSeleccionados={this.props.registrosSeleccionados}
+                        subItemSeleccionado={this.props.info.identificador}
+                        tipoCedulon={this.props.tipoCedulon}
                         tipoTributo={tipoTributo}
                         identificador={this.props.identificadorActual}
-                        disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
+                        disabled={disabledCedulon}
+                        esJuicio={esJuicio}
                     />
 
                     {/* 'datosNexos' y 'deleteDataNexos' se pasa solo en este boton para levantar solo una vez el modal 
@@ -1730,9 +1756,12 @@ class MisPagos extends React.PureComponent {
                         deleteDataNexos={this.props.deleteDataNexos}
                         seccionDetalleTributo={this.props.menuItemSeleccionado}
                         registrosSeleccionados={this.props.registrosSeleccionados}
+                        subItemSeleccionado={this.props.info.identificador}
+                        tipoCedulon={this.props.tipoCedulon}
                         tipoTributo={tipoTributo}
                         identificador={this.props.identificadorActual}
-                        disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
+                        disabled={disabledCedulon}
+                        esJuicio={esJuicio}
                         datosNexos={this.props.datosNexos}
                     />
                 </Grid>
@@ -1773,17 +1802,23 @@ class MisPagos extends React.PureComponent {
                 <Grid item sm={5} className={classes.buttonActionsContent}>
                     <MiCedulon
                         registrosSeleccionados={this.props.registrosSeleccionados}
+                        subItemSeleccionado={this.props.info.identificador}
+                        tipoCedulon={this.props.tipoCedulon}
                         tipoTributo={tipoTributo}
                         identificador={this.props.identificadorActual}
-                        disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
+                        disabled={disabledCedulon}
+                        esJuicio={esJuicio}
                     />
 
                     <MiMercadoPago
                         seccionDetalleTributo={this.props.menuItemSeleccionado}
                         registrosSeleccionados={this.props.registrosSeleccionados}
+                        subItemSeleccionado={this.props.info.identificador}
+                        tipoCedulon={this.props.tipoCedulon}
                         tipoTributo={tipoTributo}
                         identificador={this.props.identificadorActual}
-                        disabled={!(stringToFloat(this.state.importeAPagar) > 0)}
+                        disabled={disabledCedulon}
+                        esJuicio={esJuicio}
                     />
                 </Grid>
             </Grid>

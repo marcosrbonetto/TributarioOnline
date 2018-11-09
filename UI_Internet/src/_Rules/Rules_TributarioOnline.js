@@ -1,6 +1,6 @@
 const getDatosUsuario = (token, callback) => {
   return new Promise((resolve, reject) => {
-    
+
     fetch(window.Config.BASE_URL_WS + '/v1/Usuario/Usuario', {
       method: "GET",
       headers: {
@@ -9,20 +9,20 @@ const getDatosUsuario = (token, callback) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
 
   });
 };
@@ -30,7 +30,7 @@ const getDatosUsuario = (token, callback) => {
 const getTributosByCUIT = (token, identificador) => {
   return new Promise((resolve, reject) => {
 
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/SusTributos?cuil='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/SusTributos?cuil=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -38,20 +38,20 @@ const getTributosByCUIT = (token, identificador) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
@@ -66,27 +66,27 @@ const getIdTributos = (token, callback) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 
 const getInfoContribucion = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo=1&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -94,20 +94,20 @@ const getInfoContribucion = (token, identificador) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
@@ -115,7 +115,7 @@ const getInfoContribucion = (token, identificador) => {
 
 const getInfoMultas = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo=1&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -123,27 +123,27 @@ const getInfoMultas = (token, identificador) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 
 const getInfoJuiciosContribucion = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosContribuciones?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosContribuciones?tipoTributo=1&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -151,26 +151,26 @@ const getInfoJuiciosContribucion = (token, identificador) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 const getInfoJuiciosMulta = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosMultas?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosMultas?tipoTributo=1&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -178,26 +178,26 @@ const getInfoJuiciosMulta = (token, identificador) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 const getInfoPlanesPago = (token, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/PlanesContribuciones?tipoTributo=1&identificador='+identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/PlanesContribuciones?tipoTributo=1&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -205,61 +205,95 @@ const getInfoPlanesPago = (token, identificador) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 const getReporteCedulon = (token, body) => {
+  let bodyParameter = {
+    "tipoTributo": body.tipoTributo,
+    "identificador": body.identificador,
+    "opcionVencimiento": body.opcionVencimiento,
+  };
+
+  let url = '/v1/Cedulon/Contribuciones';
+  switch (body.tipoCedulon) {
+    case 'Contribuciones':
+      url = '/v1/Cedulon/Contribuciones';
+      bodyParameter.periodos= body.periodos;
+      break;
+
+    case 'Multas':
+      url = '/v1/Cedulon/Multas';
+      bodyParameter.periodos= body.periodos;
+      break;
+
+    case 'JuiciosContribuciones':
+      url = '/v1/Cedulon/JuiciosContribuciones';
+      bodyParameter.juicio= body.subItem;
+      break;
+
+    case 'JuiciosMultas':
+      url = '/v1/Cedulon/JuiciosMultas';
+      bodyParameter.juicio= body.subItem;
+      break;
+
+    case 'PlanesContribuciones':
+      url = '/v1/Cedulon/PlanesContribuciones';
+      bodyParameter.plan= body.subItem;
+      bodyParameter.periodos= body.periodos;
+      break;
+
+    case 'PlanesMultas':
+      url = '/v1/Cedulon/PlanesMultas';
+      bodyParameter.plan= body.subItem;
+      bodyParameter.periodos= body.periodos;
+      break;
+  }
 
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Cedulon/Contribuciones', {
+    fetch(window.Config.BASE_URL_WS + url, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         "Token": token
       },
-      body: JSON.stringify({
-        "tipoTributo": body.tipoTributo,
-        "identificador": body.identificador,
-        "opcionVencimiento": body.opcionVencimiento,
-        "periodos": body.periodos,
-        "tipoCedulon": 1
-      })
+      body: JSON.stringify(bodyParameter)
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 const getInformeCuenta = (token, param) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/InformeCuenta?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/InformeCuenta?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -267,20 +301,20 @@ const getInformeCuenta = (token, param) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
@@ -299,26 +333,26 @@ const getReporteInformeCuenta = (token, body) => {
         "identificador": body.identificador
       })
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 const getUltimosPagos = (token, param) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Recaudacion/UltimosPagos?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Recaudacion/UltimosPagos?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -326,26 +360,26 @@ const getUltimosPagos = (token, param) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 const getInformeAntecedentes = (token, param) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeAntecedente?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeAntecedente?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -353,26 +387,26 @@ const getInformeAntecedentes = (token, param) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
 const getInformeREMAT = (token, param) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeRemat?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeRemat?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -380,20 +414,20 @@ const getInformeREMAT = (token, param) => {
         "Token": token
       }
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 
@@ -418,20 +452,20 @@ const pagoMercadoPago = (token, body) => {
         "tipoCedulon": 1 //Contribucion
       })
     })
-    .then(res => {
+      .then(res => {
 
         if (res.status >= 400) {
-        throw new Error("Bad response from server");
+          throw new Error("Bad response from server");
         }
 
         return res.json();
-    })
-    .then(datos => {
-      resolve(datos);
-    })
-    .catch(err => {
-      reject("Error procesando la solicitud");
-    });
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
   });
 };
 

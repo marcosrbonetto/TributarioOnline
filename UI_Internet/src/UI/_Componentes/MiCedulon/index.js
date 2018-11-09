@@ -35,7 +35,7 @@ class MiCedulon extends React.PureComponent {
     this.state = {
       anchorEl: null,
       base64Cedulon: '',
-      disabled: true
+      disabled: this.props.disabled
     };
   }
 
@@ -57,6 +57,7 @@ class MiCedulon extends React.PureComponent {
   };
 
   onBotonCedulonClick = (event) => {
+
     this.setState({
       anchorEl: null,
     });
@@ -66,17 +67,26 @@ class MiCedulon extends React.PureComponent {
     const token = this.props.loggedUser.token;
     const opcion = event.currentTarget.attributes.opcion.value;
 
-    if (registros.length > 0) {
+    if (registros.length > 0 || this.props.esJuicio) {
       services.getReporteCedulon(token,
         {
           "tipoTributo": parseInt(this.props.tipoTributo),
           "identificador": this.props.identificador,
           "opcionVencimiento": parseInt(opcion),
-          "periodos": registros
+          "periodos": registros,
+          "tipoCedulon": this.props.tipoCedulon,
+          "subItem": this.props.subItemSeleccionado
         })
         .then((datos) => {
-          if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
-          
+          if (!datos.ok) {
+            this.setState({
+              base64Cedulon: '',
+              dialogoOpen: true
+            });
+            this.props.mostrarCargando(false);
+            return false;
+          } //mostrarAlerta(datos.error); 
+
           const resultData = datos.return;
 
           this.setState({
@@ -143,7 +153,7 @@ class MiCedulon extends React.PureComponent {
 
           <div key="mainContent">
             {this.state.base64Cedulon != '' && <iframe src={this.state.base64Cedulon} height="410px" width="856px"></iframe>}
-            {this.state.base64Cedulon == '' && 'Debe seleccionar algún concepto'}
+            {this.state.base64Cedulon == '' && 'Ocurrió un problema, vuelva a intentarlo.'}
           </div>
         </MiControledDialog>
       </div>
