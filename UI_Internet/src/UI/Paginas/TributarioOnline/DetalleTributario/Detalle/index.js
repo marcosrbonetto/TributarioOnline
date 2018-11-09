@@ -1673,9 +1673,6 @@ class MisPagos extends React.PureComponent {
             valor3: (deudaTotales && (deudaTotales.aVencer ? deudaTotales.aVencer : deudaTotales.gastos)) || 0,
         }
 
-        const esJuicio = this.props.menuItemSeleccionado == 'juicios';
-        let disabledCedulon = esJuicio ? false : !(stringToFloat(this.state.importeAPagar) > 0);
-
         //Datos para generar la grilla
         const rowList = this.props.info ? this.props.info.rowList : [];
         const rowsPerPage = (rowList.length <= 5 && 5) || (rowList.length > 5 && rowList.length <= 10 && 10) || (rowList.length > 10 && 25);
@@ -1687,6 +1684,20 @@ class MisPagos extends React.PureComponent {
         //Tributo y tipo de tributo para generar el cedulon
         const tributo = this.props.tributoActual;
         let tipoTributo = getIdTipoTributo(tributo);
+
+        //Determinamos si el Cedulon tiene que estar deshabilitado
+        let disabledCedulon = !(stringToFloat(this.state.importeAPagar) > 0);
+        
+        //En caso de ser juicio cambia cedulon siempre habilitado y el monto a pagar se setea el total (ya q la grilla no tiene checks)
+        const esJuicio = this.props.menuItemSeleccionado == 'juicios';
+        let auxImporteAPagar;
+        if(esJuicio) {
+            disabledCedulon = false;
+            auxImporteAPagar = 0;
+            rowList.map((item) => {
+                auxImporteAPagar += stringToFloat(item['importe'],2);
+            });
+        }
 
         return <div>
             <Grid container className={classes.containerDeudaAdm}>
@@ -1736,7 +1747,7 @@ class MisPagos extends React.PureComponent {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        value={this.state.importeAPagar}
+                        value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
                     />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
@@ -1796,7 +1807,7 @@ class MisPagos extends React.PureComponent {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        value={this.state.importeAPagar}
+                        value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
                     />
                 </Grid>
                 <Grid item sm={5} className={classes.buttonActionsContent}>
