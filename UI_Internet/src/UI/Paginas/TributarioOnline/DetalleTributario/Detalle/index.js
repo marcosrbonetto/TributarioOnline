@@ -845,7 +845,7 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
+                    if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
                     this.props.setPropsInfoInformeCuenta(datos);
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -858,7 +858,7 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
+                    if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
                     this.props.setPropsInfoReporteInformeCuenta(datos);
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
