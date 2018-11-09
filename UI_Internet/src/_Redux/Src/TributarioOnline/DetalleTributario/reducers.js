@@ -12,7 +12,7 @@ import {
     SET_PAGOS_MERCADO_PAGO,
     RESET_INFO_DETALLE_TRIBUTO
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
-import { stringToFloat, dateToString } from "@Utils/functions"
+import { stringToFloat, dateToString, formatNumber } from "@Utils/functions"
 
 import React from "react";
 import storePersistent from "@Redux/Store/persistent";
@@ -62,7 +62,7 @@ const reducer = (state = initialState, action) => {
                     return {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                        importe: stringToFloat(concepto.importe.total, 2).toFixed(2),
+                        importe: formatNumber(concepto.importe.total),
                         detalle: <MiTooltip
                             contenidoDetalle={<div>
                                 <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -96,7 +96,7 @@ const reducer = (state = initialState, action) => {
                     return {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                        importe: stringToFloat(concepto.importe.total, 2).toFixed(2),
+                        importe: formatNumber(concepto.importe.total),
                         detalle: <MiTooltip
                             contenidoDetalle={<div>
                                 <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -131,7 +131,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                            importe: stringToFloat(concepto.importe.total, 2).toFixed(2),
+                            importe: formatNumber(concepto.importe.total),
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
                                     <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -173,7 +173,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                            importe: stringToFloat(concepto.importe.total, 2).toFixed(2),
+                            importe: formatNumber(concepto.importe.total),
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
                                     <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -215,7 +215,7 @@ const reducer = (state = initialState, action) => {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                            importe: stringToFloat(concepto.importe.total, 2).toFixed(2),
+                            importe: formatNumber(concepto.importe.total),
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
                                     <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -253,7 +253,7 @@ const reducer = (state = initialState, action) => {
                 return {
                     concepto: pago.concepto,
                     fecha: dateToString(new Date(pago.fecha), 'DD/MM/YYYY'),
-                    importe: stringToFloat(pago.importe.total, 2).toFixed(2),
+                    importe: formatNumber(pago.importe.total),
                     detalle: <MiTooltip
                         contenidoDetalle={<div>
                             <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
@@ -344,7 +344,7 @@ const reducer = (state = initialState, action) => {
         }
         case RESET_INFO_DETALLE_TRIBUTO: {
             //Se resetean todos lo valores de la pantalla.
-            return Object.assign({ ...state }, state.infoReporteInformeCuenta, {
+            let emptyState = {
                 infoContribucion: [],
                 infoMultas: [],
                 infoJuiciosContribucion: [],
@@ -356,7 +356,15 @@ const reducer = (state = initialState, action) => {
                 infoInformeCuenta: [],
                 infoReporteInformeCuenta: [],
                 infoPagosMercadoPago: []
+            };
+
+            //Agregamos datos persistentes
+            const newState = storePersistent.getStorePersistent({
+                reducer: 'DetalleTributario',
+                state: emptyState
             });
+
+            return newState;
         }
         default:
             return state;

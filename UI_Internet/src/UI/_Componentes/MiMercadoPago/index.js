@@ -21,7 +21,7 @@ import MiControledDialog from "@Componentes/MiControledDialog";
 import services from '@Rules/Rules_TributarioOnline';
 import { mostrarCargando } from '@Redux/Actions/mainContent';
 import { setPagosMercadoPago } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
-import { stringToFloat } from "@Utils/functions"
+import { stringToFloat, formatNumber } from "@Utils/functions"
 
 const mapStateToProps = state => {
   return {
@@ -80,15 +80,13 @@ class MiMercadoPago extends React.PureComponent {
       this.cargarNexos();
 
     } else {
-      //Cada vez que se paga un nexo mostramos el modal para pagar los siguientes
-      const arrayNexos = datosNexos.arrayNexos;
 
       //Actualizamos los nexos guardados en el store de redux que utilizamos para luego de cada pago
       this.props.setPropsUpdatePagosMercadoPago({
-        arrayNexos: arrayNexos
+        arrayNexos: datosNexos
       });
 
-      const allNexosPagos = _.filter(arrayNexos, function (nexo) {
+      const allNexosPagos = _.filter(datosNexos, function (nexo) {
         return !nexo.pagado;
       });
 
@@ -105,7 +103,7 @@ class MiMercadoPago extends React.PureComponent {
       this.setState({
         ...this.state,
         dialogoOpen: true,
-        arrayNexos: arrayNexos
+        arrayNexos: datosNexos
       });
       this.props.mostrarCargando(false);
     }
@@ -139,6 +137,7 @@ class MiMercadoPago extends React.PureComponent {
               itemNexo.totalPeriodo += stringToFloat(periodo.importe.total, 2);
             });
 
+            itemNexo.totalPeriodo = formatNumber(itemNexo.totalPeriodo);
             arrayNexos.push(itemNexo);
           });
 
@@ -186,7 +185,7 @@ class MiMercadoPago extends React.PureComponent {
 
     script.src = "https://www.mercadopago.com.ar/integrations/v1/web-tokenize-checkout.js";
     script.setAttribute("data-public-key", "APP_USR-7e5933f0-38bd-402c-be1e-ab7e845fe55d");
-    script.setAttribute("data-transaction-amount", totalPeriodo);
+    script.setAttribute("data-transaction-amount", stringToFloat(totalPeriodo,2));
     script.setAttribute("data-button-label", "Pagar Online");
 
     element && element.appendChild(script);
@@ -353,7 +352,7 @@ const styles = theme => ({
     }
   },
   maxWidth: {
-    maxWidth: '520px'
+    maxWidth: '564px'
   }
 });
 

@@ -64,7 +64,7 @@ import {
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
 //Funciones Útiles
-import { stringToFloat, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
+import { stringToFloat, formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
 const mapStateToProps = state => {
     return {
@@ -250,10 +250,6 @@ class DetalleTributo extends React.PureComponent {
     }
 
     componentDidMount() {
-        //Reseteamos Valores de DetalleTributario (Redux)
-        this.props.resetInfoDetalleTributo();
-
-
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
 
@@ -276,7 +272,8 @@ class DetalleTributo extends React.PureComponent {
                 this.props.infoPagosMercadoPago.arrayNexos &&
                 this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
 
-                const result = _.filter(this.props.infoPagosMercadoPago.arrayNexos, {
+                let arrayNexos = this.props.infoPagosMercadoPago.arrayNexos;
+                const result = _.filter(arrayNexos, {
                     nexo: nexo,
                     tipoTributo: parseInt(tipoTributo),
                     identificador: identificador
@@ -311,7 +308,7 @@ class DetalleTributo extends React.PureComponent {
                         this.setState({
                             [seccionDetalleTributo]: {
                                 ...this.state[seccionDetalleTributo],
-                                datosNexos: this.props.infoPagosMercadoPago
+                                datosNexos: arrayNexos
                             }
                         });
 
@@ -328,10 +325,16 @@ class DetalleTributo extends React.PureComponent {
                         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                     });
             }
+        } else {
+            //Si no se esta pagando con MercadoPago se actualiza la página
+            //Reseteamos Valores de DetalleTributario (Redux)
+            this.props.resetInfoDetalleTributo();
         }
 
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
+
+        
     }
 
     componentWillMount() {
@@ -1319,7 +1322,7 @@ class DetalleTributo extends React.PureComponent {
                                     <div key="headerContent"></div>
                                     <div key="mainContent">
                                         {!this.state.informeCuenta.modal.showReporte && <div>
-                                            <Typography className={classes.title} variant="title">Deuda Total: <b>$ {stringToFloat(this.state.informeCuenta.deudaTotal, 2).toFixed(2)} </b></Typography>
+                                            <Typography className={classes.title} variant="title">Deuda Total: <b>$ {formatNumber(this.state.informeCuenta.deudaTotal)} </b></Typography>
                                             <Divider className={classes.divider} />
 
                                             <Typography className={classes.title} variant="title">Deuda vencida</Typography>
@@ -1331,7 +1334,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {stringToFloat(this.state.informeCuenta.deudaVencida.total, 2).toFixed(2)} </b>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.deudaVencida.total)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1341,7 +1344,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {stringToFloat(this.state.informeCuenta.deudaVencida.administrativa, 2).toFixed(2)} </b>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.deudaVencida.administrativa)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1354,7 +1357,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {stringToFloat(this.state.informeCuenta.deudaAVencer.total, 2).toFixed(2)} </b>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.deudaAVencer.total)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1364,7 +1367,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {stringToFloat(this.state.informeCuenta.deudaAVencer.administrativa, 2).toFixed(2)} </b>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.deudaAVencer.administrativa)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1658,7 +1661,7 @@ class MisPagos extends React.PureComponent {
         });
 
         this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
-        this.setState({ importeAPagar: importeTotal.toFixed(2).replace('.', ',') });
+        this.setState({ importeAPagar: formatNumber(importeTotal) });
     };
 
     render() {
@@ -1699,6 +1702,8 @@ class MisPagos extends React.PureComponent {
             rowList.map((item) => {
                 auxImporteAPagar += stringToFloat(item['importe'],2);
             });
+
+            auxImporteAPagar = formatNumber(auxImporteAPagar);
         }
 
         return <div>
@@ -1711,7 +1716,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>Total: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {stringToFloat(valoresDeuda.valor1, 2).toFixed(2)}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {formatNumber(valoresDeuda.valor1)}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -1721,7 +1726,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>{this.props.data.labels.vencida}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {stringToFloat(valoresDeuda.valor2, 2).toFixed(2)}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {formatNumber(valoresDeuda.valor2)}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -1731,7 +1736,7 @@ class MisPagos extends React.PureComponent {
                             <Typography variant="subheading" gutterBottom>{this.props.data.labels.aVencer}: </Typography>
                         </Grid>
                         <Grid item sm={6}>
-                            <Typography variant="subheading" gutterBottom><b>$ {stringToFloat(valoresDeuda.valor3, 2).toFixed(2)}</b></Typography>
+                            <Typography variant="subheading" gutterBottom><b>$ {formatNumber(valoresDeuda.valor3)}</b></Typography>
                         </Grid>
                     </Grid>
                 </Grid>
