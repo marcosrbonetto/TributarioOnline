@@ -74,9 +74,10 @@ class MiControledDialog extends React.PureComponent {
             <DialogContentText>
               {this.getComponent('headerContent')}
               {this.getComponent('mainContent')}
-              {this.getComponent('footerContent')}
+              {!this.props.footerFixed && this.getComponent('footerContent')}
             </DialogContentText>
           </DialogContent>
+          {this.props.footerFixed && this.getComponent('footerContent')}
           <DialogActions>
             <Button onClick={this.handleCloseModal} color="secondary">Cerrar</Button>
           </DialogActions>

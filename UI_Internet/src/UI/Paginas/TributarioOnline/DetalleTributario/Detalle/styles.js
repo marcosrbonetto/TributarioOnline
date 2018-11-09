@@ -243,6 +243,10 @@ const styles = theme => ({
         textDecoration: 'underline'
       }
     },
+    maxWidthInformeCuenta: {
+      maxWidth: '900px',
+      minWidth: '410px'
+    }
   });
 
   

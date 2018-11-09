@@ -143,15 +143,7 @@ class DetalleTributo extends React.PureComponent {
             mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
             infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
             informeCuenta: { //Información utilizada para mostrar informe de cuenta
-                deudaTotal: 0,
-                deudaVencida: {
-                    total: 0,
-                    administrativa: 0
-                },
-                deudaAVencer: {
-                    total: 0,
-                    administrativa: 0
-                },
+                info: {},
                 modal: {
                     open: false,
                     showReporte: false
@@ -539,15 +531,7 @@ class DetalleTributo extends React.PureComponent {
             this.setState({
                 informeCuenta: {
                     ...this.state.informeCuenta,
-                    deudaTotal: nextProps.infoInformeCuenta.total,
-                    deudaVencida: {
-                        total: nextProps.infoInformeCuenta.totalVencida,
-                        administrativa: nextProps.infoInformeCuenta.administrativaVencida
-                    },
-                    deudaAVencer: {
-                        total: nextProps.infoInformeCuenta.totalAVencer,
-                        administrativa: nextProps.infoInformeCuenta.administrativaAVencer
-                    },
+                    info: nextProps.infoInformeCuenta,
                     modal: {
                         ...this.state.informeCuenta.modal,
                         open: false
@@ -1318,56 +1302,100 @@ class DetalleTributo extends React.PureComponent {
                                     onDialogoClose={this.onInformeCuentaDialogoClose}
                                     textoLink={'Informe de Cuenta'}
                                     titulo={'Informe de Cuenta al día ' + dateToString(new Date(), 'DD/MM/YYYY')}
+                                    classMaxWidth={classes.maxWidthInformeCuenta}
+                                    footerFixed={true}
                                 >
                                     <div key="headerContent"></div>
                                     <div key="mainContent">
                                         {!this.state.informeCuenta.modal.showReporte && <div>
-                                            <Typography className={classes.title} variant="title">Deuda Total: <b>$ {formatNumber(this.state.informeCuenta.deudaTotal)} </b></Typography>
+                                            <Typography className={classes.title} variant="title">Deuda Total: <b>$ {formatNumber(this.state.informeCuenta.info.total)} </b></Typography>
                                             <Divider className={classes.divider} />
-
-                                            <Typography className={classes.title} variant="title">Deuda vencida</Typography>
-                                            <Divider className={classes.divider} />
-
                                             <Grid container spacing={16}>
                                                 <Grid item sm={4}>
-                                                    <Typography variant="subheading" gutterBottom>Total: </Typography>
+                                                    <Typography variant="subheading" gutterBottom>Total vencida: </Typography>
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.deudaVencida.total)} </b>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.info.totalVencida)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={16}>
                                                 <Grid item sm={4}>
-                                                    <Typography variant="subheading" gutterBottom>Administrativa: </Typography>
+                                                    <Typography variant="subheading" gutterBottom>Total a vencer: </Typography>
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.deudaVencida.administrativa)} </b>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.info.totalAVencer)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
                                             <br />
-                                            <Typography className={classes.title} variant="title">Deuda a vencer</Typography>
+                                            <Typography className={classes.title} variant="title">Administrativa</Typography>
                                             <Divider className={classes.divider} />
                                             <Grid container spacing={16}>
                                                 <Grid item sm={4}>
-                                                    <Typography variant="subheading" gutterBottom>Total: </Typography>
+                                                    <Typography variant="subheading" gutterBottom>Vencida: </Typography>
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.deudaAVencer.total)} </b>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.info.administrativaVencida)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
                                             <Grid container spacing={16}>
                                                 <Grid item sm={4}>
-                                                    <Typography variant="subheading" gutterBottom>Administrativa: </Typography>
+                                                    <Typography variant="subheading" gutterBottom>A vencer: </Typography>
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.deudaAVencer.administrativa)} </b>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.info.administrativaAVencer)} </b>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <Typography className={classes.title} variant="title">Plan</Typography>
+                                            <Divider className={classes.divider} />
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={4}>
+                                                    <Typography variant="subheading" gutterBottom>Vencida: </Typography>
+                                                </Grid>
+                                                <Grid item sm={8}>
+                                                    <Typography variant="subheading" gutterBottom>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.info.planesVencida)} </b>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={4}>
+                                                    <Typography variant="subheading" gutterBottom>A vencer: </Typography>
+                                                </Grid>
+                                                <Grid item sm={8}>
+                                                    <Typography variant="subheading" gutterBottom>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.info.planAVencer)} </b>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            <br />
+                                            <Typography className={classes.title} variant="title">Capital - Gastos</Typography>
+                                            <Divider className={classes.divider} />
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={4}>
+                                                    <Typography variant="subheading" gutterBottom>Juicios Capital: </Typography>
+                                                </Grid>
+                                                <Grid item sm={8}>
+                                                    <Typography variant="subheading" gutterBottom>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.info.capitalVencida)} </b>
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={4}>
+                                                    <Typography variant="subheading" gutterBottom>Honorarios-Gastos: </Typography>
+                                                </Grid>
+                                                <Grid item sm={8}>
+                                                    <Typography variant="subheading" gutterBottom>
+                                                        <b>$ {formatNumber(this.state.informeCuenta.info.gastosVencida)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
