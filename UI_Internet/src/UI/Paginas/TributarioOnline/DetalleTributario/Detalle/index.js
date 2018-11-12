@@ -242,13 +242,25 @@ class DetalleTributo extends React.PureComponent {
     }
 
     componentDidMount() {
+        const mercadoPago = getAllUrlParams(window.location.href).mercadoPago; //Ej.: true
+
+        //Se realiza el pago del nexo y se procede a mostrar los siguientes para pagarlos
+        if (mercadoPago) {
+            this.procesoPagoMercadoPago();
+        } else {
+            //Si no se esta pagando con MercadoPago se actualiza la página
+            //Reseteamos Valores de DetalleTributario (Redux)
+            this.props.resetInfoDetalleTributo();
+        }        
+    }
+
+    procesoPagoMercadoPago = () => {
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
         /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
 
         /* NOTA: 'this.props.infoPagosMercadoPago' tiene los nexos a pagar a partir de ellos se lo actualizará para realizar los pagos */
         const token = this.props.loggedUser.token;
 
-        const mercadoPago = getAllUrlParams(window.location.href).mercadoPago; //Ej.: true
         const seccionDetalleTributo = getAllUrlParams(window.location.href).seccionDetalleTributo; //Ej.: contribucion
         const nexo = getAllUrlParams(window.location.href).nexo; //Ej.: 183060018127
         const tipoTributo = getAllUrlParams(window.location.href).tipoTributo; //Ej.: 1
@@ -258,82 +270,73 @@ class DetalleTributo extends React.PureComponent {
         const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
         const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
 
-        //Se realiza el pago del nexo y se procede a mostrar los siguientes para pagarlos
-        if (mercadoPago) {
-            if (this.props.infoPagosMercadoPago &&
-                this.props.infoPagosMercadoPago.arrayNexos &&
-                this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
+        if (this.props.infoPagosMercadoPago &&
+            this.props.infoPagosMercadoPago.arrayNexos &&
+            this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
 
-                let arrayNexos = this.props.infoPagosMercadoPago.arrayNexos;
-                const result = _.filter(arrayNexos, {
-                    nexo: nexo,
-                    tipoTributo: parseInt(tipoTributo),
-                    identificador: identificador
-                });
+            let arrayNexos = this.props.infoPagosMercadoPago.arrayNexos;
+            const result = _.filter(arrayNexos, {
+                nexo: nexo,
+                tipoTributo: parseInt(tipoTributo),
+                identificador: identificador
+            });
 
-                if (result.length == 0) return false;
+            if (result.length == 0) return false;
 
-                let nexoActual = result[0];
+            let nexoActual = result[0];
 
-                servicesTributarioOnline.pagoMercadoPago(token, {
-                    nexo: nexoActual.nexo,
-                    tipoTributo: parseInt(tipoTributo),
-                    identificador: identificador,
-                    token: tokenNexo,
-                    metodoPago: metodoPago,
-                    emisor: emisor,
-                    cuotas: parseInt(cuotas)
-                })
-                    .then((datos) => {
+            servicesTributarioOnline.pagoMercadoPago(token, {
+                nexo: nexoActual.nexo,
+                tipoTributo: parseInt(tipoTributo),
+                identificador: identificador,
+                token: tokenNexo,
+                metodoPago: metodoPago,
+                emisor: emisor,
+                cuotas: parseInt(cuotas)
+            })
+                .then((datos) => {
 
-                        if (!datos.ok) { mostrarAlerta('Pago MercadoPago: ' + datos.error); return false; }
+                    if (!datos.ok) { mostrarAlerta('Pago MercadoPago: ' + datos.error); return false; }
 
-                        //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
-                        //Y muestre los nexos actualizados
-                        nexoActual.token = token;
-                        nexoActual.metodoPago = metodoPago;
-                        nexoActual.emisor = emisor;
-                        nexoActual.cuotas = cuotas;
-                        nexoActual.pagado = true;
+                    //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
+                    //Y muestre los nexos actualizados
+                    nexoActual.token = token;
+                    nexoActual.metodoPago = metodoPago;
+                    nexoActual.emisor = emisor;
+                    nexoActual.cuotas = cuotas;
+                    nexoActual.pagado = true;
 
-                        //Al setear el "datosNexos"
-                        this.setState({
-                            [seccionDetalleTributo]: {
-                                ...this.state[seccionDetalleTributo],
-                                datosNexos: arrayNexos
-                            }
-                        });
-
-                        mostrarMensaje('Pago MercadoPago: Pago realizado exitosamente');
-
-                    }).catch(err => {
-
-                        this.setState({
-                            [seccionDetalleTributo]: {
-                                ...this.state[seccionDetalleTributo],
-                                datosNexos: this.props.infoPagosMercadoPago
-                            }
-                        });
-                        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    //Al setear el "datosNexos"
+                    this.setState({
+                        [seccionDetalleTributo]: {
+                            ...this.state[seccionDetalleTributo],
+                            datosNexos: arrayNexos
+                        }
                     });
-            }
+
+                    mostrarMensaje('Pago MercadoPago: Pago realizado exitosamente');
+
+                }).catch(err => {
+
+                    this.setState({
+                        [seccionDetalleTributo]: {
+                            ...this.state[seccionDetalleTributo],
+                            datosNexos: this.props.infoPagosMercadoPago
+                        }
+                    });
+                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                });
         } else {
             //Si no se esta pagando con MercadoPago se actualiza la página
             //Reseteamos Valores de DetalleTributario (Redux)
             this.props.resetInfoDetalleTributo();
-        }
-
-        /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
-        /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
-
-        
+        } 
     }
 
     componentWillMount() {
         //Servicios que setean los datos en las props del store de redux
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
 
         //Traemos los tributos asociados al Token
@@ -345,7 +348,7 @@ class DetalleTributo extends React.PureComponent {
                     this.props.redireccionar('/Inicio');
                 else {
                     this.props.setPropsIdTributos(datos);
-                    this.iniciarServicios(token, tributo, identificador);
+                    this.iniciarServicios(token, identificador);
                 }
 
             }).catch(err => {
@@ -353,7 +356,7 @@ class DetalleTributo extends React.PureComponent {
             });
     }
 
-    iniciarServicios = (token, tributo, identificador) => {
+    iniciarServicios = (token, identificador) => {
         const service1 = servicesTributarioOnline.getInfoContribucion(token, identificador)
             .then((datos) => {
                 if (!datos.ok) { return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
@@ -552,9 +555,9 @@ class DetalleTributo extends React.PureComponent {
         }
     }
 
-    //Cada vez que se cambia de sección se checkean y cargamos datos en la grilla
-    //Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días ( mostrarAlternativaPlan )
-    //La información de "Datos de Cuenta" varia respecto a cada seccion ( infoDatosCuenta )
+    //- Cada vez que se cambia de sección se checkean y recargamos datos en la grilla de acuerdo al menu seleccionado
+    //- Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días ( mostrarAlternativaPlan )
+    //- La información de "Datos de Cuenta" varia respecto a cada seccion ( infoDatosCuenta )
     refreshValoresPantalla(parametros) {
         const listaDatos = parametros.listaDatos || null;
 
@@ -580,7 +583,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
-    //Evento cuando se cambia de identificador
+    //Evento cuando se cambia de identificador (se recarga la página)
     selectIdentificador = event => {
         if (event.target.value == '0')
             return false;
@@ -590,7 +593,7 @@ class DetalleTributo extends React.PureComponent {
         window.location.reload();//Recargamos la pagina con la nueva url
     };
 
-    //Evento cuando se cambia de sección del MENU
+    //Evento cuando se cambia de sección del MENU principal
     handleMenuChange = (event, value) => {
 
         this.setState({
@@ -618,9 +621,6 @@ class DetalleTributo extends React.PureComponent {
 
     /*
         Retorna listaDatos para el uso de funcion refreshValoresPantalla
-        Este es el caso de juicios y planes de pago ya que se tiene que buscar
-        los datos de alguno de los subitems (submenu) para realizar los calculos al
-        refrescar la pantalla
     */
     getListaDatosLista = (infoDatos, identificador) => {
 
@@ -669,7 +669,8 @@ class DetalleTributo extends React.PureComponent {
         });
     };
 
-    //Función para setear en el state las filas seleccionadas de la seccion actual para generar cedulon
+    //Función para setear en el state las filas seleccionadas de la grilla 
+    //de la seccion actual para generar cedulon
     setRegistrosSeleccionados = (menuItemSeleccionado, registrosSeleccionados) => {
 
         let itemSeleccionado = Object.assign({}, this.state[menuItemSeleccionado]);
@@ -678,7 +679,7 @@ class DetalleTributo extends React.PureComponent {
         this.setState({ [menuItemSeleccionado]: itemSeleccionado });
     };
 
-    //Abrimos modal informe de cuentas trayendo datos del WS
+    //Traemos datos de últimos pagos trayendo datos del WS
     onUltimosPagosDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
@@ -703,6 +704,7 @@ class DetalleTributo extends React.PureComponent {
         }
     }
 
+    //Abrimos modal últimos pagos
     handleUltimosPagosCloseDialog = () => {
         let newState = { ...this.state };
         newState.ultimosPagos.modal.open = true;
@@ -711,7 +713,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(false);
     }
 
-    //Cerramos modal informe de cuentas seteando los valores iniciales del state
+    //Cerramos modal últimos pagos seteando los valores iniciales del state
     onUltimosPagosDialogoClose = () => {
         this.setState({
             ultimosPagos: {
@@ -723,7 +725,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
-    //Abrimos modal informe de cuentas trayendo datos del WS
+    //Traemos datos de informe antecedentes trayendo datos del WS
     onInformeAntecedentesDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
@@ -748,6 +750,7 @@ class DetalleTributo extends React.PureComponent {
         }
     }
 
+    //Abrimos modal informe antecedentes
     handleInformeAntecedentesCloseDialog = () => {
         let newState = { ...this.state };
         newState.informeAntecedentes.modal.open = true;
@@ -756,7 +759,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(false);
     }
 
-    //Cerramos modal informe de cuentas seteando los valores iniciales del state
+    //Cerramos modal informe antecedentes seteando los valores iniciales del state
     onInformeAntecedentesDialogoClose = () => {
         this.setState({
             informeAntecedentes: {
@@ -768,8 +771,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
-
-    //Abrimos modal informe de cuentas trayendo datos del WS
+    //Traemos datos de informe REMAT trayendo datos del WS
     onInformeREMATDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
@@ -794,6 +796,7 @@ class DetalleTributo extends React.PureComponent {
         }
     }
 
+    //Abrimos modal informe REMAT
     handleInformeREMATCloseDialog = () => {
         let newState = { ...this.state };
         newState.informeREMAT.modal.open = true;
@@ -802,7 +805,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(false);
     }
 
-    //Cerramos modal informe de cuentas seteando los valores iniciales del state
+    //Cerramos modal informe REMAT seteando los valores iniciales del state
     onInformeREMATDialogoClose = () => {
         this.setState({
             informeREMAT: {
@@ -815,7 +818,7 @@ class DetalleTributo extends React.PureComponent {
     }
 
 
-    //Abrimos modal informe de cuentas trayendo datos del WS
+    //Traemos datos de informe cuenta trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
@@ -857,6 +860,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Abrimos modal informe cuenta
     handleInformeCuentaCloseDialog = () => {
         let newState = { ...this.state };
         newState.informeCuenta.modal.open = true;
@@ -865,7 +869,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(false);
     }
 
-    //Cerramos modal informe de cuentas seteando los valores iniciales del state
+    //Cerramos modal informe cuenta seteando los valores iniciales del state
     onInformeCuentaDialogoClose = () => {
         this.setState({
             informeCuenta: {
@@ -903,6 +907,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Cuando se terminan de pagar (Online) todos los pagos o se cancela, se borran los Nexos usados
     handleDeleteDataNexos = (seccionDetalleTributo) => {
         this.setState({
             [seccionDetalleTributo]: {
@@ -912,6 +917,7 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Evento para agregar nuevo tributo
     handleOnClickAddTributo = (event) => {
         const tributo = this.props.match.params.tributo;
         this.props.redireccionar('/Inicio/Representantes/' + tributo + '/DetalleTributario');
