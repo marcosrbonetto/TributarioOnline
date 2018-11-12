@@ -931,6 +931,20 @@ class DetalleTributo extends React.PureComponent {
             infoJuiciosMulta,
             infoPlanesPago } = this.props;
 
+        const {
+            identificadorActual,
+            identificadores,
+            menuItemSeleccionado,
+            juicios,
+            planesPago,
+            informeCuenta,
+            infoDatosCuenta,
+            ultimosPagos,
+            mostrarAlternativaPlan,
+            informeAntecedentes,
+            informeREMAT
+        } = this.state;
+
         //rowList - Filas de grilla
         //lista - lista de tributos que contienen rowLists para mostrar en la grilla
         const listContribucion = infoContribucion && infoContribucion.rowList ? infoContribucion.rowList : [];
@@ -957,16 +971,16 @@ class DetalleTributo extends React.PureComponent {
                                         name: 'identificador',
                                         id: 'identificador',
                                     }}
-                                    value={this.state.identificadorActual}
+                                    value={identificadorActual}
                                     disableUnderline
                                     onChange={this.selectIdentificador}
                                 >
 
-                                    {this.state.identificadores && this.state.identificadores.map((tributo, index) => {
+                                    {identificadores && identificadores.map((tributo, index) => {
                                         return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado}</MenuItem>
                                     })}
                                 </Select>
-                                - <b>{this.state[this.state.menuItemSeleccionado].labels.detalleTitulo}</b>
+                                - <b>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b>
                             </Typography>
 
                             {/* Menu de secciones */}
@@ -974,7 +988,7 @@ class DetalleTributo extends React.PureComponent {
                                 <Grid item sm={12} className={classes.tabMenu}>
 
                                     <Tabs
-                                        value={this.state.menuItemSeleccionado}
+                                        value={menuItemSeleccionado}
                                         onChange={this.handleMenuChange}
                                         indicatorColor="secondary"
                                         textColor="secondary"
@@ -999,7 +1013,7 @@ class DetalleTributo extends React.PureComponent {
                             {/* Sub Menus */}
 
                             {/* Juicio */}
-                            {(this.state.menuItemSeleccionado == 'juicios' &&
+                            {(menuItemSeleccionado == 'juicios' &&
                                 ((listaJuiciosContribucion.length > 0) || (listaJuiciosMulta.length > 0)) &&
                                 <div>
 
@@ -1007,7 +1021,7 @@ class DetalleTributo extends React.PureComponent {
                                         <Grid item sm={12} className={classes.tabMenu}>
                                             {/* SubMenu */}
                                             <Tabs
-                                                value={this.state.juicios.menuItemSeleccionado}
+                                                value={juicios.menuItemSeleccionado}
                                                 onChange={this.handleSubMenuChange}
                                                 classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
                                                 scrollable
@@ -1029,19 +1043,19 @@ class DetalleTributo extends React.PureComponent {
                                         </Grid>
                                     </Grid>
                                 </div>)
-                                || this.state.menuItemSeleccionado == 'juicios' &&
+                                || menuItemSeleccionado == 'juicios' &&
                                 <Typography className={classes.infoTexto}>
                                     {`Le informamos que no posee juicios`}
                                 </Typography>}
 
                             {/* Planes de Pago */}
-                            {(this.state.menuItemSeleccionado == 'planesPago' && listPlanesPago.length > 0 && <div>
+                            {(menuItemSeleccionado == 'planesPago' && listPlanesPago.length > 0 && <div>
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
                                         {/* SubMenu */}
                                         <Tabs
-                                            value={this.state.planesPago.menuItemSeleccionado}
+                                            value={planesPago.menuItemSeleccionado}
                                             onChange={this.handleSubMenuChange}
                                             scrollable
                                             scrollButtons="auto"
@@ -1058,7 +1072,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                             </div>)
                                 ||
-                                this.state.menuItemSeleccionado == 'planesPago' &&
+                                menuItemSeleccionado == 'planesPago' &&
                                 <Typography className={classes.infoTexto}>
                                     {`Le informamos que no posee planes de pago`}
                                 </Typography>}
@@ -1066,22 +1080,22 @@ class DetalleTributo extends React.PureComponent {
                             {/* Secciones */}
 
                             {/* Contribución por período */}
-                            {this.state.menuItemSeleccionado == 'contribucion' &&
+                            {menuItemSeleccionado == 'contribucion' &&
                                 listContribucion.length > 0 && <div>
                                     <div>
                                         <Typography className={classes.infoTexto}>
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
-                                            tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
-                                            deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
-                                            datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
+                                            tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
+                                            deleteDataNexos={() => { this.handleDeleteDataNexos(menuItemSeleccionado) }}
+                                            datosNexos={this.state[menuItemSeleccionado].datosNexos}
                                             check={true}
                                             classes={classes}
                                             info={infoContribucion || null}
-                                            menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                            data={this.state[this.state.menuItemSeleccionado]}
-                                            registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                            menuItemSeleccionado={menuItemSeleccionado}
+                                            data={this.state[menuItemSeleccionado]}
+                                            registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                             setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                             identificadorActual={this.props.match.params.identificador}
                                             tributoActual={this.props.match.params.tributo}
@@ -1090,22 +1104,22 @@ class DetalleTributo extends React.PureComponent {
                                 </div>}
 
                             {/* Multas */}
-                            {this.state.menuItemSeleccionado == 'multas' &&
+                            {menuItemSeleccionado == 'multas' &&
                                 listMultas.length > 0 && <div>
                                     <div>
                                         <Typography className={classes.infoTexto}>
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
-                                            tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
-                                            deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
-                                            datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
+                                            tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
+                                            deleteDataNexos={() => { this.handleDeleteDataNexos(menuItemSeleccionado) }}
+                                            datosNexos={this.state[menuItemSeleccionado].datosNexos}
                                             check={true}
                                             classes={classes}
                                             info={infoMultas || null}
-                                            menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                            data={this.state[this.state.menuItemSeleccionado]}
-                                            registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                            menuItemSeleccionado={menuItemSeleccionado}
+                                            data={this.state[menuItemSeleccionado]}
+                                            registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                             setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                             identificadorActual={this.props.match.params.identificador}
                                             tributoActual={this.props.match.params.tributo}
@@ -1116,24 +1130,24 @@ class DetalleTributo extends React.PureComponent {
                             {/* Sub Secciones */}
 
                             {/* Juicio por Contribucion */}
-                            {this.state.menuItemSeleccionado == 'juicios' &&
+                            {menuItemSeleccionado == 'juicios' &&
                                 listaJuiciosContribucion.map((juicio) => {
                                     return <div>
-                                        {this.state.juicios.menuItemSeleccionado == juicio.idJuicio &&
+                                        {juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
-                                                    tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
-                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
-                                                    datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
+                                                    tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
+                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(menuItemSeleccionado) }}
+                                                    datosNexos={this.state[menuItemSeleccionado].datosNexos}
                                                     check={false}
                                                     classes={classes}
                                                     info={juicio || null}
-                                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                                    data={this.state[this.state.menuItemSeleccionado]}
-                                                    registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                                    menuItemSeleccionado={menuItemSeleccionado}
+                                                    data={this.state[menuItemSeleccionado]}
+                                                    registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                                     identificadorActual={this.props.match.params.identificador}
                                                     tributoActual={this.props.match.params.tributo}
@@ -1144,24 +1158,24 @@ class DetalleTributo extends React.PureComponent {
                                 })}
 
                             {/* Juicio por Multas */}
-                            {this.state.menuItemSeleccionado == 'juicios' &&
+                            {menuItemSeleccionado == 'juicios' &&
                                 listaJuiciosMulta.map((juicio) => {
                                     return <div>
-                                        {this.state.juicios.menuItemSeleccionado == juicio.idJuicio &&
+                                        {juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
-                                                    tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
-                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
-                                                    datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
+                                                    tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
+                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(menuItemSeleccionado) }}
+                                                    datosNexos={this.state[menuItemSeleccionado].datosNexos}
                                                     check={false}
                                                     classes={classes}
                                                     info={juicio || null}
-                                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                                    data={this.state[this.state.menuItemSeleccionado]}
-                                                    registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                                    menuItemSeleccionado={menuItemSeleccionado}
+                                                    data={this.state[menuItemSeleccionado]}
+                                                    registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                                     identificadorActual={this.props.match.params.identificador}
                                                     tributoActual={this.props.match.params.tributo}
@@ -1172,24 +1186,24 @@ class DetalleTributo extends React.PureComponent {
                                 })}
 
                             {/* Planes de Pago */}
-                            {this.state.menuItemSeleccionado == 'planesPago' &&
+                            {menuItemSeleccionado == 'planesPago' &&
                                 listPlanesPago.map((plan) => {
                                     return <div>
-                                        {this.state.planesPago.menuItemSeleccionado == plan.idPlan &&
+                                        {planesPago.menuItemSeleccionado == plan.idPlan &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
-                                                    tipoCedulon={this.state[this.state.menuItemSeleccionado].tipoCedulon}
-                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(this.state.menuItemSeleccionado) }}
-                                                    datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
+                                                    tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
+                                                    deleteDataNexos={() => { this.handleDeleteDataNexos(menuItemSeleccionado) }}
+                                                    datosNexos={this.state[menuItemSeleccionado].datosNexos}
                                                     check={true}
                                                     classes={classes}
                                                     info={plan || null}
-                                                    menuItemSeleccionado={this.state.menuItemSeleccionado}
-                                                    data={this.state[this.state.menuItemSeleccionado]}
-                                                    registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
+                                                    menuItemSeleccionado={menuItemSeleccionado}
+                                                    data={this.state[menuItemSeleccionado]}
+                                                    registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                                     identificadorActual={this.props.match.params.identificador}
                                                     tributoActual={this.props.match.params.tributo}
@@ -1304,7 +1318,7 @@ class DetalleTributo extends React.PureComponent {
                             </Grid>
                             <Grid item sm={10}>
                                 <MiControledDialog
-                                    open={this.state.informeCuenta.modal.open}
+                                    open={informeCuenta.modal.open}
                                     onDialogoOpen={this.onInformeCuentaDialogoOpen}
                                     onDialogoClose={this.onInformeCuentaDialogoClose}
                                     textoLink={'Informe de Cuenta'}
@@ -1314,8 +1328,8 @@ class DetalleTributo extends React.PureComponent {
                                 >
                                     <div key="headerContent"></div>
                                     <div key="mainContent">
-                                        {!this.state.informeCuenta.modal.showReporte && <div>
-                                            <Typography className={classes.title} variant="title">Deuda Total: <b>$ {formatNumber(this.state.informeCuenta.info.total)} </b></Typography>
+                                        {!informeCuenta.modal.showReporte && <div>
+                                            <Typography className={classes.title} variant="title">Deuda Total: <b>$ {formatNumber(informeCuenta.info.total)} </b></Typography>
                                             <Divider className={classes.divider} />
                                             <Grid container spacing={16}>
                                                 <Grid item sm={4}>
@@ -1323,7 +1337,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.info.totalVencida)} </b>
+                                                        <b>$ {formatNumber(informeCuenta.info.totalVencida)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1333,7 +1347,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.info.totalAVencer)} </b>
+                                                        <b>$ {formatNumber(informeCuenta.info.totalAVencer)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1346,7 +1360,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.info.administrativaVencida)} </b>
+                                                        <b>$ {formatNumber(informeCuenta.info.administrativaVencida)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1356,7 +1370,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.info.administrativaAVencer)} </b>
+                                                        <b>$ {formatNumber(informeCuenta.info.administrativaAVencer)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1369,7 +1383,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.info.planesVencida)} </b>
+                                                        <b>$ {formatNumber(informeCuenta.info.planesVencida)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1379,7 +1393,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.info.planAVencer)} </b>
+                                                        <b>$ {formatNumber(informeCuenta.info.planAVencer)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1392,7 +1406,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.info.capitalVencida)} </b>
+                                                        <b>$ {formatNumber(informeCuenta.info.capitalVencida)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
@@ -1402,19 +1416,19 @@ class DetalleTributo extends React.PureComponent {
                                                 </Grid>
                                                 <Grid item sm={8}>
                                                     <Typography variant="subheading" gutterBottom>
-                                                        <b>$ {formatNumber(this.state.informeCuenta.info.gastosVencida)} </b>
+                                                        <b>$ {formatNumber(informeCuenta.info.gastosVencida)} </b>
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
                                         </div>}
 
-                                        {this.state.informeCuenta.modal.showReporte && <div>
-                                            {this.state.informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + this.state.informeCuenta.reporteBase64} height="342px" width="856px"></iframe>}
-                                            {!this.state.informeCuenta.reporteBase64 && 'Ocurrió un error al cargar el reporte'}
+                                        {informeCuenta.modal.showReporte && <div>
+                                            {informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + informeCuenta.reporteBase64} height="342px" width="856px"></iframe>}
+                                            {!informeCuenta.reporteBase64 && 'Ocurrió un error al cargar el reporte'}
                                         </div>}
                                     </div>
                                     <div key="footerContent" className={classes.buttonFotterDialog}>
-                                        {!this.state.informeCuenta.modal.showReporte && <Button
+                                        {!informeCuenta.modal.showReporte && <Button
                                             variant="contained"
                                             color="secondary"
                                             className={classes.buttonActions}
@@ -1423,7 +1437,7 @@ class DetalleTributo extends React.PureComponent {
                                             Imprimir Detalle
                                         </Button>}
 
-                                        {this.state.informeCuenta.modal.showReporte && <Button
+                                        {informeCuenta.modal.showReporte && <Button
                                             variant="contained"
                                             color="secondary"
                                             className={classes.buttonActions}
@@ -1448,9 +1462,9 @@ class DetalleTributo extends React.PureComponent {
                                     titulo={'Datos de Cuenta'}
                                 >
                                     <div className={classes.textDatosCuenta}>
-                                        {(Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta.map((item, index) => {
+                                        {(Array.isArray(infoDatosCuenta) && infoDatosCuenta.map((item, index) => {
                                             return <div key={index}>{item}</div>;
-                                        })) || (!Array.isArray(this.state.infoDatosCuenta) && this.state.infoDatosCuenta)}
+                                        })) || (!Array.isArray(infoDatosCuenta) && infoDatosCuenta)}
                                     </div>
                                 </MiLinkDialog>
                             </Grid>
@@ -1464,7 +1478,7 @@ class DetalleTributo extends React.PureComponent {
                             </Grid>
                             <Grid item sm={10}>
                                 <MiControledDialog
-                                    open={this.state.ultimosPagos.modal.open}
+                                    open={ultimosPagos.modal.open}
                                     onDialogoOpen={this.onUltimosPagosDialogoOpen}
                                     onDialogoClose={this.onUltimosPagosDialogoClose}
                                     textoLink={'Últimos pagos'}
@@ -1480,7 +1494,7 @@ class DetalleTributo extends React.PureComponent {
                                             { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe ($)' },
                                             { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                         ]}
-                                        rows={this.state.ultimosPagos.infoGrilla || []}
+                                        rows={ultimosPagos.infoGrilla || []}
                                         order='desc'
                                         orderBy='vencimiento'
                                         check={false}
@@ -1494,9 +1508,9 @@ class DetalleTributo extends React.PureComponent {
                         </Grid>
 
                         {/* Cuando no este seleccionado Planes de Pago */}
-                        {this.state.menuItemSeleccionado != 'planesPago' && <div>
+                        {menuItemSeleccionado != 'planesPago' && <div>
 
-                            {this.state.mostrarAlternativaPlan && <div>
+                            {mostrarAlternativaPlan && <div>
                                 <Grid container spacing={16}>
                                     <Grid item sm={2}>
                                         <svg className={classes.icon} viewBox="0 0 24 24">
@@ -1525,7 +1539,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={10}>
                                     <MiControledDialog
-                                        open={this.state.informeAntecedentes.modal.open}
+                                        open={informeAntecedentes.modal.open}
                                         onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
                                         onDialogoClose={this.onInformeAntecedentesDialogoClose}
                                         textoLink={'Informe Antecedentes'}
@@ -1565,7 +1579,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={10}>
                                     <MiControledDialog
-                                        open={this.state.informeREMAT.modal.open}
+                                        open={informeREMAT.modal.open}
                                         onDialogoOpen={this.onInformeREMATDialogoOpen}
                                         onDialogoClose={this.onInformeREMATDialogoClose}
                                         textoLink={'Informe REMAT'}
@@ -1596,7 +1610,7 @@ class DetalleTributo extends React.PureComponent {
                         </div>}
 
                         {/* Cuando no este seleccionado Planes de Pago */}
-                        {this.state.menuItemSeleccionado == 'planesPago' && <div>
+                        {menuItemSeleccionado == 'planesPago' && <div>
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>
                                     {/*<svg className={classes.icon} viewBox="0 0 24 24">
