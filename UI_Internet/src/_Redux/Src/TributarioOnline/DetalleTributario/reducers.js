@@ -70,7 +70,7 @@ const reducer = (state = initialState, action) => {
                                 <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                 <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                             </div>}>
-                            <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                         </MiTooltip>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
@@ -104,7 +104,7 @@ const reducer = (state = initialState, action) => {
                                 <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                 <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                             </div>}>
-                            <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                         </MiTooltip>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
@@ -139,7 +139,7 @@ const reducer = (state = initialState, action) => {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -181,7 +181,7 @@ const reducer = (state = initialState, action) => {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -223,7 +223,7 @@ const reducer = (state = initialState, action) => {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -264,7 +264,7 @@ const reducer = (state = initialState, action) => {
                             <Typography>Estado: <b>$ {pago.estado}</b></Typography>
                             <Typography>Caja: <b>$ {pago.caja}</b></Typography>
                         </div>}>
-                        <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                        <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                     </MiTooltip>,
                     data: pago //atributo "data" no se muestra en MiTabla
                 }
@@ -289,7 +289,7 @@ const reducer = (state = initialState, action) => {
                             <Typography>Cad.: <b>{row.caducidad}</b></Typography>
                             <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
                         </div>}>
-                        <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                        <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                     </MiTooltip>,
                     data: row //atributo "data" no se muestra en MiTabla
                 }
@@ -313,7 +313,7 @@ const reducer = (state = initialState, action) => {
                             <Typography>Fallo: <b>{row.fallo}</b></Typography>
                             <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
                         </div>}>
-                        <i class="material-icons" style={{ color: '#149257' }}>add_circle_outline</i>
+                        <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                     </MiTooltip>,
                     data: row //atributo "data" no se muestra en MiTabla
                 }

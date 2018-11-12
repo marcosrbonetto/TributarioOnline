@@ -61,7 +61,6 @@ class TributarioOnline extends React.PureComponent {
 
     const token = this.props.loggedUser.token;
 
-
     servicesTributarioOnline.getIdTributos(token)
       .then((datos) => {
         if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); this.props.mostrarCargando(false); return false; }

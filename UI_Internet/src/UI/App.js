@@ -56,15 +56,18 @@ class App extends React.Component {
   componentWillMount() {
     //Seteo Token en cookies // para salir del apuro asumimos que siempre viene
     const tokenParam = getAllUrlParams(window.location.href).Token;
-    
     tokenParam && localStorage.setItem('token', tokenParam);
 
+    const token = localStorage.getItem('token');
+
+    if(!token) window.location.href = "https://servicios2.cordoba.gov.ar/TributarioOnline/vecino-virtual.html";
+
     this.props.setLoggedUser({
-      token: localStorage.getItem('token')
+      token: token
     });
 
     //Traemos datos de usuario para guardarlos en las props de redux
-    services.getDatosUsuario(localStorage.getItem('token')) //this.props.loggedUser.token
+    services.getDatosUsuario(token) //this.props.loggedUser.token
       .then((datos) => {
         
         //Seteamos las props

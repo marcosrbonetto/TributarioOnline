@@ -685,7 +685,7 @@ class DetalleTributo extends React.PureComponent {
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
 
-        if (!Array.isArray(this.state.ultimosPagos.infoGrilla)) {
+        if (this.state.ultimosPagos.infoGrilla.length == 0) {
             servicesTributarioOnline.getUltimosPagos(token, {
                 tipoTributo: tributo,
                 identificador: identificador
@@ -1501,7 +1501,7 @@ class DetalleTributo extends React.PureComponent {
                                             textoLink={'Simular Plan de Pagos'}
                                             titulo={'Simular Plan de Pagos'}
                                         >
-                                            Contenido Simular Plan de Pagos!
+                                            Simulador en proceso, estamos trabajando en ello.
                                             </MiLinkDialog>
                                     </Grid>
                                 </Grid>
