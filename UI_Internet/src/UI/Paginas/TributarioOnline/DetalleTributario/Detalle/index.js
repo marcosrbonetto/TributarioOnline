@@ -924,16 +924,25 @@ class DetalleTributo extends React.PureComponent {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, 
+            infoContribucion, 
+            infoMultas, 
+            infoJuiciosContribucion,
+            infoJuiciosMulta,
+            infoPlanesPago } = this.props;
 
         //rowList - Filas de grilla
         //lista - lista de tributos que contienen rowLists para mostrar en la grilla
-        const infoContribucion = this.props.infoContribucion ? this.props.infoContribucion.rowList : [];
-        const infoMultas = this.props.infoMultas ? this.props.infoMultas.rowList : [];
-        let infoJuicios = [];
-        infoJuicios = this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista ? infoJuicios.concat(this.props.infoJuiciosContribucion.lista) : infoJuicios;
-        infoJuicios = this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista ? infoJuicios.concat(this.props.infoJuiciosMulta.lista) : infoJuicios;
-        const infoPlanesPago = this.props.infoPlanesPago ? this.props.infoPlanesPago.lista : [];
+        const listContribucion = infoContribucion && infoContribucion.rowList ? infoContribucion.rowList : [];
+        const listMultas = infoMultas && infoMultas.rowList ? infoMultas.rowList : [];
+
+        const listaJuiciosContribucion = infoJuiciosContribucion && infoJuiciosContribucion.lista ? infoJuiciosContribucion.lista : [];
+        const listaJuiciosMulta = infoJuiciosMulta && infoJuiciosMulta.lista ? infoJuiciosMulta.lista : [];
+        let listJuicios = [];
+        listJuicios = listaJuiciosContribucion ? listJuicios.concat(listaJuiciosContribucion) : listJuicios;
+        listJuicios = listaJuiciosMulta ? listJuicios.concat(listaJuiciosMulta) : listJuicios;
+        
+        const listPlanesPago = infoPlanesPago && infoPlanesPago.lista ? infoPlanesPago.lista : [];
 
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo")}>
@@ -974,13 +983,13 @@ class DetalleTributo extends React.PureComponent {
                                         classes={{ flexContainer: classes.flexContainersMenu, scrollButtons: classes.scrollButtonsMenu }}
                                     >
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoContribucion ? infoContribucion.length : 0}><div>Períodos</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div>Períodos</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoMultas ? infoMultas.length : 0}><div>Multas</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div>Multas</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={infoJuicios ? infoJuicios.length : 0}><div>Juicios</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div>Juicios</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={infoPlanesPago ? infoPlanesPago.length : 0}><div>Planes</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanesPago ? listPlanesPago.length : 0}><div>Planes</div></Badge>} />
 
                                     </Tabs>
 
@@ -991,7 +1000,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Juicio */}
                             {(this.state.menuItemSeleccionado == 'juicios' &&
-                                ((this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.length > 0) || (this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.length > 0)) &&
+                                ((listaJuiciosContribucion.length > 0) || (listaJuiciosMulta.length > 0)) &&
                                 <div>
 
                                     <Grid container spacing={16}>
@@ -1006,12 +1015,12 @@ class DetalleTributo extends React.PureComponent {
                                             >
 
                                                 {/* Juicio por Contribución */}
-                                                {this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista && this.props.infoJuiciosContribucion.lista.map((juicio) => {
+                                                {listaJuiciosContribucion.map((juicio) => {
                                                     return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                 })}
 
                                                 {/* Juicio por Multa */}
-                                                {this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista && this.props.infoJuiciosMulta.lista.map((juicio) => {
+                                                {listaJuiciosMulta.map((juicio) => {
                                                     return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                 })}
 
@@ -1026,7 +1035,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Typography>}
 
                             {/* Planes de Pago */}
-                            {(this.state.menuItemSeleccionado == 'planesPago' && this.props.infoPlanesPago.lista.length > 0 && <div>
+                            {(this.state.menuItemSeleccionado == 'planesPago' && listPlanesPago.length > 0 && <div>
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
@@ -1039,7 +1048,7 @@ class DetalleTributo extends React.PureComponent {
                                             classes={{ scrollButtons: classes.scrollButtonsSubMenu }}
                                         >
 
-                                            {this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
+                                            {listPlanesPago.map((plan) => {
                                                 return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
                                             })}
 
@@ -1058,8 +1067,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Contribución por período */}
                             {this.state.menuItemSeleccionado == 'contribucion' &&
-                                this.props.infoContribucion.rowList &&
-                                this.props.infoContribucion.rowList.length > 0 && <div>
+                                listContribucion.length > 0 && <div>
                                     <div>
                                         <Typography className={classes.infoTexto}>
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
@@ -1070,7 +1078,7 @@ class DetalleTributo extends React.PureComponent {
                                             datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                             check={true}
                                             classes={classes}
-                                            info={this.props.infoContribucion || null}
+                                            info={infoContribucion || null}
                                             menuItemSeleccionado={this.state.menuItemSeleccionado}
                                             data={this.state[this.state.menuItemSeleccionado]}
                                             registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
@@ -1083,8 +1091,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Multas */}
                             {this.state.menuItemSeleccionado == 'multas' &&
-                                this.props.infoMultas.rowList &&
-                                this.props.infoMultas.rowList.length > 0 && <div>
+                                listMultas.length > 0 && <div>
                                     <div>
                                         <Typography className={classes.infoTexto}>
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
@@ -1095,7 +1102,7 @@ class DetalleTributo extends React.PureComponent {
                                             datosNexos={this.state[this.state.menuItemSeleccionado].datosNexos}
                                             check={true}
                                             classes={classes}
-                                            info={this.props.infoMultas || null}
+                                            info={infoMultas || null}
                                             menuItemSeleccionado={this.state.menuItemSeleccionado}
                                             data={this.state[this.state.menuItemSeleccionado]}
                                             registrosSeleccionados={this.state[this.state.menuItemSeleccionado].registrosSeleccionados}
@@ -1110,9 +1117,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Juicio por Contribucion */}
                             {this.state.menuItemSeleccionado == 'juicios' &&
-                                this.props.infoJuiciosContribucion.lista &&
-                                this.props.infoJuiciosContribucion.lista.length > 0 &&
-                                this.props.infoJuiciosContribucion && this.props.infoJuiciosContribucion.lista.map((juicio) => {
+                                listaJuiciosContribucion.map((juicio) => {
                                     return <div>
                                         {this.state.juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
@@ -1140,9 +1145,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Juicio por Multas */}
                             {this.state.menuItemSeleccionado == 'juicios' &&
-                                this.props.infoJuiciosMulta.lista &&
-                                this.props.infoJuiciosMulta.lista.length > 0 &&
-                                this.props.infoJuiciosMulta && this.props.infoJuiciosMulta.lista.map((juicio) => {
+                                listaJuiciosMulta.map((juicio) => {
                                     return <div>
                                         {this.state.juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
@@ -1170,9 +1173,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Planes de Pago */}
                             {this.state.menuItemSeleccionado == 'planesPago' &&
-                                this.props.infoPlanesPago.lista &&
-                                this.props.infoPlanesPago.lista.length > 0 &&
-                                this.props.infoPlanesPago && this.props.infoPlanesPago.lista.map((plan) => {
+                                listPlanesPago.map((plan) => {
                                     return <div>
                                         {this.state.planesPago.menuItemSeleccionado == plan.idPlan &&
                                             <div>
@@ -1211,7 +1212,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{this.props.infoContribucion.titular && this.props.infoContribucion.titular.titular}</b>
+                                        <b>{infoContribucion.titular && infoContribucion.titular.titular}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -1222,7 +1223,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{this.props.infoContribucion.titular && this.props.infoContribucion.titular.cuit}</b>
+                                        <b>{infoContribucion.titular && infoContribucion.titular.cuit}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -1244,7 +1245,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{this.props.infoContribucion.tieneJuicios ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{infoContribucion.tieneJuicios ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -1255,7 +1256,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{this.props.infoContribucion.tienePlanes ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{infoContribucion.tienePlanes ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -1266,7 +1267,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{this.props.infoContribucion.tieneMultas ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{infoContribucion.tieneMultas ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
