@@ -91,6 +91,11 @@ class MiToolbar extends React.Component {
     this.props.redireccionar('/Inicio');
   }
 
+  onMiPerfilClick = () => {
+    this.setState({ anchorPopupUsuario: null });
+    window.location.href = window.Config.URL_MI_PERFIL + "/#/?token=" + this.props.loggedUser.token;
+  };
+
   render() {
     let { classes, titulo } = this.props;
 
@@ -164,10 +169,9 @@ class MiToolbar extends React.Component {
             </Typography>
           </div>
 
-          {/*<MenuItem onClick={this.handleClose}>Mi perfil</MenuItem>
-          <MenuItem divider onClick={this.handleClose}>
-            Cambiar contraseña
-          </MenuItem>*/}
+          <MenuItem divider onClick={this.onMiPerfilClick}>
+            Mi perfil
+            </MenuItem>
           <MenuItem onClick={this.onBotonCerrarSesionPress}>
             Cerrar sesión
           </MenuItem>
