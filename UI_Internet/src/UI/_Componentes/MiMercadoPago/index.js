@@ -25,7 +25,7 @@ import { stringToFloat, formatNumber } from "@Utils/functions"
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.MainContent.loggedUser
+    loggedUser: state.Usuario.loggedUser
   };
 };
 

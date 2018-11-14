@@ -17,20 +17,20 @@ import MiNotificacion from "@Componentes/MiNotificacion";
 
 //REDUX
 import { connect } from "react-redux";
-import { cerrarSesion } from "@Redux/Actions/usuario";
+import { logout } from "@Redux/Actions/usuario";
 import Icon from '@material-ui/core/Icon';
 
 const mapStateToProps = state => {
   return {
     usuario: state.Usuario.usuario,
-    loggedUser: state.MainContent.loggedUser
+    loggedUser: state.Usuario.loggedUser
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    cerrarSesion: () => {
-      dispatch(cerrarSesion());
+    logout: () => {
+      dispatch(logout());
     },
     redireccionar: url => {
       dispatch(push(url));
@@ -67,10 +67,9 @@ class MiToolbar extends React.Component {
   };
 
   onBotonCerrarSesionPress = () => {
-    window.location.href = "https://servicios2.cordoba.gov.ar/TributarioOnline/vecino-virtual.html";
-    /*if (this.props.cargando) return;
+    if (this.props.cargando) return;
     this.setState({ anchorPopupUsuario: null });
-    this.props.cerrarSesion();*/
+    this.props.logout();
   };
 
   handleDrawerClose = () => {

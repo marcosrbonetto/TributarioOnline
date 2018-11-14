@@ -69,7 +69,7 @@ import { stringToFloat, formatNumber, stringToDate, diffDays, getIdTipoTributo, 
 
 const mapStateToProps = state => {
     return {
-        loggedUser: state.MainContent.loggedUser,
+        loggedUser: state.Usuario.loggedUser,
         idsTributos: state.TributarioOnline.idsTributos,
         infoContribucion: state.DetalleTributario.infoContribucion,
         infoMultas: state.DetalleTributario.infoMultas,

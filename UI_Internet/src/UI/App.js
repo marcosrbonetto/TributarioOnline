@@ -9,11 +9,12 @@ import "./style.css";
 import { withRouter } from "react-router-dom";
 import { Route, Redirect } from "react-router-dom";
 import { AnimatedSwitch } from "react-router-transition";
+import { replace } from "connected-react-router";
 
 //REDUX
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
-import { mostrarCargando, loginUser } from '@Redux/Actions/mainContent'
+import { login, logout } from '@Redux/Actions/usuario'
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -27,13 +28,12 @@ import Inicio from "./Inicio";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
 import Pagina404 from "@UI/_Pagina404";
 
-import { getAllUrlParams } from "@Utils/functions"
-import services from '@Rules/Rules_TributarioOnline.js';
+import Rules_Usuario from "@Rules/Rules_Usuario";
 
 const mapStateToProps = state => {
   return {
     alertas: state.Alerta.alertas,
-    loggedUser: state.MainContent.loggedUser
+    loggedUser: state.Usuario.loggedUser
   };
 };
 
@@ -41,28 +41,45 @@ const mapDispatchToProps = dispatch => ({
   onAlertaClose: id => {
     dispatch(ocultarAlerta(id));
   },
-  setLoggedUser: (data) => {
-    dispatch(loginUser(data));
-  }
+  login: (data) => {
+    dispatch(login(data));
+  },
+  logout: () => {
+    dispatch(logout());
+  },
+  redireccionar: url => {
+    dispatch(replace(url));
+},
 });
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      validandoToken: false
+    };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.loggedUser != nextProps.loggedUser) {
+      if (nextProps.loggedUser === undefined) {
+        this.props.logout();
+        window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+      }
+    }
+  }
+  
   componentWillMount() {
     //Seteo Token en cookies // para salir del apuro asumimos que siempre viene
-    const tokenParam = getAllUrlParams(window.location.href).Token;
+    /*const tokenParam = getAllUrlParams(window.location.href).Token;
     tokenParam && localStorage.setItem('token', tokenParam);
 
     const token = localStorage.getItem('token');
 
     if(!token) window.location.href = "https://servicios2.cordoba.gov.ar/TributarioOnline/vecino-virtual.html";
 
-    this.props.setLoggedUser({
+    this.props.login({
       token: token
     });
 
@@ -71,14 +88,99 @@ class App extends React.Component {
       .then((datos) => {
         
         //Seteamos las props
-        this.props.setLoggedUser({
+        this.props.login({
           datos: datos.return
         });
 
-      });
+      });*/
   }
   
-  componentDidMount() {}
+  componentDidMount() {
+    let token = localStorage.getItem("token");
+    
+    let search = this.props.location.search;
+    if (search.startsWith("?")) {
+      search = search.substring(1);
+      search = new URLSearchParams(search);
+      let tokenQueryString = search.get("token");
+      if (tokenQueryString) {
+        token = tokenQueryString;
+      }
+    }
+
+    if (token == undefined || token == null || token == "undefined" || token == "") {
+      this.props.logout();
+      window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+      return;
+    }
+
+    this.setState({ validandoToken: true }, () => {
+      Rules_Usuario.validarToken(token)
+        .then(resultado => {
+          if (resultado == false) {
+            this.props.logout();
+            window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+            return;
+          }
+
+          Rules_Usuario.datos(token)
+            .then(datos => {
+              this.props.login({
+                datos: datos,
+                token: token
+              });
+
+              //let url = "/";
+              if (search) {
+                let url = search.get("url") || "/";
+                this.props.redireccionar(url);
+              }
+              
+              this.onLogin();
+            })
+            .catch(() => {
+              this.props.logout();
+              window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+            });
+        })
+        .catch(error => {
+          this.props.logout();
+          window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+        })
+        .finally(() => {
+          this.setState({ validandoToken: false });
+        });
+    });
+  }
+
+  onLogin = () => {
+    //Cada 5 seg valido el token
+    this.intervalo = setInterval(() => {
+      let token = localStorage.getItem("token");
+      if (token == undefined || token == null || token == "undefined") {
+        this.props.logout();
+        window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+        return;
+      }
+
+      Rules_Usuario.validarToken(token)
+        .then(resultado => {
+          if (resultado == false) {
+            this.props.logout();
+            window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+            return;
+          }
+        })
+        .catch(error => {
+          this.props.logout();
+          window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+        });
+    }, 5000);
+  };
+
+  componentWillUnmount() {
+    this.intervalo && clearInterval(this.intervalo);
+  }
 
   render() {
     const { classes } = this.props;
@@ -95,6 +197,9 @@ class App extends React.Component {
   renderContent() {
     const { classes } = this.props;
 
+    let base = "";
+    const login = this.state.validandoToken == false && this.props.loggedUser != undefined;
+    
     return (
       <main className={classes.content}>
         <AnimatedSwitch
@@ -103,9 +208,10 @@ class App extends React.Component {
           atActive={{ opacity: 1 }}
           className={"switch-wrapper"}
         >
-          <Route path="/Login/:codigo" component={Login} />
-          <Route path="/DetalleTributario" component={DetalleTributario} />
-          <Route path="/Inicio" component={Inicio} />
+          <Route exact path={`${base}/`} component={login ? Inicio : null} />
+          <Route path={`${base}/Login/:codigo`} component={login ? Login : null} />
+          <Route path={`${base}/DetalleTributario`} component={login ? DetalleTributario : null} />
+          <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
           <Route component={Pagina404} />
         </AnimatedSwitch>
       </main>

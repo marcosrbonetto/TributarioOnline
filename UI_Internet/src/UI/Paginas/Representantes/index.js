@@ -50,7 +50,7 @@ import { getIdTipoTributo } from "@Utils/functions"
 const mapStateToProps = state => {
 
   return {
-    loggedUser: state.MainContent.loggedUser,
+    loggedUser: state.Usuario.loggedUser,
     datosEnvioSolicitudPermisos: state.Representantes.datosEnvioSolicitudPermisos,
     datosPedidoSolicitudPermisos: state.Representantes.datosPedidoSolicitudPermisos,
     datosMisRepresentantes: state.Representantes.datosMisRepresentantes,

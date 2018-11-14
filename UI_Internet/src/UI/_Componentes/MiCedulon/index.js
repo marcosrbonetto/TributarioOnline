@@ -18,7 +18,7 @@ import { mostrarCargando } from '@Redux/Actions/mainContent';
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.MainContent.loggedUser
+    loggedUser: state.Usuario.loggedUser
   };
 };
 

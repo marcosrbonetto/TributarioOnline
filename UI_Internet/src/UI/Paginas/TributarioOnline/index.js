@@ -9,7 +9,8 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 //Redux
-import { mostrarCargando, loginUser } from '@Redux/Actions/mainContent'
+import { mostrarCargando } from '@Redux/Actions/mainContent'
+import { login } from '@Redux/Actions/usuario'
 
 import Grid from '@material-ui/core/Grid';
 import { push } from "connected-react-router";
@@ -25,7 +26,7 @@ import { mostrarAlerta } from "@Utils/functions";
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.MainContent.loggedUser,
+    loggedUser: state.Usuario.loggedUser,
     idsTributos: state.TributarioOnline.idsTributos,
   };
 };
@@ -42,7 +43,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(mostrarCargando(cargar));
     },
     setLoggedUser: (data) => {
-      dispatch(loginUser(data));
+      dispatch(login(data));
     }
   };
 };
