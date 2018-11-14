@@ -10,7 +10,9 @@ import {
     GET_INFORME_CUENTA,
     GET_REPORTE_INFORME_CUENTA,
     SET_PAGOS_MERCADO_PAGO,
-    RESET_INFO_DETALLE_TRIBUTO
+    RESET_INFO_DETALLE_TRIBUTO,
+    GET_REPORTE_INFORME_REMAT,
+    GET_REPORTE_INFORME_ANTECEDENTES
 } from "@ReduxSrc/TributarioOnline/DetalleTributario/constants";
 import { stringToFloat, dateToString, formatNumber } from "@Utils/functions"
 
@@ -32,7 +34,9 @@ let initialState = {
     infoInformeREMAT: [],
     infoInformeCuenta: [],
     infoReporteInformeCuenta: [],
-    infoPagosMercadoPago: []
+    infoPagosMercadoPago: [],
+    infoReporteInformeREMAT: [],
+    infoReporteInformeAntecedentes: [],
 };
 
 
@@ -333,6 +337,20 @@ const reducer = (state = initialState, action) => {
                 infoReporteInformeCuenta: action.payload.return
             });
         }
+        case GET_REPORTE_INFORME_REMAT: {
+            debugger;
+
+            return Object.assign({ ...state }, state.infoReporteInformeREMAT, {
+                infoReporteInformeREMAT: action.payload.return
+            });
+        }
+        case GET_REPORTE_INFORME_ANTECEDENTES: {
+            debugger;
+
+            return Object.assign({ ...state }, state.infoReporteInformeAntecedentes, {
+                infoReporteInformeAntecedentes: action.payload.return
+            });
+        }
         case SET_PAGOS_MERCADO_PAGO: {
             //Persiste los datos para que no se pierdan al actualizar la página
             return storePersistent.setStorePersistent({
@@ -355,7 +373,9 @@ const reducer = (state = initialState, action) => {
                 infoInformeREMAT: [],
                 infoInformeCuenta: [],
                 infoReporteInformeCuenta: [],
-                infoPagosMercadoPago: []
+                infoPagosMercadoPago: [],
+                infoReporteInformeREMAT: [],
+                infoReporteInformeAntecedentes: [],
             };
 
             //Agregamos datos persistentes

@@ -469,6 +469,72 @@ const pagoMercadoPago = (token, body) => {
   });
 };
 
+
+const getReporteInformeREMAT = (token, body) => {
+
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeRemat', {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      },
+      body: JSON.stringify({
+        "tipoTributo": body.tipoTributo,
+        "identificador": body.identificador
+      })
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
+
+const getReporteInformeAntecedentes = (token, body) => {
+
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeAntecedente', {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      },
+      body: JSON.stringify({
+        "tipoTributo": body.tipoTributo,
+        "identificador": body.identificador
+      })
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
+
+
 const services = {
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
@@ -484,7 +550,9 @@ const services = {
   getUltimosPagos: getUltimosPagos,
   getInformeAntecedentes: getInformeAntecedentes,
   getInformeREMAT: getInformeREMAT,
-  pagoMercadoPago: pagoMercadoPago
+  pagoMercadoPago: pagoMercadoPago,
+  getReporteInformeREMAT: getReporteInformeREMAT,
+  getReporteInformeAntecedentes: getReporteInformeAntecedentes,
 }
 
 export default services;

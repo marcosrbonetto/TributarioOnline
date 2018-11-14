@@ -46,7 +46,7 @@ class MiMercadoPago extends React.PureComponent {
 
     this.state = {
       dialogoOpen: this.props.datosNexos && this.props.datosNexos.length > 0 ? true : false,
-      disabled: true,
+      disabled: this.props.disabled,
       arrayNexos: []
     };
   }
@@ -125,7 +125,16 @@ class MiMercadoPago extends React.PureComponent {
           "subItem": this.props.subItemSeleccionado
         })
         .then((datos) => {
-          if (!datos.ok) { this.props.mostrarCargando(false); return false; } //mostrarAlerta(datos.error);
+
+          if (!datos.ok) { 
+            this.setState({ //Esto es temporario
+              ...this.state,
+              dialogoOpen: true,
+              arrayNexos: []
+            });
+
+            this.props.mostrarCargando(false); return false; 
+          } //mostrarAlerta(datos.error);
 
           const resultData = datos.return;
           let arrayNexos = [];
@@ -246,6 +255,7 @@ class MiMercadoPago extends React.PureComponent {
           </div>
 
           <div key="mainContent">
+          {this.state.arrayNexos.length > 0 &&
             <Stepper
               activeStep={this.getNextStep(this.state.arrayNexos)}
               orientation="vertical">
@@ -290,7 +300,8 @@ class MiMercadoPago extends React.PureComponent {
                   </Step>
                 );
               })}
-            </Stepper>
+            </Stepper>}
+            {!this.state.arrayNexos.length > 0 && <div style={{ color: 'red'}}>Se están precentando inconvenientes para pagar con MercadoPago, intente más tarde.</div>}
           </div>
 
           <div key="footerContent"></div>
