@@ -1639,7 +1639,9 @@ class DetalleTributo extends React.PureComponent {
                             {/* Cuando no este seleccionado Planes de Pago */}
                             {menuItemSeleccionado != 'planesPago' && <div>
 
-                                {mostrarAlternativaPlan && <div>
+                                {/* SE QUITA HASTA QUE SE IMPLEMENTE
+                                
+                                mostrarAlternativaPlan && <div>
                                     <Grid container spacing={16}>
                                         <Grid item sm={2}>
                                             <svg className={classes.icon} viewBox="0 0 24 24">
@@ -1655,7 +1657,7 @@ class DetalleTributo extends React.PureComponent {
                                             </MiLinkDialog>
                                         </Grid>
                                     </Grid>
-                                </div>}
+                                </div>*/}
 
                                 <Grid container spacing={16}>
                                     <Grid item sm={2}>
