@@ -23,7 +23,6 @@ import { IconButton, Icon } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 //Mis componentes
-import Login from "./Login/index";
 import Inicio from "./Inicio";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
 import Pagina404 from "@UI/_Pagina404";
@@ -209,7 +208,6 @@ class App extends React.Component {
           className={"switch-wrapper"}
         >
           <Route exact path={`${base}/`} component={login ? Inicio : null} />
-          <Route path={`${base}/Login/:codigo`} component={login ? Login : null} />
           <Route path={`${base}/DetalleTributario`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
           <Route component={Pagina404} />
