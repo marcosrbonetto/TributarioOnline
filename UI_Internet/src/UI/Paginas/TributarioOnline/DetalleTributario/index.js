@@ -104,7 +104,7 @@ class App extends React.Component {
           {/* Toolbar */}
           <MiToolbar
             paraMobile={this.state.paraMobile}
-            titulo={paginaActual.titulo}
+            titulo={this.props.match.params.tributo}
             cargando={this.props.cargando}
             width={width}
             leftIcon="menu"

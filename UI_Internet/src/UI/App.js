@@ -208,6 +208,7 @@ class App extends React.Component {
           className={"switch-wrapper"}
         >
           <Route exact path={`${base}/`} component={login ? Inicio : null} />
+          <Route path={`${base}/DetalleTributario/:tributo/:identificador`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/DetalleTributario`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
           <Route component={Pagina404} />
