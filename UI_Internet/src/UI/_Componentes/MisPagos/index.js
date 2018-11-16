@@ -147,10 +147,8 @@ class MisPagos extends React.PureComponent {
             esJuicio={esJuicio}
           />
 
-          {/* 'datosNexos' y 'deleteDataNexos' se pasa solo en este boton para levantar solo una vez el modal 
-                  para hacer el N+1 Pago de Nexo, de lo contrario se levanta dos veces */}
           <MiMercadoPago
-            deleteDataNexos={this.props.deleteDataNexos}
+            idBtnMercadoPago="1"
             seccionDetalleTributo={this.props.menuItemSeleccionado}
             registrosSeleccionados={this.props.registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
@@ -159,7 +157,6 @@ class MisPagos extends React.PureComponent {
             identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
             esJuicio={esJuicio}
-            datosNexos={this.props.datosNexos}
           />
         </Grid>
       </Grid>
@@ -208,6 +205,7 @@ class MisPagos extends React.PureComponent {
           />
 
           <MiMercadoPago
+            idBtnMercadoPago="2"
             seccionDetalleTributo={this.props.menuItemSeleccionado}
             registrosSeleccionados={this.props.registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
