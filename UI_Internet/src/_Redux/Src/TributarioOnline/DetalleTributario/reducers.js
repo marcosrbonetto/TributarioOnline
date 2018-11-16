@@ -338,14 +338,12 @@ const reducer = (state = initialState, action) => {
             });
         }
         case GET_REPORTE_INFORME_REMAT: {
-            debugger;
 
             return Object.assign({ ...state }, state.infoReporteInformeREMAT, {
                 infoReporteInformeREMAT: action.payload.return
             });
         }
         case GET_REPORTE_INFORME_ANTECEDENTES: {
-            debugger;
 
             return Object.assign({ ...state }, state.infoReporteInformeAntecedentes, {
                 infoReporteInformeAntecedentes: action.payload.return
