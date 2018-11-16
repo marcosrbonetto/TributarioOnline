@@ -117,7 +117,8 @@ class TributarioOnline extends React.PureComponent {
                 tipo="Inmuebles"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
-                icono="home" />
+                icono="home" 
+                eventRedirect={this.eventRedirect}/>
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercios') &&
@@ -128,7 +129,7 @@ class TributarioOnline extends React.PureComponent {
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 icono="store"
-              />
+                eventRedirect={this.eventRedirect}/>
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerios') &&
@@ -141,7 +142,7 @@ class TributarioOnline extends React.PureComponent {
                 iconoSvg={<svg viewBox="0 0 24 24">
                   <path d="M10.5,2H13.5V8H19V11H13.5V22H10.5V11H5V8H10.5V2Z" />
                 </svg>}
-              />
+                eventRedirect={this.eventRedirect}/>
             </Grid>
           )}
         </Grid>

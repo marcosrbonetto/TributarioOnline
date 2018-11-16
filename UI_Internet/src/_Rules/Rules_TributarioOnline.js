@@ -84,9 +84,9 @@ const getIdTributos = (token, callback) => {
 };
 
 
-const getInfoContribucion = (token, identificador) => {
+const getInfoContribucion = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo=1&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -113,9 +113,9 @@ const getInfoContribucion = (token, identificador) => {
 
 
 
-const getInfoMultas = (token, identificador) => {
+const getInfoMultas = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo=1&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -141,9 +141,9 @@ const getInfoMultas = (token, identificador) => {
 };
 
 
-const getInfoJuiciosContribucion = (token, identificador) => {
+const getInfoJuiciosContribucion = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosContribuciones?tipoTributo=1&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosContribuciones?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -168,9 +168,9 @@ const getInfoJuiciosContribucion = (token, identificador) => {
   });
 };
 
-const getInfoJuiciosMulta = (token, identificador) => {
+const getInfoJuiciosMulta = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosMultas?tipoTributo=1&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosMultas?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -195,9 +195,9 @@ const getInfoJuiciosMulta = (token, identificador) => {
   });
 };
 
-const getInfoPlanesPago = (token, identificador) => {
+const getInfoPlanesPago = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/PlanesContribuciones?tipoTributo=1&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/PlanesContribuciones?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
