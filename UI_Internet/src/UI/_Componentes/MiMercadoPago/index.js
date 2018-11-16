@@ -69,8 +69,7 @@ class MiMercadoPago extends React.PureComponent {
 
     //Reseteamos Valores de DetalleTributario (Redux)
     const idBtnMercadoPago = getAllUrlParams(window.location.href).idBtnMercadoPago; //Ej.: true
-    const seccionDetalleTributo = getAllUrlParams(window.location.href).seccionDetalleTributo; //Ej.: contribucion
-    if(this.props.idBtnMercadoPago == idBtnMercadoPago && this.props.seccionDetalleTributo == seccionDetalleTributo)
+    if(this.props.idBtnMercadoPago == idBtnMercadoPago)
       this.procesoPagoMercadoPago();
     else 
       this.props.mostrarCargando(false);
