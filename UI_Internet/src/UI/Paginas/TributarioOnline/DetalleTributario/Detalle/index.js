@@ -35,53 +35,16 @@ import MiTabla from "@Componentes/MiTabla";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiControledDialog from "@Componentes/MiControledDialog"
 import MisPagos from "@Componentes/MisPagos";
-
-//Funciones
-import { getAllUrlParams } from "@Utils/functions"
-
-//Actions - Redux
-import {
-    getIdTributos
-} from "@ReduxSrc/TributarioOnline/actions";
-
-import {
-    getInfoContribucion,
-    getInfoMultas,
-    getInfoJuiciosContribucion,
-    getInfoJuiciosMulta,
-    getInfoPlanesPago,
-    getInfoUltimosPagos,
-    getInfoInformeAntecedentes,
-    getInfoInformeREMAT,
-    getInfoInformeCuenta,
-    getInfoReporteInformeCuenta,
-    resetInfoDetalleTributo,
-    getInfoReporteInformeREMAT,
-    getInfoReporteInformeAntecedentes
-} from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
+import MiTooltip from "@Componentes/MiTooltip";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
 //Funciones Útiles
-import { stringToFloat, formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
+import { formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
 const mapStateToProps = state => {
     return {
-        loggedUser: state.Usuario.loggedUser,
-        idsTributos: state.TributarioOnline.idsTributos,
-        infoContribucion: state.DetalleTributario.infoContribucion,
-        infoMultas: state.DetalleTributario.infoMultas,
-        infoJuiciosContribucion: state.DetalleTributario.infoJuiciosContribucion,
-        infoJuiciosMulta: state.DetalleTributario.infoJuiciosMulta,
-        infoPlanesPago: state.DetalleTributario.infoPlanesPago,
-        infoUltimosPagos: state.DetalleTributario.infoUltimosPagos,
-        infoInformeAntecedentes: state.DetalleTributario.infoInformeAntecedentes,
-        infoInformeREMAT: state.DetalleTributario.infoInformeREMAT,
-        infoInformeCuenta: state.DetalleTributario.infoInformeCuenta,
-        infoReporteInformeCuenta: state.DetalleTributario.infoReporteInformeCuenta,
-        datosMisRepresentados: state.Representantes.datosMisRepresentados,
-        infoReporteInformeREMAT: state.DetalleTributario.infoReporteInformeREMAT,
-        infoReporteInformeAntecedentes: state.DetalleTributario.infoReporteInformeAntecedentes,
+        loggedUser: state.Usuario.loggedUser
     };
 };
 
@@ -89,51 +52,9 @@ const mapDispatchToProps = dispatch => ({
     mostrarCargando: (cargar) => {
         dispatch(mostrarCargando(cargar));
     },
-    setPropsIdTributos: (datos) => {
-        dispatch(getIdTributos(datos));
-    },
-    setPropsInfoContribucion: (datos) => {
-        dispatch(getInfoContribucion(datos));
-    },
-    setPropsInfoMultas: (datos) => {
-        dispatch(getInfoMultas(datos));
-    },
-    setPropsInfoJuiciosContribucion: (datos) => {
-        dispatch(getInfoJuiciosContribucion(datos));
-    },
-    setPropsInfoJuiciosMulta: (datos) => {
-        dispatch(getInfoJuiciosMulta(datos));
-    },
-    setPropsInfoPlanesPago: (datos) => {
-        dispatch(getInfoPlanesPago(datos));
-    },
-    setPropsInfoUltimosPagos: (datos) => {
-        dispatch(getInfoUltimosPagos(datos));
-    },
-    setPropsInfoInformeAntecedentes: (datos) => {
-        dispatch(getInfoInformeAntecedentes(datos));
-    },
-    setPropsInfoInformeREMAT: (datos) => {
-        dispatch(getInfoInformeREMAT(datos));
-    },
-    setPropsInfoInformeCuenta: (datos) => {
-        dispatch(getInfoInformeCuenta(datos));
-    },
-    setPropsInfoReporteInformeCuenta: (datos) => {
-        dispatch(getInfoReporteInformeCuenta(datos));
-    },
-    setPropsInfoReporteInformeREMAT: (datos) => {
-        dispatch(getInfoReporteInformeREMAT(datos));
-    },
-    setPropsInfoReporteInformeAntecedentes: (datos) => {
-        dispatch(getInfoReporteInformeAntecedentes(datos));
-    },
     redireccionar: url => {
         dispatch(replace(url));
     },
-    resetInfoDetalleTributo: () => {
-        dispatch(resetInfoDetalleTributo());
-    }
 });
 
 class DetalleTributo extends React.PureComponent {
@@ -157,7 +78,7 @@ class DetalleTributo extends React.PureComponent {
                 modal: {
                     open: false
                 },
-                infoGrilla: undefined
+                infoGrilla: []
             },
             informeAntecedentes: {
                 modal: {
@@ -165,7 +86,7 @@ class DetalleTributo extends React.PureComponent {
                     showReporte: false
                 },
                 reporteBase64: '',
-                infoGrilla: undefined
+                infoGrilla: []
             },
             informeREMAT: {
                 modal: {
@@ -173,12 +94,11 @@ class DetalleTributo extends React.PureComponent {
                     showReporte: false
                 },
                 reporteBase64: '',
-                infoGrilla: undefined
+                infoGrilla: []
             },
             contribucion: { //Item Menu e información
-                infoContribucion: undefined,
-                paramDatos: 'infoContribucion',
-                arrayResult: false,
+                infoSeccion: undefined,
+                tieneSubMenu: false,
                 tipoCedulon: 'Contribuciones',
                 order: 'asc',
                 orderBy: 'concepto',
@@ -192,9 +112,8 @@ class DetalleTributo extends React.PureComponent {
                 registrosSeleccionados: [],
             },
             multas: { //Item Menu e información
-                infoMultas: undefined,
-                paramDatos: 'infoMultas',
-                arrayResult: false,
+                infoSeccion: undefined,
+                tieneSubMenu: false,
                 tipoCedulon: 'Multas',
                 order: 'asc',
                 orderBy: 'vencimiento',
@@ -208,9 +127,8 @@ class DetalleTributo extends React.PureComponent {
                 registrosSeleccionados: [],
             },
             juicios: { //Item Menu e información
-                infoJuicios: undefined,
-                paramDatos: 'infoJuicios',
-                arrayResult: true,
+                infoSeccion: undefined,
+                tieneSubMenu: true,
                 tipoCedulon: 'JuiciosContribuciones',
                 order: 'asc',
                 orderBy: 'concepto',
@@ -225,9 +143,8 @@ class DetalleTributo extends React.PureComponent {
                 registrosSeleccionados: [],
             },
             planesPago: { //Item Menu e información
-                infoPlanesPago: undefined,
-                paramDatos: 'infoPlanesPago',
-                arrayResult: true,
+                infoSeccion: undefined,
+                tieneSubMenu: true,
                 tipoCedulon: 'PlanesContribuciones',
                 order: 'asc',
                 orderBy: 'concepto',
@@ -244,11 +161,6 @@ class DetalleTributo extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
-        //Reseteamos Valores de DetalleTributario (Redux)
-        this.props.resetInfoDetalleTributo();
-    }
-
     componentWillMount() {
         //Servicios que setean los datos en las props del store de redux
         this.props.mostrarCargando(true);
@@ -258,12 +170,14 @@ class DetalleTributo extends React.PureComponent {
         //Traemos los tributos asociados al Token
         const service = servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
+
                 if (!datos.ok) { return false; } //mostrarAlerta('Tributos: ' + datos.error); return false; }
 
                 if (_.filter(datos.return, { identificador: identificador }).length == 0)
                     this.props.redireccionar('/Inicio');
                 else {
-                    this.props.setPropsIdTributos(datos);
+
+                    this.setIdentificadores(datos.return);
                     this.iniciarServicios(token, identificador);
                 }
 
@@ -272,13 +186,85 @@ class DetalleTributo extends React.PureComponent {
             });
     }
 
+    setIdentificadores = (datos) => {
+        let IdsTributos = {}
+
+        var arrayAutomotores = _.filter(datos, { tipoTributo: 1 });
+        var arrayInmuebles = _.filter(datos, { tipoTributo: 2 });
+        var arrayComercios = _.filter(datos, { tipoTributo: 3 });
+
+        IdsTributos['comercios'] = (arrayComercios && arrayComercios.map((tributo) => {
+            return {
+                representado: tributo.titular.titular,
+                identificador: tributo.identificador
+            }
+        })) || [];
+
+        IdsTributos['inmuebles'] = (arrayInmuebles && arrayInmuebles.map((tributo) => {
+            return {
+                representado: tributo.titular.titular,
+                identificador: tributo.identificador
+            }
+        })) || [];
+
+        IdsTributos['automotores'] = (arrayAutomotores && arrayAutomotores.map((tributo) => {
+            return {
+                representado: tributo.titular.titular,
+                identificador: tributo.identificador
+            }
+        })) || [];
+
+        this.setState({
+            identificadores: IdsTributos[this.props.match.params.tributo.toLowerCase()]
+        });
+    }
+
     iniciarServicios = (token, identificador) => {
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
 
         const service1 = servicesTributarioOnline.getInfoContribucion(token, tipoTributo, identificador)
             .then((datos) => {
                 if (!datos.ok) { return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
-                this.props.setPropsInfoContribucion(datos);
+
+                let data = datos.return;
+                //Corroboramos que existan registros
+                if (data && data.periodos.length > 0) {
+                    data['rowList'] = data.periodos.map((concepto) => {
+
+                        return {
+                            concepto: concepto.concepto,
+                            vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                            importe: formatNumber(concepto.importe.total),
+                            detalle: <MiTooltip
+                                contenidoDetalle={<div>
+                                    <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                    <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                    <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                    <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                </div>}>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            </MiTooltip>,
+                            data: concepto //atributo "data" no se muestra en MiTabla
+                        }
+                    });
+                } else {
+                    data = {
+                        ...data,
+                        rowList: []
+                    }
+                }
+
+                this.setState({
+                    contribucion: {
+                        ...this.state.contribucion,
+                        infoSeccion: data
+                    }
+                });
+
+                //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
+                this.refreshValoresPantalla({
+                    datosItemSeleccionado: data
+                });
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -286,7 +272,41 @@ class DetalleTributo extends React.PureComponent {
         const service2 = servicesTributarioOnline.getInfoMultas(token, tipoTributo, identificador)
             .then((datos) => {
                 if (!datos.ok) { return false; } //mostrarAlerta('Multas: ' + datos.error); return false; }
-                this.props.setPropsInfoMultas(datos);
+
+                let data = datos.return;
+                //Corroboramos que existan registros
+                if (data && data.periodos.length > 0) {
+                    data['rowList'] = data.periodos.map((concepto) => {
+
+                        return {
+                            concepto: concepto.concepto,
+                            vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                            importe: formatNumber(concepto.importe.total),
+                            detalle: <MiTooltip
+                                contenidoDetalle={<div>
+                                    <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                    <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                    <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                    <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                </div>}>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            </MiTooltip>,
+                            data: concepto //atributo "data" no se muestra en MiTabla
+                        }
+                    });
+                } else {
+                    data = {
+                        ...data,
+                        rowList: []
+                    }
+                }
+
+                this.setState({
+                    multas: {
+                        ...this.state.multas,
+                        infoSeccion: data
+                    }
+                });
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -294,7 +314,57 @@ class DetalleTributo extends React.PureComponent {
         const service3 = servicesTributarioOnline.getInfoJuiciosContribucion(token, tipoTributo, identificador)
             .then((datos) => {
                 if (!datos.ok) { return false; } //mostrarAlerta('Juicios: ' + datos.error); return false; }
-                this.props.setPropsInfoJuiciosContribucion(datos);
+
+                let data = datos.return;
+                if (data && data.length > 0) {
+                    data['lista'] = data.map((juicio) => {
+
+                        let rowList = juicio.periodos && juicio.periodos.map((concepto) => {
+
+                            return {
+                                concepto: concepto.concepto,
+                                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                                importe: formatNumber(concepto.importe.total),
+                                detalle: <MiTooltip
+                                    contenidoDetalle={<div>
+                                        <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                        <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                        <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                        <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                    </div>}>
+                                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                </MiTooltip>,
+                                data: concepto //atributo "data" no se muestra en MiTabla
+                            }
+                        });
+
+                        return {
+                            ...juicio,
+                            idJuicio: juicio.identificador,
+                            rowList: rowList
+                        }
+                    });
+                } else {
+                    data = {
+                        ...data,
+                        lista: []
+                    }
+                }
+
+                let juicios = Object.assign({}, this.state.juicios);
+                juicios.menuItemSeleccionado = (data.lista > 0 && data.lista[0].idJuicio) || '';
+
+                var listaInfoJuiciosContribucion = _.each(data.lista, (x) => { return x.tipoCedulon = 'JuiciosContribuciones'; });
+                //Rellenamos "infoSeccion" ya que se comparte con juiciosMulta
+                if (juicios.infoSeccion && juicios.infoSeccion.lista)
+                    juicios.infoSeccion.lista = listaInfoJuiciosContribucion.concat(juicios.infoSeccion.lista);
+                else
+                    juicios.infoSeccion = {
+                        lista: listaInfoJuiciosContribucion
+                    };
+
+                this.setState({ juicios });
+
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -302,7 +372,57 @@ class DetalleTributo extends React.PureComponent {
         const service4 = servicesTributarioOnline.getInfoJuiciosMulta(token, tipoTributo, identificador)
             .then((datos) => {
                 if (!datos.ok) { return false; } //mostrarAlerta('Juicios: ' + datos.error); return false; }
-                this.props.setPropsInfoJuiciosMulta(datos);
+
+                let data = datos.return;
+                if (data && data.length > 0) {
+                    data['lista'] = data.map((juicio) => {
+
+                        let rowList = juicio.periodos && juicio.periodos.map((concepto) => {
+
+                            return {
+                                concepto: concepto.concepto,
+                                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                                importe: formatNumber(concepto.importe.total),
+                                detalle: <MiTooltip
+                                    contenidoDetalle={<div>
+                                        <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                        <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                        <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                        <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                    </div>}>
+                                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                </MiTooltip>,
+                                data: concepto //atributo "data" no se muestra en MiTabla
+                            }
+                        });
+
+                        return {
+                            ...juicio,
+                            idJuicio: juicio.identificador,
+                            rowList: rowList
+                        }
+                    });
+                } else {
+                    data = {
+                        ...data,
+                        lista: []
+                    }
+                }
+
+                let juicios = Object.assign({}, this.state.juicios);
+                juicios.menuItemSeleccionado = (data.lista > 0 && data.lista[0].idJuicio) || '';
+
+                var listaInfoJuiciosMulta = _.each(data.lista, (x) => { return x.tipoCedulon = 'JuiciosMultas'; });
+                //Rellenamos "infoSeccion" ya que se comparte con juiciosContribucion
+                if (juicios.infoSeccion && juicios.infoSeccion.lista)
+                    juicios.infoSeccion.lista = juicios.infoSeccion.lista.concat(listaInfoJuiciosMulta);
+                else
+                    juicios.infoSeccion = {
+                        lista: listaInfoJuiciosMulta
+                    };
+
+                this.setState({ juicios });
+
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -310,7 +430,48 @@ class DetalleTributo extends React.PureComponent {
         const service5 = servicesTributarioOnline.getInfoPlanesPago(token, tipoTributo, identificador)
             .then((datos) => {
                 if (!datos.ok) { return false; } //mostrarAlerta('Planes Pago: ' + datos.error); return false; }
-                this.props.setPropsInfoPlanesPago(datos);
+
+                let data = datos.return;
+                if (data && data.length > 0) {
+                    data['lista'] = data.map((plan) => {
+
+                        let rowList = plan.periodos.map((concepto) => {
+
+                            return {
+                                concepto: concepto.concepto,
+                                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                                importe: formatNumber(concepto.importe.total),
+                                detalle: <MiTooltip
+                                    contenidoDetalle={<div>
+                                        <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                        <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                        <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                        <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                    </div>}>
+                                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                </MiTooltip>,
+                                data: concepto //atributo "data" no se muestra en MiTabla
+                            }
+                        })
+
+                        return {
+                            ...plan,
+                            idPlan: plan.identificador,
+                            rowList: rowList
+                        }
+                    });
+                } else {
+                    data = {
+                        ...data,
+                        lista: []
+                    }
+                }
+
+                let planesPago = Object.assign({}, this.state.planesPago);
+                planesPago.menuItemSeleccionado = (data.lista > 0 && data.lista[0].idPlan) || '';
+                planesPago.infoSeccion = data;
+
+                this.setState({ planesPago });
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -324,191 +485,21 @@ class DetalleTributo extends React.PureComponent {
             });
     }
 
-    componentWillReceiveProps(nextProps) {
-
-        //Al setearse las props de redux llevamos a cabo estas acciones
-        if (JSON.stringify(this.props.idsTributos) != JSON.stringify(nextProps.idsTributos)) {
-            //Si se carga por primera vez o si vienen nuevos registros del WS
-            this.setState({
-                identificadores: nextProps.idsTributos[this.props.match.params.tributo.toLowerCase()]
-            });
-        } else if (this.props.idsTributos) {
-            //Si ya se encuentran cargados los registros en esta página o en otra
-            this.setState({
-                identificadores: this.props.idsTributos[this.props.match.params.tributo.toLowerCase()]
-            });
-        }
-
-        //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
-        if (JSON.stringify(this.props.infoContribucion) != JSON.stringify(nextProps.infoContribucion)) {
-
-            this.setState({
-                infoContribucion: nextProps.infoContribucion
-            });
-
-            this.refreshValoresPantalla({
-                listaDatos: nextProps.infoContribucion
-            });
-        }
-
-        //Refresh de la pagina apenas carga la seccion contribucion que es la primera en mostrarse
-        if (JSON.stringify(this.props.infoMultas) != JSON.stringify(nextProps.infoMultas)) {
-            this.setState({
-                infoMultas: nextProps.infoMultas
-            });
-        }
-
-        //Seteo de el primer item de los juicios de contribucion el cual es el primero que se mostrará
-        if (JSON.stringify(this.props.infoJuiciosContribucion) != JSON.stringify(nextProps.infoJuiciosContribucion)) {
-            let juicios = Object.assign({}, this.state.juicios);
-            juicios.menuItemSeleccionado = (nextProps.infoJuiciosContribucion.lista > 0 && nextProps.infoJuiciosContribucion.lista[0].idJuicio) || '';
-
-            var listaInfoJuiciosContribucion = _.each(nextProps.infoJuiciosContribucion.lista, (x) => { return x.tipoCedulon = 'JuiciosContribuciones'; });
-            //Rellenamos "infoJuicios" ya que se comparte con juiciosMulta
-            if (juicios.infoJuicios && juicios.infoJuicios.lista)
-                juicios.infoJuicios.lista = listaInfoJuiciosContribucion.concat(juicios.infoJuicios.lista);
-            else
-                juicios.infoJuicios = {
-                    lista: listaInfoJuiciosContribucion
-                };
-            this.setState({ juicios });
-        }
-
-        //Seteo de el primer item de los juicios de multas el cual es el primero que se mostrará
-        if (JSON.stringify(this.props.infoJuiciosMulta) != JSON.stringify(nextProps.infoJuiciosMulta)) {
-            let juicios = Object.assign({}, this.state.juicios);
-            juicios.menuItemSeleccionado = (nextProps.infoJuiciosMulta.lista > 0 && nextProps.infoJuiciosMulta.lista[0].idJuicio) || '';
-
-            var listaInfoJuiciosMulta = _.each(nextProps.infoJuiciosMulta.lista, (x) => { return x.tipoCedulon = 'JuiciosMultas'; });
-            //Rellenamos "infoJuicios" ya que se comparte con juiciosContribucion
-            if (juicios.infoJuicios && juicios.infoJuicios.lista)
-                juicios.infoJuicios.lista = juicios.infoJuicios.lista.concat(listaInfoJuiciosMulta);
-            else
-                juicios.infoJuicios = {
-                    lista: listaInfoJuiciosMulta
-                };
-            this.setState({ juicios });
-        }
-
-        //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
-        if (JSON.stringify(this.props.infoPlanesPago) != JSON.stringify(nextProps.infoPlanesPago)) {
-            let planesPago = Object.assign({}, this.state.planesPago);
-            planesPago.menuItemSeleccionado = (nextProps.infoPlanesPago.lista > 0 && nextProps.infoPlanesPago.lista[0].idPlan) || '';
-            planesPago.infoPlanesPago = nextProps.infoPlanesPago;
-            this.setState({ planesPago });
-        }
-
-        if (JSON.stringify(this.props.infoUltimosPagos) != JSON.stringify(nextProps.infoUltimosPagos)) {
-            this.setState({
-                ultimosPagos: {
-                    ...this.state.ultimosPagos,
-                    infoGrilla: nextProps.infoUltimosPagos
-                }
-            });
-        } else if (this.props.infoUltimosPagos) {
-            this.setState({
-                ultimosPagos: {
-                    ...this.state.ultimosPagos,
-                    infoGrilla: this.props.infoUltimosPagos
-                }
-            });
-        }
-
-        if (JSON.stringify(this.props.infoInformeAntecedentes) != JSON.stringify(nextProps.infoInformeAntecedentes)) {
-            this.setState({
-                informeAntecedentes: {
-                    ...this.state.informeAntecedentes,
-                    infoGrilla: nextProps.infoInformeAntecedentes
-                }
-            });
-        } else if (this.props.infoInformeAntecedentes) {
-            this.setState({
-                informeAntecedentes: {
-                    ...this.state.informeAntecedentes,
-                    infoGrilla: this.props.infoInformeAntecedentes
-                }
-            });
-        }
-
-        if (JSON.stringify(this.props.infoInformeREMAT) != JSON.stringify(nextProps.infoInformeREMAT)) {
-            this.setState({
-                informeREMAT: {
-                    ...this.state.informeREMAT,
-                    infoGrilla: nextProps.infoInformeREMAT
-                }
-            });
-        } else if (this.props.infoInformeREMAT) {
-            this.setState({
-                informeREMAT: {
-                    ...this.state.informeREMAT,
-                    infoGrilla: this.props.infoInformeREMAT
-                }
-            });
-        }
-
-        //Seteo de el primer item de los planes de pago el cual es el primero que se mostrará
-        if (JSON.stringify(this.props.infoInformeCuenta) != JSON.stringify(nextProps.infoInformeCuenta)) {
-
-            this.setState({
-                informeCuenta: {
-                    ...this.state.informeCuenta,
-                    info: nextProps.infoInformeCuenta,
-                    modal: {
-                        ...this.state.informeCuenta.modal,
-                        open: false
-                    }
-                }
-            });
-        }
-
-        //
-        if (JSON.stringify(this.props.infoReporteInformeCuenta) != JSON.stringify(nextProps.infoReporteInformeCuenta)) {
-
-            this.setState({
-                informeCuenta: {
-                    ...this.state.informeCuenta,
-                    reporteBase64: nextProps.infoReporteInformeCuenta
-                }
-            });
-        }
-
-        //
-        if (JSON.stringify(this.props.infoReporteInformeREMAT) != JSON.stringify(nextProps.infoReporteInformeREMAT)) {
-            this.setState({
-                informeREMAT: {
-                    ...this.state.informeREMAT,
-                    reporteBase64: nextProps.infoReporteInformeREMAT
-                }
-            });
-        }
-
-        //
-        if (JSON.stringify(this.props.infoReporteInformeAntecedentes) != JSON.stringify(nextProps.infoReporteInformeAntecedentes)) {
-            
-            this.setState({
-                informeAntecedentes: {
-                    ...this.state.informeAntecedentes,
-                    reporteBase64: nextProps.infoReporteInformeAntecedentes
-                }
-            });
-        }
-    }
-
-    //- Cada vez que se cambia de sección se checkean y recargamos datos en la grilla de acuerdo al menu seleccionado
-    //- Solo se muetra "Alternativa de plan" cuando existe una fecha mayor a 60 días ( mostrarAlternativaPlan )
-    //- La información de "Datos de Cuenta" varia respecto a cada seccion ( infoDatosCuenta )
+    //- Recargamos datos en la grilla de acuerdo al menu seleccionado
+    //- Mostramos "Alternativa de plan" cuando existe una fecha mayor a 60 días ( mostrarAlternativaPlan )
+    //- Cambiamos "Datos de Cuenta" respecto a cada seccion ( infoDatosCuenta )
     refreshValoresPantalla(parametros) {
-        const listaDatos = parametros.listaDatos || null;
+        const datosItemSeleccionado = parametros.datosItemSeleccionado || null;
 
-        if (listaDatos == null)
+        if (datosItemSeleccionado == null)
             return false;
 
         let mostrarAlternativaPlan = false;
         let infoDatosCuenta = [];
 
-        infoDatosCuenta = listaDatos.datosCuenta ? listaDatos.datosCuenta : 'No se encontraron registros';
+        infoDatosCuenta = datosItemSeleccionado.datosCuenta ? datosItemSeleccionado.datosCuenta : 'No se encontraron registros';
 
-        listaDatos.rowList && listaDatos.rowList.some((item) => {
+        datosItemSeleccionado.rowList && datosItemSeleccionado.rowList.some((item) => {
 
             if (diffDays(stringToDate(item.vencimiento), new Date()) >= 60) {
                 mostrarAlternativaPlan = true;
@@ -539,29 +530,32 @@ class DetalleTributo extends React.PureComponent {
             menuItemSeleccionado: value
         });
 
-        //Seteamos valores que varias de acuerdo a la sección seleccionada
-        const infoSeccion = this.state[value].paramDatos;
-        const listaDatos = this.state[value].arrayResult ? this.getListaDatosLista(this.state[value][infoSeccion]) : this.state[value][infoSeccion];
+        //Luego verificamos si la sección una lista de tributos (submenu)
+        //De ser asi, obtenemos los datos del primer item de la lista (submenu)
+        //De lo contrario se muestra los datos de la seccion seleccionada
+        const datosItemSeleccionado = this.state[value].tieneSubMenu ? this.getDatosSubItem(this.state[value].infoSeccion) : this.state[value].infoSeccion;
 
-        //En caso que tenga submenu, se selecciona el primero que aparece
+        //En caso de ser una lista (submenu), se selecciona el primero que aparece
         //Seleccionamos el item del SUBMENU
-        if (this.state[value].arrayResult && listaDatos.rowList && listaDatos.rowList.length > 0) {
+        if (this.state[value].tieneSubMenu && datosItemSeleccionado.rowList && datosItemSeleccionado.rowList.length > 0) {
             let seccionState = Object.assign({}, this.state[value]);
-            seccionState.menuItemSeleccionado = listaDatos.identificador;
+            //Seteamos el subitem seleccionado, como seleccionado
+            seccionState.menuItemSeleccionado = datosItemSeleccionado.identificador;
             this.setState({
                 [value]: seccionState
             });
         }
 
+        //Mostramos los datos del item seleccionado
         this.refreshValoresPantalla({
-            listaDatos: listaDatos
+            datosItemSeleccionado: datosItemSeleccionado
         });
     };
 
     /*
-        Retorna listaDatos para el uso de funcion refreshValoresPantalla
+        Retorna "datosItemSeleccionado" de un subitem del submenu
     */
-    getListaDatosLista = (infoDatos, identificador) => {
+    getDatosSubItem = (infoDatos, identificador) => {
 
         let listaDatosJuicio = {};
         if (!identificador) {
@@ -584,13 +578,13 @@ class DetalleTributo extends React.PureComponent {
 
         const seccionActual = this.state.menuItemSeleccionado;
 
-        //Seleccionamos el item del SUBMENU
+        // Seteamos el submenu seleccionado, como seleccionado
         let seccionState = Object.assign({}, this.state[seccionActual]);
         seccionState.menuItemSeleccionado = identificador;
 
-        //En caso de juicios actualizamos el tipo de cedulon de acuerdo al subitem seleccionado
+        //En caso de juicios actualizamos el tipo de cedulon de acuerdo al subitem seleccionado (AUTO, FT)
         if (seccionActual == 'juicios') {
-            var subItemSeleccionado = _.filter(seccionState.infoJuicios.lista, { identificador: identificador })[0];
+            var subItemSeleccionado = _.filter(seccionState.infoSeccion.lista, { identificador: identificador })[0];
 
             if (subItemSeleccionado)
                 seccionState.tipoCedulon = subItemSeleccionado.tipoCedulon;
@@ -600,15 +594,14 @@ class DetalleTributo extends React.PureComponent {
             [seccionActual]: seccionState
         });
 
-        //Seteamos valores que varias de acuerdo a la sección seleccionada
-        const infoSeccion = this.state[seccionActual].paramDatos;
-        const listaDatos = this.getListaDatosLista(this.state[seccionActual][infoSeccion], identificador);
+        //Seteamos valores de acuerdo a la subsección seleccionada
+        const datosItemSeleccionado = this.getDatosSubItem(this.state[seccionActual].infoSeccion, identificador);
         this.refreshValoresPantalla({
-            listaDatos: listaDatos
+            datosItemSeleccionado: datosItemSeleccionado
         });
     };
 
-    //Función para setear en el state las filas seleccionadas de la grilla 
+    //Función para registrar en el state las filas seleccionadas de la grilla 
     //de la seccion actual para generar cedulon
     setRegistrosSeleccionados = (menuItemSeleccionado, registrosSeleccionados) => {
 
@@ -632,7 +625,35 @@ class DetalleTributo extends React.PureComponent {
             })
                 .then((datos) => {
                     if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
-                    this.props.setPropsInfoUltimosPagos(datos);
+
+                    let rowList = (datos.return && datos.return.map((pago) => {
+
+                        return {
+                            concepto: pago.concepto,
+                            fecha: dateToString(new Date(pago.fecha), 'DD/MM/YYYY'),
+                            importe: formatNumber(pago.importe.total),
+                            detalle: <MiTooltip
+                                contenidoDetalle={<div>
+                                    <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
+                                    <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
+                                    <Typography>Deducción: <b>$ {pago.importe.deduccion}</b></Typography>
+                                    <Typography>Citación: <b>{pago.citacion}</b></Typography>
+                                    <Typography>CTL: <b>$ {pago.ctl}</b></Typography>
+                                    <Typography>Estado: <b>$ {pago.estado}</b></Typography>
+                                    <Typography>Caja: <b>$ {pago.caja}</b></Typography>
+                                </div>}>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            </MiTooltip>,
+                            data: pago //atributo "data" no se muestra en MiTabla
+                        }
+                    })) || [];
+
+                    this.setState({
+                        ultimosPagos: {
+                            ...this.state.ultimosPagos,
+                            infoGrilla: rowList
+                        }
+                    });
 
                     this.handleUltimosPagosCloseDialog();
                 }).catch(err => {
@@ -679,7 +700,32 @@ class DetalleTributo extends React.PureComponent {
             })
                 .then((datos) => {
                     if (!datos.ok) { mostrarAlerta('Informe Antecedentes: ' + datos.error); return false; }
-                    this.props.setPropsInfoInformeAntecedentes(datos);
+
+                    let rowList = (datos.return && datos.return.map((row) => {
+
+                        return {
+                            causa: row.causa,
+                            fecha: dateToString(new Date(row.fecha), 'DD/MM/YYYY'),
+                            infraccion: row.infraccion,
+                            detalle: <MiTooltip
+                                contenidoDetalle={<div>
+                                    <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
+                                    <Typography>Fallo: <b>{row.fallo}</b></Typography>
+                                    <Typography>Cad.: <b>{row.caducidad}</b></Typography>
+                                    <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
+                                </div>}>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            </MiTooltip>,
+                            data: row //atributo "data" no se muestra en MiTabla
+                        }
+                    })) || [];
+
+                    this.setState({
+                        informeAntecedentes: {
+                            ...this.state.informeAntecedentes,
+                            infoGrilla: rowList
+                        }
+                    });
 
                     this.handleInformeAntecedentesCloseDialog();
                 }).catch(err => {
@@ -694,7 +740,14 @@ class DetalleTributo extends React.PureComponent {
             })
                 .then((datos) => {
                     if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
-                    this.props.setPropsInfoReporteInformeAntecedentes(datos);
+
+                    this.setState({
+                        informeAntecedentes: {
+                            ...this.state.informeAntecedentes,
+                            reporteBase64: datos.return
+                        }
+                    });
+
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
@@ -773,7 +826,31 @@ class DetalleTributo extends React.PureComponent {
             })
                 .then((datos) => {
                     if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
-                    this.props.setPropsInfoInformeREMAT(datos);
+
+                    let rowList = (datos.return && datos.return.map((row) => {
+
+                        return {
+                            causa: row.causa,
+                            fecha: dateToString(new Date(row.fecha), 'DD/MM/YYYY'),
+                            infraccion: row.infraccion,
+                            detalle: <MiTooltip
+                                contenidoDetalle={<div>
+                                    <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
+                                    <Typography>Fallo: <b>{row.fallo}</b></Typography>
+                                    <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
+                                </div>}>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            </MiTooltip>,
+                            data: row //atributo "data" no se muestra en MiTabla
+                        }
+                    })) || [];
+
+                    this.setState({
+                        informeREMAT: {
+                            ...this.state.informeREMAT,
+                            infoGrilla: rowList
+                        }
+                    });
 
                     this.handleInformeREMATCloseDialog();
                 }).catch(err => {
@@ -788,7 +865,13 @@ class DetalleTributo extends React.PureComponent {
             })
                 .then((datos) => {
                     if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
-                    this.props.setPropsInfoReporteInformeREMAT(datos);
+
+                    this.setState({
+                        informeREMAT: {
+                            ...this.state.informeREMAT,
+                            reporteBase64: datos.return
+                        }
+                    });
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
@@ -867,7 +950,18 @@ class DetalleTributo extends React.PureComponent {
             })
                 .then((datos) => {
                     if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
-                    this.props.setPropsInfoInformeCuenta(datos);
+
+                    this.setState({
+                        informeCuenta: {
+                            ...this.state.informeCuenta,
+                            info: datos.return,
+                            modal: {
+                                ...this.state.informeCuenta.modal,
+                                open: false
+                            }
+                        }
+                    });
+
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
@@ -880,7 +974,13 @@ class DetalleTributo extends React.PureComponent {
             })
                 .then((datos) => {
                     if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
-                    this.props.setPropsInfoReporteInformeCuenta(datos);
+
+                    this.setState({
+                        informeCuenta: {
+                            ...this.state.informeCuenta,
+                            reporteBase64: datos.return
+                        }
+                    });
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
@@ -948,14 +1048,11 @@ class DetalleTributo extends React.PureComponent {
     }
 
     render() {
-        const { classes,
-            infoContribucion,
-            infoMultas,
-            infoJuiciosContribucion,
-            infoJuiciosMulta,
-            infoPlanesPago } = this.props;
+        const { classes } = this.props;
 
         const {
+            contribucion,
+            multas,
             identificadorActual,
             identificadores,
             menuItemSeleccionado,
@@ -969,17 +1066,16 @@ class DetalleTributo extends React.PureComponent {
             informeREMAT
         } = this.state;
 
+        const infoContribucion = contribucion.infoSeccion;
+        const infoMultas = multas.infoSeccion;
+        const infoJuicios = juicios.infoSeccion;
+        const infoPlanesPago = planesPago.infoSeccion;
+
         //rowList - Filas de grilla
         //lista - lista de tributos que contienen rowLists para mostrar en la grilla
         const listContribucion = infoContribucion && infoContribucion.rowList ? infoContribucion.rowList : [];
         const listMultas = infoMultas && infoMultas.rowList ? infoMultas.rowList : [];
-
-        const listaJuiciosContribucion = infoJuiciosContribucion && infoJuiciosContribucion.lista ? infoJuiciosContribucion.lista : [];
-        const listaJuiciosMulta = infoJuiciosMulta && infoJuiciosMulta.lista ? infoJuiciosMulta.lista : [];
-        let listJuicios = [];
-        listJuicios = listaJuiciosContribucion ? listJuicios.concat(listaJuiciosContribucion) : listJuicios;
-        listJuicios = listaJuiciosMulta ? listJuicios.concat(listaJuiciosMulta) : listJuicios;
-
+        const listJuicios = infoJuicios && infoJuicios.lista ? infoJuicios.lista : [];
         const listPlanesPago = infoPlanesPago && infoPlanesPago.lista ? infoPlanesPago.lista : [];
 
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
@@ -1040,39 +1136,35 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Juicio */}
                             {(menuItemSeleccionado == 'juicios' &&
-                                ((listaJuiciosContribucion.length > 0) || (listaJuiciosMulta.length > 0)) &&
-                                <div>
+                                (listJuicios.length > 0 &&
+                                    <div>
 
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={12} className={classes.tabMenu}>
-                                            {/* SubMenu */}
-                                            <Tabs
-                                                value={juicios.menuItemSeleccionado}
-                                                onChange={this.handleSubMenuChange}
-                                                classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
-                                                scrollable
-                                                scrollButtons="auto"
-                                            >
+                                        <Grid container spacing={16}>
+                                            <Grid item sm={12} className={classes.tabMenu}>
+                                                {/* SubMenu */}
+                                                <Tabs
+                                                    value={juicios.menuItemSeleccionado}
+                                                    onChange={this.handleSubMenuChange}
+                                                    classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+                                                    scrollable
+                                                    scrollButtons="auto"
+                                                >
 
-                                                {/* Juicio por Contribución */}
-                                                {listaJuiciosContribucion.map((juicio) => {
-                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
-                                                })}
+                                                    {/* Juicio por Contribución */}
+                                                    {listJuicios.map((juicio) => {
+                                                        return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                    })}
 
-                                                {/* Juicio por Multa */}
-                                                {listaJuiciosMulta.map((juicio) => {
-                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
-                                                })}
+                                                </Tabs>
 
-                                            </Tabs>
-
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </div>)
+                                    </div>)
                                 || menuItemSeleccionado == 'juicios' &&
                                 <Typography className={classes.infoTexto}>
                                     {`Le informamos que no posee juicios`}
-                                </Typography>}
+                                </Typography>)
+                            }
 
                             {/* Planes de Pago */}
                             {(menuItemSeleccionado == 'planesPago' && listPlanesPago.length > 0 && <div>
@@ -1153,7 +1245,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Juicio por Contribucion */}
                             {menuItemSeleccionado == 'juicios' &&
-                                listaJuiciosContribucion.map((juicio) => {
+                                listJuicios.map((juicio) => {
                                     return <div>
                                         {juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
@@ -1177,31 +1269,7 @@ class DetalleTributo extends React.PureComponent {
                                     </div>
                                 })}
 
-                            {/* Juicio por Multas */}
-                            {menuItemSeleccionado == 'juicios' &&
-                                listaJuiciosMulta.map((juicio) => {
-                                    return <div>
-                                        {juicios.menuItemSeleccionado == juicio.idJuicio &&
-                                            <div>
-                                                <Typography className={classes.infoTexto}>
-                                                    {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
-                                                </Typography>
-                                                <MisPagos
-                                                    tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
-                                                    check={false}
-                                                    classes={classes}
-                                                    info={juicio || null}
-                                                    menuItemSeleccionado={menuItemSeleccionado}
-                                                    data={this.state[menuItemSeleccionado]}
-                                                    registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
-                                                    setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                                    identificadorActual={this.props.match.params.identificador}
-                                                    tributoActual={this.props.match.params.tributo}
-                                                />
-                                            </div>
-                                        }
-                                    </div>
-                                })}
+
 
                             {/* Planes de Pago */}
                             {menuItemSeleccionado == 'planesPago' &&
@@ -1242,7 +1310,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion.titular && infoContribucion.titular.titular}</b>
+                                        <b>{infoContribucion && infoContribucion.titular && infoContribucion.titular.titular}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -1253,7 +1321,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion.titular && infoContribucion.titular.cuit}</b>
+                                        <b>{infoContribucion && infoContribucion.titular && infoContribucion.titular.cuit}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -1275,7 +1343,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion.tieneJuicios ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{infoContribucion && infoContribucion.tieneJuicios ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -1286,7 +1354,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion.tienePlanes ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{infoContribucion && infoContribucion.tienePlanes ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -1297,7 +1365,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion.tieneMultas ? 'Si tiene' : 'No tiene'}</b>
+                                        <b>{infoContribucion && infoContribucion.tieneMultas ? 'Si tiene' : 'No tiene'}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>
