@@ -192,7 +192,15 @@ class DetalleTributo extends React.PureComponent {
         var arrayAutomotores = _.filter(datos, { tipoTributo: 1 });
         var arrayInmuebles = _.filter(datos, { tipoTributo: 2 });
         var arrayComercios = _.filter(datos, { tipoTributo: 3 });
+        var arrayCementerio = _.filter(datos, { tipoTributo: 4 });
 
+        IdsTributos['cementerios'] = (arrayCementerio && arrayCementerio.map((tributo) => {
+        return {
+            representado: tributo.titular.titular,
+            identificador: tributo.identificador
+        }
+        })) || [];
+        
         IdsTributos['comercios'] = (arrayComercios && arrayComercios.map((tributo) => {
             return {
                 representado: tributo.titular.titular,
