@@ -266,7 +266,7 @@ class MiTabla extends React.PureComponent {
                                     <TableCell colSpan={6}>No se encontraron registros</TableCell>
                                 </TableRow>}
                             {emptyRows > 0 && (
-                                <TableRow style={{ height: 49 * emptyRows }}>
+                                <TableRow style={{ height: 45 * emptyRows }}>
                                     <TableCell colSpan={6} />
                                 </TableRow>
                             )}
