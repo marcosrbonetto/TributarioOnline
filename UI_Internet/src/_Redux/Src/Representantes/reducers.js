@@ -92,16 +92,17 @@ const reducer = (state = initialState, action) => {
         case GET_MIS_REPRESENTANTES: {
 
             var datos = action.payload.return.map((repr) => {
-                const nombreTributo = repr.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+
                 return {
                     usuario: repr.representante,
-                    tributo: repr.identificador + ' - ' + nombreTributo,
+                    tributo: repr.identificador + ' - ' + repr.tipoTributo.nombre,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
                     eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica
                     data: {
                         aceptado: repr.aceptado,
                         identificador: repr.identificador,
-                        tipoTributo: repr.tipoTributo.keyValue
+                        tipoTributo: repr.tipoTributo.keyValue,
+                        cuit: repr.cuilRepresentante
                     }
                 }
             });
@@ -113,16 +114,17 @@ const reducer = (state = initialState, action) => {
         case GET_MIS_REPRESENTADOS: {
 
             var datos = action.payload.return.map((repr) => {
-                const nombreTributo = repr.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+
                 return {
                     usuario: repr.representado,
-                    tributo: repr.identificador + ' - ' + nombreTributo,
+                    tributo: repr.identificador + ' - ' + repr.tipoTributo.nombre,
                     estado: repr.aceptado ? 'Aceptado' : 'Rechazado',
                     eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica
                     data: {
                         aceptado: repr.aceptado,
                         identificador: repr.identificador,
-                        tipoTributo: repr.tipoTributo.keyValue
+                        tipoTributo: repr.tipoTributo.keyValue,
+                        cuit: repr.cuilRepresentado
                     }
                 }
             });
@@ -166,14 +168,15 @@ const reducer = (state = initialState, action) => {
 
             let datosGrilla = [...state.datosMisRepresentados];
             datosGrilla.push({
-                usuario: action.payload.cuilRepresentado,
-                tributo: action.payload.identificador + ' - ' + action.payload.tipoTributo,
+                usuario: action.payload.representado,
+                tributo: action.payload.identificador + ' - ' + action.payload.nombreTributo,
                 estado: action.payload.aceptado ? 'Aceptado' : 'Rechazado',
                 eliminarPermiso: null, //type "custom" - se carga en pantalla ya que contiene logica
                 data: {
                     aceptado: action.payload.aceptado,
                     identificador: action.payload.identificador,
-                    tipoTributo: action.payload.tipoTributo
+                    tipoTributo: action.payload.tipoTributo,
+                    cuit: action.payload.cuilRepresentado
                 }
             });
 

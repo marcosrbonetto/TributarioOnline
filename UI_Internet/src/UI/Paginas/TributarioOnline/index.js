@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
@@ -17,8 +18,6 @@ import { push } from "connected-react-router";
 
 import TributarioAccess from '@Componentes/TributarioAccess';
 
-import { getIdTributos } from "@ReduxSrc/TributarioOnline/actions";
-
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline.js';
 
 //Alerta
@@ -27,7 +26,6 @@ import { mostrarAlerta } from "@Utils/functions";
 const mapStateToProps = state => {
   return {
     loggedUser: state.Usuario.loggedUser,
-    idsTributos: state.TributarioOnline.idsTributos,
   };
 };
 
@@ -35,9 +33,6 @@ const mapDispatchToProps = dispatch => {
   return {
     redireccionar: url => {
       dispatch(push(url));
-    },
-    setPropsIdTributos: (datos) => {
-      dispatch(getIdTributos(datos));
     },
     mostrarCargando: (cargar) => {
       dispatch(mostrarCargando(cargar));
@@ -66,7 +61,7 @@ class TributarioOnline extends React.PureComponent {
       .then((datos) => {
         if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); this.props.mostrarCargando(false); return false; }
 
-        this.props.setPropsIdTributos(datos);
+        this.setIdentificadores(datos.return);
 
         this.props.mostrarCargando(false);
       }).catch(err => {
@@ -74,18 +69,37 @@ class TributarioOnline extends React.PureComponent {
       });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (JSON.stringify(this.props.idsTributos) != JSON.stringify(nextProps.idsTributos)) {
-      //Si se carga por primera vez o si vienen nuevos registros del WS
-      this.setState({
-        idsTributos: nextProps.idsTributos
-      });
-    } else if(this.props.idsTributos) {
-      //Si ya se encuentran cargados los registros en esta página o en otra
-      this.setState({
-        idsTributos: this.props.idsTributos
-      });
-    }
+  setIdentificadores = (datos) => {
+    let IdsTributos = {}
+
+    var arrayAutomotores = _.filter(datos, { tipoTributo: 1 });
+    var arrayInmuebles = _.filter(datos, { tipoTributo: 2 });
+    var arrayComercios = _.filter(datos, { tipoTributo: 3 });
+
+    IdsTributos['comercios'] = (arrayComercios && arrayComercios.map((tributo) => {
+      return {
+        representado: tributo.titular.titular,
+        identificador: tributo.identificador
+      }
+    })) || [];
+
+    IdsTributos['inmuebles'] = (arrayInmuebles && arrayInmuebles.map((tributo) => {
+      return {
+        representado: tributo.titular.titular,
+        identificador: tributo.identificador
+      }
+    })) || [];
+
+    IdsTributos['automotores'] = (arrayAutomotores && arrayAutomotores.map((tributo) => {
+      return {
+        representado: tributo.titular.titular,
+        identificador: tributo.identificador
+      }
+    })) || [];
+
+    this.setState({
+      idsTributos: IdsTributos
+    });
   }
 
   eventRedirect = (tipoTributo, identificador) => {
@@ -117,8 +131,8 @@ class TributarioOnline extends React.PureComponent {
                 tipo="Inmuebles"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
-                icono="home" 
-                eventRedirect={this.eventRedirect}/>
+                icono="home"
+                eventRedirect={this.eventRedirect} />
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercios') &&
@@ -129,7 +143,7 @@ class TributarioOnline extends React.PureComponent {
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 icono="store"
-                eventRedirect={this.eventRedirect}/>
+                eventRedirect={this.eventRedirect} />
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerios') &&
@@ -142,7 +156,7 @@ class TributarioOnline extends React.PureComponent {
                 iconoSvg={<svg viewBox="0 0 24 24">
                   <path d="M10.5,2H13.5V8H19V11H13.5V22H10.5V11H5V8H10.5V2Z" />
                 </svg>}
-                eventRedirect={this.eventRedirect}/>
+                eventRedirect={this.eventRedirect} />
             </Grid>
           )}
         </Grid>

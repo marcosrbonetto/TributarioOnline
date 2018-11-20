@@ -308,10 +308,12 @@ class Representantes extends React.PureComponent {
             }, (datos) => {
 
               this.props.setPropsAgregarRegistroGrilla({
-                cuilRepresentado: datos.return.representado,
+                representado: datos.return.representado,
+                cuilRepresentado: datos.return.cuilRepresentado,
                 identificador: datos.return.identificador,
                 aceptado: datos.return.aceptado,
-                tipoTributo: datos.return.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())
+                tipoTributo: datos.return.tipoTributo.keyValue,
+                nombreTributo: datos.return.tipoTributo.nombre
               });
             });
 
@@ -398,7 +400,7 @@ class Representantes extends React.PureComponent {
     }
 
     const service = servicesRepresentantes.aceptarPermiso(token, {
-      [cuil]: datosFila.usuario,
+      [cuil]: datosFila.data.cuit,
       "tipoTributo": datosFila.data.tipoTributo,
       "identificador": datosFila.data.identificador
     })
@@ -531,12 +533,14 @@ class Representantes extends React.PureComponent {
       tipoTributo: this.state.selectTributos,
       identificador: this.state.inputIdentificadorTributo
     }, (datos) => {
-      
+
       this.props.setPropsAgregarRegistroGrilla({
-        cuilRepresentado: datos.return.representado,
+        representado: datos.return.representado,
+        cuilRepresentado: datos.return.cuilRepresentado,
         identificador: datos.return.identificador,
         aceptado: datos.return.aceptado,
-        tipoTributo: datos.return.tipoTributo.nombre.toLowerCase().replace(/\b\w/g, l => l.toUpperCase())
+        tipoTributo: datos.return.tipoTributo.keyValue,
+        nombreTributo: datos.return.tipoTributo.nombre
       });
       this.handleCancelarSolicitudPermiso();
 
