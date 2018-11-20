@@ -64,7 +64,7 @@ class TributarioAccess extends React.PureComponent {
 
     handleOnClickAddTributo = (event) => {
         const tributo = event.currentTarget.attributes.tributo.value;
-        this.props.redireccionar('/Inicio/Representantes/' + tributo);
+        this.props.redireccionar('/Inicio/Representantes/' + tributo + '?url=/Inicio');
     }
 
     eventRedirect = (event) => {

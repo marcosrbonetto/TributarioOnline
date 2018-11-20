@@ -44,8 +44,7 @@ import {
 import servicesRepresentantes from '@Rules/Rules_Representantes';
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
-import { getIdTipoTributo } from "@Utils/functions"
-
+import { getAllUrlParams, getIdTipoTributo } from "@Utils/functions"
 
 const mapStateToProps = state => {
 
@@ -541,13 +540,21 @@ class Representantes extends React.PureComponent {
       });
       this.handleCancelarSolicitudPermiso();
 
-      //Redireccionamos solo si "agregamos" desde la pantalla que se pasa como parametro redirect
-      this.props.match.params.tributo && 
-      this.props.match.params.redirect && 
-      this.props.redireccionar('/'+this.props.match.params.redirect+'/'+this.props.match.params.tributo+'/'+datos.return.identificador);
+      //Si viene como parametro el tributo, redireccionamos
+      const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+      if(this.props.match.params.tributo && tipoTributo == datos.return.tipoTributo.keyValue) {
 
-      //Redireccionamos solo si "agregamos" desde la pantalla Inicio
-      this.props.match.params.tributo && this.props.redireccionar('/Inicio');
+        let urlRedirect = getAllUrlParams(window.location.href).url;
+
+        //Redireccionamos a pantalla DetalleTributo con el nuevo tributo
+        if(urlRedirect.indexOf(':nuevoTributo') != -1) {
+          urlRedirect = urlRedirect.replace(':nuevoTributo', datos.return.identificador);
+          this.props.redireccionar(urlRedirect);
+        } else {
+          //Redireccionamos solo si "agregamos" desde la pantalla Inicio
+          this.props.redireccionar(urlRedirect);
+        }
+      }
 
       this.props.mostrarCargando(false);
     });

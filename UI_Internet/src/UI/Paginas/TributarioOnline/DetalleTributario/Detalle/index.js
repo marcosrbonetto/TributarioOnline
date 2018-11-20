@@ -1044,7 +1044,7 @@ class DetalleTributo extends React.PureComponent {
     //Evento para agregar nuevo tributo
     handleOnClickAddTributo = (event) => {
         const tributo = this.props.match.params.tributo;
-        this.props.redireccionar('/Inicio/Representantes/' + tributo + '/DetalleTributario');
+        this.props.redireccionar('/Inicio/Representantes/' + tributo + '?url=/DetalleTributario/'+tributo+'/:nuevoTributo');
     }
 
     render() {
@@ -1198,9 +1198,8 @@ class DetalleTributo extends React.PureComponent {
                             {/* Secciones */}
 
                             {/* Contribución por período */}
-                            {menuItemSeleccionado == 'contribucion' &&
+                            {(menuItemSeleccionado == 'contribucion' &&
                                 listContribucion.length > 0 && <div>
-                                    <div>
                                         <Typography className={classes.infoTexto}>
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
@@ -1216,11 +1215,14 @@ class DetalleTributo extends React.PureComponent {
                                             identificadorActual={this.props.match.params.identificador}
                                             tributoActual={this.props.match.params.tributo}
                                         />
-                                    </div>
-                                </div>}
+                                </div>)
+                                || menuItemSeleccionado == 'contribucion' &&
+                                <Typography className={classes.infoTexto}>
+                                    {`Le informamos que no posee deudas`}
+                                </Typography>}
 
                             {/* Multas */}
-                            {menuItemSeleccionado == 'multas' &&
+                            {(menuItemSeleccionado == 'multas' &&
                                 listMultas.length > 0 && <div>
                                     <div>
                                         <Typography className={classes.infoTexto}>
@@ -1239,7 +1241,11 @@ class DetalleTributo extends React.PureComponent {
                                             tributoActual={this.props.match.params.tributo}
                                         />
                                     </div>
-                                </div>}
+                                </div>)
+                                || menuItemSeleccionado == 'multas' &&
+                                <Typography className={classes.infoTexto}>
+                                    {`Le informamos que no posee multas`}
+                                </Typography>}
 
                             {/* Sub Secciones */}
 
@@ -1247,7 +1253,7 @@ class DetalleTributo extends React.PureComponent {
                             {menuItemSeleccionado == 'juicios' &&
                                 listJuicios.map((juicio) => {
                                     return <div>
-                                        {juicios.menuItemSeleccionado == juicio.idJuicio &&
+                                        {(juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
@@ -1264,7 +1270,11 @@ class DetalleTributo extends React.PureComponent {
                                                     identificadorActual={this.props.match.params.identificador}
                                                     tributoActual={this.props.match.params.tributo}
                                                 />
-                                            </div>
+                                            </div>)
+                                            || menuItemSeleccionado == 'juicios' &&
+                                            <Typography className={classes.infoTexto}>
+                                                {`Le informamos que no posee juicios`}
+                                            </Typography>
                                         }
                                     </div>
                                 })}
@@ -1275,7 +1285,7 @@ class DetalleTributo extends React.PureComponent {
                             {menuItemSeleccionado == 'planesPago' &&
                                 listPlanesPago.map((plan) => {
                                     return <div>
-                                        {planesPago.menuItemSeleccionado == plan.idPlan &&
+                                        {(planesPago.menuItemSeleccionado == plan.idPlan &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
@@ -1292,7 +1302,11 @@ class DetalleTributo extends React.PureComponent {
                                                     identificadorActual={this.props.match.params.identificador}
                                                     tributoActual={this.props.match.params.tributo}
                                                 />
-                                            </div>
+                                            </div>)
+                                            || menuItemSeleccionado == 'planesPago' &&
+                                            <Typography className={classes.infoTexto}>
+                                                {`Le informamos que no posee planes de pago`}
+                                            </Typography>
                                         }
                                     </div>
                                 })}
@@ -1377,7 +1391,7 @@ class DetalleTributo extends React.PureComponent {
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
                             <Divider className={classes.divider} />
 
-                            {/*<Grid container spacing={16}>
+                            <Grid container spacing={16}>
                                 <Grid item sm={2}>
                                     <svg className={classes.icon} viewBox="0 0 24 24">
                                         <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
@@ -1392,7 +1406,7 @@ class DetalleTributo extends React.PureComponent {
                                         Agregar nuevo tributo
                                     </Typography>
                                 </Grid>
-                            </Grid>*/}
+                            </Grid>
 
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>
