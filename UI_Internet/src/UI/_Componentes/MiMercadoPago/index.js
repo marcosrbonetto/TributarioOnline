@@ -384,7 +384,7 @@ class MiMercadoPago extends React.PureComponent {
                   );
                 })}
               </Stepper>}
-            {!this.state.arrayNexos.length > 0 && <div style={{ color: 'red' }}>Se están precentando inconvenientes para pagar con MercadoPago, intente más tarde.</div>}
+            {!this.state.arrayNexos.length > 0 && <div style={{ color: 'red' }}>Se están presentando inconvenientes para pagar con MercadoPago, intente más tarde.</div>}
           </div>
 
           <div key="footerContent"></div>
