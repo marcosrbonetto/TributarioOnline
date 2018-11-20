@@ -357,16 +357,13 @@ class Representantes extends React.PureComponent {
     const token = this.props.loggedUser.token;
 
     //De acuerdo en que gruilla se precionó el botón
-    let cuil = this.props.loggedUser.datos.cuil;
     let datosGrilla = this.props.datosMisRepresentados;
     if (datosFila.data.grilla == 'MisRepresentantes') {
-      cuil = datosFila.usuario;
       datosGrilla = this.props.datosMisRepresentantes;
     }
 
-
     const service = servicesRepresentantes.cancelarPermiso(token, {
-      "cuilRepresentante": cuil,
+      "cuilRepresentante": datosFila.data.cuit,
       "tipoTributo": datosFila.data.tipoTributo,
       "identificador": datosFila.data.identificador
     })
