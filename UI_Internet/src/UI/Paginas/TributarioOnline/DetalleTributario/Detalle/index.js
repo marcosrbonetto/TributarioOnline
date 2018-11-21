@@ -1645,7 +1645,7 @@ class DetalleTributo extends React.PureComponent {
                                                                 { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
                                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                                             ]}
-                                                            rows={this.props.infoInformeAntecedentes || []}
+                                                            rows={informeAntecedentes.infoGrilla || []}
                                                             order='desc'
                                                             orderBy='vencimiento'
                                                             check={false}
@@ -1715,7 +1715,7 @@ class DetalleTributo extends React.PureComponent {
                                                                 { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
                                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                                             ]}
-                                                            rows={this.props.infoInformeREMAT || []}
+                                                            rows={informeREMAT.infoGrilla || []}
                                                             order='desc'
                                                             orderBy='vencimiento'
                                                             check={false}
