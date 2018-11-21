@@ -41,6 +41,7 @@ import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
 //Funciones Útiles
 import { formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
+import { debug } from "util";
 
 const mapStateToProps = state => {
     return {
@@ -187,43 +188,20 @@ class DetalleTributo extends React.PureComponent {
     }
 
     setIdentificadores = (datos) => {
-        let IdsTributos = {}
+        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        let IdsTributos = [];
 
-        var arrayAutomotores = _.filter(datos, { tipoTributo: 1 });
-        var arrayInmuebles = _.filter(datos, { tipoTributo: 2 });
-        var arrayComercios = _.filter(datos, { tipoTributo: 3 });
-        var arrayCementerio = _.filter(datos, { tipoTributo: 4 });
+        var arrayTributos = _.filter(datos, { tipoTributo: tipoTributo });
 
-        IdsTributos['cementerios'] = (arrayCementerio && arrayCementerio.map((tributo) => {
+        IdsTributos = (arrayTributos && arrayTributos.map((tributo) => {
         return {
             representado: tributo.titular.titular,
             identificador: tributo.identificador
         }
         })) || [];
-        
-        IdsTributos['comercios'] = (arrayComercios && arrayComercios.map((tributo) => {
-            return {
-                representado: tributo.titular.titular,
-                identificador: tributo.identificador
-            }
-        })) || [];
-
-        IdsTributos['inmuebles'] = (arrayInmuebles && arrayInmuebles.map((tributo) => {
-            return {
-                representado: tributo.titular.titular,
-                identificador: tributo.identificador
-            }
-        })) || [];
-
-        IdsTributos['automotores'] = (arrayAutomotores && arrayAutomotores.map((tributo) => {
-            return {
-                representado: tributo.titular.titular,
-                identificador: tributo.identificador
-            }
-        })) || [];
-
+                
         this.setState({
-            identificadores: IdsTributos[this.props.match.params.tributo.toLowerCase()]
+            identificadores: IdsTributos
         });
     }
 

@@ -71,40 +71,22 @@ class TributarioOnline extends React.PureComponent {
   }
 
   setIdentificadores = (datos) => {
-    let IdsTributos = {}
+    let IdsTributos = {};
 
-    var arrayAutomotores = _.filter(datos, { tipoTributo: 1 });
-    var arrayInmuebles = _.filter(datos, { tipoTributo: 2 });
-    var arrayComercios = _.filter(datos, { tipoTributo: 3 });
-    var arrayCementerio = _.filter(datos, { tipoTributo: 4 });
+    const tipoTributos = _.map(datos, (x) => { return x.tipoTributo }).filter( (value, index, self) => { 
+        return self.indexOf(value) === index;
+    });
 
-    IdsTributos['cementerios'] = (arrayCementerio && arrayCementerio.map((tributo) => {
-      return {
-        representado: tributo.titular.titular,
-        identificador: tributo.identificador
-      }
-    })) || [];
+    _.each(tipoTributos, (tipoTributo) => {
+      var arrayTributos = _.filter(datos, { tipoTributo: tipoTributo });
 
-    IdsTributos['comercios'] = (arrayComercios && arrayComercios.map((tributo) => {
-      return {
-        representado: tributo.titular.titular,
-        identificador: tributo.identificador
-      }
-    })) || [];
-
-    IdsTributos['inmuebles'] = (arrayInmuebles && arrayInmuebles.map((tributo) => {
-      return {
-        representado: tributo.titular.titular,
-        identificador: tributo.identificador
-      }
-    })) || [];
-
-    IdsTributos['automotores'] = (arrayAutomotores && arrayAutomotores.map((tributo) => {
-      return {
-        representado: tributo.titular.titular,
-        identificador: tributo.identificador
-      }
-    })) || [];
+      IdsTributos[tipoTributo] = (arrayTributos && arrayTributos.map((tributo) => {
+        return {
+          representado: tributo.titular.titular,
+          identificador: tributo.identificador
+        }
+      })) || [];
+    });
 
     this.setState({
       idsTributos: IdsTributos
@@ -124,7 +106,7 @@ class TributarioOnline extends React.PureComponent {
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Automotores') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
-                id="automotores"
+                id="1"
                 tipo="Automotores"
                 identificador="Dominio"
                 icono="directions_car"
@@ -136,7 +118,7 @@ class TributarioOnline extends React.PureComponent {
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Inmuebles') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
-                id="inmuebles"
+                id="2"
                 tipo="Inmuebles"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
@@ -147,7 +129,7 @@ class TributarioOnline extends React.PureComponent {
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercios') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
-                id="comercios"
+                id="3"
                 tipo="Comercios"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
@@ -158,7 +140,7 @@ class TributarioOnline extends React.PureComponent {
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerios') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
-                id="cementerios"
+                id="4"
                 tipo="Cementerios"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
