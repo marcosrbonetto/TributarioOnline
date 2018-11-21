@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
@@ -229,9 +230,19 @@ class MiTabla extends React.PureComponent {
 
     render() {
         const { classes } = this.props;
-        const { data, order, orderBy, orderType, selected, rowsPerPage, page } = this.state;
+        const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+        let { orderType } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
         const check = this.props.check;
+
+        //Seteamos el orderType inicial de acuerdo a orderBy
+        if(this.props.columns) {
+            const columnOrderBy = _.filter(this.props.columns,{id:orderBy});
+
+            if(columnOrderBy.length > 0 && columnOrderBy[0].type) {
+                orderType = columnOrderBy[0].type;
+            }
+        }
 
         return (
             <Paper className={classes.root}>

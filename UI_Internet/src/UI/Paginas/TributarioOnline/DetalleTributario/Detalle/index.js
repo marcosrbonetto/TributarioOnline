@@ -81,6 +81,12 @@ class DetalleTributo extends React.PureComponent {
                 },
                 infoGrilla: []
             },
+            periodosAdeudados: {
+                modal: {
+                    open: false
+                },
+                infoGrilla: []
+            },
             informeAntecedentes: {
                 modal: {
                     open: false,
@@ -671,6 +677,79 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+    //Traemos datos de periodos adeudados trayendo datos del WS
+    onPeriodosAdeudadosDialogoOpen = () => {
+        this.props.mostrarCargando(true);
+        const token = this.props.loggedUser.token;
+        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        const identificador = this.props.match.params.identificador;
+
+        if (this.state.periodosAdeudados.infoGrilla.length == 0) {
+            servicesTributarioOnline.getPeriodosAdeudados(token, tipoTributo, identificador)
+                .then((datos) => {
+                    if (!datos.ok) { mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
+
+                    let rowList = [];
+                    let data = datos.return;
+                    //Corroboramos que existan registros
+                    if (data && data.periodos.length > 0) {
+                        rowList = data.periodos.map((concepto) => {
+
+                            return {
+                                concepto: concepto.concepto,
+                                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                                importe: formatNumber(concepto.importe.total),
+                                detalle: <MiTooltip
+                                    contenidoDetalle={<div>
+                                        <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                        <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                        <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                        <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                    </div>}>
+                                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                </MiTooltip>,
+                                data: concepto //atributo "data" no se muestra en MiTabla
+                            }
+                        });
+                    }
+
+                    this.setState({
+                        periodosAdeudados: {
+                            ...this.state.periodosAdeudados,
+                            infoGrilla: rowList
+                        }
+                    });
+
+                    this.handlePeriodosAdeudadosCloseDialog();
+                }).catch(err => {
+                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                });
+        } else {
+            this.handlePeriodosAdeudadosCloseDialog();
+        }
+    }
+
+    //Abrimos modal periodos adeudados
+    handlePeriodosAdeudadosCloseDialog = () => {
+        let newState = { ...this.state };
+        newState.periodosAdeudados.modal.open = true;
+        this.setState(newState);
+
+        this.props.mostrarCargando(false);
+    }
+
+    //Cerramos modal periodos adeudados seteando los valores iniciales del state
+    onPeriodosAdeudadosDialogoClose = () => {
+        this.setState({
+            periodosAdeudados: {
+                ...this.state.periodosAdeudados,
+                modal: {
+                    open: false
+                }
+            }
+        });
+    }
+
     //Traemos datos de informe antecedentes trayendo datos del WS
     onInformeAntecedentesDialogoOpen = () => {
         this.props.mostrarCargando(true);
@@ -1047,6 +1126,7 @@ class DetalleTributo extends React.PureComponent {
             informeCuenta,
             infoDatosCuenta,
             ultimosPagos,
+            periodosAdeudados,
             mostrarAlternativaPlan,
             informeAntecedentes,
             informeREMAT
@@ -1553,6 +1633,43 @@ class DetalleTributo extends React.PureComponent {
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
+                            
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                    </svg>
+                                </Grid>
+                                <Grid item sm={10}>
+                                    <MiControledDialog
+                                        open={periodosAdeudados.modal.open}
+                                        onDialogoOpen={this.onPeriodosAdeudadosDialogoOpen}
+                                        onDialogoClose={this.onPeriodosAdeudadosDialogoClose}
+                                        textoLink={'Períodos Adeudados'}
+                                        titulo={'Períodos Adeudados'}
+                                        classes={{
+                                            root: classes.miLinkDialog
+                                        }}
+                                    >
+                                        <MiTabla
+                                            columns={[
+                                                { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
+                                                { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
+                                                { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe ($)' },
+                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                            ]}
+                                            rows={periodosAdeudados.infoGrilla || []}
+                                            order='asc'
+                                            orderBy='vencimiento'
+                                            check={false}
+                                            rowsPerPage={5}
+                                            classes={{
+                                                root: classes.miTabla
+                                            }}
+                                        />
+                                    </MiControledDialog>
+                                </Grid>
+                            </Grid>
 
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>
@@ -1758,22 +1875,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Cuando no este seleccionado Planes de Pago */}
                             {menuItemSeleccionado == 'planesPago' && <div>
-                                {/*<Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <MiLinkDialog
-                                            textoLink={'Perìodos Adeudados'}
-                                            titulo={'Perìodos Adeudados'}
-                                        >
-                                            Contenido Perìodos Adeudados!
-                                        </MiLinkDialog>
-                                    </Grid>
-                                </Grid>
-
+                                {/*
                                 <Grid container spacing={16}>
                                     <Grid item sm={2}>
                                         <svg className={classes.icon} viewBox="0 0 24 24">
