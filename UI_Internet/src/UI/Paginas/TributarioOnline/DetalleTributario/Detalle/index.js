@@ -1136,8 +1136,8 @@ class DetalleTributo extends React.PureComponent {
                     }
                 })) || [];
 
-                if(rowList.length > 0 && !rowList[0]) { 
-                    mostrarAlerta('Declaración Jurada: DEMASIADOS RUBROS OPCION EN DESARROLLO'); this.props.mostrarCargando(false); return false; 
+                if(rowList.length > 0 && !rowList[0].periodo) { 
+                    mostrarAlerta('Declaración Jurada: Demasiados rubros opción en desarrollo'); this.props.mostrarCargando(false); return false; 
                 }
 
                 this.setState({
