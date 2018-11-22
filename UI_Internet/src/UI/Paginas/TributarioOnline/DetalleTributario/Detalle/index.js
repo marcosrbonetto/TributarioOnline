@@ -92,7 +92,7 @@ class DetalleTributo extends React.PureComponent {
                     open: false,
                     showReporte: false
                 },
-                reporteBase64: '',
+                reporteBase64: undefined,
                 infoGrilla: []
             },
             informeREMAT: {
@@ -100,8 +100,17 @@ class DetalleTributo extends React.PureComponent {
                     open: false,
                     showReporte: false
                 },
-                reporteBase64: '',
+                reporteBase64: undefined,
                 infoGrilla: []
+            },
+            declaracionJurada: {
+                modal: {
+                    open: false,
+                    showReporte: false
+                },
+                reporteBase64: undefined,
+                infoGrilla: [],
+                registrosSeleccionados: [],
             },
             contribucion: { //Item Menu e información
                 infoSeccion: undefined,
@@ -200,12 +209,12 @@ class DetalleTributo extends React.PureComponent {
         var arrayTributos = _.filter(datos, { tipoTributo: tipoTributo });
 
         IdsTributos = (arrayTributos && arrayTributos.map((tributo) => {
-        return {
-            representado: tributo.titular.titular,
-            identificador: tributo.identificador
-        }
+            return {
+                representado: tributo.titular.titular,
+                identificador: tributo.identificador
+            }
         })) || [];
-                
+
         this.setState({
             identificadores: IdsTributos
         });
@@ -757,6 +766,7 @@ class DetalleTributo extends React.PureComponent {
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = this.props.match.params.identificador;
 
+        debugger;
         let arrayService = [];
         if (!this.state.informeAntecedentes.reporteBase64) {
             const service1 = servicesTributarioOnline.getInformeAntecedentes(token, {
@@ -792,7 +802,6 @@ class DetalleTributo extends React.PureComponent {
                         }
                     });
 
-                    this.handleInformeAntecedentesCloseDialog();
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
@@ -825,6 +834,7 @@ class DetalleTributo extends React.PureComponent {
             });
         } else {
             this.handleInformeAntecedentesCloseDialog();
+            this.props.mostrarCargando(false);
         }
     }
 
@@ -917,7 +927,6 @@ class DetalleTributo extends React.PureComponent {
                         }
                     });
 
-                    this.handleInformeREMATCloseDialog();
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
@@ -949,6 +958,7 @@ class DetalleTributo extends React.PureComponent {
             });
         } else {
             this.handleInformeREMATCloseDialog();
+            this.props.mostrarCargando(false);
         }
     }
 
@@ -1106,10 +1116,122 @@ class DetalleTributo extends React.PureComponent {
         });
     }
 
+
+    //Traemos datos de Declaración Jurada trayendo datos del WS
+    onDeclaracionJuradaDialogoOpen = () => {
+        this.props.mostrarCargando(true);
+        const token = this.props.loggedUser.token;
+        const identificador = this.props.match.params.identificador;
+
+        servicesTributarioOnline.getDeclaracionJurada(token, {
+            cuit: identificador
+        })
+            .then((datos) => {
+                if (!datos.ok) { mostrarAlerta('Declaración Jurada: ' + datos.error); this.props.mostrarCargando(false); return false; }
+
+                let rowList = (datos.return.periodos && datos.return.periodos.map((periodo, key) => {
+                    return {
+                        id: key,
+                        periodo: periodo
+                    }
+                })) || [];
+
+                if(rowList.length > 0 && !rowList[0]) { 
+                    mostrarAlerta('Declaración Jurada: DEMASIADOS RUBROS OPCION EN DESARROLLO'); this.props.mostrarCargando(false); return false; 
+                }
+
+                this.setState({
+                    declaracionJurada: {
+                        ...this.state.declaracionJurada,
+                        infoGrilla: rowList,
+                        reporteBase64: ''
+                    }
+                });
+
+                this.handleDeclaracionJuradaOpenDialog();
+                this.props.mostrarCargando(false);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
+    }
+
+    //Abrimos modal Declaración Jurada
+    handleDeclaracionJuradaOpenDialog = () => {
+        let newState = { ...this.state };
+        newState.declaracionJurada.modal.open = true;
+        this.setState(newState);
+
+        this.props.mostrarCargando(false);
+    }
+
+    //Cerramos modal Declaración Jurada seteando los valores iniciales del state
+    onDeclaracionJuradaDialogoClose = () => {
+        this.setState({
+            declaracionJurada: {
+                modal: {
+                    open: false,
+                    showReporte: false
+                },
+                reporteBase64: undefined,
+                infoGrilla: [],
+                registrosSeleccionados: [],
+            }
+        });
+    }
+
+    //Mostramos el reporte en el modal de Declaración Jurada
+    onDeclaracionJuradaShowReporte = () => {
+
+        //CODIGO GENERADOR DE DDJJ
+
+        this.setState({
+            declaracionJurada: {
+                ...this.state.declaracionJurada,
+                modal: {
+                    ...this.state.declaracionJurada.modal,
+                    showReporte: true
+                }
+            }
+        });
+    }
+
+    //Ocultamos el reporte en el modal de Declaración Jurada
+    onDeclaracionJuradaHideReporte = () => {
+        this.setState({
+            declaracionJurada: {
+                ...this.state.declaracionJurada,
+                modal: {
+                    ...this.state.declaracionJurada.modal,
+                    showReporte: false
+                },
+                reporteBase64: '',
+            }
+        });
+    }
+
+    //Totalizador de importe de filas seleccionadas
+    getFilasSeleccionadasDDJJ = (filas, idFilasSeleccionadas) => {
+        let registrosSeleccionados = []
+
+        filas.map((item) => {
+            if (idFilasSeleccionadas.indexOf(item.id) != -1)
+                registrosSeleccionados.push(item['concepto']);
+        });
+
+        this.setState({
+            declaracionJurada: {
+                ...this.state.declaracionJurada,
+                registrosSeleccionados: registrosSeleccionados
+            }
+        });
+
+    };
+
+
     //Evento para agregar nuevo tributo
     handleOnClickAddTributo = (event) => {
         const tributo = this.props.match.params.tributo;
-        this.props.redireccionar('/Inicio/Representantes/' + tributo + '?url=/DetalleTributario/'+tributo+'/:nuevoTributo');
+        this.props.redireccionar('/Inicio/Representantes/' + tributo + '?url=/DetalleTributario/' + tributo + '/:nuevoTributo');
     }
 
     render() {
@@ -1128,6 +1250,7 @@ class DetalleTributo extends React.PureComponent {
             ultimosPagos,
             periodosAdeudados,
             mostrarAlternativaPlan,
+            declaracionJurada,
             informeAntecedentes,
             informeREMAT
         } = this.state;
@@ -1266,21 +1389,21 @@ class DetalleTributo extends React.PureComponent {
                             {/* Contribución por período */}
                             {(menuItemSeleccionado == 'contribucion' &&
                                 listContribucion.length > 0 && <div>
-                                        <Typography className={classes.infoTexto}>
-                                            {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
-                                        </Typography>
-                                        <MisPagos
-                                            tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
-                                            check={true}
-                                            classes={classes}
-                                            info={infoContribucion || null}
-                                            menuItemSeleccionado={menuItemSeleccionado}
-                                            data={this.state[menuItemSeleccionado]}
-                                            registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
-                                            setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                            identificadorActual={this.props.match.params.identificador}
-                                            tributoActual={this.props.match.params.tributo}
-                                        />
+                                    <Typography className={classes.infoTexto}>
+                                        {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                    </Typography>
+                                    <MisPagos
+                                        tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
+                                        check={true}
+                                        classes={classes}
+                                        info={infoContribucion || null}
+                                        menuItemSeleccionado={menuItemSeleccionado}
+                                        data={this.state[menuItemSeleccionado]}
+                                        registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
+                                        setRegistrosSeleccionados={this.setRegistrosSeleccionados}
+                                        identificadorActual={this.props.match.params.identificador}
+                                        tributoActual={this.props.match.params.tributo}
+                                    />
                                 </div>)
                                 || menuItemSeleccionado == 'contribucion' &&
                                 <Typography className={classes.infoTexto}>
@@ -1633,7 +1756,7 @@ class DetalleTributo extends React.PureComponent {
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
-                            
+
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>
                                     <svg className={classes.icon} viewBox="0 0 24 24">
@@ -1923,6 +2046,78 @@ class DetalleTributo extends React.PureComponent {
                                         </MiLinkDialog>
                                     </Grid>
                                 </Grid>*/}
+                            </div>}
+
+                            {/* Solo en comercios */}
+                            {getIdTipoTributo(this.props.match.params.tributo) == 3 && <div>
+                                <Grid container spacing={16}>
+                                    <Grid item sm={2}>
+                                        {/*<svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
+                                            </svg>*/}
+                                        <svg className={classes.icon} viewBox="0 0 24 24">
+                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                        </svg>
+                                    </Grid>
+                                    <Grid item sm={10}>
+                                        <MiControledDialog
+                                            open={declaracionJurada.modal.open}
+                                            onDialogoOpen={this.onDeclaracionJuradaDialogoOpen}
+                                            onDialogoClose={this.onDeclaracionJuradaDialogoClose}
+                                            textoLink={'Imprimir DDJJ'}
+                                            titulo={'Imprimir DDJJ'}
+                                            classes={{
+                                                root: classes.miLinkDialog
+                                            }}
+                                        >
+                                            <div key="headerContent"></div>
+                                            <div key="mainContent">
+                                                {!declaracionJurada.modal.showReporte && <div>
+                                                    <MiTabla
+                                                        columns={[
+                                                            { id: 'periodo', type: 'string', numeric: false, disablePadding: false, label: 'Periodos' },
+                                                        ]}
+                                                        rows={declaracionJurada.infoGrilla || []}
+                                                        getFilasSeleccionadas={this.getFilasSeleccionadasDDJJ}
+                                                        order='desc'
+                                                        orderBy='vencimiento'
+                                                        check={true}
+                                                        rowsPerPage={5}
+                                                        classes={{
+                                                            root: classes.miTabla
+                                                        }}
+                                                    />
+                                                </div>}
+
+                                                {declaracionJurada.modal.showReporte && <div>
+                                                    {declaracionJurada.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} height="342px" width="856px"></iframe>}
+                                                    {declaracionJurada.reporteBase64 == undefined && 'No se pudo generar el detalle para imprimir, intente nuevamente.'}
+                                                    {declaracionJurada.reporteBase64 == '' && 'Generando DDJJ.'}
+                                                </div>}
+                                            </div>
+                                            <div key="footerContent" className={classes.buttonFotterDialog}>
+                                                {!declaracionJurada.modal.showReporte && <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    className={classes.buttonActions}
+                                                    onClick={this.onDeclaracionJuradaShowReporte}
+                                                    disabled={!declaracionJurada.registrosSeleccionados.length > 0}
+                                                >
+                                                    Imprimir DDJJ
+                                            </Button>}
+
+                                                {declaracionJurada.modal.showReporte && <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    className={classes.buttonActions}
+                                                    onClick={this.onDeclaracionJuradaHideReporte}
+                                                >
+                                                    Volver
+                                            </Button>}
+                                            </div>
+                                        </MiControledDialog>
+                                    </Grid>
+                                </Grid>
                             </div>}
                         </MiCard>
 

@@ -17,7 +17,9 @@ const reducer = (state = initialState, action) => {
         newState.cantProcesosCargando += 1;
       } else {
         //Corroboramos que no exista procesos cargando
-        newState.cantProcesosCargando -=1;
+        if(newState.cantProcesosCargando > 0)
+          newState.cantProcesosCargando -=1;
+          
         if(newState.cantProcesosCargando == 0)
           newState.cargando = cargar;
       }

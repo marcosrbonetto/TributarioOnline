@@ -561,6 +561,37 @@ const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
   });
 };
 
+const getDeclaracionJurada = (token, body) => {
+
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/DeclaracionJurada/ObtenerDdjj', {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      },
+      body: JSON.stringify({
+        "cuit": body.cuit
+      })
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
+
 const services = {
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
@@ -579,7 +610,8 @@ const services = {
   pagoMercadoPago: pagoMercadoPago,
   getReporteInformeREMAT: getReporteInformeREMAT,
   getReporteInformeAntecedentes: getReporteInformeAntecedentes,
-  getPeriodosAdeudados: getPeriodosAdeudados
+  getPeriodosAdeudados: getPeriodosAdeudados,
+  getDeclaracionJurada: getDeclaracionJurada
 }
 
 export default services;
