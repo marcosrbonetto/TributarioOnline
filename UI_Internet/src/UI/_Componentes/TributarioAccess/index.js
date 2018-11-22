@@ -103,7 +103,7 @@ class TributarioAccess extends React.PureComponent {
                             </Button>
                         }
                         title={
-                            <Typography className={classes.title} variant="title">{this.props.tipo}</Typography>
+                            <Typography className={classes.title} variant="title">{this.props.titulo}</Typography>
                         }
                     />
                     <div className={classes.sectionInputSpacing}>
