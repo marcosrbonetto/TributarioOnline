@@ -1135,8 +1135,8 @@ class DetalleTributo extends React.PureComponent {
                     }
                 })) || [];
 
-                if(rowList.length == 0) { 
-                    mostrarAlerta('Declaración Jurada: Demasiados rubros opción en desarrollo'); this.props.mostrarCargando(false); return false; 
+                if (rowList.length == 0) {
+                    mostrarAlerta('Declaración Jurada: Demasiados rubros opción en desarrollo'); this.props.mostrarCargando(false); return false;
                 }
 
                 this.setState({
@@ -1441,7 +1441,7 @@ class DetalleTributo extends React.PureComponent {
                             {menuItemSeleccionado == 'juicios' &&
                                 listJuicios.map((juicio) => {
                                     return <div>
-                                        {(juicios.menuItemSeleccionado == juicio.idJuicio &&
+                                        {juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
@@ -1458,12 +1458,7 @@ class DetalleTributo extends React.PureComponent {
                                                     identificadorActual={this.props.match.params.identificador}
                                                     tributoActual={this.props.match.params.tributo}
                                                 />
-                                            </div>)
-                                            || menuItemSeleccionado == 'juicios' &&
-                                            <Typography className={classes.infoTexto}>
-                                                {`Le informamos que no posee juicios`}
-                                            </Typography>
-                                        }
+                                            </div>}
                                     </div>
                                 })}
 
@@ -1473,7 +1468,7 @@ class DetalleTributo extends React.PureComponent {
                             {menuItemSeleccionado == 'planesPago' &&
                                 listPlanesPago.map((plan) => {
                                     return <div>
-                                        {(planesPago.menuItemSeleccionado == plan.idPlan &&
+                                        {planesPago.menuItemSeleccionado == plan.idPlan &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
@@ -1490,12 +1485,7 @@ class DetalleTributo extends React.PureComponent {
                                                     identificadorActual={this.props.match.params.identificador}
                                                     tributoActual={this.props.match.params.tributo}
                                                 />
-                                            </div>)
-                                            || menuItemSeleccionado == 'planesPago' &&
-                                            <Typography className={classes.infoTexto}>
-                                                {`Le informamos que no posee planes de pago`}
-                                            </Typography>
-                                        }
+                                            </div>}
                                     </div>
                                 })}
 
