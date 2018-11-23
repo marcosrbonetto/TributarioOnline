@@ -220,12 +220,13 @@ class App extends React.Component {
           atLeave={{ opacity: 0 }}
           atActive={{ opacity: 1 }}
           className={"switch-wrapper"}
-        >
+        >          
+          <Route exact path="/" component={null} />
           <Route path={`${base}/DetalleTributario/:tributo/:identificador`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/DetalleTributario`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
           <Route path={`${base}/setAfipData`} component={login ? AfipController : null} />
-          <Route component={Pagina404}  component={login ? Pagina404 : null} />
+          <Route component={login ? Pagina404 : null} />
         </AnimatedSwitch>
       </main>
     );
