@@ -82,6 +82,8 @@ class TributarioOnline extends React.PureComponent {
     _.each(tipoTributos, (tipoTributo) => {
       var arrayTributos = _.filter(datos, { tipoTributo: tipoTributo });
 
+      arrayTributos = _.sortBy(arrayTributos, function(o) { return o.titular.titular; });
+
       IdsTributos[tipoTributo] = (arrayTributos && arrayTributos.map((tributo) => {
         return {
           representado: tributo.titular.titular,
