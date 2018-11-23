@@ -274,7 +274,7 @@ class MiTabla extends React.PureComponent {
                                         isSelected={isSelected}
                                     />
                                 })) || <TableRow>
-                                    <TableCell colSpan={6}>No se encontraron registros</TableCell>
+                                    <TableCell colSpan={6}>{this.props.msgNoRows ? this.props.msgNoRows : 'No se encontraron registros'}</TableCell>
                                 </TableRow>}
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 45 * emptyRows }}>

@@ -1818,6 +1818,7 @@ class DetalleTributo extends React.PureComponent {
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
                                             rows={ultimosPagos.infoGrilla || []}
+                                            msgNoRows={'No existen pagos registrados en los últimos dos años'}
                                             order='desc'
                                             orderBy='vencimiento'
                                             check={false}
