@@ -225,7 +225,7 @@ class App extends React.Component {
           <Route path={`${base}/DetalleTributario`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
           <Route path={`${base}/setAfipData`} component={login ? AfipController : null} />
-          <Route component={Pagina404} />
+          <Route component={Pagina404}  component={login ? Pagina404 : null} />
         </AnimatedSwitch>
       </main>
     );
