@@ -25,6 +25,7 @@ import CloseIcon from "@material-ui/icons/Close";
 //Mis componentes
 import Inicio from "./Inicio";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
+import AfipController from "@UI/Paginas/AfipController/index";
 import Pagina404 from "@UI/_Pagina404";
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
@@ -211,6 +212,7 @@ class App extends React.Component {
           <Route path={`${base}/DetalleTributario/:tributo/:identificador`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/DetalleTributario`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
+          <Route path={`${base}/setAfipData`} component={login ? AfipController : null} />
           <Route component={Pagina404} />
         </AnimatedSwitch>
       </main>

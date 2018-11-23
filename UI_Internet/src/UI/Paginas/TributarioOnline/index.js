@@ -6,6 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
 import './styles.css';
 
+//Librerias
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -16,8 +17,10 @@ import { login } from '@Redux/Actions/usuario'
 import Grid from '@material-ui/core/Grid';
 import { push } from "connected-react-router";
 
+//Componentes
 import TributarioAccess from '@Componentes/TributarioAccess';
 
+//Servicios
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline.js';
 
 //Alerta
@@ -59,7 +62,6 @@ class TributarioOnline extends React.PureComponent {
 
     servicesTributarioOnline.getIdTributos(token)
       .then((datos) => {
-        debugger;
         if (!datos.ok) { mostrarAlerta('Tributos: ' + datos.error); this.props.mostrarCargando(false); return false; }
 
         this.setIdentificadores(datos.return);

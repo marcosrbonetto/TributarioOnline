@@ -73,6 +73,10 @@ class TributarioAccess extends React.PureComponent {
         this.props.eventRedirect(tipoTributo, identificador);
     };
 
+    handleOnClickImportarAFIP = () => {
+        window.location.href = "http://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html";
+    };
+
     render() {
         const { classes } = this.props;
 
@@ -93,14 +97,24 @@ class TributarioAccess extends React.PureComponent {
                             (!this.props.icono && <div className={classes.iconSvg}>{this.props.iconoSvg}</div>)
                         }
                         action={
-                            <Button
-                                variant="outlined"
-                                color="secondary"
-                                className={classNames(classes.buttonActions, classes.buttonAddTributo)}
-                                tributo={this.props.tipo}
-                                onClick={this.handleOnClickAddTributo}>
-                                + Agregar
+                            <div>
+                                {this.props.id == 3 && <Button //Comercio
+                                    variant="outlined"
+                                    color="secondary"
+                                    className={classNames(classes.buttonActions, classes.buttonAddTributo)}
+                                    tributo={this.props.tipo}
+                                    onClick={this.handleOnClickImportarAFIP}>
+                                    Importar AFIP
+                            </Button>}
+                                <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    className={classNames(classes.buttonActions, classes.buttonAddTributo)}
+                                    tributo={this.props.tipo}
+                                    onClick={this.handleOnClickAddTributo}>
+                                    + Agregar
                             </Button>
+                            </div>
                         }
                         title={
                             <Typography className={classes.title} variant="title">{this.props.titulo}</Typography>
