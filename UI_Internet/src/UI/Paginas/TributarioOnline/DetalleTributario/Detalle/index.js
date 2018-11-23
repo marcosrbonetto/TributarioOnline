@@ -1274,7 +1274,7 @@ class DetalleTributo extends React.PureComponent {
                     <Grid item xs={8} className={"container"}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}
-                            <Typography className={classes.title} variant="title">Dominio:
+                            <Typography className={classes.title} variant="title">Identificador:
                             <Select
                                     className={classes.selectIdentificador}
                                     inputProps={{
