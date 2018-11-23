@@ -6,8 +6,13 @@
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript">
+
+        const afipUrlRedirect = new URLSearchParams(window.location.search).get('urlRedirect');
+        document.cookie = "afipUrlRedirect="+afipUrlRedirect+";path=/";
+
         document.cookie = "Modo=TributarioOnline;path=/";
         window.location.href = "https://auth.afip.gob.ar/contribuyente_/login.xhtml?action=SYSTEM&system=municor";
+
     </script>
 </head>
 <body>

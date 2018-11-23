@@ -1,16 +1,42 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript">
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        let urlRedirect = getCookie('afipUrlRedirect');
+        if(urlRedirect.indexOf('?') == -1)
+            urlRedirect = urlRedirect + '?';
+        else 
+            urlRedirect = urlRedirect + '&';
+
         document.cookie = "Modo=None;path=/";
-        document.location.href = 'http://localhost:3000/#/setAfipData?data=' + new URLSearchParams(window.location.search).get('data')
+        document.cookie = "afipUrlRedirect=None;path=/";
+        document.location.href = urlRedirect + 'data=' + new URLSearchParams(window.location.search).get('data')
     </script>
 </head>
+
 <body>
-    
+
 </body>
+
 </html>
