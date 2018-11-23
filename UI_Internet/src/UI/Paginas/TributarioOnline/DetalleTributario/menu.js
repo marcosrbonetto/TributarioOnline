@@ -5,7 +5,7 @@ const Menu = [
   {
     url: "/DetalleTributario/:tributo/:identificador",
     exact: true,
-    mostrarEnMenu: true,
+    mostrarEnMenu: false,
     component: DetalleTributo,
     nombre: "Automotores",
     titulo: "Automotores",
