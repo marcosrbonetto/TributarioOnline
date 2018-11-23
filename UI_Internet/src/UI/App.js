@@ -49,7 +49,7 @@ const mapDispatchToProps = dispatch => ({
   },
   redireccionar: url => {
     dispatch(replace(url));
-},
+  },
 });
 
 class App extends React.Component {
@@ -68,8 +68,14 @@ class App extends React.Component {
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       }
     }
+
+    if (this.props.location.pathname != nextProps.location.pathname) {
+      if (nextProps.location.pathname == "/") {
+        this.props.redireccionar("/Inicio");
+      }
+    }
   }
-  
+
   componentWillMount() {
     //Seteo Token en cookies // para salir del apuro asumimos que siempre viene
     /*const tokenParam = getAllUrlParams(window.location.href).Token;
@@ -94,10 +100,10 @@ class App extends React.Component {
 
       });*/
   }
-  
+
   componentDidMount() {
     let token = localStorage.getItem("token");
-    
+
     let search = this.props.location.search;
     if (search.startsWith("?")) {
       search = search.substring(1);
@@ -133,9 +139,16 @@ class App extends React.Component {
               //let url = "/";
               if (search) {
                 let url = search.get("url") || "/";
+                if (url == "/") url = "/Inicio";
                 this.props.redireccionar(url);
+              } else {
+                console.log(this.props.location);
+
+                if (this.props.location.pathname == "/") {
+                  this.props.redireccionar("/Inicio");
+                }
               }
-              
+
               this.onLogin();
             })
             .catch(() => {
@@ -199,7 +212,7 @@ class App extends React.Component {
 
     let base = "";
     const login = this.state.validandoToken == false && this.props.loggedUser != undefined;
-    
+
     return (
       <main className={classes.content}>
         <AnimatedSwitch
@@ -208,7 +221,6 @@ class App extends React.Component {
           atActive={{ opacity: 1 }}
           className={"switch-wrapper"}
         >
-          <Route exact path={`${base}/`} component={login ? Inicio : null} />
           <Route path={`${base}/DetalleTributario/:tributo/:identificador`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/DetalleTributario`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
