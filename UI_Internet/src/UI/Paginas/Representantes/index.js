@@ -217,7 +217,7 @@ class Representantes extends React.PureComponent {
         if (!datos.ok) { mostrarAlerta('Busqueda por CUIT: ' + datos.error); this.props.mostrarCargando(false); return false; }
 
         //En caso que sean Comercios los quitamos ya que solo se hacen por busqueda de Titular
-        const arrayDatos = _.filter(datos.return, (o) => { return !o.tipoTributo == 3 });
+        const arrayDatos = _.filter(datos.return, (o) => { return !(o.tipoTributo == 3) });
         const newDatos = {
           ...datos,
           return: arrayDatos
