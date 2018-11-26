@@ -1226,12 +1226,19 @@ class DetalleTributo extends React.PureComponent {
 
     };
 
-
     //Evento para agregar nuevo tributo
     handleOnClickAddTributo = (event) => {
         const tributo = this.props.match.params.tributo;
         this.props.redireccionar('/Inicio/Representantes/' + tributo + '?url=/DetalleTributario/' + tributo + '/:nuevoTributo');
     }
+
+    //Evento para agregar comercios desde AFIP
+    handleOnClickImportarAFIP = () => {
+        const tributo = this.props.match.params.tributo;
+        const identificador = this.props.match.params.identificador;
+
+        window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP?appUrlRedirect=' + '/DetalleTributario/' + tributo + '/' + identificador);
+    };
 
     render() {
         const { classes } = this.props;
@@ -1569,22 +1576,39 @@ class DetalleTributo extends React.PureComponent {
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
                             <Divider className={classes.divider} />
 
-                            <Grid container spacing={16}>
-                                <Grid item sm={2}>
-                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                    </svg>
-                                </Grid>
-                                <Grid item sm={10}>
-                                    <Typography
-                                        onClick={this.handleOnClickAddTributo}
-                                        variant="subheading"
-                                        className={classNames(classes.textList, classes.link)}
-                                        gutterBottom>
-                                        Agregar nuevo tributo
-                                    </Typography>
-                                </Grid>
-                            </Grid>
+                            {(tipoTributo != 3 &&
+                                <Grid container spacing={16}>
+                                    <Grid item sm={2}>
+                                        <svg className={classes.icon} viewBox="0 0 24 24">
+                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                        </svg>
+                                    </Grid>
+                                    <Grid item sm={10}>
+                                        <Typography
+                                            onClick={this.handleOnClickAddTributo}
+                                            variant="subheading"
+                                            className={classNames(classes.textList, classes.link)}
+                                            gutterBottom>
+                                            Agregar nuevo tributo
+                                        </Typography>
+                                    </Grid>
+                                </Grid>) ||
+                                <Grid container spacing={16}>
+                                    <Grid item sm={2}>
+                                        <svg className={classes.icon} viewBox="0 0 24 24">
+                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                        </svg>
+                                    </Grid>
+                                    <Grid item sm={10}>
+                                        <Typography
+                                            onClick={this.handleOnClickImportarAFIP}
+                                            variant="subheading"
+                                            className={classNames(classes.textList, classes.link)}
+                                            gutterBottom>
+                                            Importar AFIP
+                                        </Typography>
+                                    </Grid>
+                                </Grid>}
 
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>

@@ -74,7 +74,7 @@ class TributarioAccess extends React.PureComponent {
     };
 
     handleOnClickImportarAFIP = () => {
-        window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent("http://localhost:3000/#/setAfipData");
+        window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP');
     };
 
     render() {
@@ -127,7 +127,7 @@ class TributarioAccess extends React.PureComponent {
                                 <List component="nav" className={classes.navList}>
                                     {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.length == 0 &&
                                         <ListItem button>
-                                            <ListItemText primary={'No se encontraron ' + this.props.tipo} />
+                                            <ListItemText primary={'No se encontraron ' + this.props.titulo} />
                                         </ListItem>
                                     }
                                     {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.map((data, index) => {

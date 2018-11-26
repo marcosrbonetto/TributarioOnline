@@ -27,7 +27,7 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-class AfipController extends Component {
+class importacionIndividual extends Component {
     constructor() {
         super();
     }
@@ -36,25 +36,27 @@ class AfipController extends Component {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const hash = new URLSearchParams(this.props.location.search).get('data');
+        let appUrlRedirect = new URLSearchParams(this.props.location.search).get('appUrlRedirect');
+        appUrlRedirect = appUrlRedirect ? appUrlRedirect : '/';
 
         if (hash) {
-            servicesAfip.addRepresentandosAfip(token, {
+            servicesAfip.importarRepresentanteAFIP(token, {
                 hash: hash
             })
                 .then((datos) => {
                     if (!datos.ok) { mostrarAlerta('Importación AFIP: ' + datos.error); return false; }
 
                     this.props.mostrarCargando(false);
-                    this.props.redireccionar('/Inicio');
+                    this.props.redireccionar(appUrlRedirect);
                     
                 }).catch(err => {
                     mostrarAlerta('Importación AFIP: ' + err);
                     this.props.mostrarCargando(false);
-                    this.props.redireccionar('/Inicio');
+                    this.props.redireccionar(appUrlRedirect);
                 });
         } else {
             this.props.mostrarCargando(false);
-            this.props.redireccionar('/Inicio');
+            this.props.redireccionar(appUrlRedirect);
         }
     }
 
@@ -63,7 +65,7 @@ class AfipController extends Component {
     }
 }
 
-let componente = AfipController;
+let componente = importacionIndividual;
 componente = connect(
     mapStateToProps,
     mapDispatchToProps

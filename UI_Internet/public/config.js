@@ -1,7 +1,7 @@
 const DEPLOY = 1;
 const TEST = 2;
 const LOCAL = 3;
-const ENTORNO = TEST;
+const ENTORNO = LOCAL;
 
 //WS Tributario
 const URL_WS_TRIBUTARIO_LOCAL = "https://srv-dev04/WSTributarioOnline";
@@ -15,12 +15,18 @@ const URL_LOGIN_TEST = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/#/
 const URL_LOGIN_DEPLOY = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/#/Login/TributarioOnline";
 let URL_LOGIN = URL_LOGIN_DEPLOY;
 
+//Url AFIP
+const BASE_URL_SET_AFIP_LOCAL = "http://localhost:3000/#/";
+const BASE_URL_SET_AFIP_TEST = "https://srv-dev04/TributarioOnline/#/";
+const BASE_URL_SET_AFIP_DEPLOY = "https://servicios2.cordoba.gov.ar/TributarioOnline/#/";
+
 //Segun el entorno, cargo las variables
 switch (ENTORNO) {
   case DEPLOY:
     {
       URL_WS_TRIBUTARIO = URL_WS_TRIBUTARIO_DEPLOY;
       URL_LOGIN = URL_LOGIN_DEPLOY;
+      BASE_URL_SET_AFIP = BASE_URL_SET_AFIP_DEPLOY;
     }
     break;
 
@@ -28,6 +34,7 @@ switch (ENTORNO) {
     {
       URL_WS_TRIBUTARIO = URL_WS_TRIBUTARIO_TEST;
       URL_LOGIN = URL_LOGIN_TEST;
+      BASE_URL_SET_AFIP = BASE_URL_SET_AFIP_TEST;
     }
     break;
 
@@ -35,6 +42,7 @@ switch (ENTORNO) {
     {
       URL_WS_TRIBUTARIO = URL_WS_TRIBUTARIO_LOCAL;
       URL_LOGIN = URL_LOGIN_LOCAL;
+      BASE_URL_SET_AFIP = BASE_URL_SET_AFIP_LOCAL;
     }
     break;
 }
@@ -42,6 +50,7 @@ switch (ENTORNO) {
 var Config = {
   BASE_URL: "/TributarioOnline",
   BASE_URL_WS: URL_WS_TRIBUTARIO,
+  BASE_URL_SET_AFIP: BASE_URL_SET_AFIP,
   WS_CORDOBA_GEO: "https://servicios2.cordoba.gov.ar/CordobaGeoApi",
   URL_LOGIN: URL_LOGIN,
   URL_CORDOBA_FILES: "https://servicios2.cordoba.gov.ar/CordobaFiles",

@@ -55,8 +55,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Aranceles Taxis y Remises",
-    titulo: "Aranceles Taxis y Remises",
+    nombre: "Taxis/Remises",
+    titulo: "Taxis/Remises",
   },
   {
     url: "/Inicio/Tributo/Tributos",

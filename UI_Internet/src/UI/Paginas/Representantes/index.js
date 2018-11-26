@@ -175,7 +175,7 @@ class Representantes extends React.PureComponent {
 
     const service1 = servicesRepresentantes.getMisRepresentantes(token)
       .then((datos) => {
-        if (!datos.ok) { mostrarAlerta('Mis Representantes: '+datos.error); this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta('Mis Representantes: ' + datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentantes(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -183,7 +183,7 @@ class Representantes extends React.PureComponent {
 
     const service2 = servicesRepresentantes.getMisRepresentados(token)
       .then((datos) => {
-        if (!datos.ok) { mostrarAlerta('Mis Representados: '+datos.error); this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta('Mis Representados: ' + datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentados(datos);
       }).catch(err => {
         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -197,7 +197,7 @@ class Representantes extends React.PureComponent {
   //Servicios que setean los datos en las props del store de redux
   //Busqueda de tributos por CUIT
   buscarTributosCUIT = () => {
-    
+
     //Corroboramos que no se ingrese le cuit loggeado
     const cuilLog = this.props.loggedUser.datos.cuil;
 
@@ -214,11 +214,18 @@ class Representantes extends React.PureComponent {
 
     const service = servicesTributarioOnline.getTributosByCUIT(token, identificador)
       .then((datos) => {
-        if (!datos.ok) { mostrarAlerta('Busqueda por CUIT: '+datos.error); this.props.mostrarCargando(false); return false; }
-        
+        if (!datos.ok) { mostrarAlerta('Busqueda por CUIT: ' + datos.error); this.props.mostrarCargando(false); return false; }
+
+        //En caso que sean Comercios los quitamos ya que solo se hacen por busqueda de Titular
+        const arrayDatos = _.filter(datos.return, (o) => { return !o.tipoTributo == 3 });
+        const newDatos = {
+          ...datos,
+          return: arrayDatos
+        };
+
         this.handleCancelarSolicitudPermiso();
-        if (Array.isArray(datos.return) && datos.return.length > 0) {
-          this.props.setPropsTributosCUIT(datos);
+        if (Array.isArray(arrayDatos) && arrayDatos.length > 0) {
+          this.props.setPropsTributosCUIT(newDatos);
 
           this.setState({
             inputCuit: '',
@@ -258,8 +265,8 @@ class Representantes extends React.PureComponent {
     newState.busquedaCUIT.tributos[tipo].cantPermisos = cantidad;
     newState.busquedaCUIT.tributos[tipo].tributosSelec = arraySeleccionados;
 
-    const tributos = newState.busquedaCUIT.tributos; 
-    newState.busquedaCUIT.hayPermisosSeleccionados = _.filter(Object.keys(tributos), function(tributo){ return tributos[tributo].cantPermisos > 0 }).length > 0;
+    const tributos = newState.busquedaCUIT.tributos;
+    newState.busquedaCUIT.hayPermisosSeleccionados = _.filter(Object.keys(tributos), function (tributo) { return tributos[tributo].cantPermisos > 0 }).length > 0;
 
     this.setState({ newState });
   }
@@ -339,8 +346,8 @@ class Representantes extends React.PureComponent {
       "identificador": param.identificador
     })
       .then((datos) => {
-        
-        if (!datos.ok) { mostrarAlerta('Agregar: '+datos.error); this.props.mostrarCargando(false); return false; }
+
+        if (!datos.ok) { mostrarAlerta('Agregar: ' + datos.error); this.props.mostrarCargando(false); return false; }
         if (typeof callback === "function")
           callback(datos);
       }).catch(err => {
@@ -369,7 +376,7 @@ class Representantes extends React.PureComponent {
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
-        if (!datos.ok) { mostrarAlerta('Cancelar Permiso: '+datos.error); this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta('Cancelar Permiso: ' + datos.error); this.props.mostrarCargando(false); return false; }
 
         this.props.setPropsCambiarEstadoPermiso({
           grilla: datosFila.data.grilla,
@@ -403,7 +410,7 @@ class Representantes extends React.PureComponent {
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
-        if (!datos.ok) { mostrarAlerta('Aceptar Permiso: '+datos.error); this.props.mostrarCargando(false); return false; }
+        if (!datos.ok) { mostrarAlerta('Aceptar Permiso: ' + datos.error); this.props.mostrarCargando(false); return false; }
 
         this.props.setPropsCambiarEstadoPermiso({
           grilla: datosFila.data.grilla,
@@ -420,8 +427,8 @@ class Representantes extends React.PureComponent {
   //Botón Cancelar ó Aceptar que se mostrará en la grilla y se pasara al componente MiTabla en "customCell"
   botonAgregarCancelarPermisos = (datosExtra) => {
     const { classes } = this.props;
-    const datosFila = {...datosExtra};
-    
+    const datosFila = { ...datosExtra };
+
     return (datosExtra.data.aceptado && <div className={classes.iconEliminarPermiso}>
       <MiLinkDialog
         textoLink={'Cancelar Permiso'}
@@ -495,7 +502,7 @@ class Representantes extends React.PureComponent {
               identificador: this.state.inputIdentificadorTributo
             }
           });
-        } else if(datos.ok && cuilLog == datos.return.cuit) {
+        } else if (datos.ok && cuilLog == datos.return.cuit) {
           this.handleCancelarSolicitudPermiso();
 
           this.setState({
@@ -524,6 +531,11 @@ class Representantes extends React.PureComponent {
   }
 
   //Aceptando solicitud en busca por Tributo
+  handleOnClickImportarRepresentanteAFIP = () => {
+    window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionIndividualAFIP');
+  }
+
+  //Aceptando solicitud en busca por Tributo
   handleAceptarSolicitudPermisoTitular = () => {
     this.props.mostrarCargando(true);
 
@@ -544,12 +556,12 @@ class Representantes extends React.PureComponent {
 
       //Si viene como parametro el tributo, redireccionamos
       const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-      if(this.props.match.params.tributo && tipoTributo == datos.return.tipoTributo.keyValue) {
+      if (this.props.match.params.tributo && tipoTributo == datos.return.tipoTributo.keyValue) {
 
         let urlRedirect = getAllUrlParams(window.location.href).url;
 
         //Redireccionamos a pantalla DetalleTributo con el nuevo tributo
-        if(urlRedirect.indexOf(':nuevoTributo') != -1) {
+        if (urlRedirect.indexOf(':nuevoTributo') != -1) {
           urlRedirect = urlRedirect.replace(':nuevoTributo', datos.return.identificador);
           this.props.redireccionar(urlRedirect);
         } else {
@@ -738,15 +750,20 @@ class Representantes extends React.PureComponent {
                 </Grid>
                   <Divider className={classes.divider} />
 
+                  {this.state.selectTributos == '3' && <div>
+                    <Typography variant="caption">Para agregar al tributo seleccionado, deberá ingresar el CUIT y la clave fiscal del comercio en cuestión.</Typography>
+                  </div>}
+
                   <ExpansionPanelActions className={classes.actionButtons}>
                     <Button size="small" onClick={this.handleCancelarSolicitudPermiso}>Cancelar</Button>
                     <Button
                       size="small"
                       color="secondary"
-                      onClick={this.handleAceptarSolicitudPermisoTitular}>
+                      onClick={this.state.selectTributos != '3' ? this.handleAceptarSolicitudPermisoTitular : this.handleOnClickImportarRepresentanteAFIP}>
                       Agregar
                   </Button>
                   </ExpansionPanelActions>
+
                 </div>}
 
               {this.state.busquedaTributo.mensajeError && <div>
