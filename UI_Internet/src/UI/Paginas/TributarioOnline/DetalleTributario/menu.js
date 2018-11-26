@@ -11,6 +11,14 @@ const Menu = [
     titulo: "Automotores",
   },
   {
+    url: "/Inicio",
+    exact: true,
+    mostrarEnMenu: true,
+    component: TributarioOnline,
+    nombre: "Home",
+    titulo: "Home",
+  },
+  {
     url: "/Inicio/Tributo/Automotores",
     exact: true,
     mostrarEnMenu: true,
