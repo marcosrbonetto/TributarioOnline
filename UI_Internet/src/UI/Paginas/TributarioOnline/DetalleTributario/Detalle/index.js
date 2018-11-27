@@ -175,7 +175,7 @@ class DetalleTributo extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.state = initialState;
+        this.state = _.clone(initialState);
     }
 
     componentDidMount() {
@@ -191,9 +191,11 @@ class DetalleTributo extends React.PureComponent {
         let idNuevo = nextProps.match.params.identificador;
         if (idAnterior != idNuevo) {
             //window.location.reload();//Recargamos la pagina con la nueva url
-            this.setState(initialState);
-            const token = this.props.loggedUser.token;
-            this.init(token, idNuevo);
+
+            this.setState(_.clone(initialState), () => {
+                const token = this.props.loggedUser.token;
+                this.init(token, idNuevo);
+            });
         }
     }
 
@@ -685,11 +687,17 @@ class DetalleTributo extends React.PureComponent {
 
     //Abrimos modal últimos pagos
     handleUltimosPagosOpenDialog = () => {
-        let newState = { ...this.state };
-        newState.ultimosPagos.modal.open = true;
-        this.setState(newState);
-
-        this.props.mostrarCargando(false);
+        this.setState({
+            ultimosPagos: {
+                ...this.state.ultimosPagos,
+                modal: {
+                    ...this.state.ultimosPagos.modal,
+                    open: true
+                }
+            }
+        }, () => {
+            this.props.mostrarCargando(false);
+        });
     }
 
     //Cerramos modal últimos pagos seteando los valores iniciales del state
@@ -698,6 +706,7 @@ class DetalleTributo extends React.PureComponent {
             ultimosPagos: {
                 ...this.state.ultimosPagos,
                 modal: {
+                    ...this.state.ultimosPagos.modal,
                     open: false
                 }
             }
@@ -758,11 +767,17 @@ class DetalleTributo extends React.PureComponent {
 
     //Abrimos modal periodos adeudados
     handlePeriodosAdeudadosOpenDialog = () => {
-        let newState = { ...this.state };
-        newState.periodosAdeudados.modal.open = true;
-        this.setState(newState);
-
-        this.props.mostrarCargando(false);
+        this.setState({
+            periodosAdeudados: {
+                ...this.state.periodosAdeudados,
+                modal: {
+                    ...this.state.periodosAdeudados.modal,
+                    open: true
+                }
+            }
+        }, () => {
+            this.props.mostrarCargando(false);
+        });
     }
 
     //Cerramos modal periodos adeudados seteando los valores iniciales del state
@@ -857,11 +872,17 @@ class DetalleTributo extends React.PureComponent {
 
     //Abrimos modal informe antecedentes
     handleInformeAntecedentesOpenDialog = () => {
-        let newState = { ...this.state };
-        newState.informeAntecedentes.modal.open = true;
-        this.setState(newState);
-
-        this.props.mostrarCargando(false);
+        this.setState({
+            informeAntecedentes: {
+                ...this.state.informeAntecedentes,
+                modal: {
+                    ...this.state.informeAntecedentes.modal,
+                    open: true
+                }
+            }
+        }, () => {
+            this.props.mostrarCargando(false);
+        });
     }
 
     //Cerramos modal informe antecedentes seteando los valores iniciales del state
@@ -901,7 +922,6 @@ class DetalleTributo extends React.PureComponent {
             }
         });
     }
-
 
     //Traemos datos de informe REMAT trayendo datos del WS
     onInformeREMATDialogoOpen = () => {
@@ -981,11 +1001,17 @@ class DetalleTributo extends React.PureComponent {
 
     //Abrimos modal informe REMAT
     handleInformeREMATOpenDialog = () => {
-        let newState = { ...this.state };
-        newState.informeREMAT.modal.open = true;
-        this.setState(newState);
-
-        this.props.mostrarCargando(false);
+        this.setState({
+            informeREMAT: {
+                ...this.state.informeREMAT,
+                modal: {
+                    ...this.state.informeREMAT.modal,
+                    open: true
+                }
+            }
+        }, () => {
+            this.props.mostrarCargando(false);
+        });
     }
 
     //Cerramos modal informe REMAT seteando los valores iniciales del state
@@ -1088,11 +1114,17 @@ class DetalleTributo extends React.PureComponent {
 
     //Abrimos modal informe cuenta
     handleInformeCuentaOpenDialog = () => {
-        let newState = { ...this.state };
-        newState.informeCuenta.modal.open = true;
-        this.setState(newState);
-
-        this.props.mostrarCargando(false);
+        this.setState({
+            informeCuenta: {
+                ...this.state.informeCuenta,
+                modal: {
+                    ...this.state.informeCuenta.modal,
+                    open: true
+                }
+            }
+        }, () => {
+            this.props.mostrarCargando(false);
+        });
     }
 
     //Cerramos modal informe cuenta seteando los valores iniciales del state
@@ -1174,11 +1206,17 @@ class DetalleTributo extends React.PureComponent {
 
     //Abrimos modal Declaración Jurada
     handleDeclaracionJuradaOpenDialog = () => {
-        let newState = { ...this.state };
-        newState.declaracionJurada.modal.open = true;
-        this.setState(newState);
-
-        this.props.mostrarCargando(false);
+        this.setState({
+            declaracionJurada: {
+                ...this.state.declaracionJurada,
+                modal: {
+                    ...this.state.declaracionJurada.modal,
+                    open: true
+                }
+            }
+        }, () => {
+            this.props.mostrarCargando(false);
+        });
     }
 
     //Cerramos modal Declaración Jurada seteando los valores iniciales del state
@@ -1277,7 +1315,6 @@ class DetalleTributo extends React.PureComponent {
             informeAntecedentes,
             informeREMAT
         } = this.state;
-
         const infoContribucion = contribucion.infoSeccion;
         const infoMultas = multas.infoSeccion;
         const infoJuicios = juicios.infoSeccion;
@@ -1825,7 +1862,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={10}>
                                     <MiControledDialog
-                                        open={ultimosPagos.modal.open}
+                                        open={ultimosPagos.modal.open == true}
                                         onDialogoOpen={this.onUltimosPagosDialogoOpen}
                                         onDialogoClose={this.onUltimosPagosDialogoClose}
                                         textoLink={'Últimos pagos'}
