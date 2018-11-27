@@ -16,9 +16,9 @@ const URL_LOGIN_DEPLOY = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/
 let URL_LOGIN = URL_LOGIN_DEPLOY;
 
 //Url AFIP
-const BASE_URL_SET_AFIP_LOCAL = "http://localhost:3000/#/";
-const BASE_URL_SET_AFIP_TEST = "https://srv-dev04/TributarioOnline/#/";
-const BASE_URL_SET_AFIP_DEPLOY = "https://servicios2.cordoba.gov.ar/TributarioOnline/#/";
+const BASE_URL_SET_AFIP_LOCAL = "http://localhost:3000/#";
+const BASE_URL_SET_AFIP_TEST = "https://srv-dev04/TributarioOnline/#";
+const BASE_URL_SET_AFIP_DEPLOY = "https://servicios2.cordoba.gov.ar/TributarioOnline/#";
 
 //Segun el entorno, cargo las variables
 switch (ENTORNO) {

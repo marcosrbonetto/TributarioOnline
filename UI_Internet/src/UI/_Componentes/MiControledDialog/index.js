@@ -62,7 +62,7 @@ class MiControledDialog extends React.PureComponent {
           </div>
         }
         <Dialog
-          open={this.props.open}
+          open={this.props.open || false}
           scroll='paper'
           aria-labelledby="scroll-dialog-title"
           classes={{

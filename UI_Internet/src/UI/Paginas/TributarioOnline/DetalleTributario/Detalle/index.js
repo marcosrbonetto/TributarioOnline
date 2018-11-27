@@ -1401,7 +1401,6 @@ class DetalleTributo extends React.PureComponent {
                                     <MisPagos
                                         tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                         check={true}
-                                        classes={classes}
                                         info={infoContribucion || null}
                                         menuItemSeleccionado={menuItemSeleccionado}
                                         data={this.state[menuItemSeleccionado]}
@@ -1426,7 +1425,6 @@ class DetalleTributo extends React.PureComponent {
                                         <MisPagos
                                             tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                             check={true}
-                                            classes={classes}
                                             info={infoMultas || null}
                                             menuItemSeleccionado={menuItemSeleccionado}
                                             data={this.state[menuItemSeleccionado]}
@@ -1456,7 +1454,6 @@ class DetalleTributo extends React.PureComponent {
                                                 <MisPagos
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={false}
-                                                    classes={classes}
                                                     info={juicio || null}
                                                     menuItemSeleccionado={menuItemSeleccionado}
                                                     data={this.state[menuItemSeleccionado]}
@@ -1483,7 +1480,6 @@ class DetalleTributo extends React.PureComponent {
                                                 <MisPagos
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={true}
-                                                    classes={classes}
                                                     info={plan || null}
                                                     menuItemSeleccionado={menuItemSeleccionado}
                                                     data={this.state[menuItemSeleccionado]}
@@ -1783,9 +1779,6 @@ class DetalleTributo extends React.PureComponent {
                                         onDialogoClose={this.onPeriodosAdeudadosDialogoClose}
                                         textoLink={'Períodos Adeudados'}
                                         titulo={'Períodos Adeudados'}
-                                        classes={{
-                                            root: classes.miLinkDialog
-                                        }}
                                     >
                                         <MiTabla
                                             columns={[
@@ -1820,9 +1813,6 @@ class DetalleTributo extends React.PureComponent {
                                         onDialogoClose={this.onUltimosPagosDialogoClose}
                                         textoLink={'Últimos pagos'}
                                         titulo={'Últimos pagos'}
-                                        classes={{
-                                            root: classes.miLinkDialog
-                                        }}
                                     >
                                         <MiTabla
                                             columns={[
@@ -1885,9 +1875,6 @@ class DetalleTributo extends React.PureComponent {
                                                 onDialogoClose={this.onInformeAntecedentesDialogoClose}
                                                 textoLink={'Informe Antecedentes'}
                                                 titulo={'Informe Antecedentes'}
-                                                classes={{
-                                                    root: classes.miLinkDialog
-                                                }}
                                             >
                                                 <div key="headerContent"></div>
                                                 <div key="mainContent">
@@ -1955,9 +1942,6 @@ class DetalleTributo extends React.PureComponent {
                                                 onDialogoClose={this.onInformeREMATDialogoClose}
                                                 textoLink={'Informe REMAT'}
                                                 titulo={'Informe REMAT'}
-                                                classes={{
-                                                    root: classes.miLinkDialog
-                                                }}
                                             >
                                                 <div key="headerContent"></div>
                                                 <div key="mainContent">
@@ -2077,9 +2061,6 @@ class DetalleTributo extends React.PureComponent {
                                             onDialogoClose={this.onDeclaracionJuradaDialogoClose}
                                             textoLink={'Presentar DDJJ'}
                                             titulo={'Presentar DDJJ'}
-                                            classes={{
-                                                root: classes.miLinkDialog
-                                            }}
                                         >
                                             <div key="headerContent"></div>
                                             <div key="mainContent">

@@ -67,9 +67,7 @@ class TributarioAccess extends React.PureComponent {
         this.props.redireccionar('/Inicio/Representantes/' + tributo + '?url=/Inicio');
     }
 
-    eventRedirect = (event) => {
-        const identificador = event.currentTarget.attributes.identificador.value;
-        const tipoTributo = event.currentTarget.attributes.tipoTributo.value;
+    eventRedirect = (identificador, tipoTributo) => {
         this.props.eventRedirect(tipoTributo, identificador);
     };
 
@@ -131,7 +129,7 @@ class TributarioAccess extends React.PureComponent {
                                         </ListItem>
                                     }
                                     {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.map((data, index) => {
-                                        return <ListItem button onClick={this.eventRedirect} identificador={data.identificador} tipoTributo={this.props.tipo}>
+                                        return <ListItem key={index} button onClick={() => this.eventRedirect(data.identificador, this.props.tipo)}>
                                             <ListItemIcon>
                                                 <PlayArrow className={classes.iconColor} />
                                             </ListItemIcon>
