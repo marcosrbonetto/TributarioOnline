@@ -26,7 +26,7 @@ export const getIdTipoTributo = (tributo) => {
 
 	const tipoTributoSel = _.filter(arrayIdTipoTributos,(o)=>{ return o.value.toLowerCase() == tributo.toLowerCase();})
 
-	if(tipoTributoSel.length > 0 && tipoTributoSel[0].key)
+	if(tipoTributoSel[0])
 		return tipoTributoSel[0].key;
 	else 
 		return false;
