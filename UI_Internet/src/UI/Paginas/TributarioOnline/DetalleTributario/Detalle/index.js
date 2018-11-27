@@ -175,20 +175,21 @@ class DetalleTributo extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        this.urlIdentificador = decodeURIComponent(this.props.match.params.identificador);
         this.state = _.clone(initialState);
     }
 
     componentDidMount() {
         //Servicios que setean los datos en las props del store de redux
         const token = this.props.loggedUser.token;
-        const identificador = this.props.match.params.identificador;
+        const identificador = this.urlIdentificador;
         this.init(token, identificador);
     }
 
 
     componentWillReceiveProps(nextProps) {
-        let idAnterior = this.props.match.params.identificador;
-        let idNuevo = nextProps.match.params.identificador;
+        let idAnterior = this.urlIdentificador;
+        let idNuevo = decodeURIComponent(nextProps.match.params.identificador);
         if (idAnterior != idNuevo) {
             //window.location.reload();//Recargamos la pagina con la nueva url
 
@@ -539,7 +540,7 @@ class DetalleTributo extends React.PureComponent {
             return false;
 
         this.props.mostrarCargando(true);
-        this.props.redireccionar('/DetalleTributario/' + this.props.match.params.tributo + '/' + event.target.value);
+        this.props.redireccionar('/DetalleTributario/' + this.props.match.params.tributo + '/' + encodeURIComponent(event.target.value));
         this.props.mostrarCargando(false);
         // window.location.reload();//Recargamos la pagina con la nueva url
     };
@@ -637,7 +638,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.props.match.params.identificador;
+        const identificador = this.urlIdentificador;
 
         if (this.state.ultimosPagos.infoGrilla.length == 0) {
             servicesTributarioOnline.getUltimosPagos(token, {
@@ -718,7 +719,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.props.match.params.identificador;
+        const identificador = this.urlIdentificador;
 
         if (this.state.periodosAdeudados.infoGrilla.length == 0) {
             servicesTributarioOnline.getPeriodosAdeudados(token, tipoTributo, identificador)
@@ -797,7 +798,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.props.match.params.identificador;
+        const identificador = this.urlIdentificador;
 
         let arrayService = [];
         if (!this.state.informeAntecedentes.reporteBase64) {
@@ -928,7 +929,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.props.match.params.identificador;
+        const identificador = this.urlIdentificador;
 
         let arrayService = [];
         if (!this.state.informeREMAT.reporteBase64) {
@@ -1058,7 +1059,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.props.match.params.identificador;
+        const identificador = this.urlIdentificador;
 
         let arrayService = [];
         if (!this.state.informeCuenta.reporteBase64) {
@@ -1170,7 +1171,7 @@ class DetalleTributo extends React.PureComponent {
     onDeclaracionJuradaDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const identificador = this.props.match.params.identificador;
+        const identificador = this.urlIdentificador;
 
         servicesTributarioOnline.getDeclaracionJurada(token, {
             cuit: identificador
@@ -1291,9 +1292,9 @@ class DetalleTributo extends React.PureComponent {
     //Evento para agregar comercios desde AFIP
     handleOnClickImportarAFIP = () => {
         const tributo = this.props.match.params.tributo;
-        const identificador = this.props.match.params.identificador;
+        const identificador = this.urlIdentificador;
 
-        window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP?appUrlRedirect=' + '/DetalleTributario/' + tributo + '/' + identificador);
+        window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP?appUrlRedirect=' + '/DetalleTributario/' + tributo + '/' + encodeURIComponent(identificador));
     };
 
     render() {
@@ -1342,7 +1343,7 @@ class DetalleTributo extends React.PureComponent {
                                         name: 'identificador',
                                         id: 'identificador',
                                     }}
-                                    value={this.props.match.params.identificador}
+                                    value={this.urlIdentificador}
                                     disableUnderline
                                     onChange={this.selectIdentificador}
                                 >
@@ -1460,7 +1461,7 @@ class DetalleTributo extends React.PureComponent {
                                         data={this.state[menuItemSeleccionado]}
                                         registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                         setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                        identificadorActual={this.props.match.params.identificador}
+                                        identificadorActual={this.urlIdentificador}
                                         tributoActual={this.props.match.params.tributo}
                                     />
                                 </div>)
@@ -1484,7 +1485,7 @@ class DetalleTributo extends React.PureComponent {
                                             data={this.state[menuItemSeleccionado]}
                                             registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                             setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                            identificadorActual={this.props.match.params.identificador}
+                                            identificadorActual={this.urlIdentificador}
                                             tributoActual={this.props.match.params.tributo}
                                         />
                                     </div>
@@ -1513,7 +1514,7 @@ class DetalleTributo extends React.PureComponent {
                                                     data={this.state[menuItemSeleccionado]}
                                                     registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                                    identificadorActual={this.props.match.params.identificador}
+                                                    identificadorActual={this.urlIdentificador}
                                                     tributoActual={this.props.match.params.tributo}
                                                 />
                                             </div>}
@@ -1539,7 +1540,7 @@ class DetalleTributo extends React.PureComponent {
                                                     data={this.state[menuItemSeleccionado]}
                                                     registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                                    identificadorActual={this.props.match.params.identificador}
+                                                    identificadorActual={this.urlIdentificador}
                                                     tributoActual={this.props.match.params.tributo}
                                                 />
                                             </div>}
@@ -1581,7 +1582,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{this.props.match.params.identificador}</b>
+                                        <b>{this.urlIdentificador}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>

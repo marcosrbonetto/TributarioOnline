@@ -22,7 +22,13 @@ export const getIdTipoTributo = (tributo) => {
 	if (typeof tributo !== "string") return false;
 
 	tributo = tributo.toLowerCase();
-	return (tributo == 'automotores' && 1) || (tributo == 'inmuebles' && 2) || (tributo == 'comercios' && 3) || (tributo == 'cementerios' && 4) || false;
+	return (tributo == 'automotores' && 1) || 
+	(tributo == 'inmuebles' && 2) || 
+	(tributo == 'comercios' && 3) || 
+	(tributo == 'cementerios' && 4) || 
+	(tributo == 'feriasmercados' && 5) || 
+	(tributo == 'taxisremises' && 6) || 
+	false;
 }
 
 export const stringToFloat = (str, decimales, opciones) => {

@@ -98,7 +98,7 @@ class TributarioOnline extends React.PureComponent {
   }
 
   eventRedirect = (tipoTributo, identificador) => {
-    this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + identificador);
+    this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador));
   }
 
   render() {

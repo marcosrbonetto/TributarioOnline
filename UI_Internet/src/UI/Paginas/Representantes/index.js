@@ -562,7 +562,7 @@ class Representantes extends React.PureComponent {
 
         //Redireccionamos a pantalla DetalleTributo con el nuevo tributo
         if (urlRedirect.indexOf(':nuevoTributo') != -1) {
-          urlRedirect = urlRedirect.replace(':nuevoTributo', datos.return.identificador);
+          urlRedirect = urlRedirect.replace(':nuevoTributo', encodeURIComponent(datos.return.identificador));
           this.props.redireccionar(urlRedirect);
         } else {
           //Redireccionamos solo si "agregamos" desde la pantalla Inicio
@@ -708,6 +708,12 @@ class Representantes extends React.PureComponent {
                 </MenuItem>
                 <MenuItem value="4">
                   <em>Cementerio</em>
+                </MenuItem>
+                <MenuItem value="5">
+                  <em>Ferias y Mercados</em>
+                </MenuItem>
+                <MenuItem value="6">
+                  <em>Taxis/Remises</em>
                 </MenuItem>
               </Select>
 
