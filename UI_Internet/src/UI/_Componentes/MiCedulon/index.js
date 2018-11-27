@@ -146,8 +146,8 @@ class MiCedulon extends React.PureComponent {
               open={Boolean(this.state.anchorEl)}
               onClose={this.handleClose}
             >
-              <MenuItem onClick={this.onBotonCedulonClick} opcion="1">Hoy</MenuItem>
-              <MenuItem onClick={this.onBotonCedulonClick} opcion="2">A Días</MenuItem>
+              <MenuItem onClick={this.onBotonCedulonClick} opcion="0">Hoy</MenuItem>
+              <MenuItem onClick={this.onBotonCedulonClick} opcion="10">A Días</MenuItem>
             </Menu>
           </div>
 

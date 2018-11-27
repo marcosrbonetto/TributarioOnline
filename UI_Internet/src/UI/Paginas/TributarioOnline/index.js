@@ -108,7 +108,7 @@ class TributarioOnline extends React.PureComponent {
       <div className={classes.mainContainer}>
         <Grid container className={classes.root} spacing={16}>
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Automotor') &&
-            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
+            <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >
               <TributarioAccess
                 id="1"
                 tipo="Automotor"
@@ -121,7 +121,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Inmueble') &&
-            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
+            <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >
               <TributarioAccess
                 id="2"
                 tipo="Inmueble"
@@ -133,7 +133,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercio') &&
-            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
+            <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >
               <TributarioAccess
                 id="3"
                 tipo="Comercio"
@@ -145,7 +145,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerio') &&
-            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
+            <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >
               <TributarioAccess
                 id="4"
                 tipo="Cementerio"
@@ -160,7 +160,7 @@ class TributarioOnline extends React.PureComponent {
           )}
 
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'FeriaMercado') &&
-            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
+            <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >
               <TributarioAccess
                 id="5"
                 tipo="FeriaMercado"
@@ -172,7 +172,7 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'TaxiRemis') &&
-            <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
+            <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >
               <TributarioAccess
                 id="6"
                 tipo="TaxiRemis"

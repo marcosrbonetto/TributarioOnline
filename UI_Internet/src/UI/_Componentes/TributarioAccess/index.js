@@ -96,22 +96,32 @@ class TributarioAccess extends React.PureComponent {
                         }
                         action={
                             <div>
-                                {this.props.id == 3 && <Button //Comercio
-                                    variant="outlined"
-                                    color="secondary"
-                                    className={classNames(classes.buttonActions, classes.buttonAddTributo)}
-                                    tributo={this.props.tipo}
-                                    onClick={this.handleOnClickImportarAFIP}>
-                                    Importar AFIP
+                                {(this.props.id == 3 && <div>
+                                    <Button //Comercio
+                                        variant="outlined"
+                                        color="secondary"
+                                        className={classNames(classes.buttonActions, classes.buttonAddTributo)}
+                                        tributo={this.props.tipo}
+                                        onClick={this.handleOnClickImportarAFIP}>
+                                        Importar AFIP
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        className={classNames(classes.buttonActions, classes.buttonAddTributo)}
+                                        tributo={this.props.tipo}
+                                        onClick={this.handleOnClickAddTributo}>
+                                        +
+                                    </Button>
+                                </div>) ||
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        className={classNames(classes.buttonActions, classes.buttonAddTributo)}
+                                        tributo={this.props.tipo}
+                                        onClick={this.handleOnClickAddTributo}>
+                                        + Agregar
                             </Button>}
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    className={classNames(classes.buttonActions, classes.buttonAddTributo)}
-                                    tributo={this.props.tipo}
-                                    onClick={this.handleOnClickAddTributo}>
-                                    + Agregar
-                            </Button>
                             </div>
                         }
                         title={
@@ -129,11 +139,16 @@ class TributarioAccess extends React.PureComponent {
                                         </ListItem>
                                     }
                                     {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.map((data, index) => {
-                                        return <ListItem key={index} button onClick={() => this.eventRedirect(data.identificador, this.props.tipo)}>
+                                        return <ListItem key={index} className={classes.itemLista} button onClick={() => this.eventRedirect(data.identificador, this.props.tipo)}>
                                             <ListItemIcon>
                                                 <PlayArrow className={classes.iconColor} />
                                             </ListItemIcon>
-                                            <ListItemText primary={data.representado ? data.identificador + ' - ' + data.representado : data.identificador} />
+                                            <ListItemText primary={<div>
+                                                <Typography className={classes.titleItem} variant="title">{data.identificador}</Typography>
+                                                <Typography className={classes.titleItem} >{data.representado}</Typography>
+                                            </div>
+                                            } />
+
                                         </ListItem>
                                     })}
                                 </List>

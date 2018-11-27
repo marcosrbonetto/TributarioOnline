@@ -4,6 +4,12 @@
     }
 } 
 
+@media only screen and (max-width: 1100px) and (min-width: 760px) {
+    .tributarioAccess {
+        min-width: 50%
+    }
+} 
+
 /* width */
 ::-webkit-scrollbar {
     width: 10px;

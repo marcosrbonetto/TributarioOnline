@@ -196,7 +196,7 @@ class MiMercadoPago extends React.PureComponent {
   cargarNexos = () => {
     const registros = this.props.registrosSeleccionados;
     const token = this.props.loggedUser.token;
-    const opcion = "1"; // Hoy
+    const opcion = "0"; // Hoy
 
     if (registros.length > 0 || this.props.esJuicio) {
       services.getReporteCedulon(token,
