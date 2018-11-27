@@ -58,133 +58,150 @@ const mapDispatchToProps = dispatch => ({
     },
 });
 
+const initialState = {
+    menuItemSeleccionado: 'contribucion', //Menu seleccionado que muestra contenido MisPagos
+    mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
+    infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
+    informeCuenta: { //Información utilizada para mostrar informe de cuenta
+        info: {},
+        modal: {
+            open: false,
+            showReporte: false
+        },
+        reporteBase64: ''
+    },
+    ultimosPagos: {
+        modal: {
+            open: false
+        },
+        infoGrilla: []
+    },
+    periodosAdeudados: {
+        modal: {
+            open: false
+        },
+        infoGrilla: []
+    },
+    informeAntecedentes: {
+        modal: {
+            open: false,
+            showReporte: false
+        },
+        reporteBase64: undefined,
+        infoGrilla: []
+    },
+    informeREMAT: {
+        modal: {
+            open: false,
+            showReporte: false
+        },
+        reporteBase64: undefined,
+        infoGrilla: []
+    },
+    declaracionJurada: {
+        modal: {
+            open: false,
+            showReporte: false
+        },
+        reporteBase64: undefined,
+        infoGrilla: [],
+        registrosSeleccionados: [],
+    },
+    contribucion: { //Item Menu e información
+        infoSeccion: undefined,
+        tieneSubMenu: false,
+        tipoCedulon: 'Contribuciones',
+        order: 'asc',
+        orderBy: 'concepto',
+        labels: {
+            detalleTitulo: 'Períodos',
+            totalesDeuda: 'Administrativa',
+            vencida: 'Deuda vencida',
+            aVencer: 'A vencer',
+            columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+        },
+        registrosSeleccionados: [],
+    },
+    multas: { //Item Menu e información
+        infoSeccion: undefined,
+        tieneSubMenu: false,
+        tipoCedulon: 'Multas',
+        order: 'asc',
+        orderBy: 'vencimiento',
+        labels: {
+            detalleTitulo: 'Multas',
+            totalesDeuda: 'Administrativa',
+            vencida: 'Deuda vencida',
+            aVencer: 'A vencer',
+            columnas: ['Causa', 'Fecha', 'Total ($)']
+        },
+        registrosSeleccionados: [],
+    },
+    juicios: { //Item Menu e información
+        infoSeccion: undefined,
+        tieneSubMenu: true,
+        tipoCedulon: 'JuiciosContribuciones',
+        order: 'asc',
+        orderBy: 'concepto',
+        labels: {
+            detalleTitulo: 'Juicios',
+            totalesDeuda: 'del Juicio',
+            vencida: 'Capital',
+            aVencer: 'Gastos',
+            columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+        },
+        menuItemSeleccionado: '',
+        registrosSeleccionados: [],
+    },
+    planesPago: { //Item Menu e información
+        infoSeccion: undefined,
+        tieneSubMenu: true,
+        tipoCedulon: 'PlanesContribuciones',
+        order: 'asc',
+        orderBy: 'concepto',
+        labels: {
+            detalleTitulo: 'Planes',
+            totalesDeuda: 'Administrativa',
+            vencida: 'Vencida',
+            aVencer: 'A vencer',
+            columnas: ['Concepto', 'Fecha', 'Total ($)']
+        },
+        menuItemSeleccionado: '',
+        registrosSeleccionados: [],
+    }
+};
+
 class DetalleTributo extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.state = {
-            identificadorActual: this.props.match.params.identificador, //El elejido en el combo del header
-            menuItemSeleccionado: 'contribucion', //Menu seleccionado que muestra contenido MisPagos
-            mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
-            infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
-            informeCuenta: { //Información utilizada para mostrar informe de cuenta
-                info: {},
-                modal: {
-                    open: false,
-                    showReporte: false
-                },
-                reporteBase64: ''
-            },
-            ultimosPagos: {
-                modal: {
-                    open: false
-                },
-                infoGrilla: []
-            },
-            periodosAdeudados: {
-                modal: {
-                    open: false
-                },
-                infoGrilla: []
-            },
-            informeAntecedentes: {
-                modal: {
-                    open: false,
-                    showReporte: false
-                },
-                reporteBase64: undefined,
-                infoGrilla: []
-            },
-            informeREMAT: {
-                modal: {
-                    open: false,
-                    showReporte: false
-                },
-                reporteBase64: undefined,
-                infoGrilla: []
-            },
-            declaracionJurada: {
-                modal: {
-                    open: false,
-                    showReporte: false
-                },
-                reporteBase64: undefined,
-                infoGrilla: [],
-                registrosSeleccionados: [],
-            },
-            contribucion: { //Item Menu e información
-                infoSeccion: undefined,
-                tieneSubMenu: false,
-                tipoCedulon: 'Contribuciones',
-                order: 'asc',
-                orderBy: 'concepto',
-                labels: {
-                    detalleTitulo: 'Períodos',
-                    totalesDeuda: 'Administrativa',
-                    vencida: 'Deuda vencida',
-                    aVencer: 'A vencer',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
-                },
-                registrosSeleccionados: [],
-            },
-            multas: { //Item Menu e información
-                infoSeccion: undefined,
-                tieneSubMenu: false,
-                tipoCedulon: 'Multas',
-                order: 'asc',
-                orderBy: 'vencimiento',
-                labels: {
-                    detalleTitulo: 'Multas',
-                    totalesDeuda: 'Administrativa',
-                    vencida: 'Deuda vencida',
-                    aVencer: 'A vencer',
-                    columnas: ['Causa', 'Fecha', 'Total ($)']
-                },
-                registrosSeleccionados: [],
-            },
-            juicios: { //Item Menu e información
-                infoSeccion: undefined,
-                tieneSubMenu: true,
-                tipoCedulon: 'JuiciosContribuciones',
-                order: 'asc',
-                orderBy: 'concepto',
-                labels: {
-                    detalleTitulo: 'Juicios',
-                    totalesDeuda: 'del Juicio',
-                    vencida: 'Capital',
-                    aVencer: 'Gastos',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
-                },
-                menuItemSeleccionado: '',
-                registrosSeleccionados: [],
-            },
-            planesPago: { //Item Menu e información
-                infoSeccion: undefined,
-                tieneSubMenu: true,
-                tipoCedulon: 'PlanesContribuciones',
-                order: 'asc',
-                orderBy: 'concepto',
-                labels: {
-                    detalleTitulo: 'Planes',
-                    totalesDeuda: 'Administrativa',
-                    vencida: 'Vencida',
-                    aVencer: 'A vencer',
-                    columnas: ['Concepto', 'Fecha', 'Total ($)']
-                },
-                menuItemSeleccionado: '',
-                registrosSeleccionados: [],
-            }
-        };
+        this.state = initialState;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         //Servicios que setean los datos en las props del store de redux
-        this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const identificador = this.props.match.params.identificador;
+        this.init(token, identificador);
+    }
 
+
+    componentWillReceiveProps(nextProps) {
+        let idAnterior = this.props.match.params.identificador;
+        let idNuevo = nextProps.match.params.identificador;
+        if (idAnterior != idNuevo) {
+            //window.location.reload();//Recargamos la pagina con la nueva url
+            this.setState(initialState);
+            const token = this.props.loggedUser.token;
+            this.init(token, idNuevo);
+        }
+    }
+
+    init = (token, identificador) => {
+
+        this.props.mostrarCargando(true);
         //Traemos los tributos asociados al Token
-        const service = servicesTributarioOnline.getIdTributos(token)
+        servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
 
                 if (!datos.ok) { return false; } //mostrarAlerta('Tributos: ' + datos.error); return false; }
@@ -521,7 +538,8 @@ class DetalleTributo extends React.PureComponent {
 
         this.props.mostrarCargando(true);
         this.props.redireccionar('/DetalleTributario/' + this.props.match.params.tributo + '/' + event.target.value);
-        window.location.reload();//Recargamos la pagina con la nueva url
+        this.props.mostrarCargando(false);
+        // window.location.reload();//Recargamos la pagina con la nueva url
     };
 
     //Evento cuando se cambia de sección del MENU principal
@@ -1246,7 +1264,6 @@ class DetalleTributo extends React.PureComponent {
         const {
             contribucion,
             multas,
-            identificadorActual,
             identificadores,
             menuItemSeleccionado,
             juicios,
@@ -1288,7 +1305,7 @@ class DetalleTributo extends React.PureComponent {
                                         name: 'identificador',
                                         id: 'identificador',
                                     }}
-                                    value={identificadorActual}
+                                    value={this.props.match.params.identificador}
                                     disableUnderline
                                     onChange={this.selectIdentificador}
                                 >
