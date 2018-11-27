@@ -107,12 +107,12 @@ class TributarioOnline extends React.PureComponent {
     return (
       <div className={classes.mainContainer}>
         <Grid container className={classes.root} spacing={16}>
-          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Automotores') &&
+          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Automotor') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="1"
-                tipo="Automotores"
-                titulo="Automotores"
+                tipo="Automotor"
+                titulo="Automotor"
                 identificador="Dominio"
                 icono="directions_car"
                 opciones={this.state.idsTributos}
@@ -120,36 +120,36 @@ class TributarioOnline extends React.PureComponent {
                 eventRedirect={this.eventRedirect} />
             </Grid>
           )}
-          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Inmuebles') &&
+          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Inmueble') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="2"
-                tipo="Inmuebles"
-                titulo="Inmuebles"
+                tipo="Inmueble"
+                titulo="Inmueble"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 icono="home"
                 eventRedirect={this.eventRedirect} />
             </Grid>
           )}
-          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercios') &&
+          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Comercio') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="3"
-                tipo="Comercios"
-                titulo="Comercios"
+                tipo="Comercio"
+                titulo="Comercio"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 icono="store"
                 eventRedirect={this.eventRedirect} />
             </Grid>
           )}
-          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerios') &&
+          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Cementerio') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="4"
-                tipo="Cementerios"
-                titulo="Cementerios"
+                tipo="Cementerio"
+                titulo="Cementerio"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 iconoSvg={<svg viewBox="0 0 24 24">
@@ -159,11 +159,11 @@ class TributarioOnline extends React.PureComponent {
             </Grid>
           )}
 
-          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'FeriasMercados') &&
+          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'FeriaMercado') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="5"
-                tipo="FeriasMercados"
+                tipo="FeriaMercado"
                 titulo="Ferias y Mercados"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
@@ -171,11 +171,11 @@ class TributarioOnline extends React.PureComponent {
                 eventRedirect={this.eventRedirect} />
             </Grid>
           )}
-          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'TaxisRemises') &&
+          {((!this.props.match.params.tributo || this.props.match.params.tributo == 'TaxiRemis') &&
             <Grid item xs={6} classes={{ "grid-xs-6": "tributarioAccess" }} >
               <TributarioAccess
                 id="6"
-                tipo="TaxisRemises"
+                tipo="TaxiRemis"
                 titulo="Taxis/Remises"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"

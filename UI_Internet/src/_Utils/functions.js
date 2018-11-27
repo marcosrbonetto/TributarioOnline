@@ -1,6 +1,7 @@
 //Alert
 import Store from "@Redux/Store/index";
 import { mostrarAlertaRoja, mostrarAlertaVerde } from "@Redux/Actions/alerta";
+import _ from "lodash";
 
 export const mostrarAlerta = (texto) => {
 	Store.dispatch(mostrarAlertaRoja({
@@ -21,14 +22,14 @@ export const mostrarMensaje = (texto) => {
 export const getIdTipoTributo = (tributo) => {
 	if (typeof tributo !== "string") return false;
 
-	tributo = tributo.toLowerCase();
-	return (tributo == 'automotores' && 1) || 
-	(tributo == 'inmuebles' && 2) || 
-	(tributo == 'comercios' && 3) || 
-	(tributo == 'cementerios' && 4) || 
-	(tributo == 'feriasmercados' && 5) || 
-	(tributo == 'taxisremises' && 6) || 
-	false;
+	var arrayIdTipoTributos = Store.getState().MainContent.idTipoTributos;
+
+	const tipoTributoSel = _.filter(arrayIdTipoTributos,(o)=>{ return o.value.toLowerCase() == tributo.toLowerCase();})
+
+	if(tipoTributoSel.length > 0 && tipoTributoSel[0].key)
+		return tipoTributoSel[0].key;
+	else 
+		return false;
 }
 
 export const stringToFloat = (str, decimales, opciones) => {

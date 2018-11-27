@@ -29,9 +29,9 @@ const reducer = (state = initialState, action) => {
                 var arrayComercios = _.filter(action.payload.return, {tipoTributo: 3});
 
                 arrayAutomotores.length > 0 && Object.keys(arrayAutomotores).map((tributo) => {
-                    datos.tributos['automotores'] = {
-                        label: 'Automotores',
-                        tipo: 'automotores',
+                    datos.tributos['automotor'] = {
+                        label: 'Automotor',
+                        tipo: 'automotor',
                         cantPermisos: 0,
                         tributosSelec: [],
                         tipoTributo: 1,
@@ -40,9 +40,9 @@ const reducer = (state = initialState, action) => {
                 });
 
                 arrayInmuebles.length > 0 && Object.keys(arrayInmuebles).map((tributo) => {
-                    datos.tributos['inmuebles'] = {
-                        label: 'Inmuebles',
-                        tipo: 'inmuebles',
+                    datos.tributos['inmueble'] = {
+                        label: 'Inmueble',
+                        tipo: 'inmueble',
                         cantPermisos: 0,
                         tributosSelec: [],
                         tipoTributo: 2,
@@ -51,9 +51,9 @@ const reducer = (state = initialState, action) => {
                 });
 
                 arrayComercios.length > 0 && Object.keys(arrayComercios).map((tributo) => {
-                    datos.tributos['comercios'] = {
-                        label: 'Comercios',
-                        tipo: 'comercios',
+                    datos.tributos['comercio'] = {
+                        label: 'Comercio',
+                        tipo: 'comercio',
                         cantPermisos: 0,
                         tributosSelec: [],
                         tipoTributo: 3,

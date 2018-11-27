@@ -1,9 +1,11 @@
 import { MAIN_CONTENT_CARGANDO } from "@Redux/Constants/index";
+import { SET_TIPO_TRIBUTOS } from "@Redux/Constants/index";
 
 const initialState = {
   cargando: false,
   loggedUser: {},
-  cantProcesosCargando: 0
+  cantProcesosCargando: 0,
+  idTipoTributos: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -25,6 +27,9 @@ const reducer = (state = initialState, action) => {
       }
         
       return newState;
+    }
+    case SET_TIPO_TRIBUTOS: {
+      return { ...state, idTipoTributos: action.payload };
     }
     default:
       return state;

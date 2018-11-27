@@ -14,7 +14,8 @@ import { replace } from "connected-react-router";
 //REDUX
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
-import { login, logout } from '@Redux/Actions/usuario'
+import { login, logout } from '@Redux/Actions/usuario';
+import { setTipoTributos } from '@Redux/Actions/mainContent';
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -30,6 +31,9 @@ import importacionIndividualAFIP from "@UI/Paginas/AfipController/importacionInd
 import Pagina404 from "@UI/_Pagina404";
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
+import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
+import { getAllUrlParams, getIdTipoTributo } from "@Utils/functions"
+
 
 const mapStateToProps = state => {
   return {
@@ -51,6 +55,9 @@ const mapDispatchToProps = dispatch => ({
   redireccionar: url => {
     dispatch(replace(url));
   },
+  setTipoTributos: data => {
+    dispatch(setTipoTributos(data));
+  }
 });
 
 class App extends React.Component {
@@ -103,6 +110,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    //Se traen datos grales para la app
+    this.setTipoTributos();
+
     let token = localStorage.getItem("token");
 
     let search = this.props.location.search;
@@ -166,6 +176,17 @@ class App extends React.Component {
         });
     });
   }
+
+  setTipoTributos = () => {
+    Rules_TributarioOnline.getTipoTributos()
+        .then(datos => {
+          this.props.setTipoTributos(datos.return);
+        })
+        .catch(error => {
+          this.props.logout();
+          window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+        });
+  };
 
   onLogin = () => {
     //Cada 5 seg valido el token

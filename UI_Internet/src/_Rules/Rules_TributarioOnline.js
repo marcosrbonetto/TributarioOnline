@@ -1,3 +1,31 @@
+const getTipoTributos = (token, callback) => {
+  return new Promise((resolve, reject) => {
+
+    fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoTributo', {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+
+  });
+};
+
 const getDatosUsuario = (token, callback) => {
   return new Promise((resolve, reject) => {
 
@@ -593,6 +621,7 @@ const getDeclaracionJurada = (token, body) => {
 };
 
 const services = {
+  getTipoTributos: getTipoTributos,
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
   getIdTributos: getIdTributos,

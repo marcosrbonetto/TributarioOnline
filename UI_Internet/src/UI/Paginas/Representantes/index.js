@@ -698,13 +698,13 @@ class Representantes extends React.PureComponent {
                 className={classes.selectTipoTributo}
               >
                 <MenuItem value="1">
-                  <em>Automotores</em>
+                  <em>Automotor</em>
                 </MenuItem>
                 <MenuItem value="2">
-                  <em>Inmuebles</em>
+                  <em>Inmueble</em>
                 </MenuItem>
                 <MenuItem value="3">
-                  <em>Comercios</em>
+                  <em>Comercio</em>
                 </MenuItem>
                 <MenuItem value="4">
                   <em>Cementerio</em>
