@@ -674,17 +674,17 @@ class DetalleTributo extends React.PureComponent {
                         }
                     });
 
-                    this.handleUltimosPagosCloseDialog();
+                    this.handleUltimosPagosOpenDialog();
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
         } else {
-            this.handleUltimosPagosCloseDialog();
+            this.handleUltimosPagosOpenDialog();
         }
     }
 
     //Abrimos modal últimos pagos
-    handleUltimosPagosCloseDialog = () => {
+    handleUltimosPagosOpenDialog = () => {
         let newState = { ...this.state };
         newState.ultimosPagos.modal.open = true;
         this.setState(newState);
@@ -747,17 +747,17 @@ class DetalleTributo extends React.PureComponent {
                         }
                     });
 
-                    this.handlePeriodosAdeudadosCloseDialog();
+                    this.handlePeriodosAdeudadosOpenDialog();
                 }).catch(err => {
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
         } else {
-            this.handlePeriodosAdeudadosCloseDialog();
+            this.handlePeriodosAdeudadosOpenDialog();
         }
     }
 
     //Abrimos modal periodos adeudados
-    handlePeriodosAdeudadosCloseDialog = () => {
+    handlePeriodosAdeudadosOpenDialog = () => {
         let newState = { ...this.state };
         newState.periodosAdeudados.modal.open = true;
         this.setState(newState);
@@ -846,17 +846,17 @@ class DetalleTributo extends React.PureComponent {
             arrayService.push(service2);
 
             Promise.all(arrayService).then(() => {
-                this.handleInformeAntecedentesCloseDialog();
+                this.handleInformeAntecedentesOpenDialog();
                 this.props.mostrarCargando(false);
             });
         } else {
-            this.handleInformeAntecedentesCloseDialog();
+            this.handleInformeAntecedentesOpenDialog();
             this.props.mostrarCargando(false);
         }
     }
 
     //Abrimos modal informe antecedentes
-    handleInformeAntecedentesCloseDialog = () => {
+    handleInformeAntecedentesOpenDialog = () => {
         let newState = { ...this.state };
         newState.informeAntecedentes.modal.open = true;
         this.setState(newState);
@@ -970,17 +970,17 @@ class DetalleTributo extends React.PureComponent {
             arrayService.push(service2);
 
             Promise.all(arrayService).then(() => {
-                this.handleInformeREMATCloseDialog();
+                this.handleInformeREMATOpenDialog();
                 this.props.mostrarCargando(false);
             });
         } else {
-            this.handleInformeREMATCloseDialog();
+            this.handleInformeREMATOpenDialog();
             this.props.mostrarCargando(false);
         }
     }
 
     //Abrimos modal informe REMAT
-    handleInformeREMATCloseDialog = () => {
+    handleInformeREMATOpenDialog = () => {
         let newState = { ...this.state };
         newState.informeREMAT.modal.open = true;
         this.setState(newState);
@@ -1081,13 +1081,13 @@ class DetalleTributo extends React.PureComponent {
         }
 
         Promise.all(arrayService).then(() => {
-            this.handleInformeCuentaCloseDialog();
+            this.handleInformeCuentaOpenDialog();
             this.props.mostrarCargando(false);
         });
     }
 
     //Abrimos modal informe cuenta
-    handleInformeCuentaCloseDialog = () => {
+    handleInformeCuentaOpenDialog = () => {
         let newState = { ...this.state };
         newState.informeCuenta.modal.open = true;
         this.setState(newState);
