@@ -36,23 +36,29 @@ class importacionMasiva extends Component {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const hash = new URLSearchParams(this.props.location.search).get('data');
+        
         let appUrlRedirect = new URLSearchParams(this.props.location.search).get('appUrlRedirect');
         appUrlRedirect = appUrlRedirect ? appUrlRedirect : '/';
+        if(appUrlRedirect.indexOf('?') == -1)
+            appUrlRedirect = appUrlRedirect + '?';
+        else 
+            appUrlRedirect = appUrlRedirect + '&';
 
         if (hash) {
             servicesAfip.importarListaRepresentantesAFIP(token, {
                 hash: hash
             })
                 .then((datos) => {
-                    if (!datos.ok) { mostrarAlerta('Importación AFIP: ' + datos.error); return false; }
+                    this.props.mostrarCargando(false);
 
-                    this.props.mostrarCargando(false);
-                    this.props.redireccionar(appUrlRedirect);
-                    
+                    if (!datos.ok) {
+                        this.props.redireccionar(appUrlRedirect + 'afipProcess=' + datos.error);
+                    } else {
+                        this.props.redireccionar(appUrlRedirect + 'afipProcess=OK');
+                    }
                 }).catch(err => {
-                    mostrarAlerta('Importación AFIP: ' + err);
                     this.props.mostrarCargando(false);
-                    this.props.redireccionar(appUrlRedirect);
+                    this.props.redireccionar(appUrlRedirect + 'afipProcess=' + err);
                 });
         } else {
             this.props.mostrarCargando(false);

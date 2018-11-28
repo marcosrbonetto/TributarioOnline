@@ -32,8 +32,7 @@ import Pagina404 from "@UI/_Pagina404";
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
 import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
-import { getAllUrlParams, getIdTipoTributo } from "@Utils/functions"
-
+import { mostrarAlerta, mostrarMensaje } from "@Utils/functions";
 
 const mapStateToProps = state => {
   return {
@@ -70,6 +69,16 @@ class App extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
+    //Corroboramos Resultado importacion AFIP
+    let afipProcess = new URLSearchParams(this.props.location.search).get('afipProcess');
+    if(afipProcess) {
+      if(afipProcess == 'OK')
+        mostrarMensaje('La imporación de AFIP se realizó con éxito');
+      else
+        mostrarAlerta(afipProcess);
+    }
+    
     if (this.props.loggedUser != nextProps.loggedUser) {
       if (nextProps.loggedUser === undefined) {
         this.props.logout();
@@ -85,6 +94,7 @@ class App extends React.Component {
   }
 
   componentWillMount() {
+
     //Seteo Token en cookies // para salir del apuro asumimos que siempre viene
     /*const tokenParam = getAllUrlParams(window.location.href).Token;
     tokenParam && localStorage.setItem('token', tokenParam);
@@ -110,8 +120,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    //Se traen datos grales para la app
-    this.setTipoTributos();
+    //Acciones iniciales
+    this.init();
 
     let token = localStorage.getItem("token");
 
@@ -175,6 +185,11 @@ class App extends React.Component {
           this.setState({ validandoToken: false });
         });
     });
+  }
+
+  init = () => {
+    //Seteamos los tipo tributos en la aplicacion
+    this.setTipoTributos();
   }
 
   setTipoTributos = () => {
