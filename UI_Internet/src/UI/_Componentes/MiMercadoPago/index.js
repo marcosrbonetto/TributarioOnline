@@ -48,7 +48,7 @@ class MiMercadoPago extends React.PureComponent {
     this.myRef = React.createRef();
 
     this.state = {
-      dialogoOpen: this.props.datosNexos && this.props.datosNexos.length > 0 ? true : false,
+      dialogoOpen: false,
       disabled: this.props.disabled,
       arrayNexos: []
     };
@@ -68,129 +68,35 @@ class MiMercadoPago extends React.PureComponent {
     this.props.mostrarCargando(true);
 
     //Reseteamos Valores de DetalleTributario (Redux)
-    const idBtnMercadoPago = getAllUrlParams(window.location.href).idBtnMercadoPago; //Ej.: true
-    if(this.props.idBtnMercadoPago == idBtnMercadoPago)
-      this.procesoPagoMercadoPago();
-    else 
-      this.props.mostrarCargando(false);
-  }
-
-  procesoPagoMercadoPago = () => {
-    /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
-    /* -------- Obtenemos datos y realizamos pago del Nexo. Mostramos modal en caso que haya mas para pagar -------- */
-
-    /* NOTA: 'this.props.infoPagosMercadoPago' tiene los nexos a pagar a partir de ellos se lo actualizará para realizar los pagos */
-    const token = this.props.loggedUser.token;
-    const mercadoPago = getAllUrlParams(window.location.href).mercadoPago; //Ej.: true
-    const nexo = getAllUrlParams(window.location.href).nexo; //Ej.: 183060018127
-    const tipoTributo = getAllUrlParams(window.location.href).tipoTributo; //Ej.: 1
-    const identificador = getAllUrlParams(window.location.href).identificador; //Ej.: HCJ675
-    const tokenNexo = getAllUrlParams(window.location.href).token; //Ej.: c643dcdeae55ee341509701473ae202d
-    const emisor = getAllUrlParams(window.location.href).issuer_id; //Ej.: 310
-    const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
-    const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
-
-    if (mercadoPago && this.props.infoPagosMercadoPago &&
-      this.props.infoPagosMercadoPago.arrayNexos &&
-      this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
-
-      let arrayNexos = this.props.infoPagosMercadoPago.arrayNexos;
-      const result = _.filter(arrayNexos, {
-        nexo: nexo,
-        tipoTributo: parseInt(tipoTributo),
-        identificador: identificador
-      });
-
-      if (result.length == 0) return false;
-
-      let nexoActual = result[0];
-
-      servicesTributarioOnline.pagoMercadoPago(token, {
-        nexo: nexoActual.nexo,
-        tipoTributo: parseInt(tipoTributo),
-        identificador: identificador,
-        token: tokenNexo,
-        metodoPago: metodoPago,
-        emisor: emisor,
-        cuotas: parseInt(cuotas)
-      })
-        .then((datos) => {
-
-          if (!datos.ok) { mostrarAlerta('Pago MercadoPago: ' + datos.error); return false; }
-
-          //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
-          //Y muestre los nexos actualizados
-          nexoActual.token = token;
-          nexoActual.metodoPago = metodoPago;
-          nexoActual.emisor = emisor;
-          nexoActual.cuotas = cuotas;
-          nexoActual.pagado = true;
-
-          //Al setear el "datosNexos"
-          this.setState({
-            ...this.state,
-            arrayNexos: arrayNexos
-          });
-
-          mostrarMensaje('Pago MercadoPago: Pago realizado exitosamente');
-
-          this.onBotonCedulonClick(arrayNexos);
-          this.props.mostrarCargando(false);
-        }).catch(err => {
-
-          this.setState({
-            ...this.state,
-            arrayNexos: arrayNexos
-          });
-          this.props.mostrarCargando(false);
-          console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+    const idBtnMercadoPago = localStorage.getItem('idBtnMercadoPago');
+    if(idBtnMercadoPago && this.props.idBtnMercadoPago == idBtnMercadoPago) {
+      
+      if(this.props.infoPagosMercadoPago.arrayNexos && this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
+        this.setState({
+          ...this.state,
+          dialogoOpen: true,
+          arrayNexos: this.props.infoPagosMercadoPago.arrayNexos
         });
-    } else {
-      this.props.mostrarCargando(false);
-    }
-  }
-
-  onBotonCedulonClick = (datosNexos) => {
-    //Vemos si se esta pagando el siguiente Nexo (si es que hay mas de uno)
-    //Modal tiene que abrirse luego de realizar el pago del primer nexo
-    //Si viene vacio se continua con normalidad
-
-    this.props.mostrarCargando(true);
-
-    //Determinamos si hay nexos cargados, de lo contrario se los carga
-    if (!datosNexos) {
-
-      //Carga de todos los nexos y mostramos para pagar el primero de ellos
-      this.cargarNexos();
-
-    } else {
-
-      //Actualizamos los nexos guardados en el store de redux que utilizamos para luego de cada pago
-      this.props.setPropsUpdatePagosMercadoPago({
-        arrayNexos: datosNexos
-      });
-
-      const allNexosPagos = _.filter(datosNexos, function (nexo) {
-        return !nexo.pagado;
-      });
-
-      //Corroboramos si todos los nexos estan pagos, procedemos a no mostrar el modal de pagos online
-      if (allNexosPagos.length == 0) {
-        this.props.setPropsUpdatePagosMercadoPago({
+      } else {
+        this.setState({
+          ...this.state,
+          dialogoOpen: false,
           arrayNexos: []
         });
-
-        this.props.mostrarCargando(false);
-        return false;
+        mostrarMensaje('Pago MercadoPago: Pago realizado exitosamente');
       }
-
-      this.setState({
-        ...this.state,
-        dialogoOpen: true,
-        arrayNexos: datosNexos
-      });
-      this.props.mostrarCargando(false);
+      
     }
+    
+    localStorage.removeItem('idBtnMercadoPago');
+    this.props.mostrarCargando(false);
+  }
+
+  onBotonCedulonClick = () => {
+    this.props.mostrarCargando(true);
+
+    //Carga de todos los nexos y mostramos para pagar el primero de ellos
+    this.cargarNexos();
   }
 
   cargarNexos = () => {
@@ -210,15 +116,7 @@ class MiMercadoPago extends React.PureComponent {
         })
         .then((datos) => {
 
-          if (!datos.ok) {
-            this.setState({ //Esto es temporario
-              ...this.state,
-              dialogoOpen: true,
-              arrayNexos: []
-            });
-
-            this.props.mostrarCargando(false); return false;
-          } //mostrarAlerta(datos.error);
+          if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false;}
 
           const resultData = datos.return;
           let arrayNexos = [];
@@ -337,7 +235,7 @@ class MiMercadoPago extends React.PureComponent {
           </div>
 
           <div key="mainContent">
-            {this.state.arrayNexos.length > 0 &&
+            {this.state.arrayNexos && this.state.arrayNexos.length > 0 &&
               <Stepper
                 activeStep={this.getNextStep(this.state.arrayNexos)}
                 orientation="vertical">
@@ -361,13 +259,14 @@ class MiMercadoPago extends React.PureComponent {
                             se muestra solo el botón (form) en el primero que se encuentre sin pagar, 
                             en los siguientes se muestra un pensaje como pendiente a pagar */}
                             {(nexo.pagado && <div className={classes.pagoExito}>(Nexo pagado con éxito)</div>) ||
-                              (_.find(this.state.arrayNexos, function (x) { return !x.pagado }).nexo != nexo.nexo ? <div className={classes.pagoExito}>(Nexo pendiente a pagar)</div> :
+                              (this.state.arrayNexos && _.find(this.state.arrayNexos, function (x) { return !x.pagado }).nexo != nexo.nexo ? <div className={classes.pagoExito}>(Nexo pendiente a pagar)</div> :
                                 <form
                                   id={"formMercadoLibre-" + nexo.nexo}
                                   onSubmit={this.handleSubmit}
                                   ref={this.loadModalMercadoLibre}
                                   totalPeriodo={nexo.totalPeriodo}
                                   className={classes.formMercadoLibre}
+                                  action="#/PagoNexo"
                                 >
                                   <input type="hidden" value="true" name="mercadoPago" />
                                   <input type="hidden" value={nexo.nexo} name="nexo" />
@@ -375,6 +274,7 @@ class MiMercadoPago extends React.PureComponent {
                                   <input type="hidden" value={nexo.identificador} name="identificador" />
                                   <input type="hidden" value={this.props.seccionDetalleTributo} name="seccionDetalleTributo" />
                                   <input type="hidden" value={this.props.idBtnMercadoPago} name="idBtnMercadoPago" />
+                                  <input type="hidden" value={window.location.hash && window.location.hash.substring(1)} name="urlRedirect" />
                                 </form>)}
 
                           </Grid>
@@ -384,7 +284,7 @@ class MiMercadoPago extends React.PureComponent {
                   );
                 })}
               </Stepper>}
-            {!this.state.arrayNexos.length > 0 && <div style={{ color: 'red' }}>Se están presentando inconvenientes para pagar con MercadoPago, intente más tarde.</div>}
+            {this.state.arrayNexos && !this.state.arrayNexos.length > 0 && <div style={{ color: 'red' }}>Se están presentando inconvenientes para pagar con MercadoPago, intente más tarde.</div>}
           </div>
 
           <div key="footerContent"></div>

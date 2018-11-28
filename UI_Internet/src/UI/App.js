@@ -28,6 +28,7 @@ import Inicio from "./Inicio";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
 import importacionMasivaAFIP from "@UI/Paginas/AfipController/importacionMasiva";
 import importacionIndividualAFIP from "@UI/Paginas/AfipController/importacionIndividual";
+import pagoNexo from "@UI/Paginas/MercadoPagoController/pagoNexo";
 import Pagina404 from "@UI/_Pagina404";
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
@@ -264,6 +265,7 @@ class App extends React.Component {
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
           <Route path={`${base}/importacionMasivaAFIP`} component={login ? importacionMasivaAFIP : null} />
           <Route path={`${base}/importacionIndividualAFIP`} component={login ? importacionIndividualAFIP : null} />
+          <Route path={`${base}/PagoNexo`} component={login ? pagoNexo : null} />
           <Route component={login ? Pagina404 : null} />
         </AnimatedSwitch>
       </main>

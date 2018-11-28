@@ -59,7 +59,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const initialState = {
-    menuItemSeleccionado: 'contribucion', //Menu seleccionado que muestra contenido MisPagos
+    menuItemSeleccionado: localStorage.getItem('seccionDetalleTributo') || 'contribucion', //Menu seleccionado que muestra contenido MisPagos
     mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
     infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
     informeCuenta: { //Información utilizada para mostrar informe de cuenta
@@ -175,24 +175,23 @@ class DetalleTributo extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.urlIdentificador = decodeURIComponent(this.props.match.params.identificador);
         this.state = _.clone(initialState);
     }
 
     componentDidMount() {
         //Servicios que setean los datos en las props del store de redux
         const token = this.props.loggedUser.token;
-        const identificador = this.urlIdentificador;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
         this.init(token, identificador);
     }
 
 
     componentWillReceiveProps(nextProps) {
-        let idAnterior = this.urlIdentificador;
+        let idAnterior = decodeURIComponent(this.props.match.params.identificador);
         let idNuevo = decodeURIComponent(nextProps.match.params.identificador);
         if (idAnterior != idNuevo) {
-            //window.location.reload();//Recargamos la pagina con la nueva url
 
+            //window.location.reload();//Recargamos la pagina con la nueva url
             this.setState(_.clone(initialState), () => {
                 const token = this.props.loggedUser.token;
                 this.init(token, idNuevo);
@@ -201,6 +200,8 @@ class DetalleTributo extends React.PureComponent {
     }
 
     init = (token, identificador) => {
+        //Removemos la variable que determina en que sección se encuentra cuando se esta pagando por mercado pago
+        localStorage.removeItem('seccionDetalleTributo');
 
         this.props.mostrarCargando(true);
         //Traemos los tributos asociados al Token
@@ -638,7 +639,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.urlIdentificador;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         if (this.state.ultimosPagos.infoGrilla.length == 0) {
             servicesTributarioOnline.getUltimosPagos(token, {
@@ -719,7 +720,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.urlIdentificador;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         if (this.state.periodosAdeudados.infoGrilla.length == 0) {
             servicesTributarioOnline.getPeriodosAdeudados(token, tipoTributo, identificador)
@@ -798,7 +799,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.urlIdentificador;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         let arrayService = [];
         if (!this.state.informeAntecedentes.reporteBase64) {
@@ -929,7 +930,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.urlIdentificador;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         let arrayService = [];
         if (!this.state.informeREMAT.reporteBase64) {
@@ -1059,7 +1060,7 @@ class DetalleTributo extends React.PureComponent {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const tributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = this.urlIdentificador;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         let arrayService = [];
         if (!this.state.informeCuenta.reporteBase64) {
@@ -1171,7 +1172,7 @@ class DetalleTributo extends React.PureComponent {
     onDeclaracionJuradaDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const identificador = this.urlIdentificador;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         servicesTributarioOnline.getDeclaracionJurada(token, {
             cuit: identificador
@@ -1292,7 +1293,7 @@ class DetalleTributo extends React.PureComponent {
     //Evento para agregar comercios desde AFIP
     handleOnClickImportarAFIP = () => {
         const tributo = this.props.match.params.tributo;
-        const identificador = this.urlIdentificador;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP?appUrlRedirect=' + '/DetalleTributario/' + tributo + '/' + encodeURIComponent(identificador));
     };
@@ -1343,7 +1344,7 @@ class DetalleTributo extends React.PureComponent {
                                         name: 'identificador',
                                         id: 'identificador',
                                     }}
-                                    value={this.urlIdentificador}
+                                    value={decodeURIComponent(this.props.match.params.identificador)}
                                     disableUnderline
                                     onChange={this.selectIdentificador}
                                 >
@@ -1461,7 +1462,7 @@ class DetalleTributo extends React.PureComponent {
                                         data={this.state[menuItemSeleccionado]}
                                         registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                         setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                        identificadorActual={this.urlIdentificador}
+                                        identificadorActual={decodeURIComponent(this.props.match.params.identificador)}
                                         tributoActual={this.props.match.params.tributo}
                                     />
                                 </div>)
@@ -1485,7 +1486,7 @@ class DetalleTributo extends React.PureComponent {
                                             data={this.state[menuItemSeleccionado]}
                                             registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                             setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                            identificadorActual={this.urlIdentificador}
+                                            identificadorActual={decodeURIComponent(this.props.match.params.identificador)}
                                             tributoActual={this.props.match.params.tributo}
                                         />
                                     </div>
@@ -1514,7 +1515,7 @@ class DetalleTributo extends React.PureComponent {
                                                     data={this.state[menuItemSeleccionado]}
                                                     registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                                    identificadorActual={this.urlIdentificador}
+                                                    identificadorActual={decodeURIComponent(this.props.match.params.identificador)}
                                                     tributoActual={this.props.match.params.tributo}
                                                 />
                                             </div>}
@@ -1540,7 +1541,7 @@ class DetalleTributo extends React.PureComponent {
                                                     data={this.state[menuItemSeleccionado]}
                                                     registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                                    identificadorActual={this.urlIdentificador}
+                                                    identificadorActual={decodeURIComponent(this.props.match.params.identificador)}
                                                     tributoActual={this.props.match.params.tributo}
                                                 />
                                             </div>}
@@ -1582,7 +1583,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={8}>
                                     <Typography variant="subheading" gutterBottom>
-                                        <b>{this.urlIdentificador}</b>
+                                        <b>{decodeURIComponent(this.props.match.params.identificador)}</b>
                                     </Typography>
                                 </Grid>
                             </Grid>

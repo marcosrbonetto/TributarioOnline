@@ -29,7 +29,7 @@ export const getIdTipoTributo = (tributo) => {
 	if(tipoTributoSel[0])
 		return tipoTributoSel[0].key;
 	else 
-		return false;
+		window.location.href = window.Config.URL_LOGIN + "?url=/";
 }
 
 export const stringToFloat = (str, decimales, opciones) => {
