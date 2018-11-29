@@ -72,8 +72,8 @@ const styles = theme => ({
     color: '#149257'
   },
   itemLista: {
-    paddingTop: '6px',
-    paddingBottom: '6px',
+    paddingTop: '3px',
+    paddingBottom: '3px',
   }
 });
 
