@@ -608,6 +608,7 @@ class Representantes extends React.PureComponent {
                   { id: 'eliminarPermiso', type: 'custom', numeric: false, label: '' },
                 ]}
                 rows={this.state.datosGrillaMisRepresentantes || []}
+                order={'asc'}
                 orderBy={'usuario'}
                 check={false}
                 rowsPerPage={5}
@@ -628,6 +629,7 @@ class Representantes extends React.PureComponent {
                   { id: 'eliminarPermiso', type: 'custom', numeric: false, label: '' },
                 ]}
                 rows={this.state.datosGrillaMisRepresentados || []}
+                order={'asc'}
                 orderBy={'usuario'}
                 check={false}
                 rowsPerPage={5}
