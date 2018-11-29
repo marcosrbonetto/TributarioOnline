@@ -363,20 +363,21 @@ class Representantes extends React.PureComponent {
     const token = this.props.loggedUser.token;
 
     //De acuerdo en que gruilla se precionó el botón
-    let cuil = "cuilRepresentado";
+    let cuil = this.props.loggedUser.datos.cuil;
     let datosGrilla = this.props.datosMisRepresentados;
     if (datosFila.data.grilla == 'MisRepresentantes') {
-      cuil = "cuilRepresentante";
+      cuil = datosFila.data.cuit;
       datosGrilla = this.props.datosMisRepresentantes;
     }
 
     const service = servicesRepresentantes.cancelarPermiso(token, {
-      [cuil]: datosFila.data.cuit,
+      "cuilRepresentante": cuil,
       "tipoTributo": datosFila.data.tipoTributo,
       "identificador": datosFila.data.identificador
     })
       .then((datos) => {
         if (!datos.ok) { mostrarAlerta('Cancelar Permiso: ' + datos.error); this.props.mostrarCargando(false); return false; }
+  
 
         this.props.setPropsCambiarEstadoPermiso({
           grilla: datosFila.data.grilla,
@@ -397,15 +398,15 @@ class Representantes extends React.PureComponent {
     this.props.mostrarCargando(true);
     const token = this.props.loggedUser.token;
 
-    let cuil = "cuilRepresentado";
+    let cuil = this.props.loggedUser.datos.cuil;
     let datosGrilla = this.props.datosMisRepresentados;
     if (datosFila.data.grilla == 'MisRepresentantes') {
-      cuil = "cuilRepresentante";
+      cuil = datosFila.data.cuit;
       datosGrilla = this.props.datosMisRepresentantes;
     }
-
+    
     const service = servicesRepresentantes.aceptarPermiso(token, {
-      [cuil]: datosFila.data.cuit,
+      "cuilRepresentante": cuil,
       "tipoTributo": datosFila.data.tipoTributo,
       "identificador": datosFila.data.identificador
     })
