@@ -6,6 +6,7 @@ import Lottie from "react-lottie";
 import * as animExito from "@Resources/animaciones/anim_success.json";
 
 //Colores
+import blue from "@material-ui/core/colors/blue";
 import red from "@material-ui/core/colors/red";
 import orange from "@material-ui/core/colors/orange";
 import green from "@material-ui/core/colors/green";
@@ -23,21 +24,29 @@ const lottieExito = {
 class MiPanelMensaje extends React.PureComponent {
   render() {
     let conLottieExito = "lottieExito" in this.props;
+    let esCargando = "cargando" in this.props;
     let esError = "error" in this.props;
     let esAlerta = "alerta" in this.props;
     let esExito = "exito" in this.props;
 
     let tieneIcono =
-      esError || esAlerta || esExito || this.props.icono !== undefined;
+    esCargando || esError || esAlerta || esExito || this.props.icono !== undefined;
 
     let icono = undefined;
     let iconoColor = undefined;
 
     if (tieneIcono) {
+      
+      if (esCargando) {
+        icono = "settings_ethernet";
+        iconoColor = blue["500"];
+      }
+      
       if (esError) {
         icono = "error";
         iconoColor = red["500"];
       }
+      
       if (esAlerta) {
         icono = "warning";
         iconoColor = orange["500"];

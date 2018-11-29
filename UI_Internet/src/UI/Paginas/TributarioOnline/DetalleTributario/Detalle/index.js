@@ -1776,7 +1776,7 @@ class DetalleTributo extends React.PureComponent {
 
                                             {informeCuenta.modal.showReporte && <div>
                                                 {informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + informeCuenta.reporteBase64} height="342px" width="856px"></iframe>}
-                                                {!informeCuenta.reporteBase64 && 'No se pudo generar el detalle para imprimir, intente nuevamente.'}
+                                                {!informeCuenta.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                             </div>}
                                         </div>
                                         <div key="footerContent" className={classes.buttonFotterDialog}>
@@ -1955,7 +1955,7 @@ class DetalleTributo extends React.PureComponent {
 
                                                     {informeAntecedentes.modal.showReporte && <div>
                                                         {informeAntecedentes.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64} height="342px" width="856px"></iframe>}
-                                                        {!informeAntecedentes.reporteBase64 && 'No se pudo generar el detalle para imprimir, intente nuevamente.'}
+                                                        {!informeAntecedentes.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     </div>}
                                                 </div>
                                                 <div key="footerContent" className={classes.buttonFotterDialog}>
@@ -2022,7 +2022,7 @@ class DetalleTributo extends React.PureComponent {
 
                                                     {informeREMAT.modal.showReporte && <div>
                                                         {informeREMAT.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + informeREMAT.reporteBase64} height="342px" width="856px"></iframe>}
-                                                        {!informeREMAT.reporteBase64 && 'No se pudo generar el detalle para imprimir, intente nuevamente.'}
+                                                        {!informeREMAT.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     </div>}
                                                 </div>
                                                 <div key="footerContent" className={classes.buttonFotterDialog}>
@@ -2139,7 +2139,7 @@ class DetalleTributo extends React.PureComponent {
 
                                                 {declaracionJurada.modal.showReporte && <div>
                                                     {declaracionJurada.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} height="342px" width="856px"></iframe>}
-                                                    {declaracionJurada.reporteBase64 == undefined && 'No se pudo generar el detalle para imprimir, intente nuevamente.'}
+                                                    {declaracionJurada.reporteBase64 == undefined && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     {declaracionJurada.reporteBase64 == '' && 'Generando DDJJ.'}
                                                 </div>}
                                             </div>

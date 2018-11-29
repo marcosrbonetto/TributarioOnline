@@ -5,13 +5,13 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import _ from "lodash";
 
-import { mostrarCargando } from '@Redux/Actions/mainContent';
 import { mostrarAlerta } from "@Utils/functions";
 
 import { setPagosMercadoPago } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 import servicesMercadoPago from '@Rules/Rules_MercadoPago';
 
 import { getAllUrlParams, getIdTipoTributo } from "@Utils/functions"
+import MiPanelMensaje from "@Componentes/MiPanelMensaje";
 
 const mapStateToProps = state => {
     return {
@@ -25,9 +25,6 @@ const mapDispatchToProps = dispatch => {
         redireccionar: url => {
             dispatch(push(url));
         },
-        mostrarCargando: (cargar) => {
-            dispatch(mostrarCargando(cargar));
-        },
         setPropsUpdatePagosMercadoPago: (arrayNexos) => {
             dispatch(setPagosMercadoPago(arrayNexos));
         }
@@ -37,10 +34,16 @@ const mapDispatchToProps = dispatch => {
 class PagoNexo extends Component {
     constructor() {
         super();
+
+        this.state = {
+            cargando: true,
+            error: false,
+            exito: false,
+            finPagos: false
+        }
     }
 
     componentWillMount() {
-        this.props.mostrarCargando(true);
 
         /* NOTA: 'this.props.infoPagosMercadoPago' tiene los nexos a pagar a partir de ellos se lo actualizará para realizar los pagos */
         const token = this.props.loggedUser.token;
@@ -57,8 +60,6 @@ class PagoNexo extends Component {
         localStorage.setItem('idBtnMercadoPago', idBtnMercadoPago);
         const seccionDetalleTributo = getAllUrlParams(window.location.href).seccionDetalleTributo;
         localStorage.setItem('seccionDetalleTributo', seccionDetalleTributo);
-
-        const urlRedirect = getAllUrlParams(window.location.href).urlRedirect;
 
         if (mercadoPago && this.props.infoPagosMercadoPago &&
             this.props.infoPagosMercadoPago.arrayNexos &&
@@ -110,29 +111,86 @@ class PagoNexo extends Component {
                             arrayNexos: []
                         });
 
-                        this.props.mostrarCargando(false);
-
-                        window.location.href = window.location.origin + window.location.pathname + '#' + decodeURIComponent(urlRedirect);
+                        this.setState({
+                            cargando: false,
+                            error: false,
+                            exito: true,
+                            finPagos: true
+                        });
                         return false;
                     }
 
-                    this.props.mostrarCargando(false);
-                    this.props.redireccionar(decodeURIComponent(urlRedirect));
+                    this.setState({
+                        cargando: false,
+                        error: false,
+                        exito: true,
+                    });
+
                 }).catch(err => {
+
+                    this.setState({
+                        cargando: false,
+                        error: true,
+                        exito: false,
+                    });
+
                     localStorage.removeItem('idBtnMercadoPago');
                     localStorage.removeItem('seccionDetalleTributo');
                     this.props.redireccionar("/");
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
         } else {
+            this.setState({
+                cargando: false,
+                error: true,
+                exito: false,
+            });
+
             localStorage.removeItem('idBtnMercadoPago');
             localStorage.removeItem('seccionDetalleTributo');
             this.props.redireccionar("/");
         }
     }
 
+    onBotonContinuarClick = () => {
+        const urlRedirect = getAllUrlParams(window.location.href).urlRedirect;
+
+        if(this.state.finPagos)
+            window.location.href = window.location.origin + window.location.pathname + '#' + decodeURIComponent(urlRedirect);
+        else
+            this.props.redireccionar(decodeURIComponent(urlRedirect));
+    }
+
+    onBotonErrorClick = () => {
+        window.location.href = window.location.origin + window.location.pathname + '#/';
+    }
+
     render() {
-        return null
+        return  <div style={{ width: '100%'}}>
+            {this.state.cargando && 
+            <MiPanelMensaje 
+            cargando
+            mensaje="Se está procesando el pago..."
+            />}
+
+            {this.state.error && 
+            <MiPanelMensaje 
+            error
+            mensaje="Ocurrió un error al guardar el pago"
+            tieneBoton
+            onBotonClick={this.onBotonErrorClick}
+            boton="Volver"
+            />}
+
+            {this.state.exito && 
+            <MiPanelMensaje 
+            lottieExito
+            mensaje="¡Pago realizado con éxito!"
+            tieneBoton
+            onBotonClick={this.onBotonContinuarClick}
+            boton="Continuar"
+            />}
+        </div>
     }
 }
 
