@@ -20,6 +20,9 @@ import { connect } from "react-redux";
 import { logout } from "@Redux/Actions/usuario";
 import Icon from '@material-ui/core/Icon';
 
+//Mis componentes
+import CordobaFilesUtils from "@Utils/CordobaFiles";
+
 const mapStateToProps = state => {
   return {
     usuario: state.Usuario.usuario,
@@ -52,6 +55,10 @@ class MiToolbar extends React.Component {
     if (JSON.stringify(this.props.loggedUser.datos) != JSON.stringify(nextProps.loggedUser.datos)) {
       this.setState({
         datosUsuario: nextProps.loggedUser.datos
+      });
+    } else {
+      this.setState({
+        datosUsuario: this.props.loggedUser.datos
       });
     }
   }
@@ -99,6 +106,12 @@ class MiToolbar extends React.Component {
   render() {
     let { classes, titulo } = this.props;
 
+    let urlFotoPerfilMiniatura, urlFotoPerfil;
+    if (this.state.datosUsuario) {
+      urlFotoPerfilMiniatura = CordobaFilesUtils.getUrlFotoMiniatura(this.state.datosUsuario.identificadorFotoPersonal, this.state.datosUsuario.sexoMasculino);
+      urlFotoPerfil = CordobaFilesUtils.getUrlFotoMediana(this.state.datosUsuario.identificadorFotoPersonal, this.state.datosUsuario.sexoMasculino);
+    }
+debugger;
     return (
       <AppBar position="absolute" className={classNames(classes.appBar)}>
         <Toolbar disableGutters={true} className={classes.toolbar}>
@@ -139,16 +152,13 @@ class MiToolbar extends React.Component {
           <MiNotificacion />
 
           {/* Icono del usuario */}
+          {this.state.datosUsuario &&
           <IconButton onClick={this.onUsuarioPress} color="inherit">
-            <Avatar
-              alt="Menu del usuario"
-              src="https://servicios2.cordoba.gov.ar/CordobaFiles/Archivo/f_qdag0f9irgka9xj2l6mbll69gxmhlghezkmkj2mykg1pj0uuhwogqiqfic_c327l9gmyk9tutz1fuq0rc3_z2byq5gcg2j5tjpqcn6jid4x2rlv2nsaa2it7s64d7m2k4h7e_xegt2w8p79uvk4jj42a7uvrcfm1cn8jpq31o4raxvsv8ktwtsa_q6iqbxeop56c_zee/3"
-              className={classNames(classes.icono)}
-            />
-          </IconButton>
+            <Avatar alt="Menu del usuario" src={urlFotoPerfilMiniatura} className={classNames(classes.icono)} />
+          </IconButton>}
         </Toolbar>
 
-        <Menu
+        {this.state.datosUsuario && <Menu
           id="simple-menu"
           anchorEl={this.state.anchorPopupUsuario}
           getContentAnchorEl={null}
@@ -158,11 +168,7 @@ class MiToolbar extends React.Component {
           onClose={this.onUsuarioMenuClose}
         >
           <div className={classes.menuUsuarioInfo} style={{ display: "flex" }}>
-            <Avatar
-              alt="Menu del usuario"
-              src="https://servicios2.cordoba.gov.ar/CordobaFiles/Archivo/f_qdag0f9irgka9xj2l6mbll69gxmhlghezkmkj2mykg1pj0uuhwogqiqfic_c327l9gmyk9tutz1fuq0rc3_z2byq5gcg2j5tjpqcn6jid4x2rlv2nsaa2it7s64d7m2k4h7e_xegt2w8p79uvk4jj42a7uvrcfm1cn8jpq31o4raxvsv8ktwtsa_q6iqbxeop56c_zee/3"
-              className={classNames(classes.icono)}
-            />
+            <Avatar alt="Menu del usuario" src={urlFotoPerfil} className={classNames(classes.icono)} />
             <Typography align="center" variant="subheading" color="inherit">
               {this.state.datosUsuario &&
                 this.state.datosUsuario.apellido + ', ' + this.state.datosUsuario.nombre}
@@ -175,7 +181,7 @@ class MiToolbar extends React.Component {
           <MenuItem onClick={this.onBotonCerrarSesionPress}>
             Cerrar sesión
           </MenuItem>
-        </Menu>
+        </Menu>}
 
         <div
           className={classNames(
