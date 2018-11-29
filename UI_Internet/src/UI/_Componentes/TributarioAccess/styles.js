@@ -67,13 +67,15 @@ const styles = theme => ({
   navList: {
     height: '152px',
     overflowY: 'auto',
+    paddingTop: '0px',
+    paddingBottom: '0px',
   },
   iconColor: {
     color: '#149257'
   },
   itemLista: {
-    paddingTop: '3px',
-    paddingBottom: '3px',
+    paddingTop: '6px',
+    paddingBottom: '6px',
   }
 });
 
