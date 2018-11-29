@@ -32,6 +32,19 @@ export const getIdTipoTributo = (tributo) => {
 		window.location.href = window.Config.URL_LOGIN + "?url=/";
 }
 
+export const getTextoTipoTributo = (valueTributo) => {
+	if (typeof valueTributo !== "string") return false;
+
+	switch(valueTributo) {
+		case 'FeriaMercado':
+			return 'Ferias y Mercados';
+		case 'TaxiRemis':
+			return 'Taxis y Remises';
+	}
+	
+	return valueTributo;
+}
+
 export const stringToFloat = (str, decimales, opciones) => {
 	if (opciones && opciones.permitirVacio && str == "") {
 		return str;

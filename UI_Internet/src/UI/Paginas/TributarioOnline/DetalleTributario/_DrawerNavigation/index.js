@@ -23,7 +23,11 @@ class MiDrawer extends React.PureComponent {
 
   onDrawerItemClick = index => {
     if (this.props.onPaginaClick == undefined) return;
-    this.props.onPaginaClick(Menu[index].url);
+    
+    if(Menu[index].externalLink)
+      window.location.href = Menu[index].url;
+    else
+      this.props.onPaginaClick(Menu[index].url);
   };
 
   render() {

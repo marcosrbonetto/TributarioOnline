@@ -67,6 +67,13 @@ const Menu = [
     titulo: "Taxis/Remises",
   },
   {
+    url: "https://sistemas2.cordoba.local/tasas/",
+    exact: true,
+    mostrarEnMenu: true,
+    externalLink: true,
+    nombre: "Tasas Administrativas",
+  },
+  {
     url: "/Inicio",
     exact: false,
     mostrarEnMenu: true,

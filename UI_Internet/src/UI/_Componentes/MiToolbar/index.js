@@ -22,6 +22,8 @@ import Icon from '@material-ui/core/Icon';
 
 //Mis componentes
 import CordobaFilesUtils from "@Utils/CordobaFiles";
+import { getTextoTipoTributo } from "@Utils/functions"
+
 
 const mapStateToProps = state => {
   return {
@@ -111,7 +113,9 @@ class MiToolbar extends React.Component {
       urlFotoPerfilMiniatura = CordobaFilesUtils.getUrlFotoMiniatura(this.state.datosUsuario.identificadorFotoPersonal, this.state.datosUsuario.sexoMasculino);
       urlFotoPerfil = CordobaFilesUtils.getUrlFotoMediana(this.state.datosUsuario.identificadorFotoPersonal, this.state.datosUsuario.sexoMasculino);
     }
-debugger;
+
+    titulo = getTextoTipoTributo(titulo);
+
     return (
       <AppBar position="absolute" className={classNames(classes.appBar)}>
         <Toolbar disableGutters={true} className={classes.toolbar}>

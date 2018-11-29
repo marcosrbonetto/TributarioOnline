@@ -37,6 +37,13 @@ const Menu = [
     nombre: "Tributario Online",
     titulo: "Tributario Online",
     icono: "home"
+  },
+  {
+    url: "https://sistemas2.cordoba.local/tasas/",
+    exact: true,
+    mostrarEnMenu: true,
+    externalLink: true,
+    nombre: "Tasas Administrativas",
   }
 ];
 

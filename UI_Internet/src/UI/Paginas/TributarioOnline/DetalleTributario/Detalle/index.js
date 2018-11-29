@@ -1965,7 +1965,7 @@ class DetalleTributo extends React.PureComponent {
                                                         className={classes.buttonActions}
                                                         onClick={this.onInformeAntecedentesShowReporte}
                                                     >
-                                                        Imprimir Detalle
+                                                        Imprimir Informe
                                             </Button>}
 
                                                     {informeAntecedentes.modal.showReporte && <Button
@@ -2032,7 +2032,7 @@ class DetalleTributo extends React.PureComponent {
                                                         className={classes.buttonActions}
                                                         onClick={this.onInformeREMATShowReporte}
                                                     >
-                                                        Imprimir Detalle
+                                                        Imprimir Informe
                                             </Button>}
 
                                                     {informeREMAT.modal.showReporte && <Button
