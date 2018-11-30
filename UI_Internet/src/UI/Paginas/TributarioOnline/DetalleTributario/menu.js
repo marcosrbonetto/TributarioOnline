@@ -1,7 +1,16 @@
 import DetalleTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Detalle/index";
+import SeleccionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Seleccion/index";
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
 
 const Menu = [
+  {
+    url: "/DetalleTributario/:tributo",
+    exact: true,
+    mostrarEnMenu: false,
+    component: SeleccionTributo,
+    nombre: "Tributos",
+    titulo: "Tributos",
+  },
   {
     url: "/DetalleTributario/:tributo/:identificador",
     exact: true,
@@ -19,7 +28,7 @@ const Menu = [
     titulo: "Inicio",
   },
   {
-    url: "/Inicio/Tributo/Automotor",
+    url: "/DetalleTributario/Automotor",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -27,7 +36,7 @@ const Menu = [
     titulo: "Automotor",
   },
   {
-    url: "/Inicio/Tributo/Inmueble",
+    url: "/DetalleTributario/Inmueble",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -35,7 +44,7 @@ const Menu = [
     titulo: "Inmueble",
   },
   {
-    url: "/Inicio/Tributo/Comercio",
+    url: "/DetalleTributario/Comercio",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -43,7 +52,7 @@ const Menu = [
     titulo: "Comercios e Industria",
   },
   {
-    url: "/Inicio/Tributo/Cementerio",
+    url: "/DetalleTributario/Cementerio",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -51,7 +60,7 @@ const Menu = [
     titulo: "Cementerio",
   },
   {
-    url: "/Inicio/Tributo/FeriaMercado",
+    url: "/DetalleTributario/FeriaMercado",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
@@ -59,7 +68,7 @@ const Menu = [
     titulo: "Ferias y Mercados",
   },
   {
-    url: "/Inicio/Tributo/TaxiRemis",
+    url: "/DetalleTributario/TaxiRemis",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
