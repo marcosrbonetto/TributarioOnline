@@ -44,12 +44,13 @@ import {
 import servicesRepresentantes from '@Rules/Rules_Representantes';
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
-import { getAllUrlParams, getIdTipoTributo } from "@Utils/functions"
+import { getAllUrlParams, getIdTipoTributo, getTextoTipoTributo } from "@Utils/functions"
 
 const mapStateToProps = state => {
 
   return {
     loggedUser: state.Usuario.loggedUser,
+    idTipoTributos: state.MainContent.idTipoTributos,
     datosEnvioSolicitudPermisos: state.Representantes.datosEnvioSolicitudPermisos,
     datosPedidoSolicitudPermisos: state.Representantes.datosPedidoSolicitudPermisos,
     datosMisRepresentantes: state.Representantes.datosMisRepresentantes,
@@ -700,24 +701,11 @@ class Representantes extends React.PureComponent {
                 }}
                 className={classes.selectTipoTributo}
               >
-                <MenuItem value="1">
-                  <em>Automotor</em>
-                </MenuItem>
-                <MenuItem value="2">
-                  <em>Inmueble</em>
-                </MenuItem>
-                <MenuItem value="3">
-                  <em>Comercio</em>
-                </MenuItem>
-                <MenuItem value="4">
-                  <em>Cementerio</em>
-                </MenuItem>
-                <MenuItem value="5">
-                  <em>Ferias y Mercados</em>
-                </MenuItem>
-                <MenuItem value="6">
-                  <em>Taxis/Remises</em>
-                </MenuItem>
+                {this.props.idTipoTributos && this.props.idTipoTributos.map(tributo => {
+                  return <MenuItem value={`${tributo.key}`}>
+                          <em>{getTextoTipoTributo(tributo.value)}</em>
+                        </MenuItem>  
+                })}
               </Select>
 
               <Grid container spacing={0}>

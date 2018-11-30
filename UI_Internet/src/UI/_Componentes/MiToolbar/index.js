@@ -12,6 +12,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Button from "@material-ui/core/Button";
 
 import MiNotificacion from "@Componentes/MiNotificacion";
 
@@ -105,6 +106,11 @@ class MiToolbar extends React.Component {
     window.location.href = window.Config.URL_MI_PERFIL + "/#/?token=" + this.props.loggedUser.token;
   };
 
+  handleInicioSesion = () => {
+    this.setState({ anchorPopupUsuario: null });
+    window.location.href = window.Config.URL_LOGIN;
+  };
+
   render() {
     let { classes, titulo } = this.props;
 
@@ -153,13 +159,20 @@ class MiToolbar extends React.Component {
           </Typography>
 
           {/* Icono de Notificaciones */}
-          <MiNotificacion />
+          {this.state.datosUsuario && <MiNotificacion />}
 
           {/* Icono del usuario */}
           {this.state.datosUsuario &&
-          <IconButton onClick={this.onUsuarioPress} color="inherit">
-            <Avatar alt="Menu del usuario" src={urlFotoPerfilMiniatura} className={classNames(classes.icono)} />
-          </IconButton>}
+            <IconButton onClick={this.onUsuarioPress} color="inherit">
+              <Avatar alt="Menu del usuario" src={urlFotoPerfilMiniatura} className={classNames(classes.icono)} />
+            </IconButton>}
+
+          {/* Inicio sesion Vecino Virtual */}
+          {!this.state.datosUsuario && <div>
+            <Button onClick={this.handleInicioSesion} color="secondary">
+              Iniciar Sesión
+            </Button>
+          </div>}
         </Toolbar>
 
         {this.state.datosUsuario && <Menu

@@ -1,12 +1,33 @@
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
 import Representantes from "@UI/Paginas/Representantes/index";
 
+import HomeUsuario from "@UI/Paginas/TributarioOnline/HomeUsuario/index";
+import HomeInvitado from "@UI/Paginas/TributarioOnline/HomeInvitado/index";
+
 const Menu = [
   {
     url: "/Inicio",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
+    nombre: "Tributario Online",
+    titulo: "Tributario Online",
+    icono: "home"
+  },
+  {
+    url: "/Inicio/HomeUsuario",
+    exact: false,
+    mostrarEnMenu: false,
+    component: HomeUsuario,
+    nombre: "Tributario Online",
+    titulo: "Tributario Online",
+    icono: "home"
+  },
+  {
+    url: "/Inicio/HomeInvitado",
+    exact: false,
+    mostrarEnMenu: false,
+    component: HomeInvitado,
     nombre: "Tributario Online",
     titulo: "Tributario Online",
     icono: "home"

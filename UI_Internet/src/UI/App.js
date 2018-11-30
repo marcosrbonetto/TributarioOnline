@@ -73,13 +73,13 @@ class App extends React.Component {
 
     //Corroboramos Resultado importacion AFIP
     let afipProcess = new URLSearchParams(this.props.location.search).get('afipProcess');
-    if(afipProcess) {
-      if(afipProcess == 'OK')
+    if (afipProcess) {
+      if (afipProcess == 'OK')
         mostrarMensaje('La imporación de AFIP se realizó con éxito');
       else
         mostrarAlerta(afipProcess);
     }
-    
+
     if (this.props.loggedUser != nextProps.loggedUser) {
       if (nextProps.loggedUser === undefined) {
         this.props.logout();
@@ -136,56 +136,72 @@ class App extends React.Component {
       }
     }
 
-    if (token == undefined || token == null || token == "undefined" || token == "") {
-      this.props.logout();
-      window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-      return;
-    }
+     //Usuario Invitado
+    if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
 
-    this.setState({ validandoToken: true }, () => {
-      Rules_Usuario.validarToken(token)
-        .then(resultado => {
-          if (resultado == false) {
-            this.props.logout();
-            window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-            return;
-          }
+      //Logueamos con el usuario Invitado
+      this.props.login({
+        datos: {},
+        token: window.Config.TOKEN_INVITADO
+      });
 
-          Rules_Usuario.datos(token)
-            .then(datos => {
-              this.props.login({
-                datos: datos,
-                token: token
-              });
+      if (search) {
+        let url = search.get("url") || "/";
+        if (url == "/") url = "/Inicio";
+        this.props.redireccionar(url);
+      } else {
+        console.log(this.props.location);
 
-              //let url = "/";
-              if (search) {
-                let url = search.get("url") || "/";
-                if (url == "/") url = "/Inicio";
-                this.props.redireccionar(url);
-              } else {
-                console.log(this.props.location);
-
-                if (this.props.location.pathname == "/") {
-                  this.props.redireccionar("/Inicio");
-                }
-              }
-
-              this.onLogin();
-            })
-            .catch(() => {
+        if (this.props.location.pathname == "/") {
+          this.props.redireccionar("/Inicio");
+        }
+      }
+    } else { //Usuario Vecino Virtual
+      this.setState({ validandoToken: true }, () => {
+        Rules_Usuario.validarToken(token)
+          .then(resultado => {
+            if (resultado == false) {
               this.props.logout();
               window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-            });
-        })
-        .catch(error => {
-          this.props.logout();
-          window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-        })
-        .finally(() => {
-          this.setState({ validandoToken: false });
-        });
-    });
+              return;
+            }
+
+            Rules_Usuario.datos(token)
+              .then(datos => {
+                this.props.login({
+                  datos: datos,
+                  token: token
+                });
+
+                //let url = "/";
+                if (search) {
+                  let url = search.get("url") || "/";
+                  if (url == "/") url = "/Inicio";
+                  this.props.redireccionar(url);
+                } else {
+                  console.log(this.props.location);
+
+                  if (this.props.location.pathname == "/") {
+                    this.props.redireccionar("/Inicio");
+                  }
+                }
+
+                this.onLogin();
+              })
+              .catch(() => {
+                this.props.logout();
+                window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+              });
+          })
+          .catch(error => {
+            this.props.logout();
+            window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+          })
+          .finally(() => {
+            this.setState({ validandoToken: false });
+          });
+      });
+    }
   }
 
   init = () => {
@@ -195,13 +211,13 @@ class App extends React.Component {
 
   setTipoTributos = () => {
     Rules_TributarioOnline.getTipoTributos()
-        .then(datos => {
-          this.props.setTipoTributos(datos.return);
-        })
-        .catch(error => {
-          this.props.logout();
-          window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-        });
+      .then(datos => {
+        this.props.setTipoTributos(datos.return);
+      })
+      .catch(error => {
+        this.props.logout();
+        window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+      });
   };
 
   onLogin = () => {
@@ -258,7 +274,7 @@ class App extends React.Component {
           atLeave={{ opacity: 0 }}
           atActive={{ opacity: 1 }}
           className={"switch-wrapper"}
-        >          
+        >
           <Route exact path="/" component={null} />
           <Route path={`${base}/DetalleTributario/:tributo`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/DetalleTributario/:tributo/:identificador`} component={login ? DetalleTributario : null} />
