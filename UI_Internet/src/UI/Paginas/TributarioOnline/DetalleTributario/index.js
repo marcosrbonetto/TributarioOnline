@@ -130,7 +130,7 @@ class App extends React.Component {
           <div className={classNames(classes.main)}>
             <div className={classes.separadorToolbar} />
             <div className={classes.content}>
-              <Route path="/" component={Content} />
+              <Route path="/" component={() => { return Content(this.modoInvitado) }} />
             </div>
           </div>
         </div>
@@ -146,7 +146,7 @@ class App extends React.Component {
   }
 }
 
-const Content = () => {
+const Content = (modoInvitado) => {
   return (
     <div className={styles.switchWrapper}>
       <AnimatedSwitch
@@ -156,6 +156,8 @@ const Content = () => {
         className={"switch-wrapper"}
       >
         {Menu.map((item, index) => {
+          if (modoInvitado && item.mostrarUserInvitado == false) return null;
+
           return (
             <Route
               key={index}
