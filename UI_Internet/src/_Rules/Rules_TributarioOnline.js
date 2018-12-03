@@ -85,7 +85,6 @@ const getTributosByCUIT = (token, identificador) => {
 
 const getIdTributos = (token, callback) => {
   return new Promise((resolve, reject) => {
-
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos', {
       method: "GET",
       headers: {
@@ -95,7 +94,6 @@ const getIdTributos = (token, callback) => {
       }
     })
       .then(res => {
-
         if (res.status >= 400) {
           throw new Error("Bad response from server");
         }
@@ -103,9 +101,11 @@ const getIdTributos = (token, callback) => {
         return res.json();
       })
       .then(datos => {
+      
         resolve(datos);
       })
       .catch(err => {
+      
         reject("Error procesando la solicitud");
       });
   });

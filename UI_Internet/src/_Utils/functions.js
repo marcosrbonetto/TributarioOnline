@@ -40,6 +40,12 @@ export const getTextoTipoTributo = (valueTributo) => {
 			return 'Ferias y Mercados';
 		case 'TaxiRemis':
 			return 'Taxis y Remises';
+		case 'AgentePercepcionRetencion':
+			return 'Agente de Percepción y Retención';
+		case 'ContribucionMejoras':
+			return 'Contribución de Mejoras';
+		case 'PlanesDeVivienda':
+			return 'Planes De Vivienda';
 	}
 	
 	return valueTributo;

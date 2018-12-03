@@ -24,6 +24,15 @@ const Menu = [
     icono: "home"
   },
   {
+    url: "/Inicio/HomeInvitado/:tributo",
+    exact: false,
+    mostrarEnMenu: false,
+    component: HomeInvitado,
+    nombre: "Tributario Online",
+    titulo: "Tributario Online",
+    icono: "home"
+  },
+  {
     url: "/Inicio/HomeInvitado",
     exact: false,
     mostrarEnMenu: false,
@@ -36,6 +45,7 @@ const Menu = [
     url: "/Inicio/Representantes/:tributo",
     exact: false,
     mostrarEnMenu: false,
+    mostrarUserInvitado: false,
     component: Representantes,
     nombre: "Representantes",
     titulo: "Representantes",
@@ -45,6 +55,7 @@ const Menu = [
     url: "/Inicio/Representantes",
     exact: false,
     mostrarEnMenu: true,
+    mostrarUserInvitado: false,
     component: Representantes,
     nombre: "Representantes",
     titulo: "Representantes",
@@ -54,6 +65,7 @@ const Menu = [
     url: "/Inicio/Tributo/:tributo",
     exact: false,
     mostrarEnMenu: false,
+    mostrarUserInvitado: false,
     component: TributarioOnline,
     nombre: "Tributario Online",
     titulo: "Tributario Online",

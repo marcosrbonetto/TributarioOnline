@@ -175,6 +175,7 @@ class DetalleTributo extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        this.modoInvitado = this.props.loggedUser.token == window.Config.TOKEN_INVITADO;
         this.state = _.clone(initialState);
     }
 
@@ -204,6 +205,34 @@ class DetalleTributo extends React.PureComponent {
         localStorage.removeItem('seccionDetalleTributo');
 
         this.props.mostrarCargando(true);
+
+        if (this.modoInvitado) {
+            this.setIdTributosUserInvitado();
+        } else {
+            this.setIdTributosUserLog(token, identificador);
+        }
+    }
+
+    setIdTributosUserInvitado = () => {
+        const token = this.props.loggedUser.token;
+        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
+
+        //Cargamos el tributo seleccionado
+        this.setIdentificadores([{
+            "tipoTributo": tipoTributo,
+            "identificador": identificador,
+            "titular": {
+                "cuit": undefined,
+                "titular": undefined
+            },
+            "soyTitular": false,
+            "deuda": 0
+        }]);
+        this.iniciarServicios(token, identificador);
+    }
+
+    setIdTributosUserLog = (token, identificador) => {
         //Traemos los tributos asociados al Token
         servicesTributarioOnline.getIdTributos(token)
             .then((datos) => {
@@ -638,12 +667,12 @@ class DetalleTributo extends React.PureComponent {
     onUltimosPagosDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         if (this.state.ultimosPagos.infoGrilla.length == 0) {
             servicesTributarioOnline.getUltimosPagos(token, {
-                tipoTributo: tributo,
+                tipoTributo: tipoTributo,
                 identificador: identificador
             })
                 .then((datos) => {
@@ -798,13 +827,13 @@ class DetalleTributo extends React.PureComponent {
     onInformeAntecedentesDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         let arrayService = [];
         if (!this.state.informeAntecedentes.reporteBase64) {
             const service1 = servicesTributarioOnline.getInformeAntecedentes(token, {
-                tipoTributo: tributo,
+                tipoTributo: tipoTributo,
                 identificador: identificador
             })
                 .then((datos) => {
@@ -843,7 +872,7 @@ class DetalleTributo extends React.PureComponent {
             arrayService.push(service1);
 
             const service2 = servicesTributarioOnline.getReporteInformeAntecedentes(token, {
-                tipoTributo: tributo,
+                tipoTributo: tipoTributo,
                 identificador: identificador
             })
                 .then((datos) => {
@@ -929,13 +958,13 @@ class DetalleTributo extends React.PureComponent {
     onInformeREMATDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         let arrayService = [];
         if (!this.state.informeREMAT.reporteBase64) {
             const service1 = servicesTributarioOnline.getInformeREMAT(token, {
-                tipoTributo: tributo,
+                tipoTributo: tipoTributo,
                 identificador: identificador
             })
                 .then((datos) => {
@@ -973,7 +1002,7 @@ class DetalleTributo extends React.PureComponent {
             arrayService.push(service1);
 
             const service2 = servicesTributarioOnline.getReporteInformeREMAT(token, {
-                tipoTributo: tributo,
+                tipoTributo: tipoTributo,
                 identificador: identificador
             })
                 .then((datos) => {
@@ -1059,13 +1088,13 @@ class DetalleTributo extends React.PureComponent {
     onInformeCuentaDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const tributo = getIdTipoTributo(this.props.match.params.tributo);
+        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         let arrayService = [];
         if (!this.state.informeCuenta.reporteBase64) {
             const service1 = servicesTributarioOnline.getInformeCuenta(token, {
-                tipoTributo: tributo,
+                tipoTributo: tipoTributo,
                 identificador: identificador
             })
                 .then((datos) => {
@@ -1089,7 +1118,7 @@ class DetalleTributo extends React.PureComponent {
             arrayService.push(service1);
 
             const service2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
-                tipoTributo: tributo,
+                tipoTributo: tipoTributo,
                 identificador: identificador
             })
                 .then((datos) => {
@@ -1628,39 +1657,41 @@ class DetalleTributo extends React.PureComponent {
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
                             <Divider className={classes.divider} />
 
-                            {(tipoTributo != 3 &&
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <Typography
-                                            onClick={this.handleOnClickAddTributo}
-                                            variant="subheading"
-                                            className={classNames(classes.textList, classes.link)}
-                                            gutterBottom>
-                                            Agregar nuevo tributo
+                            {!this.modoInvitado && <div>
+                                {(tipoTributo != 3 &&
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <Typography
+                                                onClick={this.handleOnClickAddTributo}
+                                                variant="subheading"
+                                                className={classNames(classes.textList, classes.link)}
+                                                gutterBottom>
+                                                Agregar nuevo tributo
                                         </Typography>
-                                    </Grid>
-                                </Grid>) ||
-                                <Grid container spacing={16}>
-                                    <Grid item sm={2}>
-                                        <svg className={classes.icon} viewBox="0 0 24 24">
-                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                        </svg>
-                                    </Grid>
-                                    <Grid item sm={10}>
-                                        <Typography
-                                            onClick={this.handleOnClickImportarAFIP}
-                                            variant="subheading"
-                                            className={classNames(classes.textList, classes.link)}
-                                            gutterBottom>
-                                            Importar AFIP
+                                        </Grid>
+                                    </Grid>) ||
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <Typography
+                                                onClick={this.handleOnClickImportarAFIP}
+                                                variant="subheading"
+                                                className={classNames(classes.textList, classes.link)}
+                                                gutterBottom>
+                                                Importar AFIP
                                         </Typography>
-                                    </Grid>
-                                </Grid>}
+                                        </Grid>
+                                    </Grid>}
+                            </div>}
 
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>

@@ -54,8 +54,14 @@ class SeleccionTributo extends React.PureComponent {
     }
 
     componentDidMount() {
-        //Servicios que setean los datos en las props del store de redux
         const token = this.props.loggedUser.token;
+
+        //Redireccionamos al Inicio si es usuario Invitado
+        if(token == window.Config.TOKEN_INVITADO) {
+            this.props.redireccionar('/Inicio/HomeInvitado/' + this.props.match.params.tributo);
+            return false;
+        }
+
         this.props.mostrarCargando(true);
         //Traemos los tributos asociados al Token
         servicesTributarioOnline.getIdTributos(token)

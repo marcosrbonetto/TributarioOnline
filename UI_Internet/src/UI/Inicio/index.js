@@ -24,6 +24,7 @@ import Menu from "./menu";
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.Usuario.loggedUser,
     usuario: state.Usuario.usuario,
     cargando: state.MainContent.cargando
   };
@@ -40,7 +41,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.modoInvitado = this.props.loggedUser.token == window.Config.TOKEN_INVITADO;
     let paraMobile = !isWidthUp(limite, props.width);
+
     this.state = {
       open: false,
       paraMobile: paraMobile
@@ -113,6 +116,7 @@ class App extends React.Component {
 
           {/* Drawer */}
           <MiDrawer
+            modoInvitado={this.modoInvitado}
             width={width}
             paginaActual={paginaActual}
             paraMobile={this.state.paraMobile}

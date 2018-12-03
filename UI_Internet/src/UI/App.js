@@ -34,6 +34,7 @@ import Pagina404 from "@UI/_Pagina404";
 import Rules_Usuario from "@Rules/Rules_Usuario";
 import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
 import { mostrarAlerta, mostrarMensaje } from "@Utils/functions";
+import { callbackify } from "util";
 
 const mapStateToProps = state => {
   return {
@@ -121,98 +122,99 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    //Acciones iniciales
-    this.init();
+    //Realizamos acciónes iniciales y luego seguimos cargando la aplicación
+    this.init(() => {
+      let token = localStorage.getItem("token");
 
-    let token = localStorage.getItem("token");
-
-    let search = this.props.location.search;
-    if (search.startsWith("?")) {
-      search = search.substring(1);
-      search = new URLSearchParams(search);
-      let tokenQueryString = search.get("token");
-      if (tokenQueryString) {
-        token = tokenQueryString;
-      }
-    }
-
-     //Usuario Invitado
-    if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
-
-      //Logueamos con el usuario Invitado
-      this.props.login({
-        datos: {},
-        token: window.Config.TOKEN_INVITADO
-      });
-
-      if (search) {
-        let url = search.get("url") || "/";
-        if (url == "/") url = "/Inicio";
-        this.props.redireccionar(url);
-      } else {
-        console.log(this.props.location);
-
-        if (this.props.location.pathname == "/") {
-          this.props.redireccionar("/Inicio");
+      let search = this.props.location.search;
+      if (search.startsWith("?")) {
+        search = search.substring(1);
+        search = new URLSearchParams(search);
+        let tokenQueryString = search.get("token");
+        if (tokenQueryString) {
+          token = tokenQueryString;
         }
       }
-    } else { //Usuario Vecino Virtual
-      this.setState({ validandoToken: true }, () => {
-        Rules_Usuario.validarToken(token)
-          .then(resultado => {
-            if (resultado == false) {
-              this.props.logout();
-              window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-              return;
-            }
 
-            Rules_Usuario.datos(token)
-              .then(datos => {
-                this.props.login({
-                  datos: datos,
-                  token: token
-                });
+      //Usuario Invitado
+      if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
 
-                //let url = "/";
-                if (search) {
-                  let url = search.get("url") || "/";
-                  if (url == "/") url = "/Inicio";
-                  this.props.redireccionar(url);
-                } else {
-                  console.log(this.props.location);
+        //Logueamos con el usuario Invitado
+        this.props.login({
+          datos: undefined,
+          token: window.Config.TOKEN_INVITADO
+        });
 
-                  if (this.props.location.pathname == "/") {
-                    this.props.redireccionar("/Inicio");
-                  }
-                }
+        if (search) {
+          let url = search.get("url") || "/";
+          if (url == "/") url = "/Inicio";
+          this.props.redireccionar(url);
+        } else {
+          console.log(this.props.location);
 
-                this.onLogin();
-              })
-              .catch(() => {
+          if (this.props.location.pathname == "/") {
+            this.props.redireccionar("/Inicio");
+          }
+        }
+      } else { //Usuario Vecino Virtual
+        this.setState({ validandoToken: true }, () => {
+          Rules_Usuario.validarToken(token)
+            .then(resultado => {
+              if (resultado == false) {
                 this.props.logout();
                 window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-              });
-          })
-          .catch(error => {
-            this.props.logout();
-            window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-          })
-          .finally(() => {
-            this.setState({ validandoToken: false });
-          });
-      });
-    }
+                return;
+              }
+
+              Rules_Usuario.datos(token)
+                .then(datos => {
+                  this.props.login({
+                    datos: datos,
+                    token: token
+                  });
+
+                  //let url = "/";
+                  if (search) {
+                    let url = search.get("url") || "/";
+                    if (url == "/") url = "/Inicio";
+                    this.props.redireccionar(url);
+                  } else {
+                    console.log(this.props.location);
+
+                    if (this.props.location.pathname == "/") {
+                      this.props.redireccionar("/Inicio");
+                    }
+                  }
+
+                  this.onLogin();
+                })
+                .catch(() => {
+                  this.props.logout();
+                  window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+                });
+            })
+            .catch(error => {
+              this.props.logout();
+              window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+            })
+            .finally(() => {
+              this.setState({ validandoToken: false });
+            });
+        });
+      }
+    });
   }
 
-  init = () => {
+  init = (callback) => {
     //Seteamos los tipo tributos en la aplicacion
-    this.setTipoTributos();
+    this.setTipoTributos(callback);
   }
 
-  setTipoTributos = () => {
+  setTipoTributos = (callback) => {
     Rules_TributarioOnline.getTipoTributos()
       .then(datos => {
         this.props.setTipoTributos(datos.return);
+        callback();
       })
       .catch(error => {
         this.props.logout();

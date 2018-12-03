@@ -32,6 +32,19 @@ const styles = theme => ({
   selectTipoTributo: {
     width: '100%'
   },
+  buttonActions: {
+    display: 'inline-block',
+    minWidth: 'auto',
+    margin: '2px',
+    borderRadius: '20px',
+    marginBottom: '8px'
+  },
+  title: {
+    fontWeight: 'bold'
+  },
+  itemTributo: {
+    fontStyle: 'normal'
+  }
 });
 
 

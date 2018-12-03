@@ -31,7 +31,8 @@ class MiDrawer extends React.PureComponent {
   };
 
   render() {
-    const { classes, open, paraMobile, paginaActual } = this.props;
+    const { classes, open, paraMobile, paginaActual, modoInvitado } = this.props;
+
     return (
       <SwipeableDrawer
         onClose={this.handleDrawerClose}
@@ -59,7 +60,8 @@ class MiDrawer extends React.PureComponent {
 
         <List component="nav">
           {Menu.map((item, index) => {
-            if (item.mostrarEnMenu == false) return null;
+            if (item.mostrarEnMenu == false || (modoInvitado && item.mostrarUserInvitado == false)) return null;
+            
             return (
               <DrawerItem
                 key={index}
