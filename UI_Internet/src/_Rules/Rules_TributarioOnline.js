@@ -581,6 +581,35 @@ const getDeclaracionJurada = (token, body) => {
   });
 };
 
+const getImprecionDeclaracionJurada = (token, body) => {
+
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/DeclaracionJurada/ImprimirDdjj', {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
+
 const services = {
   getTipoTributos: getTipoTributos,
   getDatosUsuario: getDatosUsuario,
@@ -600,7 +629,8 @@ const services = {
   getReporteInformeREMAT: getReporteInformeREMAT,
   getReporteInformeAntecedentes: getReporteInformeAntecedentes,
   getPeriodosAdeudados: getPeriodosAdeudados,
-  getDeclaracionJurada: getDeclaracionJurada
+  getDeclaracionJurada: getDeclaracionJurada,
+  getImprecionDeclaracionJurada: getImprecionDeclaracionJurada
 }
 
 export default services;

@@ -693,7 +693,7 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
+                    if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
 
                     let rowList = (datos.return && datos.return.map((pago) => {
 
@@ -771,7 +771,7 @@ class DetalleTributo extends React.PureComponent {
         if (this.state.periodosAdeudados.infoGrilla.length == 0) {
             servicesTributarioOnline.getPeriodosAdeudados(token, tipoTributo, identificador)
                 .then((datos) => {
-                    if (!datos.ok) { mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
+                    if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
 
                     let rowList = [];
                     let data = datos.return;
@@ -854,7 +854,7 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { mostrarAlerta('Informe Antecedentes: ' + datos.error); return false; }
+                    if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Informe Antecedentes: ' + datos.error); return false; }
 
                     let rowList = (datos.return && datos.return.map((row) => {
 
@@ -985,7 +985,7 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
+                    if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
 
                     let rowList = (datos.return && datos.return.map((row) => {
 
@@ -1115,7 +1115,7 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+                    if (!datos.ok) { this.props.mostrarCargando(false); return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
 
                     this.setState({
                         informeCuenta: {
@@ -1221,7 +1221,7 @@ class DetalleTributo extends React.PureComponent {
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         servicesTributarioOnline.getDeclaracionJurada(token, {
-            cuit: identificador
+            cuit: identificador //El identificador del comercio es el cuit
         })
             .then((datos) => {
                 if (!datos.ok) { mostrarAlerta('Declaración Jurada: ' + datos.error); this.props.mostrarCargando(false); return false; }
@@ -1284,18 +1284,32 @@ class DetalleTributo extends React.PureComponent {
 
     //Mostramos el reporte en el modal de Declaración Jurada
     onDeclaracionJuradaShowReporte = () => {
+        this.props.mostrarCargando(true);
+        const token = this.props.loggedUser.token;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
+        
+        servicesTributarioOnline.getImprecionDeclaracionJurada(token, {
+            cuit: identificador, //El identificador del comercio es el cuit
+            periodosSeleccionados: this.state.declaracionJurada.registrosSeleccionados
+        })
+            .then((datos) => {
+                if (!datos.ok) { mostrarAlerta('Declaración Jurada: ' + datos.error); this.props.mostrarCargando(false); return false; }
+                
+                this.setState({
+                    declaracionJurada: {
+                        ...this.state.declaracionJurada,
+                        modal: {
+                            ...this.state.declaracionJurada.modal,
+                            showReporte: true
+                        },
+                        reporteBase64: datos.return.reporte
+                    }
+                });
 
-        //CODIGO GENERADOR DE DDJJ
-
-        this.setState({
-            declaracionJurada: {
-                ...this.state.declaracionJurada,
-                modal: {
-                    ...this.state.declaracionJurada.modal,
-                    showReporte: true
-                }
-            }
-        });
+                this.props.mostrarCargando(false);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
     }
 
     //Ocultamos el reporte en el modal de Declaración Jurada
@@ -1308,6 +1322,7 @@ class DetalleTributo extends React.PureComponent {
                     showReporte: false
                 },
                 reporteBase64: '',
+                registrosSeleccionados: []
             }
         });
     }
@@ -1318,7 +1333,7 @@ class DetalleTributo extends React.PureComponent {
 
         filas.map((item) => {
             if (idFilasSeleccionadas.indexOf(item.id) != -1)
-                registrosSeleccionados.push(item['concepto']);
+                registrosSeleccionados.push(item['periodo']);
         });
 
         this.setState({
@@ -2152,7 +2167,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Solo en comercios */}
                             {getIdTipoTributo(this.props.match.params.tributo) == 3 && <div>
-                                {/*<Grid container spacing={16}>
+                                <Grid container spacing={16}>
                                     <Grid item sm={2}>
                                         <svg className={classes.icon} viewBox="0 0 24 24">
                                             <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
@@ -2213,7 +2228,7 @@ class DetalleTributo extends React.PureComponent {
                                             </div>
                                         </MiControledDialog>
                                     </Grid>
-                                </Grid>*/}
+                                </Grid>
                             </div>}
                         </MiCard>
 
