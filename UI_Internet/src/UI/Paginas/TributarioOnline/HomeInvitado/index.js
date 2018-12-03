@@ -26,7 +26,7 @@ import Typography from "@material-ui/core/Typography";
 
 //Custom Components
 import MiCard from "@Componentes/MiCard";
-import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
+import servicesRepresentantes from '@Rules/Rules_Representantes';
 
 //Funciones Útiles
 import { getIdTipoTributo, getTextoTipoTributo } from "@Utils/functions"
@@ -55,7 +55,9 @@ class HomeInvitado extends React.PureComponent {
 
     this.state = {
       selectTributos: this.tipoTributo || 'Automotor',
-      inputIdentificadorTributo: ''
+      inputIdentificadorTributo: '',
+      errorInputIdentificador: '',
+      mensajeError: false
     };
   }
 
@@ -74,24 +76,45 @@ class HomeInvitado extends React.PureComponent {
   }
 
   handleEntrarTributo = () => {
+    this.props.mostrarCargando(true);
+    const token = this.props.loggedUser.token;
+    const idTipoTributo = getIdTipoTributo(this.state.selectTributos);
     const tipoTributo = this.state.selectTributos;
     const identificador = this.state.inputIdentificadorTributo;
 
-    this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador));
+    servicesRepresentantes.getTitularTributo(token, {
+      "tipoTributo": idTipoTributo,
+      "identificador": identificador
+    })
+      .then((datos) => {
+        this.props.mostrarCargando(false);
+
+        if (datos.ok) {
+          this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador));
+        } else {
+          this.setState({
+            mensajeError: 'El identificador es incorrecto.',
+            errorInputIdentificador: true
+          })
+        }
+
+      }).catch(err => {
+        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+      });
   }
 
   render() {
     const { classes } = this.props;
 
     const { } = this.state;
-    
+
     return (
       <div className={classNames(classes.mainContainer, "contentDetalleTributo")}>
         <Grid container spacing={16} justify="center">
           <Grid item xs={4} className={"container"} >
             <MiCard contentClassName={classes.root} >
 
-              <Typography className={classes.title} variant="title">Ingreso a Tributo</Typography><br/>
+              <Typography className={classes.title} variant="title">Ingreso a Tributo</Typography><br />
 
               <Grid container>
                 <InputLabel htmlFor="tipo_tributo">Tipo Tributo</InputLabel>
@@ -123,6 +146,7 @@ class HomeInvitado extends React.PureComponent {
                       value={this.state.inputIdentificadorTributo}
                       onChange={this.handleInputIdentificador}
                       autoFocus={true}
+                      error={this.state.errorInputIdentificador}
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -135,6 +159,10 @@ class HomeInvitado extends React.PureComponent {
                       Entrar
                 </Button>
                   </Grid>
+
+                  {this.state.mensajeError && <div>
+                    <Typography className={classes.mensajeError} variant="subheading">{this.state.mensajeError}</Typography>
+                  </div>}
                 </Grid>
               </Grid>
             </MiCard>

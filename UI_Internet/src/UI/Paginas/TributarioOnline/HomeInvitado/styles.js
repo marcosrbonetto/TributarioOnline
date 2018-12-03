@@ -44,6 +44,9 @@ const styles = theme => ({
   },
   itemTributo: {
     fontStyle: 'normal'
+  },
+  mensajeError: {
+    color: theme.color.error.main
   }
 });
 

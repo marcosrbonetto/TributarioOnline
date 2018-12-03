@@ -38,6 +38,7 @@ import MisPagos from "@Componentes/MisPagos";
 import MiTooltip from "@Componentes/MiTooltip";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
+import servicesRepresentantes from '@Rules/Rules_Representantes';
 
 //Funciones Útiles
 import { formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
@@ -215,21 +216,37 @@ class DetalleTributo extends React.PureComponent {
 
     setIdTributosUserInvitado = () => {
         const token = this.props.loggedUser.token;
-        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
-        //Cargamos el tributo seleccionado
-        this.setIdentificadores([{
-            "tipoTributo": tipoTributo,
-            "identificador": identificador,
-            "titular": {
-                "cuit": undefined,
-                "titular": undefined
-            },
-            "soyTitular": false,
-            "deuda": 0
-        }]);
-        this.iniciarServicios(token, identificador);
+        //Corroboramos que el identificador sea correcto y exista
+        servicesRepresentantes.getTitularTributo(token, {
+            "tipoTributo": idTipoTributo,
+            "identificador": identificador
+        })
+            .then((datos) => {
+                this.props.mostrarCargando(false);
+
+                if (datos.ok) {
+                    //Cargamos el tributo seleccionado
+                    this.setIdentificadores([{
+                        "tipoTributo": idTipoTributo,
+                        "identificador": identificador,
+                        "titular": {
+                            "cuit": undefined,
+                            "titular": undefined
+                        },
+                        "soyTitular": false,
+                        "deuda": 0
+                    }]);
+                    this.iniciarServicios(token, identificador);
+                } else {
+                    this.props.redireccionar('/');
+                }
+
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
     }
 
     setIdTributosUserLog = (token, identificador) => {
