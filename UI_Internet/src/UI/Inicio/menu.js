@@ -18,6 +18,7 @@ const Menu = [
     url: "/Inicio/HomeUsuario",
     exact: false,
     mostrarEnMenu: false,
+    mostrarUserInvitado: false,
     component: HomeUsuario,
     nombre: "Tributario Online",
     titulo: "Tributario Online",

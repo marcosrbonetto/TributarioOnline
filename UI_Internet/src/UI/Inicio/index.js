@@ -13,10 +13,6 @@ import { AnimatedSwitch } from "react-router-transition";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 
-//Compontes
-import MenuIcon from "@material-ui/icons/Menu";
-import IconButton from "@material-ui/core/IconButton";
-
 //Mis Componentes
 import MiDrawer from "./_DrawerNavigation/index";
 import MiToolbar from "@Componentes/MiToolbar";
@@ -50,6 +46,11 @@ class App extends React.Component {
     };
   }
 
+  componentWillReceiveProps() {
+    //Subimos el scroll cada vez que se ingresa, de lo contrario a veces queda abajo
+    this.refs.mainContent.scrollTop = 0;
+  }
+  
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
   }
@@ -129,7 +130,7 @@ class App extends React.Component {
           {/* Contenido */}
           <div className={classNames(classes.main)}>
             <div className={classes.separadorToolbar} />
-            <div className={classes.content}>
+            <div ref="mainContent" className={classes.content}>
               <Route path="/" render={() => {return Content(this.modoInvitado)}} />
             </div>
           </div>
