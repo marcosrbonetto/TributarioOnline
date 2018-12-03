@@ -225,7 +225,6 @@ class DetalleTributo extends React.PureComponent {
             "identificador": identificador
         })
             .then((datos) => {
-                this.props.mostrarCargando(false);
 
                 if (datos.ok) {
                     //Cargamos el tributo seleccionado
@@ -241,6 +240,7 @@ class DetalleTributo extends React.PureComponent {
                     }]);
                     this.iniciarServicios(token, identificador);
                 } else {
+                    this.props.mostrarCargando(false);
                     this.props.redireccionar('/');
                 }
 
