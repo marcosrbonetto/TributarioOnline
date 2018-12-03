@@ -130,7 +130,7 @@ class App extends React.Component {
           <div className={classNames(classes.main)}>
             <div className={classes.separadorToolbar} />
             <div className={classes.content}>
-              <Route path="/" component={() => { return Content(this.modoInvitado) }} />
+              <Route path="/" render={() => {return Content(this.modoInvitado)}} />
             </div>
           </div>
         </div>
