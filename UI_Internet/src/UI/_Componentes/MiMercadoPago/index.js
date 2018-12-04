@@ -47,7 +47,7 @@ class MiMercadoPago extends React.PureComponent {
     super(props);
 
     const email = (this.props.loggedUser.datos && this.props.loggedUser.datos.email) || this.props.infoPagosMercadoPago.email || '';
-debugger;
+
     this.state = {
       dialogoOpen: false,
       disabled: this.props.disabled,
@@ -358,6 +358,7 @@ debugger;
                                   <input type="hidden" value={this.props.idBtnMercadoPago} name="idBtnMercadoPago" />
                                   <input type="hidden" value={window.location.hash && window.location.hash.substring(1)} name="urlRedirect" />
                                   <input type="hidden" value={this.state.email} name="email" />
+                                  <input type="hidden" value={this.props.tipoCedulon} name="tipoCedulon" />
                                 </form>)}
 
                           </Grid>

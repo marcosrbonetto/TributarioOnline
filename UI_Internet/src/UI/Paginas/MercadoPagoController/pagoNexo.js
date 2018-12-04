@@ -55,7 +55,10 @@ class PagoNexo extends Component {
         const emisor = getAllUrlParams(window.location.href).issuer_id; //Ej.: 310
         const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
         const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
-        const tipoCedulon = getAllUrlParams(window.location.href).tipoCedulon; //Ej.: Constribucion
+        
+        let tipoCedulon = getAllUrlParams(window.location.href).tipoCedulon; //Ej.: Contribuciones
+        //Lo siguiente se deberá mejorar, se hace por tema de apuro
+        tipoCedulon = (tipoCedulon == 'Contribuciones' && 1) || (tipoCedulon == 'Multas' && 2) || (tipoCedulon == 'JuiciosContribuciones' && 3) || (tipoCedulon == 'JuiciosMultas' && 3) || (tipoCedulon == 'PlanesContribuciones' && 4);
 
         const email = decodeURIComponent(getAllUrlParams(window.location.href).email); //Ej.: ruben@hotmail.com
 
@@ -78,7 +81,7 @@ class PagoNexo extends Component {
             if (result.length == 0) return false;
 
             let nexoActual = result[0];
-            debugger;
+            
             servicesMercadoPago.pagoMercadoPago(token, {
                 nexo: nexoActual.nexo,
                 tipoTributo: parseInt(tipoTributo),

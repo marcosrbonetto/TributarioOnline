@@ -16,7 +16,8 @@ const pagoMercadoPago = (token, body) => {
           "metodoPago": body.metodoPago,
           "emisor": body.emisor,
           "cuotas": body.cuotas,
-          "tipoCedulon": 1 //Contribucion
+          "email": body.email,
+          "tipoCedulon": body.tipoCedulon
         })
       })
         .then(res => {
