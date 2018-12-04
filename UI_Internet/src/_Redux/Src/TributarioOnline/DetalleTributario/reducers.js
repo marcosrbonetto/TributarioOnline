@@ -6,7 +6,7 @@ import {
 import storePersistent from "@Redux/Store/persistent";
 
 let initialState = {
-    infoPagosMercadoPago: [],
+    infoPagosMercadoPago: {},
 };
 
 //Agrega al initialState lo que se seteo como permanente
@@ -29,7 +29,7 @@ const reducer = (state = initialState, action) => {
         case RESET_INFO_DETALLE_TRIBUTO: {
             //Se resetean todos lo valores de la pantalla.
             let emptyState = {
-                infoPagosMercadoPago: [],
+                infoPagosMercadoPago: {},
             };
 
             //Agregamos datos persistentes

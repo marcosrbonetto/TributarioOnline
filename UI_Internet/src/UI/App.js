@@ -139,6 +139,8 @@ class App extends React.Component {
       //Usuario Invitado
       if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
 
+        //Borramos el localStorage por si hay algun pago inconcluso o algun dato del redux persistente
+        localStorage.clear();
         //Logueamos con el usuario Invitado
         this.props.login({
           datos: undefined,
@@ -168,6 +170,9 @@ class App extends React.Component {
 
               Rules_Usuario.datos(token)
                 .then(datos => {
+
+                  //Borramos el localStorage por si hay algun pago inconcluso o algun dato del redux persistente
+                  localStorage.clear();
                   this.props.login({
                     datos: datos,
                     token: token

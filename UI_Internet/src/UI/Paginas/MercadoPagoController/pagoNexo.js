@@ -55,6 +55,9 @@ class PagoNexo extends Component {
         const emisor = getAllUrlParams(window.location.href).issuer_id; //Ej.: 310
         const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
         const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
+        const tipoCedulon = getAllUrlParams(window.location.href).tipoCedulon; //Ej.: Constribucion
+
+        const email = decodeURIComponent(getAllUrlParams(window.location.href).email); //Ej.: ruben@hotmail.com
 
         const idBtnMercadoPago = getAllUrlParams(window.location.href).idBtnMercadoPago;
         localStorage.setItem('idBtnMercadoPago', idBtnMercadoPago);
@@ -75,7 +78,7 @@ class PagoNexo extends Component {
             if (result.length == 0) return false;
 
             let nexoActual = result[0];
-
+            debugger;
             servicesMercadoPago.pagoMercadoPago(token, {
                 nexo: nexoActual.nexo,
                 tipoTributo: parseInt(tipoTributo),
@@ -83,11 +86,27 @@ class PagoNexo extends Component {
                 token: tokenNexo,
                 metodoPago: metodoPago,
                 emisor: emisor,
-                cuotas: parseInt(cuotas)
+                cuotas: parseInt(cuotas),
+                email: email,
+                tipoCedulon: tipoCedulon
             })
                 .then((datos) => {
 
-                    if (!datos.ok) { mostrarAlerta('Pago MercadoPago: ' + datos.error); return false; }
+                    if (!datos.ok) {
+                        this.setState({
+                            cargando: false,
+                            error: true,
+                            exito: false,
+                        });
+
+                        mostrarAlerta('Pago MercadoPago: ' + datos.error);
+
+                        localStorage.removeItem('idBtnMercadoPago');
+                        localStorage.removeItem('seccionDetalleTributo');
+                        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+
+                        return false;
+                    }
 
                     //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
                     //Y muestre los nexos actualizados
@@ -98,6 +117,7 @@ class PagoNexo extends Component {
                     nexoActual.pagado = true;
 
                     this.props.setPropsUpdatePagosMercadoPago({
+                        email: email,
                         arrayNexos: arrayNexos
                     });
 
@@ -108,6 +128,7 @@ class PagoNexo extends Component {
                     //Corroboramos si todos los nexos estan pagos, procedemos a no mostrar el modal de pagos online
                     if (allNexosPagos.length == 0) {
                         this.props.setPropsUpdatePagosMercadoPago({
+                            email: '',
                             arrayNexos: []
                         });
 
@@ -136,7 +157,6 @@ class PagoNexo extends Component {
 
                     localStorage.removeItem('idBtnMercadoPago');
                     localStorage.removeItem('seccionDetalleTributo');
-                    this.props.redireccionar("/");
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
         } else {
@@ -155,7 +175,7 @@ class PagoNexo extends Component {
     onBotonContinuarClick = () => {
         const urlRedirect = getAllUrlParams(window.location.href).urlRedirect;
 
-        if(this.state.finPagos)
+        if (this.state.finPagos)
             window.location.href = window.location.origin + window.location.pathname + '#' + decodeURIComponent(urlRedirect);
         else
             this.props.redireccionar(decodeURIComponent(urlRedirect));
@@ -166,30 +186,30 @@ class PagoNexo extends Component {
     }
 
     render() {
-        return  <div style={{ width: '100%'}}>
-            {this.state.cargando && 
-            <MiPanelMensaje 
-            cargando
-            mensaje="Se está procesando el pago..."
-            />}
+        return <div style={{ width: '100%' }}>
+            {this.state.cargando &&
+                <MiPanelMensaje
+                    cargando
+                    mensaje="Se está procesando el pago..."
+                />}
 
-            {this.state.error && 
-            <MiPanelMensaje 
-            error
-            mensaje="Ocurrió un error al guardar el pago"
-            tieneBoton
-            onBotonClick={this.onBotonErrorClick}
-            boton="Volver"
-            />}
+            {this.state.error &&
+                <MiPanelMensaje
+                    error
+                    mensaje="Ocurrió un error al guardar el pago"
+                    tieneBoton
+                    onBotonClick={this.onBotonErrorClick}
+                    boton="Volver"
+                />}
 
-            {this.state.exito && 
-            <MiPanelMensaje 
-            lottieExito
-            mensaje="¡Pago realizado con éxito!"
-            tieneBoton
-            onBotonClick={this.onBotonContinuarClick}
-            boton="Continuar"
-            />}
+            {this.state.exito &&
+                <MiPanelMensaje
+                    lottieExito
+                    mensaje="¡Pago realizado con éxito!"
+                    tieneBoton
+                    onBotonClick={this.onBotonContinuarClick}
+                    boton="Continuar"
+                />}
         </div>
     }
 }

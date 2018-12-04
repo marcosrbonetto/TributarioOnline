@@ -16,6 +16,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
+import TextField from "@material-ui/core/TextField";
 
 import MiControledDialog from "@Componentes/MiControledDialog";
 
@@ -45,12 +46,17 @@ class MiMercadoPago extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.myRef = React.createRef();
-
+    const email = (this.props.loggedUser.datos && this.props.loggedUser.datos.email) || this.props.infoPagosMercadoPago.email || '';
+debugger;
     this.state = {
       dialogoOpen: false,
       disabled: this.props.disabled,
-      arrayNexos: []
+      arrayNexos: [],
+      email: email,
+      validacionEmail: {
+        errorEmail: false,
+        emailValidado: false
+      }
     };
   }
 
@@ -69,9 +75,9 @@ class MiMercadoPago extends React.PureComponent {
 
     //Reseteamos Valores de DetalleTributario (Redux)
     const idBtnMercadoPago = localStorage.getItem('idBtnMercadoPago');
-    if(idBtnMercadoPago && this.props.idBtnMercadoPago == idBtnMercadoPago) {
-      
-      if(this.props.infoPagosMercadoPago.arrayNexos && this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
+    if (idBtnMercadoPago && this.props.idBtnMercadoPago == idBtnMercadoPago) {
+
+      if (this.props.infoPagosMercadoPago.arrayNexos && this.props.infoPagosMercadoPago.arrayNexos.length > 0) {
         this.setState({
           ...this.state,
           dialogoOpen: true,
@@ -85,9 +91,9 @@ class MiMercadoPago extends React.PureComponent {
         });
         mostrarMensaje('Pago MercadoPago: Pago realizado exitosamente');
       }
-      
+
     }
-    
+
     localStorage.removeItem('idBtnMercadoPago');
     this.props.mostrarCargando(false);
   }
@@ -116,7 +122,7 @@ class MiMercadoPago extends React.PureComponent {
         })
         .then((datos) => {
 
-          if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false;}
+          if (!datos.ok) { mostrarAlerta(datos.error); this.props.mostrarCargando(false); return false; }
 
           const resultData = datos.return;
           let arrayNexos = [];
@@ -128,6 +134,19 @@ class MiMercadoPago extends React.PureComponent {
               itemNexo.totalPeriodo += stringToFloat(periodo.importe.total, 2);
             });
 
+            itemNexo.totalPeriodo = formatNumber(itemNexo.totalPeriodo);
+            arrayNexos.push(itemNexo);
+          });
+
+          _.each(resultData.nexos, (nexo) => {
+            var itemNexo = { ...nexo };
+            itemNexo.totalPeriodo = 0;
+
+            _.each(nexo.periodos, (periodo) => {
+              itemNexo.totalPeriodo += stringToFloat(periodo.importe.total, 2);
+            });
+
+            itemNexo.nexo = 1;
             itemNexo.totalPeriodo = formatNumber(itemNexo.totalPeriodo);
             arrayNexos.push(itemNexo);
           });
@@ -198,6 +217,35 @@ class MiMercadoPago extends React.PureComponent {
     return 0;
   }
 
+  handleInputEmail = (event) => {
+    this.setState({
+      email: event.target.value
+    });
+  }
+
+  handleValidarEmail = () => {
+    const emailIngresado = this.state.email;
+
+    if (!/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(emailIngresado)) {
+      this.setState({
+        ...this.state,
+        validacionEmail: {
+          ...this.state.validacionEmail,
+          errorEmail: true
+        }
+      });
+      return;
+    }
+
+    this.setState({
+      ...this.state,
+      validacionEmail: {
+        errorEmail: false,
+        emailValidado: true
+      }
+    });
+  }
+
   render() {
     let { classes } = this.props;
     const activeStep = 0;
@@ -235,12 +283,46 @@ class MiMercadoPago extends React.PureComponent {
           </div>
 
           <div key="mainContent">
-            {this.state.arrayNexos && this.state.arrayNexos.length > 0 &&
+
+            {!this.state.validacionEmail.emailValidado && <div>
+              <Typography variant="subheading" gutterBottom>
+                A continuación ingrese un correo en el que estará asociado su pago con la plataforma MercadoPago
+              </Typography>
+              <Grid container spacing={0} alignItems="flex-end">
+                <Grid item xs={9}>
+                  <TextField
+                    id="email-input"
+                    label="Email"
+                    className={classes.selectTipoTributo}
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    margin="normal"
+                    value={this.state.email}
+                    onChange={this.handleInputEmail}
+                    autoFocus={true}
+                    error={this.state.validacionEmail.errorEmail}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.buttonActions}
+                    onClick={this.handleValidarEmail}
+                  >
+                    Continuar
+                </Button>
+                </Grid>
+              </Grid>
+              <br />
+            </div>}
+
+            {this.state.validacionEmail.emailValidado && this.state.arrayNexos && this.state.arrayNexos.length > 0 &&
               <Stepper
                 activeStep={this.getNextStep(this.state.arrayNexos)}
                 orientation="vertical">
                 {Array.isArray(this.state.arrayNexos) && this.state.arrayNexos.length > 0 && this.state.arrayNexos.map((nexo, index) => {
-
 
                   return (
                     <Step key={index}>
@@ -275,6 +357,7 @@ class MiMercadoPago extends React.PureComponent {
                                   <input type="hidden" value={this.props.seccionDetalleTributo} name="seccionDetalleTributo" />
                                   <input type="hidden" value={this.props.idBtnMercadoPago} name="idBtnMercadoPago" />
                                   <input type="hidden" value={window.location.hash && window.location.hash.substring(1)} name="urlRedirect" />
+                                  <input type="hidden" value={this.state.email} name="email" />
                                 </form>)}
 
                           </Grid>
@@ -347,7 +430,10 @@ const styles = theme => ({
   },
   maxWidth: {
     maxWidth: '564px'
-  }
+  },
+  selectTipoTributo: {
+    width: '100%'
+  },
 });
 
 let componente = MiMercadoPago;
