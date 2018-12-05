@@ -46,7 +46,6 @@ const reducer = (state = initialState, action) => {
       });
 
       tipoTributos['result'] = action.payload;
-      debugger;
       return { ...state, tipoTributos: tipoTributos };
     }
     case SET_TIPO_CEDULONES: {
@@ -62,7 +61,6 @@ const reducer = (state = initialState, action) => {
       });
 
       tipoCedulones['result'] = action.payload;
-      debugger;
       return { ...state, tipoCedulones: tipoCedulones };
     }
     default:

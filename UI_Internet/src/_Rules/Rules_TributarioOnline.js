@@ -114,7 +114,7 @@ const getTributosByCUIT = (token, identificador) => {
 };
 
 const getIdTributos = (token, callback) => {
-  debugger;
+
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos', {
       method: "GET",

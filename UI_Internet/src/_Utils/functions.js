@@ -26,8 +26,8 @@ export const getIdTipoTributo = (tributo) => {
 
 	const tipoTributoSel = tipoTributos[tributo];
 
-	if(tipoTributoSel[0])
-		return tipoTributoSel[0].key;
+	if(tipoTributoSel)
+		return tipoTributoSel;
 	else 
 		window.location.href = window.Config.URL_LOGIN + "?url=/";
 }

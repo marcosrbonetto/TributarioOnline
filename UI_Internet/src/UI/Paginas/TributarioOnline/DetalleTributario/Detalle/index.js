@@ -219,7 +219,7 @@ class DetalleTributo extends React.PureComponent {
         const token = this.props.loggedUser.token;
         const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
-
+        
         //Corroboramos que el identificador sea correcto y exista
         servicesRepresentantes.getTitularTributo(token, {
             "tipoTributo": idTipoTributo,
