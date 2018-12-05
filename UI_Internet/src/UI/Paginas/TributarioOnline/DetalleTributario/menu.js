@@ -1,6 +1,7 @@
 import DetalleTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Detalle/index";
 import SeleccionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Seleccion/index";
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
+import Representantes from "@UI/Paginas/Representantes/index";
 
 const Menu = [
   {
@@ -24,8 +25,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Inicio",
-    titulo: "Inicio",
+    nombre: "Tributos",
+    titulo: "Tributos",
   },
   {
     url: "/DetalleTributario/Automotor",
@@ -100,19 +101,29 @@ const Menu = [
     titulo: "Planes De Vivienda",
   },
   {
+    url: "/Inicio/Representantes/:tributo",
+    exact: false,
+    mostrarEnMenu: false,
+    mostrarUserInvitado: false,
+    component: Representantes,
+    nombre: "Representantes",
+    titulo: "Representantes",
+  },
+  {
+    url: "/Inicio/Representantes",
+    exact: false,
+    mostrarEnMenu: true,
+    mostrarUserInvitado: false,
+    component: Representantes,
+    nombre: "Representantes",
+    titulo: "Representantes",
+  },
+  {
     url: "https://sistemas2.cordoba.local/tasas/",
     exact: true,
     mostrarEnMenu: true,
     externalLink: true,
     nombre: "Tasas Administrativas",
-  },
-  {
-    url: "/Inicio",
-    exact: false,
-    mostrarEnMenu: true,
-    component: TributarioOnline,
-    nombre: "Volver",
-    titulo: "Volver",
   }
 ];
 
