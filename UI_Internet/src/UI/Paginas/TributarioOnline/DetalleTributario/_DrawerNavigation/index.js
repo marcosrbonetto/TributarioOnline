@@ -12,7 +12,15 @@ import List from "@material-ui/core/List";
 import Menu from "../menu";
 import DrawerItem from "./DrawerItem";
 
-class MiDrawer extends React.PureComponent {
+class MiDrawer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      itemMenuSeleccionado: this.props.paginaActual
+    };
+  }
+  
   handleDrawerClose = () => {
     this.props.onClose();
   };
@@ -26,12 +34,17 @@ class MiDrawer extends React.PureComponent {
     
     if(Menu[index].externalLink)
       window.location.href = Menu[index].url;
-    else
+    else {
+      this.setState({
+        itemMenuSeleccionado: Menu[index]
+      });
+      
       this.props.onPaginaClick(Menu[index].url);
+    }
   };
 
   render() {
-    const { classes, open, paraMobile, paginaActual, modoInvitado } = this.props;
+    const { classes, open, paraMobile, modoInvitado } = this.props;
 
     return (
       <SwipeableDrawer
@@ -68,7 +81,7 @@ class MiDrawer extends React.PureComponent {
                 index={index}
                 texto={item.nombre || "Sin texto"}
                 icono={item.icono}
-                seleccionado={paginaActual.url == item.url}
+                seleccionado={this.state.itemMenuSeleccionado.url == item.url}
                 onClick={this.onDrawerItemClick}
               />
             );

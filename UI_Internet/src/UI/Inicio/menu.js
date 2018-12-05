@@ -4,14 +4,16 @@ import Representantes from "@UI/Paginas/Representantes/index";
 import HomeUsuario from "@UI/Paginas/TributarioOnline/HomeUsuario/index";
 import HomeInvitado from "@UI/Paginas/TributarioOnline/HomeInvitado/index";
 
+import BusquedaPor from "@UI/Paginas/TributarioOnline/BusquedaPor/index";
+
 const Menu = [
   {
     url: "/Inicio",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Tributario Online",
-    titulo: "Tributario Online",
+    nombre: "Tributos",
+    titulo: "Tributos",
     icono: "home"
   },
   {
@@ -20,8 +22,8 @@ const Menu = [
     mostrarEnMenu: false,
     mostrarUserInvitado: false,
     component: HomeUsuario,
-    nombre: "Tributario Online",
-    titulo: "Tributario Online",
+    nombre: "Tributos",
+    titulo: "Tributos",
     icono: "home"
   },
   {
@@ -29,8 +31,8 @@ const Menu = [
     exact: false,
     mostrarEnMenu: false,
     component: HomeInvitado,
-    nombre: "Tributario Online",
-    titulo: "Tributario Online",
+    nombre: "Tributos",
+    titulo: "Tributos",
     icono: "home"
   },
   {
@@ -38,8 +40,17 @@ const Menu = [
     exact: false,
     mostrarEnMenu: false,
     component: HomeInvitado,
-    nombre: "Tributario Online",
-    titulo: "Tributario Online",
+    nombre: "Tributos",
+    titulo: "Tributos",
+    icono: "home"
+  },
+  {
+    url: "/Inicio/BusquedaPor",
+    exact: true,
+    mostrarEnMenu: true,
+    component: BusquedaPor,
+    nombre: "Gestión por Identificador",
+    titulo: "Gestión por Identificador",
     icono: "home"
   },
   {
@@ -68,8 +79,8 @@ const Menu = [
     mostrarEnMenu: false,
     mostrarUserInvitado: false,
     component: TributarioOnline,
-    nombre: "Tributario Online",
-    titulo: "Tributario Online",
+    nombre: "Tributos",
+    titulo: "Tributos",
     icono: "home"
   },
   {
