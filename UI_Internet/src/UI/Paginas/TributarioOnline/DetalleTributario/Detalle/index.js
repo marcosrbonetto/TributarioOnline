@@ -115,7 +115,7 @@ const initialState = {
         order: 'asc',
         orderBy: 'concepto',
         labels: {
-            detalleTitulo: 'Períodos',
+            detalleTitulo: 'D.Administrativa',
             totalesDeuda: 'Administrativa',
             vencida: 'Deuda vencida',
             aVencer: 'A vencer',
@@ -145,7 +145,7 @@ const initialState = {
         order: 'asc',
         orderBy: 'concepto',
         labels: {
-            detalleTitulo: 'Juicios',
+            detalleTitulo: 'D.Judicial',
             totalesDeuda: 'del Juicio',
             vencida: 'Capital',
             aVencer: 'Gastos',
@@ -1431,13 +1431,13 @@ class DetalleTributo extends React.PureComponent {
                                         classes={{ flexContainer: classes.flexContainersMenu, scrollButtons: classes.scrollButtonsMenu }}
                                     >
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div>Períodos</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div>Multas</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div>Juicios</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
 
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanesPago ? listPlanesPago.length : 0}><div>Planes</div></Badge>} />
+                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="planesPago" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanesPago ? listPlanesPago.length : 0}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
 
                                     </Tabs>
 
