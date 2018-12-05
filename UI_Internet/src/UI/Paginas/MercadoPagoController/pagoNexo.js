@@ -39,7 +39,11 @@ class PagoNexo extends Component {
             cargando: true,
             error: false,
             exito: false,
-            finPagos: false
+            finPagos: false,
+            mensajeOK: '¡Pago realizado con éxito!',
+            mensajeError: 'Ocurrió un error al guardar el pago',
+            mensajeCargando: 'Se está procesando el pago...',
+            btnOK: 'Continuar'
         }
     }
 
@@ -97,6 +101,7 @@ class PagoNexo extends Component {
 
                     if (!datos.ok) {
                         this.setState({
+                            ...this.state,
                             cargando: false,
                             error: true,
                             exito: false,
@@ -136,23 +141,29 @@ class PagoNexo extends Component {
                         });
 
                         this.setState({
+                            ...this.state,
                             cargando: false,
                             error: false,
                             exito: true,
-                            finPagos: true
+                            finPagos: true,
+                            mensajeOK: <div>{'¡Pago realizado con éxito!'} <br/> {'El comprobante le será remitido a la casilla de correo ' + email}</div>,
+                            btnOK: 'Finalizar'
                         });
                         return false;
                     }
 
                     this.setState({
+                        ...this.state,
                         cargando: false,
                         error: false,
                         exito: true,
+                        mensajeOK: <div>{'¡Pago realizado con éxito!'} <br/> {'El comprobante le será remitido a la casilla de correo ' + email}</div>
                     });
 
                 }).catch(err => {
 
                     this.setState({
+                        ...this.state,
                         cargando: false,
                         error: true,
                         exito: false,
@@ -164,6 +175,7 @@ class PagoNexo extends Component {
                 });
         } else {
             this.setState({
+                ...this.state,
                 cargando: false,
                 error: true,
                 exito: false,
@@ -193,13 +205,13 @@ class PagoNexo extends Component {
             {this.state.cargando &&
                 <MiPanelMensaje
                     cargando
-                    mensaje="Se está procesando el pago..."
+                    mensaje={this.state.mensajeCargando}
                 />}
 
             {this.state.error &&
                 <MiPanelMensaje
                     error
-                    mensaje="Ocurrió un error al guardar el pago"
+                    mensaje={this.state.mensajeError}
                     tieneBoton
                     onBotonClick={this.onBotonErrorClick}
                     boton="Volver"
@@ -208,10 +220,10 @@ class PagoNexo extends Component {
             {this.state.exito &&
                 <MiPanelMensaje
                     lottieExito
-                    mensaje="¡Pago realizado con éxito!"
+                    mensaje={this.state.mensajeOK}
                     tieneBoton
                     onBotonClick={this.onBotonContinuarClick}
-                    boton="Continuar"
+                    boton={this.state.btnOK}
                 />}
         </div>
     }
