@@ -115,7 +115,7 @@ const initialState = {
         order: 'asc',
         orderBy: 'concepto',
         labels: {
-            detalleTitulo: 'D.Administrativa',
+            detalleTitulo: 'Deuda Administrativa',
             totalesDeuda: 'Administrativa',
             vencida: 'Deuda vencida',
             aVencer: 'A vencer',
@@ -145,7 +145,7 @@ const initialState = {
         order: 'asc',
         orderBy: 'concepto',
         labels: {
-            detalleTitulo: 'D.Judicial',
+            detalleTitulo: 'Deuda Judicial',
             totalesDeuda: 'del Juicio',
             vencida: 'Capital',
             aVencer: 'Gastos',
@@ -1414,7 +1414,7 @@ class DetalleTributo extends React.PureComponent {
                                         return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado}</MenuItem>
                                     })}
                                 </Select>
-                                - <b>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b>
+                                - <b className={classes.textoNoWrap}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b>
                             </Typography>
 
                             {/* Menu de secciones */}
@@ -2178,8 +2178,8 @@ class DetalleTributo extends React.PureComponent {
                                             open={declaracionJurada.modal.open}
                                             onDialogoOpen={this.onDeclaracionJuradaDialogoOpen}
                                             onDialogoClose={this.onDeclaracionJuradaDialogoClose}
-                                            textoLink={'Presentar DDJJ'}
-                                            titulo={'Presentar DDJJ'}
+                                            textoLink={'Imprimir DDJJ'}
+                                            titulo={'Imprimir DDJJ'}
                                         >
                                             <div key="headerContent"></div>
                                             <div key="mainContent">

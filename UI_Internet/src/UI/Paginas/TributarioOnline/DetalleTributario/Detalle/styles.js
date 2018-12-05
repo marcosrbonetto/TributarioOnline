@@ -246,6 +246,9 @@ const styles = theme => ({
     maxWidthInformeCuenta: {
       maxWidth: '900px',
       minWidth: '410px'
+    },
+    textoNoWrap: {
+      whiteSpace: 'nowrap'
     }
   });
 
