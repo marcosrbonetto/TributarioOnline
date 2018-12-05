@@ -1,5 +1,8 @@
-import { MAIN_CONTENT_CARGANDO } from "@Redux/Constants/index";
-import { SET_TIPO_TRIBUTOS } from "@Redux/Constants/index";
+import { 
+  MAIN_CONTENT_CARGANDO, 
+  SET_TIPO_TRIBUTOS, 
+  SET_TIPO_CEDULONES 
+} from "@Redux/Constants/index";
 
 export const mostrarCargando = cargando => ({
   type: MAIN_CONTENT_CARGANDO,
@@ -8,5 +11,10 @@ export const mostrarCargando = cargando => ({
 
 export const setTipoTributos = datos => ({
   type: SET_TIPO_TRIBUTOS,
+  payload: datos
+});
+
+export const setTipoCedulones = datos => ({
+  type: SET_TIPO_CEDULONES,
   payload: datos
 });

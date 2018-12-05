@@ -50,7 +50,7 @@ const mapStateToProps = state => {
 
   return {
     loggedUser: state.Usuario.loggedUser,
-    idTipoTributos: state.MainContent.idTipoTributos,
+    tipoTributos: state.MainContent.tipoTributos,
     datosEnvioSolicitudPermisos: state.Representantes.datosEnvioSolicitudPermisos,
     datosPedidoSolicitudPermisos: state.Representantes.datosPedidoSolicitudPermisos,
     datosMisRepresentantes: state.Representantes.datosMisRepresentantes,
@@ -701,7 +701,7 @@ class Representantes extends React.PureComponent {
                 }}
                 className={classes.selectTipoTributo}
               >
-                {this.props.idTipoTributos && this.props.idTipoTributos.map(tributo => {
+                {this.props.tipoTributos && this.props.tipoTributos.result.map(tributo => {
                   return <MenuItem value={`${tributo.key}`}>
                           <em>{getTextoTipoTributo(tributo.value)}</em>
                         </MenuItem>  

@@ -25,7 +25,6 @@ import TributarioAccessBusqueda from '@Componentes/TributarioAccessBusqueda';
 const mapStateToProps = state => {
   return {
     loggedUser: state.Usuario.loggedUser,
-    idTipoTributos: state.MainContent.idTipoTributos,
   };
 };
 

@@ -15,7 +15,7 @@ import { replace } from "connected-react-router";
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
 import { login, logout } from '@Redux/Actions/usuario';
-import { setTipoTributos } from '@Redux/Actions/mainContent';
+import { setTipoTributos, setTipoCedulones } from '@Redux/Actions/mainContent';
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -58,6 +58,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setTipoTributos: data => {
     dispatch(setTipoTributos(data));
+  },
+  setTipoCedulones: data => {
+    dispatch(setTipoCedulones(data));
   }
 });
 
@@ -216,15 +219,27 @@ class App extends React.Component {
   }
 
   setTipoTributos = (callback) => {
-    Rules_TributarioOnline.getTipoTributos()
+    const service1 = Rules_TributarioOnline.getTipoTributos()
       .then(datos => {
         this.props.setTipoTributos(datos.return);
-        callback();
       })
       .catch(error => {
         this.props.logout();
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
+
+    const service2 = Rules_TributarioOnline.getTipoCedulones()
+      .then(datos => {
+        this.props.setTipoCedulones(datos.return);
+      })
+      .catch(error => {
+        this.props.logout();
+        window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+      });
+
+    Promise.all([service1, service2]).then(() => {
+      callback();
+    });
   };
 
   onLogin = () => {

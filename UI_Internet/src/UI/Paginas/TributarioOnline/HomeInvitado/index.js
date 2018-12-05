@@ -25,7 +25,6 @@ import TributarioAccessInvitado from '@Componentes/TributarioAccessInvitado';
 const mapStateToProps = state => {
   return {
     loggedUser: state.Usuario.loggedUser,
-    idTipoTributos: state.MainContent.idTipoTributos,
   };
 };
 

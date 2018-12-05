@@ -22,9 +22,9 @@ export const mostrarMensaje = (texto) => {
 export const getIdTipoTributo = (tributo) => {
 	if (typeof tributo !== "string") return false;
 
-	var arrayIdTipoTributos = Store.getState().MainContent.idTipoTributos;
+	var tipoTributos = Store.getState().MainContent.tipoTributos.byValue;
 
-	const tipoTributoSel = _.filter(arrayIdTipoTributos,(o)=>{ return o.value.toLowerCase() == tributo.toLowerCase();})
+	const tipoTributoSel = tipoTributos[tributo];
 
 	if(tipoTributoSel[0])
 		return tipoTributoSel[0].key;

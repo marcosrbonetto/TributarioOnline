@@ -1,7 +1,37 @@
+import Store from "@Redux/Store/index";
+
 const getTipoTributos = (token, callback) => {
   return new Promise((resolve, reject) => {
 
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoTributo', {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+
+  });
+};
+
+const getTipoCedulones = (token, callback) => {
+  return new Promise((resolve, reject) => {
+
+    fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoCedulon', {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -84,6 +114,7 @@ const getTributosByCUIT = (token, identificador) => {
 };
 
 const getIdTributos = (token, callback) => {
+  debugger;
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos', {
       method: "GET",
@@ -257,35 +288,37 @@ const getReporteCedulon = (token, body) => {
     "opcionVencimiento": body.opcionVencimiento,
   };
 
+  var tipoCedulones = Store.getState().MainContent.tipoCedulones.byKey;
+
   let url = '/v1/Cedulon/Contribuciones';
   switch (body.tipoCedulon) {
-    case 'Contribuciones':
+    case tipoCedulones[1]:
       url = '/v1/Cedulon/Contribuciones';
       bodyParameter.periodos= body.periodos;
       break;
 
-    case 'Multas':
+    case tipoCedulones[2]:
       url = '/v1/Cedulon/Multas';
       bodyParameter.periodos= body.periodos;
       break;
 
-    case 'JuiciosContribuciones':
+    case tipoCedulones[3]:
       url = '/v1/Cedulon/JuiciosContribuciones';
       bodyParameter.juicio= body.subItem;
       break;
 
-    case 'JuiciosMultas':
+    case tipoCedulones[4]:
       url = '/v1/Cedulon/JuiciosMultas';
       bodyParameter.juicio= body.subItem;
       break;
 
-    case 'PlanesContribuciones':
+    case tipoCedulones[5]:
       url = '/v1/Cedulon/PlanesContribuciones';
       bodyParameter.plan= body.subItem;
       bodyParameter.periodos= body.periodos;
       break;
 
-    case 'PlanesMultas':
+    case tipoCedulones[6]:
       url = '/v1/Cedulon/PlanesMultas';
       bodyParameter.plan= body.subItem;
       bodyParameter.periodos= body.periodos;
@@ -612,6 +645,7 @@ const getImprecionDeclaracionJurada = (token, body) => {
 
 const services = {
   getTipoTributos: getTipoTributos,
+  getTipoCedulones: getTipoCedulones,
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
   getIdTributos: getIdTributos,

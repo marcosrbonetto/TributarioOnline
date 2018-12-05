@@ -21,7 +21,6 @@ import servicesRepresentantes from '@Rules/Rules_Representantes';
 const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
-        idTipoTributos: state.MainContent.idTipoTributos,
     };
 };
 
