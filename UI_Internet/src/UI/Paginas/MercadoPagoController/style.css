@@ -1,0 +1,42 @@
+.cargando {
+    opacity: 0; 
+    height: 100%;
+    animation: opacityOnAndOff 1s 1s infinite;
+    -moz-animation: opacityOnAndOff 1s 1s infinite;
+    -webkit-animation: opacityOnAndOff 1s 1s infinite;
+
+}
+
+@keyframes opacityOnAndOff {
+    0% {
+        opacity: 0;
+    }
+    50%{
+      opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-moz-keyframes opacityOnAndOff {
+    0% {
+        opacity: 0;
+    }
+    50%{
+      opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-webkit-keyframes opacityOnAndOff {
+    0% {
+        opacity: 0;
+    }
+    50%{
+      opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

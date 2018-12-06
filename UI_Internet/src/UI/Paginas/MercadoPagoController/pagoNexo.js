@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import _ from "lodash";
-
+import './style.css'
 import { mostrarAlerta } from "@Utils/functions";
 
 import { setPagosMercadoPago } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
@@ -42,13 +42,13 @@ class PagoNexo extends Component {
             finPagos: false,
             mensajeOK: '¡Pago realizado con éxito!',
             mensajeError: 'Ocurrió un error al guardar el pago',
-            mensajeCargando: 'Se está procesando el pago...',
+            mensajeCargando: 'Procesando su pago...',
             btnOK: 'Continuar'
         }
     }
 
     componentWillMount() {
-
+        
         /* NOTA: 'this.props.infoPagosMercadoPago' tiene los nexos a pagar a partir de ellos se lo actualizará para realizar los pagos */
         const token = this.props.loggedUser.token;
         const mercadoPago = getAllUrlParams(window.location.href).mercadoPago; //Ej.: true
@@ -203,10 +203,11 @@ class PagoNexo extends Component {
     render() {
         return <div style={{ width: '100%' }}>
             {this.state.cargando &&
-                <MiPanelMensaje
+                <div className="cargando">
+                    <MiPanelMensaje
                     cargando
                     mensaje={this.state.mensajeCargando}
-                />}
+                /></div>}
 
             {this.state.error &&
                 <MiPanelMensaje
