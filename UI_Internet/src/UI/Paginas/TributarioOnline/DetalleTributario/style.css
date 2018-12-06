@@ -11,3 +11,31 @@
   bottom: 0px;
   display: flex;
 }
+
+.navMenu  {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* width */
+.navMenu::-webkit-scrollbar {
+  width: 10px;
+  height: 12px;
+}
+
+/* Track */
+.navMenu::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 1px grey; 
+  border-radius: 10px;
+}
+
+/* Handle */
+.navMenu::-webkit-scrollbar-thumb {
+  background: #999 !important; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.navMenu::-webkit-scrollbar-thumb:hover {
+  background: #999 !important; 
+}

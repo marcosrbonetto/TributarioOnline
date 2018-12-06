@@ -71,7 +71,7 @@ class MiDrawer extends React.Component {
           </div>
         )}
 
-        <List component="nav">
+        <List component="nav" className="navMenu">
           {Menu.map((item, index) => {
             if (item.mostrarEnMenu == false || (modoInvitado && item.mostrarUserInvitado == false)) return null;
             
