@@ -14,7 +14,7 @@ const Menu = [
     titulo: "Tributos",
   },
   {
-    url: "/DetalleTributario/:tributo/:identificador/:tipoOperacion/:identificadorOperacion",
+    url: "/DetalleTributario/:tributo/:identificador/:seccionMenu/:subIdentificador",
     exact: true,
     mostrarEnMenu: false,
     component: DetalleTributo,

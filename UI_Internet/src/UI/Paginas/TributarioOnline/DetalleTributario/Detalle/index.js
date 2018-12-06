@@ -419,7 +419,11 @@ class DetalleTributo extends React.PureComponent {
                 }
 
                 let juicios = Object.assign({}, this.state.juicios);
-                juicios.menuItemSeleccionado = (data.lista > 0 && data.lista[0].idJuicio) || '';
+                const menuItem = (this.props.match.params.seccionMenu == 'juicios' ? 
+                    decodeURIComponent(this.props.match.params.subIdentificador) 
+                    : 
+                    ((data.lista > 0 && data.lista[0].idJuicio) || ''));
+                juicios.menuItemSeleccionado = menuItem;
 
                 var listaInfoJuiciosContribucion = _.each(data.lista, (x) => { return x.tipoCedulon = this.props.tipoCedulones.byKey[3]; });
                 //Rellenamos "infoSeccion" ya que se comparte con juiciosMulta
@@ -477,7 +481,11 @@ class DetalleTributo extends React.PureComponent {
                 }
 
                 let juicios = Object.assign({}, this.state.juicios);
-                juicios.menuItemSeleccionado = (data.lista > 0 && data.lista[0].idJuicio) || '';
+                const menuItem = (this.props.match.params.seccionMenu == 'juicios' ? 
+                    decodeURIComponent(this.props.match.params.subIdentificador) 
+                    : 
+                    ((data.lista > 0 && data.lista[0].idJuicio) || ''));
+                juicios.menuItemSeleccionado = menuItem;
 
                 var listaInfoJuiciosMulta = _.each(data.lista, (x) => { return x.tipoCedulon = this.props.tipoCedulones.byKey[4]; });
                 //Rellenamos "infoSeccion" ya que se comparte con juiciosContribucion
@@ -535,7 +543,12 @@ class DetalleTributo extends React.PureComponent {
                 }
 
                 let planesPago = Object.assign({}, this.state.planesPago);
-                planesPago.menuItemSeleccionado = (data.lista > 0 && data.lista[0].idPlan) || '';
+                const menuItem = (this.props.match.params.seccionMenu == 'planesPago' ? 
+                    decodeURIComponent(this.props.match.params.subIdentificador) 
+                    : 
+                    ((data.lista > 0 && data.lista[0].idJuicio) || ''));
+                planesPago.menuItemSeleccionado = menuItem;
+
                 planesPago.infoSeccion = data;
 
                 this.setState({ planesPago });
