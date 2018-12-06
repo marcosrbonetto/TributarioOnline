@@ -66,7 +66,7 @@ class DetalleTributo extends React.PureComponent {
 
         this.modoInvitado = this.props.loggedUser.token == window.Config.TOKEN_INVITADO;
         this.initialState = {
-            menuItemSeleccionado: localStorage.getItem('seccionDetalleTributo') || 'contribucion', //Menu seleccionado que muestra contenido MisPagos
+            menuItemSeleccionado: this.props.match.params.seccionMenu || 'contribucion', //Menu seleccionado que muestra contenido MisPagos
             mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
             infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
             informeCuenta: { //Información utilizada para mostrar informe de cuenta
@@ -203,8 +203,6 @@ class DetalleTributo extends React.PureComponent {
     }
 
     init = (token, identificador) => {
-        //Removemos la variable que determina en que sección se encuentra cuando se esta pagando por mercado pago
-        localStorage.removeItem('seccionDetalleTributo');
 
         this.props.mostrarCargando(true);
 
@@ -600,7 +598,7 @@ class DetalleTributo extends React.PureComponent {
             menuItemSeleccionado: value
         });
 
-        //Luego verificamos si la sección una lista de tributos (submenu)
+        //Luego verificamos si la sección es una lista de tributos (submenu)
         //De ser asi, obtenemos los datos del primer item de la lista (submenu)
         //De lo contrario se muestra los datos de la seccion seleccionada
         const datosItemSeleccionado = this.state[value].tieneSubMenu ? this.getDatosSubItem(this.state[value].infoSeccion) : this.state[value].infoSeccion;
@@ -1517,6 +1515,7 @@ class DetalleTributo extends React.PureComponent {
                                         {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                     </Typography>
                                     <MisPagos
+                                        pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
                                         tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                         check={true}
                                         info={infoContribucion || null}
@@ -1541,6 +1540,7 @@ class DetalleTributo extends React.PureComponent {
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagos
+                                            pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
                                             tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                             check={true}
                                             info={infoMultas || null}
@@ -1570,6 +1570,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={false}
                                                     info={juicio || null}
@@ -1596,6 +1597,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagos
+                                                    pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={true}
                                                     info={plan || null}

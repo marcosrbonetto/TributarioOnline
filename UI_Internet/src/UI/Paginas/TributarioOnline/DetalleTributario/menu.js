@@ -22,6 +22,14 @@ const Menu = [
     titulo: "Automotor",
   },
   {
+    url: "/DetalleTributario/:tributo/:identificador/:seccionMenu",
+    exact: true,
+    mostrarEnMenu: false,
+    component: DetalleTributo,
+    nombre: "Automotor",
+    titulo: "Automotor",
+  },
+  {
     url: "/DetalleTributario/:tributo/:identificador",
     exact: true,
     mostrarEnMenu: false,

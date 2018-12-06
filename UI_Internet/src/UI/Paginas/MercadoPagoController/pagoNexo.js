@@ -68,8 +68,6 @@ class PagoNexo extends Component {
 
         const idBtnMercadoPago = getAllUrlParams(window.location.href).idBtnMercadoPago;
         localStorage.setItem('idBtnMercadoPago', idBtnMercadoPago);
-        const seccionDetalleTributo = getAllUrlParams(window.location.href).seccionDetalleTributo;
-        localStorage.setItem('seccionDetalleTributo', seccionDetalleTributo);
 
         if (mercadoPago && this.props.infoPagosMercadoPago &&
             this.props.infoPagosMercadoPago.arrayNexos &&
@@ -110,7 +108,6 @@ class PagoNexo extends Component {
                         mostrarAlerta('Pago MercadoPago: ' + datos.error);
 
                         localStorage.removeItem('idBtnMercadoPago');
-                        localStorage.removeItem('seccionDetalleTributo');
                         console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
 
                         return false;
@@ -170,7 +167,6 @@ class PagoNexo extends Component {
                     });
 
                     localStorage.removeItem('idBtnMercadoPago');
-                    localStorage.removeItem('seccionDetalleTributo');
                     console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
         } else {
@@ -182,7 +178,6 @@ class PagoNexo extends Component {
             });
 
             localStorage.removeItem('idBtnMercadoPago');
-            localStorage.removeItem('seccionDetalleTributo');
             this.props.redireccionar("/");
         }
     }

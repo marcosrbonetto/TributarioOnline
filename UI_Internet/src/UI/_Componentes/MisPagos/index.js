@@ -148,6 +148,7 @@ class MisPagos extends React.PureComponent {
           />
 
           <MiMercadoPago
+            pagoRedirect={this.props.pagoRedirect}
             idBtnMercadoPago={this.props.menuItemSeleccionado+"1"}
             seccionDetalleTributo={this.props.menuItemSeleccionado}
             registrosSeleccionados={this.props.registrosSeleccionados}
@@ -205,6 +206,7 @@ class MisPagos extends React.PureComponent {
           />
 
           <MiMercadoPago
+            pagoRedirect={this.props.pagoRedirect}
             idBtnMercadoPago={this.props.menuItemSeleccionado+"2"}
             seccionDetalleTributo={this.props.menuItemSeleccionado}
             registrosSeleccionados={this.props.registrosSeleccionados}
