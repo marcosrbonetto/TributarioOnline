@@ -2,6 +2,7 @@ import DetalleTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Detal
 import SeleccionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Seleccion/index";
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
 import Representantes from "@UI/Paginas/Representantes/index";
+import BusquedaPor from "@UI/Paginas/TributarioOnline/BusquedaPor/index";
 
 const Menu = [
   {
@@ -11,6 +12,14 @@ const Menu = [
     component: SeleccionTributo,
     nombre: "Tributos",
     titulo: "Tributos",
+  },
+  {
+    url: "/DetalleTributario/:tributo/:identificador/:tipoOperacion/:identificadorOperacion",
+    exact: true,
+    mostrarEnMenu: false,
+    component: DetalleTributo,
+    nombre: "Automotor",
+    titulo: "Automotor",
   },
   {
     url: "/DetalleTributario/:tributo/:identificador",
@@ -99,6 +108,15 @@ const Menu = [
     component: TributarioOnline,
     nombre: "Planes De Vivienda",
     titulo: "Planes De Vivienda",
+  },
+  {
+    url: "/Inicio/BusquedaPor",
+    exact: true,
+    mostrarEnMenu: true,
+    component: BusquedaPor,
+    nombre: "Gestión por Identificador",
+    titulo: "Gestión por Identificador",
+    icono: "home"
   },
   {
     url: "/Inicio/Representantes/:tributo",

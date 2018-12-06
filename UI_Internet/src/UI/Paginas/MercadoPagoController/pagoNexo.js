@@ -85,7 +85,7 @@ class PagoNexo extends Component {
             if (result.length == 0) return false;
 
             let nexoActual = result[0];
-            debugger;         
+      
             servicesMercadoPago.pagoMercadoPago(token, {
                 nexo: nexoActual.nexo,
                 tipoTributo: parseInt(tipoTributo),
