@@ -17,6 +17,7 @@ const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
         infoPagosMercadoPago: state.DetalleTributario.infoPagosMercadoPago,
+        tipoCedulones: state.MainContent.tipoCedulones,
     };
 };
 
@@ -47,7 +48,7 @@ class PagoNexo extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         
         /* NOTA: 'this.props.infoPagosMercadoPago' tiene los nexos a pagar a partir de ellos se lo actualizará para realizar los pagos */
         const token = this.props.loggedUser.token;
@@ -60,9 +61,8 @@ class PagoNexo extends Component {
         const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
         const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
         
-        let tipoCedulon = getAllUrlParams(window.location.href).tipoCedulon; //Ej.: Contribuciones
-        //Lo siguiente se deberá mejorar, se hace por tema de apuro
-        tipoCedulon = (tipoCedulon == 'Contribuciones' && 1) || (tipoCedulon == 'Multas' && 2) || (tipoCedulon == 'JuiciosContribuciones' && 3) || (tipoCedulon == 'JuiciosMultas' && 3) || (tipoCedulon == 'PlanesContribuciones' && 4);
+        const tipoCedulon = getAllUrlParams(window.location.href).tipoCedulon; //Ej.: Contribuciones
+        const idTipoCedulon = this.props.tipoCedulones.byValue[tipoCedulon];
 
         const email = decodeURIComponent(getAllUrlParams(window.location.href).email); //Ej.: ruben@hotmail.com
 
@@ -85,7 +85,7 @@ class PagoNexo extends Component {
             if (result.length == 0) return false;
 
             let nexoActual = result[0];
-            
+            debugger;         
             servicesMercadoPago.pagoMercadoPago(token, {
                 nexo: nexoActual.nexo,
                 tipoTributo: parseInt(tipoTributo),
@@ -95,7 +95,7 @@ class PagoNexo extends Component {
                 emisor: emisor,
                 cuotas: parseInt(cuotas),
                 email: email,
-                tipoCedulon: tipoCedulon
+                tipoCedulon: idTipoCedulon
             })
                 .then((datos) => {
 
