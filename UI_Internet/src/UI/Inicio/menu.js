@@ -136,6 +136,15 @@ const Menu = [
     nombre: "Planes De Vivienda",
     titulo: "Planes De Vivienda",
   },
+  // {
+  //   url: "/Inicio/BusquedaPor",
+  //   exact: true,
+  //   mostrarEnMenu: true,
+  //   component: BusquedaPor,
+  //   nombre: "Gestión por Identificador",
+  //   titulo: "Gestión por Identificador",
+  //   icono: "home"
+  // },
   {
     url: "/Inicio/Representantes/:tributo",
     exact: false,

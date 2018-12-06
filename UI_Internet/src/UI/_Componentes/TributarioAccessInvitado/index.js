@@ -81,6 +81,12 @@ class TributarioAccessInvitado extends React.PureComponent {
             });
     }
 
+    handleEnter = (e) => {
+        if (e.key === 'Enter') {
+            this.handleEntrarTributo();
+        }
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -100,7 +106,7 @@ class TributarioAccessInvitado extends React.PureComponent {
                             ||
                             (!this.props.icono && <div className={classes.iconSvg}>{this.props.iconoSvg}</div>)
                         }
-                        
+
                         title={
                             <Typography className={classes.title} variant="title">{this.props.titulo}</Typography>
                         }
@@ -118,6 +124,8 @@ class TributarioAccessInvitado extends React.PureComponent {
                                     value={this.state.inputIdentificadorTributo}
                                     onChange={this.handleInputIdentificador}
                                     error={this.state.errorInputIdentificador}
+                                    onKeyUp={this.handleEnter}
+                                    autoComplete="on"
                                 />
                             </Grid>
                             <Grid item xs={3}>
