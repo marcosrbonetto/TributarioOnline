@@ -274,6 +274,8 @@ class DetalleTributo extends React.PureComponent {
 
         var arrayTributos = _.filter(datos, { tipoTributo: tipoTributo });
 
+        arrayTributos = _.sortBy(arrayTributos, function(o) { return o.titular.titular; });
+        
         IdsTributos = (arrayTributos && arrayTributos.map((tributo) => {
             return {
                 representado: tributo.titular.titular,

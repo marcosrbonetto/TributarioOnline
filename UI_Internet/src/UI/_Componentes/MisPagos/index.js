@@ -3,11 +3,14 @@ import _ from "lodash";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
+import classNames from "classnames";
 
 //Material UI Components
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import Button from "@material-ui/core/Button";
+import Tooltip from '@material-ui/core/Tooltip';
 
 //Custom Components
 import MiTabla from "@Componentes/MiTabla";
@@ -122,7 +125,7 @@ class MisPagos extends React.PureComponent {
       </Grid>
       <Grid container spacing={16}>
         {/* Totalizador de deudas seleccionadas y botones de pago */}
-        <Grid item sm={7}>
+        <Grid item sm={6}>
           <TextField
             id="standard-full-width"
             label="Total a pagar"
@@ -136,7 +139,19 @@ class MisPagos extends React.PureComponent {
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
         </Grid>
-        <Grid item sm={5} className={classes.buttonActionsContent}>
+        <Grid item sm={6} className={classes.buttonActionsContent}>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classNames(classes.buttonActions, classes.promotionButton)}
+          >Promoción</Button>
+
+          <div className={classes.infoContainer}>
+            <Tooltip classes={{ tooltip: classes.textTooltip }} title={<span>Las promociones estarán<br/>vigentes desde el año 2019</span>}>
+              <i className={classNames(classes.infoIcon,"material-icons")}>info</i>
+            </Tooltip>
+          </div>
+
           <MiCedulon
             registrosSeleccionados={this.props.registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
@@ -149,7 +164,7 @@ class MisPagos extends React.PureComponent {
 
           <MiMercadoPago
             pagoRedirect={this.props.pagoRedirect}
-            idBtnMercadoPago={this.props.menuItemSeleccionado+"1"}
+            idBtnMercadoPago={this.props.menuItemSeleccionado + "1"}
             seccionDetalleTributo={this.props.menuItemSeleccionado}
             registrosSeleccionados={this.props.registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
@@ -207,7 +222,7 @@ class MisPagos extends React.PureComponent {
 
           <MiMercadoPago
             pagoRedirect={this.props.pagoRedirect}
-            idBtnMercadoPago={this.props.menuItemSeleccionado+"2"}
+            idBtnMercadoPago={this.props.menuItemSeleccionado + "2"}
             seccionDetalleTributo={this.props.menuItemSeleccionado}
             registrosSeleccionados={this.props.registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
@@ -250,6 +265,32 @@ const styles = theme => ({
     textAlign: 'right',
     marginTop: '18px'
   },
+  buttonActions: {
+    display: 'inline-block',
+    minWidth: 'auto',
+    margin: '2px',
+    borderRadius: '20px',
+  },
+  promotionButton: {
+    background: '#ffa114',
+    '&:hover': {
+      background: '#ffa114'
+    }
+  },
+  infoContainer: {
+    display: 'inline-block',
+    width: '36px',
+    height: '45px',
+    textAlign: 'left',
+  },
+  infoIcon: {
+    color: '#0f8fea',
+    verticalAlign: 'middle',
+    cursor: 'help'
+  },
+  textTooltip: {
+    fontSize: 16,
+  }
 });
 
 export default withStyles(styles)(MisPagos);
