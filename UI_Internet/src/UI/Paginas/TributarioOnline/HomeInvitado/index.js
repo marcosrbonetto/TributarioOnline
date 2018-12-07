@@ -47,6 +47,14 @@ class HomeInvitado extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    const token = this.props.loggedUser.token;
+
+    if (!(token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO)) {
+      this.props.redireccionar("/Inicio/HomeUsuario");
+    }
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -58,7 +66,7 @@ class HomeInvitado extends React.PureComponent {
               <TributarioAccessInvitado
                 id="1"
                 tipo="Automotor"
-                titulo="Automotor"
+                titulo="Automotores"
                 identificador="Dominio"
                 icono="directions_car" />
             </Grid>
@@ -68,7 +76,7 @@ class HomeInvitado extends React.PureComponent {
               <TributarioAccessInvitado
                 id="2"
                 tipo="Inmueble"
-                titulo="Inmueble"
+                titulo="Inmuebles"
                 opciones={this.state.idsTributos} 
                 icono="home" />
             </Grid>
@@ -78,7 +86,7 @@ class HomeInvitado extends React.PureComponent {
               <TributarioAccessInvitado
                 id="3"
                 tipo="Comercio"
-                titulo="Comercio"
+                titulo="Comercios e Industria"
                 identificador="Identificador"
                 icono="store" />
             </Grid>
@@ -88,7 +96,7 @@ class HomeInvitado extends React.PureComponent {
               <TributarioAccessInvitado
                 id="4"
                 tipo="Cementerio"
-                titulo="Cementerio" 
+                titulo="Cementerios" 
                 identificador="Identificador"
                 iconoSvg={<svg viewBox="0 0 24 24">
                   <path d="M10.5,2H13.5V8H19V11H13.5V22H10.5V11H5V8H10.5V2Z" />

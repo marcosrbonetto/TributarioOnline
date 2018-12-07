@@ -112,7 +112,7 @@ class HomeUsuario extends React.PureComponent {
               <TributarioAccess
                 id="1"
                 tipo="Automotor"
-                titulo="Automotor"
+                titulo="Automotores"
                 identificador="Dominio"
                 icono="directions_car"
                 opciones={this.state.idsTributos}
@@ -125,7 +125,7 @@ class HomeUsuario extends React.PureComponent {
               <TributarioAccess
                 id="2"
                 tipo="Inmueble"
-                titulo="Inmueble"
+                titulo="Inmuebles"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 icono="home"
@@ -137,7 +137,7 @@ class HomeUsuario extends React.PureComponent {
               <TributarioAccess
                 id="3"
                 tipo="Comercio"
-                titulo="Comercio"
+                titulo="Comercios e Industria"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 icono="store"
@@ -149,7 +149,7 @@ class HomeUsuario extends React.PureComponent {
               <TributarioAccess
                 id="4"
                 tipo="Cementerio"
-                titulo="Cementerio"
+                titulo="Cementerios"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 iconoSvg={<svg viewBox="0 0 24 24">

@@ -16,9 +16,13 @@ import MiCard from "@Componentes/MiCard";
 
 import { mostrarCargando } from '@Redux/Actions/mainContent';
 
+import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
+
 const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
+        tipoTributos: state.MainContent.tipoTributos,
+
     };
 };
 
@@ -51,7 +55,53 @@ class TributarioAccessBusqueda extends React.PureComponent {
     }
 
     handleEntrarIdentificador = () => {
-        
+        const token = this.props.loggedUser.token;
+        const idTipoOperacion = this.props.idTipoOperacion;
+        const identificador = this.state.inputIdentificador;
+
+        if(identificador == '') {
+            this.setState({
+                errorInputIdentificador: true,
+                mensajeError: 'Debe ingresar un identificador'
+            });
+            return false;
+        } else if (!this.props.regexFormato.test(identificador)) {
+            this.setState({
+                errorInputIdentificador: true,
+                mensajeError: 'El formato es incorrecto'
+            });
+            return false;
+        }
+
+        this.props.mostrarCargando(true);
+        servicesTributarioOnline.getTributoByIdentificador(token, idTipoOperacion, identificador)
+            .then((datos) => {
+                this.props.mostrarCargando(false);
+
+                if (!datos.ok) { 
+                    this.setState({
+                        errorInputIdentificador: true,
+                        mensajeError: datos.error
+                    });
+                    return false; 
+                }
+
+                const data = datos.return;
+                const valueTipoTributo = this.props.tipoTributos.byKey[data.tipoTributo];
+
+                let seccionDetalle = 'juicios'; //Esto se deberá mejorar para no hardcodear los valores
+                switch(idTipoOperacion) {
+                    case 1:
+                        seccionDetalle = 'juicios';
+                    break;
+                    case 2:
+                        seccionDetalle = 'planesPago';
+                    break;
+                }
+                this.props.redireccionar('/DetalleTributario/'+valueTipoTributo+'/'+data.identificador+'/'+seccionDetalle+'/'+encodeURIComponent(identificador))
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
     }
 
     render() {
@@ -73,7 +123,7 @@ class TributarioAccessBusqueda extends React.PureComponent {
                             ||
                             (!this.props.icono && <div className={classes.iconSvg}>{this.props.iconoSvg}</div>)
                         }
-                        
+
                         title={
                             <Typography className={classes.title} variant="title">{this.props.titulo}</Typography>
                         }

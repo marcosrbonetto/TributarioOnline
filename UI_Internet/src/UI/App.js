@@ -15,7 +15,7 @@ import { replace } from "connected-react-router";
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
 import { login, logout } from '@Redux/Actions/usuario';
-import { setTipoTributos, setTipoCedulones } from '@Redux/Actions/mainContent';
+import { setTipoTributos, setTipoCedulones, setTipoOperaciones } from '@Redux/Actions/mainContent';
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -61,7 +61,10 @@ const mapDispatchToProps = dispatch => ({
   },
   setTipoCedulones: data => {
     dispatch(setTipoCedulones(data));
-  }
+  },
+  setTipoOperaciones: data => {
+    dispatch(setTipoOperaciones(data));
+  },
 });
 
 class App extends React.Component {
@@ -143,9 +146,9 @@ class App extends React.Component {
       if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
 
         //Borramos el localStorage por si hay algun pago inconcluso o algun dato del redux persistente
-        if(!token == window.Config.TOKEN_INVITADO) //Solo en caso que no exista un token
+        if (!token == window.Config.TOKEN_INVITADO) //Solo en caso que no exista un token
           localStorage.clear();
-          
+
         //Logueamos con el usuario Invitado
         this.props.login({
           datos: undefined,
@@ -237,7 +240,16 @@ class App extends React.Component {
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
 
-    Promise.all([service1, service2]).then(() => {
+    const service3 = Rules_TributarioOnline.getTipoOperaciones()
+      .then(datos => {
+        this.props.setTipoOperaciones(datos.return);
+      })
+      .catch(error => {
+        this.props.logout();
+        window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+      });
+
+    Promise.all([service1, service2, service3]).then(() => {
       callback();
     });
   };

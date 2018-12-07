@@ -16,7 +16,6 @@ const Menu = [
     component: TributarioOnline,
     nombre: "Tributos",
     titulo: "Tributos",
-    icono: "home"
   },
   {
     url: "/Inicio/HomeUsuario",
@@ -26,7 +25,6 @@ const Menu = [
     component: HomeUsuario,
     nombre: "Tributos",
     titulo: "Tributos",
-    icono: "home"
   },
   {
     url: "/Inicio/HomeInvitado/:tributo",
@@ -35,7 +33,6 @@ const Menu = [
     component: HomeInvitado,
     nombre: "Tributos",
     titulo: "Tributos",
-    icono: "home"
   },
   {
     url: "/Inicio/HomeInvitado",
@@ -44,7 +41,6 @@ const Menu = [
     component: HomeInvitado,
     nombre: "Tributos",
     titulo: "Tributos",
-    icono: "home"
   },
   {
     url: "/Inicio/Tributo/:tributo",
@@ -54,7 +50,6 @@ const Menu = [
     component: TributarioOnline,
     nombre: "Tributos",
     titulo: "Tributos",
-    icono: "home"
   },
   {
     url: "/DetalleTributario/:tributo",
@@ -69,16 +64,16 @@ const Menu = [
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Automotor",
-    titulo: "Automotor",
+    nombre: "Automotores",
+    titulo: "Automotores",
   },
   {
     url: "/DetalleTributario/Inmueble",
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Inmueble",
-    titulo: "Inmueble",
+    nombre: "Inmuebles",
+    titulo: "Inmuebles",
   },
   {
     url: "/DetalleTributario/Comercio",
@@ -93,8 +88,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Cementerio",
-    titulo: "Cementerio",
+    nombre: "Cementerios",
+    titulo: "Cementerios",
   },
   {
     url: "/DetalleTributario/FeriaMercado",
@@ -143,7 +138,6 @@ const Menu = [
     component: BusquedaPor,
     nombre: "Gestión por Identificador",
     titulo: "Gestión por Identificador",
-    icono: "home"
   },
   {
     url: "/Inicio/Representantes/:tributo",
