@@ -1416,14 +1416,14 @@ class DetalleTributo extends React.PureComponent {
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
 
         return (
-            <div className={classNames(classes.mainContainer, "contentDetalleTributo")}>
+            <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
                 <Grid container className={classes.root} spacing={16}>
                     <Grid item xs={8} className={"container"}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}
                             <Typography className={classes.title} variant="title">Identificador:
                             <Select
-                                    className={classes.selectIdentificador}
+                                    className={classNames(classes.selectIdentificador,"MenuItemIdentificadores")}
                                     inputProps={{
                                         name: 'identificador',
                                         id: 'identificador',

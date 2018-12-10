@@ -146,11 +146,7 @@ class MiToolbar extends React.Component {
             )}
 
           {/* Logo muni */}
-          {<img
-            onClick={this.handleClickLogo}
-            className={classes.logoMuni}
-            src="https://www.cordoba.gob.ar/wp-content/uploads/2016/07/logo-oscuro-01.png"
-          />}
+          {<div className="imgMuni"></div>}
 
 
           <Typography

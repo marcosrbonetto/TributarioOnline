@@ -11,3 +11,26 @@
   bottom: 0px;
   display: flex;
 }
+
+@media only screen and (max-width: 760px) {
+  .mainContainer {
+  width: calc(100% - 10px) !important;
+  margin: 0px !important;
+  }
+
+  .marginIcon {
+      margin: 0px !important;
+  }
+
+  .imgMuni {
+      width: 34px !important;
+  }
+
+  .iconosTributarios {
+      display: none !important;
+  }
+
+  .botonesTributarios {
+      top: 0px !important;
+  }
+} 

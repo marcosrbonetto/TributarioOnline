@@ -128,7 +128,7 @@ class MiNotificacion extends React.PureComponent {
       <div>
         {/* Icono de Notificaciones */}
         <IconButton
-          className={classes.marginIcon}
+          className={classNames(classes.marginIcon,'marginIcon')}
           color="inherit"
           onClick={this.handleClick}
         >

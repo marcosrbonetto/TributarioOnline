@@ -5,6 +5,7 @@ import _ from "lodash";
 import { withStyles } from "@material-ui/core/styles";
 import styles from './styles';
 import './styles.css';
+import classNames from "classnames";
 
 //Librerias
 import { withRouter } from "react-router-dom";
@@ -105,7 +106,7 @@ class HomeUsuario extends React.PureComponent {
     const { classes } = this.props;
 
     return (
-      <div className={classes.mainContainer}>
+      <div className={classNames(classes.mainContainer,'mainContainer')}>
         <Grid container className={classes.root} spacing={16}>
           {((!this.props.match.params.tributo || this.props.match.params.tributo == 'Automotor') &&
             <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >

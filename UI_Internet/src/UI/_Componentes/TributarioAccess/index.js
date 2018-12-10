@@ -88,15 +88,15 @@ class TributarioAccess extends React.PureComponent {
                     <CardHeader
                         className={classes.header}
                         avatar={
-                            (this.props.icono && <Icon className={classes.icon}>
+                            (this.props.icono && <Icon className={classNames(classes.icon, 'iconosTributarios')}>
                                 {this.props.icono}
                             </Icon>)
                             ||
-                            (!this.props.icono && <div className={classes.iconSvg}>{this.props.iconoSvg}</div>)
+                            (!this.props.icono && <div className={classNames(classes.iconSvg, 'iconosTributarios')}>{this.props.iconoSvg}</div>)
                         }
                         action={
                             <div>
-                                {(this.props.id == 3 && <div>
+                                {(this.props.id == 3 && <div className="botonesTributarios">
                                     <Button //Comercio
                                         variant="outlined"
                                         color="secondary"
@@ -117,7 +117,7 @@ class TributarioAccess extends React.PureComponent {
                                     <Button
                                         variant="outlined"
                                         color="secondary"
-                                        className={classNames(classes.buttonActions, classes.buttonAddTributo)}
+                                        className={classNames(classes.buttonActions, classes.buttonAddTributo, 'botonesTributarios')}
                                         tributo={this.props.tipo}
                                         onClick={this.handleOnClickAddTributo}>
                                         + Agregar
