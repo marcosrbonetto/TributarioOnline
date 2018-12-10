@@ -29,6 +29,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import MiCard from "@Componentes/MiCard";
 
+import servicesNotificaciones from '@Rules/Rules_Notificaciones';
+
 //REDUX
 import { connect } from "react-redux";
 
@@ -44,6 +46,15 @@ class MiNotificacion extends React.PureComponent {
         textoNotificacion: ''
       }
     };
+  }
+
+  componentDidMount() {
+    servicesNotificaciones.getMisNotificaciones(this.props.token)
+    .then((datos) => {
+      if (!datos.ok) { return false; }
+
+      
+    });
   }
 
   handleClick  = event => {

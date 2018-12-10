@@ -156,6 +156,19 @@ class App extends React.Component {
           token: window.Config.TOKEN_INVITADO
         });
 
+        let search = window.location.search;
+        if (search) {
+          let url = search.get("url") || "/";
+          if (url == "/") url = "/Inicio";
+          this.props.redireccionar(url);
+        } else {
+          console.log(this.props.location);
+
+          if (this.props.location.pathname == "/") {
+            this.props.redireccionar("/Inicio");
+          }
+        }
+
       } else { //Usuario Vecino Virtual
         this.setState({ validandoToken: true }, () => {
           Rules_Usuario.validarToken(token)

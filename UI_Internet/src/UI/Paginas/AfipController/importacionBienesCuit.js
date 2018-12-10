@@ -88,7 +88,10 @@ class importacionBienesCuit extends Component {
                     this.props.setTributosBienesPorCUIT(tributosCUIT);
 
                     const appUrlRedirect = this.getAppUrlRedirect();
-                    this.props.redireccionar(appUrlRedirect);
+                    this.props.redireccionar({
+                        pathname: appUrlRedirect,
+                        search: '?status=OK'
+                      });
                 }).catch((err) => {
                     this.props.mostrarCargando(false);
                     const appUrlRedirect = this.getAppUrlRedirect();
@@ -109,9 +112,7 @@ class importacionBienesCuit extends Component {
     getAppUrlRedirect = () => {
         let appUrlRedirect = new URLSearchParams(this.props.location.search).get('appUrlRedirect');
         appUrlRedirect = appUrlRedirect ? appUrlRedirect : '/';
-        if (appUrlRedirect.indexOf('?') == -1)
-            appUrlRedirect = appUrlRedirect + '?';
-        else
+        if (appUrlRedirect.indexOf('?') != -1)
             appUrlRedirect = appUrlRedirect + '&';
 
         return appUrlRedirect;

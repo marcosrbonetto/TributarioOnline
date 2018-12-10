@@ -144,7 +144,7 @@ class MisPagos extends React.PureComponent {
             variant="contained"
             color="secondary"
             className={classNames(classes.buttonActions, classes.promotionButton)}
-          >Promoción</Button>
+          >Beneficios</Button>
 
           <div className={classes.infoContainer}>
             <Tooltip classes={{ tooltip: classes.textTooltip }} title={<span>Las promociones estarán<br/>vigentes desde el año 2019</span>}>
