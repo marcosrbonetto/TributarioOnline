@@ -53,6 +53,23 @@ const styles = theme => ({
   mensajeError: {
     color: theme.color.error.main,
     textAlign: 'left'
+  },
+  navList: {
+    height: '108px',
+    overflowY: 'auto',
+    paddingTop: '0px',
+    paddingBottom: '0px',
+  },
+  itemLista: {
+    paddingTop: '6px',
+    paddingBottom: '6px',
+  },
+  iconColor: {
+    color: '#149257'
+  },
+  titleItem: {
+    paddingBottom: '0px',
+    fontSize: '1em'
   }
 });
 

@@ -111,6 +111,10 @@ class MiToolbar extends React.Component {
     window.location.href = window.Config.URL_LOGIN;
   };
 
+  handleBienesPorCUIT = () => {
+    window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionBienesCuitAFIP?appUrlRedirect=' + window.location.hash.substring(1));
+  };
+
   render() {
     let { classes, titulo } = this.props;
 
@@ -167,9 +171,16 @@ class MiToolbar extends React.Component {
               <Avatar alt="Menu del usuario" src={urlFotoPerfilMiniatura} className={classNames(classes.icono)} />
             </IconButton>}
 
+          {/* Importar Bienes por CUIT */}
+          {!this.state.datosUsuario && <div>
+            <Button onClick={this.handleBienesPorCUIT} className={classes.btnBienesPorCUIT} variant="outlined" color="secondary">
+              Importar Bienes por CUIT
+            </Button>
+          </div>}
+
           {/* Inicio sesion Vecino Virtual */}
           {!this.state.datosUsuario && <div>
-            <Button onClick={this.handleInicioSesion} color="secondary">
+            <Button onClick={this.handleInicioSesion} variant="contained" color="secondary">
               Iniciar Sesión
             </Button>
           </div>}
@@ -287,6 +298,9 @@ const styles = theme => {
     },
     contenedorCargandoVisible: {
       opacity: 1
+    },
+    btnBienesPorCUIT: {
+      marginRight: '10px'
     }
   };
 };

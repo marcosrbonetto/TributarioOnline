@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
@@ -14,6 +15,12 @@ import TextField from '@material-ui/core/TextField';
 import Icon from '@material-ui/core/Icon';
 import MiCard from "@Componentes/MiCard";
 
+import ListItemText from '@material-ui/core/ListItemText';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import PlayArrow from '@material-ui/icons/PlayArrow';
+
 import { mostrarCargando } from '@Redux/Actions/mainContent';
 import servicesRepresentantes from '@Rules/Rules_Representantes';
 
@@ -21,6 +28,7 @@ import servicesRepresentantes from '@Rules/Rules_Representantes';
 const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
+        tributosBienesPorCUIT: state.AfipController.tributosBienesPorCUIT,
     };
 };
 
@@ -38,6 +46,7 @@ class TributarioAccessInvitado extends React.PureComponent {
         super(props);
 
         this.state = {
+            opcionesTributos: _.filter(this.props.tributosBienesPorCUIT,{ tipoTributo: parseInt(this.props.id) }) || [],
             inputIdentificadorTributo: '',
             errorInputIdentificador: false,
             mensajeError: false
@@ -87,6 +96,10 @@ class TributarioAccessInvitado extends React.PureComponent {
         }
     }
 
+    eventRedirect = (identificador, tipoTributo) => {
+        this.props.eventRedirect(tipoTributo, identificador);
+    };
+
     render() {
         const { classes } = this.props;
 
@@ -112,7 +125,6 @@ class TributarioAccessInvitado extends React.PureComponent {
                         }
                     />
                     <div className={classes.sectionInputSpacingInvitado}>
-
                         <Grid container spacing={0} alignItems="flex-end">
                             <Grid item xs={9}>
 
@@ -141,8 +153,29 @@ class TributarioAccessInvitado extends React.PureComponent {
                                 <Typography className={classes.mensajeError} variant="subheading">{this.state.mensajeError}</Typography>
                             </div>}
                         </Grid>
-
                     </div>
+
+                    {this.state.opcionesTributos.length > 0 && <div className={classes.sectionInputSpacingInvitado}>
+                        <Grid container spacing={0}>
+                            <Grid item md={12}>
+                                <List component="nav" className={classes.navList}>
+                                    {Array.isArray(this.state.opcionesTributos) && this.state.opcionesTributos.map((data, index) => {
+                                        return <ListItem key={index} className={classes.itemLista} button onClick={() => this.eventRedirect(data.identificador, this.props.tipo)}>
+                                            <ListItemIcon>
+                                                <PlayArrow className={classes.iconColor} />
+                                            </ListItemIcon>
+                                            <ListItemText primary={<div>
+                                                <Typography className={classes.titleItem} variant="title">{data.identificador}</Typography>
+                                                <Typography className={classes.titleItem} >{data.representado}</Typography>
+                                            </div>
+                                            } />
+
+                                        </ListItem>
+                                    })}
+                                </List>
+                            </Grid>
+                        </Grid>
+                    </div>}
                 </MiCard>
             </div>
         );

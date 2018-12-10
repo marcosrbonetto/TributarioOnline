@@ -28,6 +28,7 @@ import Inicio from "./Inicio";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
 import importacionMasivaAFIP from "@UI/Paginas/AfipController/importacionMasiva";
 import importacionIndividualAFIP from "@UI/Paginas/AfipController/importacionIndividual";
+import importacionBienesCuitAFIP from "@UI/Paginas/AfipController/importacionBienesCuit";
 import pagoNexo from "@UI/Paginas/MercadoPagoController/pagoNexo";
 import Pagina404 from "@UI/_Pagina404";
 
@@ -146,7 +147,7 @@ class App extends React.Component {
       if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
 
         //Borramos el localStorage por si hay algun pago inconcluso o algun dato del redux persistente
-        if (!token == window.Config.TOKEN_INVITADO) //Solo en caso que no exista un token
+        if (!(token == window.Config.TOKEN_INVITADO)) //Solo en caso que no exista un token
           localStorage.clear();
 
         //Logueamos con el usuario Invitado
@@ -155,17 +156,6 @@ class App extends React.Component {
           token: window.Config.TOKEN_INVITADO
         });
 
-        if (search) {
-          let url = search.get("url") || "/";
-          if (url == "/") url = "/Inicio";
-          this.props.redireccionar(url);
-        } else {
-          console.log(this.props.location);
-
-          if (this.props.location.pathname == "/") {
-            this.props.redireccionar("/Inicio");
-          }
-        }
       } else { //Usuario Vecino Virtual
         this.setState({ validandoToken: true }, () => {
           Rules_Usuario.validarToken(token)
@@ -315,6 +305,7 @@ class App extends React.Component {
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
           <Route path={`${base}/importacionMasivaAFIP`} component={login ? importacionMasivaAFIP : null} />
           <Route path={`${base}/importacionIndividualAFIP`} component={login ? importacionIndividualAFIP : null} />
+          <Route path={`${base}/importacionBienesCuitAFIP`} component={login ? importacionBienesCuitAFIP : null} />
           <Route path={`${base}/PagoNexo`} component={login ? pagoNexo : null} />
           <Route component={login ? Pagina404 : null} />
         </AnimatedSwitch>

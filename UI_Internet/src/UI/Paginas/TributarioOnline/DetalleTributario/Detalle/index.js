@@ -48,6 +48,7 @@ const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
         tipoCedulones: state.MainContent.tipoCedulones,
+        tributosBienesPorCUIT: state.AfipController.tributosBienesPorCUIT,
     };
 };
 
@@ -226,8 +227,8 @@ class DetalleTributo extends React.PureComponent {
             .then((datos) => {
 
                 if (datos.ok) {
-                    //Cargamos el tributo seleccionado
-                    this.setIdentificadores([{
+
+                    let identificadorActual = {
                         "tipoTributo": idTipoTributo,
                         "identificador": identificador,
                         "titular": {
@@ -236,7 +237,15 @@ class DetalleTributo extends React.PureComponent {
                         },
                         "soyTitular": false,
                         "deuda": 0
-                    }]);
+                    };
+
+                    const tributosBienesPorCUIT = _.filter(this.props.tributosBienesPorCUIT, (o) => {
+                        return o.tipoTributo == parseInt(getIdTipoTributo(this.props.match.params.tributo)) && !(o.tipoTributo == idTipoTributo &&  o.identificador == identificador)
+                    });
+                    
+                    //Cargamos el tributo seleccionado
+                    this.setIdentificadores([identificadorActual, ...tributosBienesPorCUIT]);
+
                     this.iniciarServicios(token, identificador);
                 } else {
                     this.props.mostrarCargando(false);
