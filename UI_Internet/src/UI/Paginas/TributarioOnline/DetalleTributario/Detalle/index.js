@@ -218,7 +218,7 @@ class DetalleTributo extends React.PureComponent {
         const token = this.props.loggedUser.token;
         const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
-        
+debugger;  
         //Corroboramos que el identificador sea correcto y exista
         servicesRepresentantes.getTitularTributo(token, {
             "tipoTributo": idTipoTributo,
@@ -239,7 +239,9 @@ class DetalleTributo extends React.PureComponent {
                     });
                     
                     //Cargamos el tributo seleccionado
-                    this.setIdentificadores([identificadorActual, ...tributosBienesPorCUIT]);
+                    this.setState({
+                        identificadores: [identificadorActual, ...tributosBienesPorCUIT]
+                    });
 
                     this.iniciarServicios(token, identificador);
                 } else {
