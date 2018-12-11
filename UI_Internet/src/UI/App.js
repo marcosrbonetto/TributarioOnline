@@ -155,8 +155,7 @@ class App extends React.Component {
           datos: undefined,
           token: window.Config.TOKEN_INVITADO
         });
-
-        let search = window.location.search;
+        
         if (search) {
           let url = search.get("url") || "/";
           if (url == "/") url = "/Inicio";
