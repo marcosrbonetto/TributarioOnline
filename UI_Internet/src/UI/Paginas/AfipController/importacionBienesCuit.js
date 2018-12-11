@@ -71,14 +71,14 @@ class importacionBienesCuit extends Component {
                                 const result = _.filter(tributosCUIT, {
                                     tipoTributo: item.tipoTributo,
                                     identificador: item.identificador,
-                                    titular: item.titular.titular
+                                    representado: item.titular.titular
                                 });
 
                                 if (!result.length > 0) {
                                     tributosCUIT.push({
                                         tipoTributo: item.tipoTributo,
                                         identificador: item.identificador,
-                                        titular: item.titular.titular
+                                        representado: item.titular.titular
                                     });
                                 }
                             });

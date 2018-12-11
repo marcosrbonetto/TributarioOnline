@@ -231,14 +231,9 @@ class DetalleTributo extends React.PureComponent {
                     let identificadorActual = {
                         "tipoTributo": idTipoTributo,
                         "identificador": identificador,
-                        "titular": {
-                            "cuit": undefined,
-                            "titular": undefined
-                        },
-                        "soyTitular": false,
-                        "deuda": 0
+                        "representado": undefined
                     };
-
+                    //HACER QUE SI EL QUE SELECCIONO YA ESTA EN this.props.tributosBienesPorCUIT QUE NO LO PONGA COMO NUEVO
                     const tributosBienesPorCUIT = _.filter(this.props.tributosBienesPorCUIT, (o) => {
                         return o.tipoTributo == parseInt(getIdTipoTributo(this.props.match.params.tributo)) && !(o.tipoTributo == idTipoTributo &&  o.identificador == identificador)
                     });
