@@ -205,21 +205,23 @@ class MiNotificacion extends React.PureComponent {
           <MiCard padding={false} className={classes.styleMiCard}>
             <Typography className={classes.titleMiCard} variant="subheading"><b>Notificaciones</b></Typography>
 
-            {this.state.arrayCUITNotificaciones && this.state.arrayCUITNotificaciones.map((item) => {
+            {this.state.arrayCUITNotificaciones && this.state.arrayCUITNotificaciones.map((item, index) => {
               return <div>
                 <Badge badgeContent={item.cantNotif} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
-                  <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+                  <ExpansionPanel expanded={expanded === 'panel'+index} onChange={this.handleChange('panel'+index)}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                       <Typography variant="subheading">{cuil == item.cuit ? 'Mis Notificaciones' : item.cuit}</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails className={classes.detalleNotificacion}>
                       <MenuList className={classes.listNotificacion}>
-                        {item.arrayNotificaciones && item.arrayNotificaciones.map((notificacion) => {
+                        {item.arrayNotificaciones && item.arrayNotificaciones.map((notificacion, index) => {
 
                           return <MenuItem
+                            key={index}
                             idNotificacion={notificacion.id}
                             cuit={notificacion.cuil}
-                            onClick={this.handleClickItemLista}>
+                            onClick={this.handleClickItemLista}
+                            className={!notificacion.leida && classes.notificacionNoLeida}>
                             <ListItemIcon>
                               <InboxIcon />
                             </ListItemIcon>
@@ -300,6 +302,9 @@ const styles = theme => {
     },
     contentPopover: {
       borderRadius: '10px'
+    },
+    notificacionNoLeida: {
+      background: '#dedede'
     }
   };
 };
