@@ -1,6 +1,7 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import _ from "lodash";
 
 //Componentes
 import Typography from "@material-ui/core/Typography";
@@ -33,6 +34,23 @@ import servicesNotificaciones from '@Rules/Rules_Notificaciones';
 
 //REDUX
 import { connect } from "react-redux";
+import { mostrarCargando } from '@Redux/Actions/mainContent'
+import { replace } from "connected-react-router";
+
+const mapStateToProps = state => {
+  return {
+    loggedUser: state.Usuario.loggedUser,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  mostrarCargando: (cargar) => {
+    dispatch(mostrarCargando(cargar));
+  },
+  redireccionar: url => {
+    dispatch(replace(url));
+  },
+});
 
 class MiNotificacion extends React.PureComponent {
   constructor(props) {
@@ -44,20 +62,44 @@ class MiNotificacion extends React.PureComponent {
       notificacion: {
         tituloNotificacion: '',
         textoNotificacion: ''
-      }
+      },
+      arrayCUITNotificaciones: [],
+      cantTotalNotif: 0
     };
   }
 
   componentDidMount() {
-    servicesNotificaciones.getMisNotificaciones(this.props.token)
-    .then((datos) => {
-      if (!datos.ok) { return false; }
+    const token = this.props.loggedUser.token;
 
-      
-    });
+    servicesNotificaciones.getMisNotificaciones(token)
+      .then((datos) => {
+        if (!datos.ok) { return false; }
+
+        let arrayNotificaciones = [];
+        let cantTotalNotif = 0;
+        const arrayCUITs = _.map(_.uniqBy(datos.return, 'cuil'), 'cuil');
+
+        arrayCUITs.map((cuit) => {
+          const cantidad = _.filter(datos.return, { 'cuil': cuit, leida: false }).length;
+
+          arrayNotificaciones.push({
+            cuit: cuit,
+            arrayNotificaciones: _.filter(datos.return, { 'cuil': cuit }),
+            cantNotif: cantidad,
+          });
+
+          cantTotalNotif += cantidad;
+        });
+
+        this.setState({
+          arrayCUITNotificaciones: arrayNotificaciones,
+          cantTotalNotif: cantTotalNotif
+        })
+
+      });
   }
 
-  handleClick  = event => {
+  handleClick = event => {
     this.setState({
       anchorEl: event.currentTarget
     });
@@ -82,51 +124,46 @@ class MiNotificacion extends React.PureComponent {
   }
 
   handleClickItemLista = event => {
-    this.handleClick (event);
-    this.setState({
-      notificacion: {
-        tituloNotificacion: 'Notificacion 1',
-        textoNotificacion: 'Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac\
-              facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum\
-              at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus\
-              sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum\
-              nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur\
-              et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras\
-              mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
-              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
-              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
-              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
-              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis\
-              consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
-              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
-              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
-              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
-              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis\
-              consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
-              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
-              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
-              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
-              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis\
-              consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
-              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
-              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
-              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
-              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis\
-              consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in,\
-              egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.\
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis\
-              lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla\
-              sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.\
-              Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.'
-      }
-    });
-    this.handleToggleNotificacion();
+    this.handleClick(event);
+
+    const cuit = event.currentTarget.attributes.cuit ? event.currentTarget.attributes.cuit.value : null;
+    const idNotificacion = event.currentTarget.attributes.idNotificacion.value;
+
+    const datosCuit = _.find(this.state.arrayCUITNotificaciones, { 'cuit': cuit });
+    const notificacion = _.find(datosCuit.arrayNotificaciones, { 'id': parseInt(idNotificacion) });
+
+    const token = this.props.loggedUser.token;
+    servicesNotificaciones.setNotificacionLeida(token, parseInt(idNotificacion))
+      .then((datos) => {
+        if (!datos.ok) { this.mostrarNotificacion(notificacion); return false; }
+
+        notificacion.leida = true;
+        datosCuit.cantNotif--;
+
+        let cantTotalNotif = this.state.cantTotalNotif;
+        this.setState({
+          arrayCUITNotificaciones: this.state.arrayCUITNotificaciones,
+          cantTotalNotif: cantTotalNotif - 1,
+        });
+
+        this.mostrarNotificacion(notificacion);
+
+      });
   }
 
+  mostrarNotificacion = (notificacion) => {
+    if (notificacion.url) {
+      this.props.redireccionar(notificacion.url);
+    } else {
+      this.setState({
+        notificacion: {
+          tituloNotificacion: notificacion.titulo,
+          textoNotificacion: notificacion.contenido
+        }
+      });
+      this.handleToggleNotificacion();
+    }
+  }
 
 
   render() {
@@ -134,6 +171,8 @@ class MiNotificacion extends React.PureComponent {
 
     const { openNotificacion, anchorEl, expanded } = this.state;
     const openListado = Boolean(anchorEl);
+
+    const cuil = this.props.loggedUser.cuil;
 
     return (
       <div>
@@ -143,76 +182,57 @@ class MiNotificacion extends React.PureComponent {
           color="inherit"
           onClick={this.handleClick}
         >
-          <Badge badgeContent={4} color="secondary" >
+          <Badge badgeContent={this.state.cantTotalNotif} color="secondary" >
             <NotificationsIcon />
           </Badge>
         </IconButton>
 
-        <Popover 
-        open={openListado} 
-        anchorEl={anchorEl} 
-        onClose={this.handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        classes={{ 
-          paper: classes.contentPopover
-        }}>
-          <MiCard padding={false}>
+        <Popover
+          open={openListado}
+          anchorEl={anchorEl}
+          onClose={this.handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          classes={{
+            paper: classes.contentPopover
+          }}>
+          <MiCard padding={false} className={classes.styleMiCard}>
             <Typography className={classes.titleMiCard} variant="subheading"><b>Notificaciones</b></Typography>
 
-            <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
-              <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="subheading">Mis Notificaciones</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.detalleNotificacion}>
-                  <MenuList className={classes.listNotificacion}>
-                    <MenuItem onClick={this.handleClickItemLista}>
-                      <ListItemIcon>
-                        <InboxIcon />
-                      </ListItemIcon>
-                      <ListItemText inset primary="Notificacion 1" />
-                    </MenuItem>
-                    <MenuItem onClick={this.handleClickItemLista}>
-                      <ListItemIcon>
-                        <InboxIcon />
-                      </ListItemIcon>
-                      <ListItemText inset primary="Notificacion 2" />
-                    </MenuItem>
-                  </MenuList>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            </Badge>
-            <br />
-            <Badge badgeContent={2} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
-              <ExpansionPanel expanded={expanded === 'panel2'} onChange={this.handleChange('panel2')}>
-              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="subheading">20-35526616-9</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.detalleNotificacion}>
-                  <MenuList className={classes.listNotificacion}>
-                    <MenuItem onClick={this.handleClickItemLista}>
-                      <ListItemIcon>
-                        <InboxIcon />
-                      </ListItemIcon>
-                      <ListItemText inset primary="Notificacion 1" />
-                    </MenuItem>
-                    <MenuItem onClick={this.handleClickItemLista}>
-                      <ListItemIcon>
-                        <InboxIcon />
-                      </ListItemIcon>
-                      <ListItemText inset primary="Notificacion 2" />
-                    </MenuItem>
-                  </MenuList>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            </Badge>
+            {this.state.arrayCUITNotificaciones && this.state.arrayCUITNotificaciones.map((item) => {
+              return <div>
+                <Badge badgeContent={item.cantNotif} color="secondary" classes={{ badge: classes.badgeNotificaciones }}>
+                  <ExpansionPanel expanded={expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                      <Typography variant="subheading">{cuil == item.cuit ? 'Mis Notificaciones' : item.cuit}</Typography>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className={classes.detalleNotificacion}>
+                      <MenuList className={classes.listNotificacion}>
+                        {item.arrayNotificaciones && item.arrayNotificaciones.map((notificacion) => {
+
+                          return <MenuItem
+                            idNotificacion={notificacion.id}
+                            cuit={notificacion.cuil}
+                            onClick={this.handleClickItemLista}>
+                            <ListItemIcon>
+                              <InboxIcon />
+                            </ListItemIcon>
+                            <ListItemText inset primary={notificacion.titulo} />
+                          </MenuItem>;
+
+                        })}
+                      </MenuList>
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
+                </Badge> <br />
+              </div>
+            })}
 
           </MiCard>
         </Popover>
@@ -255,6 +275,9 @@ const styles = theme => {
       padding: '10px 0px 10px 20px',
       flexGrow: 1
     },
+    styleMiCard: {
+      borderRadius: '10px'
+    },
     titleMiCard: {
       background: '#149257',
       color: '#fff',
@@ -276,7 +299,7 @@ const styles = theme => {
       right: '46px',
     },
     contentPopover: {
-      borderRadius: '16px'
+      borderRadius: '10px'
     }
   };
 };
@@ -284,7 +307,7 @@ const styles = theme => {
 let componente = undefined;
 componente = withStyles(styles)(MiNotificacion);
 componente = connect(
-  null,
-  null
+  mapStateToProps,
+  mapDispatchToProps
 )(componente);
 export default componente;

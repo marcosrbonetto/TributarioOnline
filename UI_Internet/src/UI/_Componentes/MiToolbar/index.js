@@ -124,7 +124,6 @@ class MiToolbar extends React.Component {
       urlFotoPerfil = CordobaFilesUtils.getUrlFotoMediana(this.state.datosUsuario.identificadorFotoPersonal, this.state.datosUsuario.sexoMasculino);
     }
 
-    const token = this.props.loggedUser.token;
     titulo = getTextoTipoTributo(titulo);
 
     return (
@@ -164,7 +163,7 @@ class MiToolbar extends React.Component {
           </Typography>
 
           {/* Icono de Notificaciones */}
-          {this.state.datosUsuario && <MiNotificacion token={token} />}
+          {this.state.datosUsuario && <MiNotificacion />}
 
           {/* Icono del usuario */}
           {this.state.datosUsuario &&
