@@ -218,7 +218,7 @@ class DetalleTributo extends React.PureComponent {
         const token = this.props.loggedUser.token;
         const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
-debugger;  
+
         //Corroboramos que el identificador sea correcto y exista
         servicesRepresentantes.getTitularTributo(token, {
             "tipoTributo": idTipoTributo,
@@ -233,14 +233,19 @@ debugger;
                         "identificador": identificador,
                         "representado": undefined
                     };
-                    //HACER QUE SI EL QUE SELECCIONO YA ESTA EN this.props.tributosBienesPorCUIT QUE NO LO PONGA COMO NUEVO
+                    
                     const tributosBienesPorCUIT = _.filter(this.props.tributosBienesPorCUIT, (o) => {
-                        return o.tipoTributo == parseInt(getIdTipoTributo(this.props.match.params.tributo)) && !(o.tipoTributo == idTipoTributo &&  o.identificador == identificador)
+                        return o.tipoTributo == parseInt(getIdTipoTributo(this.props.match.params.tributo)) //&& !(o.tipoTributo == idTipoTributo &&  o.identificador == identificador)
                     });
                     
+                    //Si el seleccionado ya esta entre los importados no lo lo mete de nuevo en el array
+                    let arrayIdentificadores = [identificadorActual, ...tributosBienesPorCUIT];
+                    if(_.findIndex(tributosBienesPorCUIT,{ "tipoTributo": identificadorActual.tipoTributo, "identificador": identificadorActual.identificador }) != -1)
+                        arrayIdentificadores = tributosBienesPorCUIT;
+
                     //Cargamos el tributo seleccionado
                     this.setState({
-                        identificadores: [identificadorActual, ...tributosBienesPorCUIT]
+                        identificadores: arrayIdentificadores
                     });
 
                     this.iniciarServicios(token, identificador);
@@ -1810,6 +1815,26 @@ debugger;
                                                     <Grid item sm={8}>
                                                         <Typography variant="subheading" gutterBottom>
                                                             <b>$ {formatNumber(informeCuenta.info.administrativaAVencer)} </b>
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid container spacing={16}>
+                                                    <Grid item sm={4}>
+                                                        <Typography variant="subheading" gutterBottom>Fiscalizacion: </Typography>
+                                                    </Grid>
+                                                    <Grid item sm={8}>
+                                                        <Typography variant="subheading" gutterBottom>
+                                                            <b>$ {formatNumber(informeCuenta.info.fiscalizacion)} </b>
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid container spacing={16}>
+                                                    <Grid item sm={4}>
+                                                        <Typography variant="subheading" gutterBottom>Quiebra: </Typography>
+                                                    </Grid>
+                                                    <Grid item sm={8}>
+                                                        <Typography variant="subheading" gutterBottom>
+                                                            <b>$ {formatNumber(informeCuenta.info.quiebra)} </b>
                                                         </Typography>
                                                     </Grid>
                                                 </Grid>

@@ -58,15 +58,16 @@ class HomeInvitado extends React.PureComponent {
       this.props.redireccionar("/Inicio/HomeUsuario");
     }
 
-    //Corroboramos Resultado importacion AFIP
+    //Corroboramos Resultado importacion AFIP - BIENES por CUIT
     let afipProcess = new URLSearchParams(this.props.location.search).get('status');
     if (afipProcess) {
       if (afipProcess == 'OK')
         this.setState({
           dialogoOpenImportacionBienesCUIT: true
         });
-      else
-        mostrarAlerta(afipProcess);
+      else {
+        mostrarAlerta('Ocurrió un error al intentar importar los bienes, intente nuevamente.');
+      }
     }
   }
 
