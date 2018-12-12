@@ -89,7 +89,7 @@ class TributarioAccessInvitado extends React.PureComponent {
                 } else {
                     this.setState({
                         ...this.state,
-                        mensajeError: 'El identificador es incorrecto.',
+                        mensajeError: datos.error,
                         errorInputIdentificador: true
                     })
                 }
