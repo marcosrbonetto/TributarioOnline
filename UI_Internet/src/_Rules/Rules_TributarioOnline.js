@@ -56,6 +56,34 @@ const getTipoCedulones = (token, callback) => {
   });
 };
 
+const getEstadoPagos = (token, callback) => {
+  return new Promise((resolve, reject) => {
+
+    fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/EstadoPago', {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+
+  });
+};
+
 const getDatosUsuario = (token, callback) => {
   return new Promise((resolve, reject) => {
 
@@ -675,6 +703,7 @@ const getTributoByIdentificador = (token, tipoTributo, identificador) => {
 const services = {
   getTipoTributos: getTipoTributos,
   getTipoCedulones: getTipoCedulones,
+  getEstadoPagos: getEstadoPagos,
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
   getIdTributos: getIdTributos,

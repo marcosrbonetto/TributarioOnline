@@ -1,7 +1,8 @@
 import {
   MAIN_CONTENT_CARGANDO,
   SET_TIPO_TRIBUTOS,
-  SET_TIPO_CEDULONES
+  SET_TIPO_CEDULONES,
+  SET_ESTADO_PAGOS
 } from "@Redux/Constants/index";
 import _ from "lodash";
 
@@ -10,7 +11,8 @@ const initialState = {
   loggedUser: {},
   cantProcesosCargando: 0,
   tipoTributos: {},
-  tipoCedulones: {}
+  tipoCedulones: {},
+  estadoPagos: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -62,6 +64,21 @@ const reducer = (state = initialState, action) => {
 
       tipoCedulones['result'] = action.payload;
       return { ...state, tipoCedulones: tipoCedulones };
+    }
+    case SET_ESTADO_PAGOS: {
+      let estadoPagos = {};
+
+      estadoPagos['byKey'] = {};
+      estadoPagos['byValue'] = {};
+      estadoPagos['result'] = {};
+
+      _.each(action.payload, (item) => {
+        estadoPagos.byKey[item.key] = item.value;
+        estadoPagos.byValue[item.value] = item.key;
+      });
+
+      estadoPagos['result'] = action.payload;
+      return { ...state, estadoPagos: estadoPagos };
     }
     default:
       return state;

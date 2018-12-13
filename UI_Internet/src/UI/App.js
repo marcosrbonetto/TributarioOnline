@@ -15,7 +15,7 @@ import { replace } from "connected-react-router";
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
 import { login, logout } from '@Redux/Actions/usuario';
-import { setTipoTributos, setTipoCedulones } from '@Redux/Actions/mainContent';
+import { setTipoTributos, setTipoCedulones, setEstadoPagos } from '@Redux/Actions/mainContent';
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -62,6 +62,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setTipoCedulones: data => {
     dispatch(setTipoCedulones(data));
+  },
+  setEstadoPagos: data => {
+    dispatch(setEstadoPagos(data));
   }
 });
 
@@ -239,7 +242,16 @@ class App extends React.Component {
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
 
-    Promise.all([service1, service2]).then(() => {
+      const service3 = Rules_TributarioOnline.getEstadoPagos()
+      .then(datos => {
+        this.props.setEstadoPagos(datos.return);
+      })
+      .catch(error => {
+        this.props.logout();
+        window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+      });
+
+    Promise.all([service1, service2, service3]).then(() => {
       callback();
     });
   };
