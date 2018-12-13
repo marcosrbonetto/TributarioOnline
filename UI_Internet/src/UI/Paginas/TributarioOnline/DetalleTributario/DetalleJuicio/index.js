@@ -167,6 +167,7 @@ class DetalleJuicio extends React.PureComponent {
         } = this.state;
 
         const tributo = this.props.match.params.tributo;
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo")}>
@@ -180,7 +181,7 @@ class DetalleJuicio extends React.PureComponent {
                                 {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                             </Typography>
                             <MisPagos
-                                pagoRedirect={'/DetalleTributario/' + tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
+                                pagoRedirect={'/DetalleTributario/' + tributo + '/' + identificador + '/' + menuItemSeleccionado}
                                 tipoCedulon={this.state['juicio'].tipoCedulon}
                                 check={false}
                                 info={juicio || null}
@@ -188,7 +189,7 @@ class DetalleJuicio extends React.PureComponent {
                                 data={this.state['juicio']}
                                 registrosSeleccionados={this.state['juicio'].registrosSeleccionados}
                                 setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                identificadorActual={decodeURIComponent(this.props.match.params.identificador)}
+                                identificadorActual={identificador}
                                 tributoActual={tributo}
                             />
                         </MiCard>

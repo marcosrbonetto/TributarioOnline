@@ -1,8 +1,7 @@
 import {
   MAIN_CONTENT_CARGANDO,
   SET_TIPO_TRIBUTOS,
-  SET_TIPO_CEDULONES,
-  SET_TIPO_OPERACIONES
+  SET_TIPO_CEDULONES
 } from "@Redux/Constants/index";
 import _ from "lodash";
 
@@ -11,8 +10,7 @@ const initialState = {
   loggedUser: {},
   cantProcesosCargando: 0,
   tipoTributos: {},
-  tipoCedulones: {},
-  tipoOperaciones: {},
+  tipoCedulones: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -64,21 +62,6 @@ const reducer = (state = initialState, action) => {
 
       tipoCedulones['result'] = action.payload;
       return { ...state, tipoCedulones: tipoCedulones };
-    }
-    case SET_TIPO_OPERACIONES: {
-      let tipoOperaciones = {};
-
-      tipoOperaciones['byKey'] = {};
-      tipoOperaciones['byValue'] = {};
-      tipoOperaciones['result'] = {};
-
-      _.each(action.payload, (item) => {
-        tipoOperaciones.byKey[item.key] = item.value;
-        tipoOperaciones.byValue[item.value] = item.key;
-      });
-
-      tipoOperaciones['result'] = action.payload;
-      return { ...state, tipoOperaciones: tipoOperaciones };
     }
     default:
       return state;

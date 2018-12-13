@@ -56,7 +56,7 @@ class TributarioAccessBusqueda extends React.PureComponent {
 
     handleEntrarIdentificador = () => {
         const token = this.props.loggedUser.token;
-        const idTipoOperacion = this.props.idTipoOperacion;
+        const idTipoTributo = this.props.idTipoTributo;
         const identificador = this.state.inputIdentificador;
 
         if(identificador == '') {
@@ -74,7 +74,7 @@ class TributarioAccessBusqueda extends React.PureComponent {
         }
 
         this.props.mostrarCargando(true);
-        servicesTributarioOnline.getTributoByIdentificador(token, idTipoOperacion, identificador)
+        servicesTributarioOnline.getTributoByIdentificador(token, idTipoTributo, identificador)
             .then((datos) => {
                 this.props.mostrarCargando(false);
 
@@ -90,7 +90,7 @@ class TributarioAccessBusqueda extends React.PureComponent {
                 const valueTipoTributo = this.props.tipoTributos.byKey[data.tipoTributo];
 
                 let seccionDetalle = 'juicios'; //Esto se deberá mejorar para no hardcodear los valores
-                switch(idTipoOperacion) {
+                switch(idTipoTributo) {
                     case 1:
                         seccionDetalle = 'juicios';
                     break;

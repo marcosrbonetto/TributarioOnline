@@ -56,34 +56,6 @@ const getTipoCedulones = (token, callback) => {
   });
 };
 
-const getTipoOperaciones = (token, callback) => {
-  return new Promise((resolve, reject) => {
-
-    fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoOperacion', {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => {
-
-        if (res.status >= 400) {
-          throw new Error("Bad response from server");
-        }
-
-        return res.json();
-      })
-      .then(datos => {
-        resolve(datos);
-      })
-      .catch(err => {
-        reject("Error procesando la solicitud");
-      });
-
-  });
-};
-
 const getDatosUsuario = (token, callback) => {
   return new Promise((resolve, reject) => {
 
@@ -671,8 +643,8 @@ const getImprecionDeclaracionJurada = (token, body) => {
   });
 };
 
-const getTributoByIdentificador = (token, idTipoOperacion, identificador) => {
-  const queryString = '?tipoOperacion='+idTipoOperacion+'&identificador=' + identificador;
+const getTributoByIdentificador = (token, tipoTributo, identificador) => {
+  const queryString = '?tipoTributo='+tipoTributo+'&identificador=' + identificador;
 
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributo' + queryString, {
@@ -703,7 +675,6 @@ const getTributoByIdentificador = (token, idTipoOperacion, identificador) => {
 const services = {
   getTipoTributos: getTipoTributos,
   getTipoCedulones: getTipoCedulones,
-  getTipoOperaciones: getTipoOperaciones,
   getDatosUsuario: getDatosUsuario,
   getTributosByCUIT: getTributosByCUIT,
   getIdTributos: getIdTributos,

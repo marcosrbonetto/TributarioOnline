@@ -55,7 +55,7 @@ class BusquedaPor extends React.PureComponent {
         <Grid container className={classes.root} spacing={16} >
           <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >
             <TributarioAccessBusqueda
-              idTipoOperacion={1}
+              idTipoTributo={11}
               regexFormato={/(AUT)\d{5}\/\d{4}/}
               titulo="Por Juicio"
               identificador="N° de Juicio"
@@ -64,7 +64,7 @@ class BusquedaPor extends React.PureComponent {
           </Grid>
           <Grid item xs={4} classes={{ "grid-xs-4": "tributarioAccess" }} >
             <TributarioAccessBusqueda
-              idTipoOperacion={2}
+              idTipoTributo={12}
               regexFormato={/\d{8}/}
               titulo="Por Plan"
               identificador="N° de Plan"
