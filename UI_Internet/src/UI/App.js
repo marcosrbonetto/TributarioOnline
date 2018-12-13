@@ -15,7 +15,7 @@ import { replace } from "connected-react-router";
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
 import { login, logout } from '@Redux/Actions/usuario';
-import { setTipoTributos, setTipoCedulones, setEstadoPagos } from '@Redux/Actions/mainContent';
+import { setTipoTributos, setTipoCedulones, setEstadoPagos, setPublicKeyMercadoPago } from '@Redux/Actions/mainContent';
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -34,6 +34,7 @@ import Pagina404 from "@UI/_Pagina404";
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
 import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
+import Rules_MercadoPago from '@Rules/Rules_MercadoPago';
 import { mostrarAlerta, mostrarMensaje } from "@Utils/functions";
 import { callbackify } from "util";
 
@@ -65,7 +66,10 @@ const mapDispatchToProps = dispatch => ({
   },
   setEstadoPagos: data => {
     dispatch(setEstadoPagos(data));
-  }
+  },
+  setPublicKeyMercadoPago: data => {
+    dispatch(setPublicKeyMercadoPago(data));
+  },
 });
 
 class App extends React.Component {
@@ -251,7 +255,16 @@ class App extends React.Component {
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
 
-    Promise.all([service1, service2, service3]).then(() => {
+      const service4 = Rules_MercadoPago.getPublicKeyMercadoPago()
+      .then(datos => {
+        this.props.setPublicKeyMercadoPago(datos.return);
+      })
+      .catch(error => {
+        this.props.logout();
+        window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+      });
+
+    Promise.all([service1, service2, service3, service4]).then(() => {
       callback();
     });
   };

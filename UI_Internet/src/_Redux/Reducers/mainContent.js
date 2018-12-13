@@ -2,7 +2,8 @@ import {
   MAIN_CONTENT_CARGANDO,
   SET_TIPO_TRIBUTOS,
   SET_TIPO_CEDULONES,
-  SET_ESTADO_PAGOS
+  SET_ESTADO_PAGOS,
+  SET_PUBLIC_KEY_MERCADO_PAGO
 } from "@Redux/Constants/index";
 import _ from "lodash";
 
@@ -12,7 +13,8 @@ const initialState = {
   cantProcesosCargando: 0,
   tipoTributos: {},
   tipoCedulones: {},
-  estadoPagos: {}
+  estadoPagos: {},
+  publicKeyMercadoPago: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -79,6 +81,9 @@ const reducer = (state = initialState, action) => {
 
       estadoPagos['result'] = action.payload;
       return { ...state, estadoPagos: estadoPagos };
+    }
+    case SET_PUBLIC_KEY_MERCADO_PAGO: {
+      return { ...state, publicKeyMercadoPago: action.payload };
     }
     default:
       return state;

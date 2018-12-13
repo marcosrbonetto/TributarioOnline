@@ -30,6 +30,7 @@ const mapStateToProps = state => {
   return {
     loggedUser: state.Usuario.loggedUser,
     infoPagosMercadoPago: state.DetalleTributario.infoPagosMercadoPago,
+    publicKeyMercadoPago: state.MainContent.publicKeyMercadoPago,
   };
 };
 
@@ -179,7 +180,7 @@ class MiMercadoPago extends React.PureComponent {
     const totalPeriodo = element.attributes.totalPeriodo.value;
 
     script.src = "https://www.mercadopago.com.ar/integrations/v1/web-tokenize-checkout.js";
-    script.setAttribute("data-public-key", "APP_USR-7e5933f0-38bd-402c-be1e-ab7e845fe55d");
+    script.setAttribute("data-public-key", this.props.publicKeyMercadoPago);
     script.setAttribute("data-transaction-amount", stringToFloat(totalPeriodo, 2));
     script.setAttribute("data-button-label", "Pagar Online");
 
