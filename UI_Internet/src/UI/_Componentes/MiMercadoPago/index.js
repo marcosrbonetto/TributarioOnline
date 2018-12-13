@@ -110,7 +110,7 @@ class MiMercadoPago extends React.PureComponent {
     const token = this.props.loggedUser.token;
     const opcion = "0"; // Hoy
 
-    if (registros.length > 0 || this.props.esJuicio) {
+    if (registros.length > 0 || this.props.esJuicio || this.props.allSelected) {
       services.getReporteCedulon(token,
         {
           "tipoTributo": parseInt(this.props.tipoTributo),
@@ -118,7 +118,7 @@ class MiMercadoPago extends React.PureComponent {
           "opcionVencimiento": parseInt(opcion),
           "periodos": registros,
           "tipoCedulon": this.props.tipoCedulon,
-          "subItem": this.props.subItemSeleccionado
+          "subItem": this.props.subItemSeleccionado || this.props.subItem
         })
         .then((datos) => {
 

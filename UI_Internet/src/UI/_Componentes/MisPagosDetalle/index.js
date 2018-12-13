@@ -21,7 +21,7 @@ import MiMercadoPago from "@Componentes/MiMercadoPago";
 import { stringToFloat, formatNumber, getIdTipoTributo } from "@Utils/functions"
 
 
-class MisPagos extends React.PureComponent {
+class MisPagosDetalle extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -42,46 +42,45 @@ class MisPagos extends React.PureComponent {
         registrosSeleccionados.push(item['concepto']);
     });
 
-    this.props.setRegistrosSeleccionados && 
-    this.props.setRegistrosSeleccionados(registrosSeleccionados, this.props);
-
+    this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
     this.setState({ importeAPagar: formatNumber(importeTotal) });
   };
 
   render() {
     const classes = this.props.classes;
 
-    const { 
-      deudaTotales, 
-      rowList,
-      registrosSeleccionados,
-      tablaConfig,
-      cedulonConfig,
-      mercadoPagoConfig,
-      labelsTotales
-    } = this.props;
+    //deudaAdministrativa ó deudaJuicio contienen los mismos valores pero vienen en diferentes atributos
+    //Puede venir una u otra, no las dos juntas
+    const deudaTotales = this.props.info ? this.props.info.deudaAdministrativa || this.props.info.deudaJuicio : null;
 
     let valoresDeuda = {
-      valor1: deudaTotales && deudaTotales.total || 0,
-      valor2: (deudaTotales && (deudaTotales.vencida || deudaTotales.capital)) || 0,
-      valor3: (deudaTotales && (deudaTotales.aVencer || deudaTotales.gastos)) || 0,
+      valor1: deudaTotales && deudaTotales.total ? deudaTotales.total : 0,
+      valor2: (deudaTotales && (deudaTotales.vencida ? deudaTotales.vencida : deudaTotales.capital)) || 0,
+      valor3: (deudaTotales && (deudaTotales.aVencer ? deudaTotales.aVencer : deudaTotales.gastos)) || 0,
     }
 
     //Datos para generar la grilla
+    const rowList = this.props.info ? this.props.info.rowList : [];
     const rowsPerPage = (rowList.length <= 5 && 5) || (rowList.length > 5 && rowList.length <= 10 && 10) || (rowList.length > 10 && 25);
-    const columnas = tablaConfig.columnas || null;
-    const order = tablaConfig.order || 'asc';
-    const orderBy = tablaConfig.orderBy || 'concepto';
-    const check = tablaConfig.check;
+    const columnas = this.props.data.labels.columnas || null;
+    const order = this.props.data.order || 'asc';
+    const orderBy = this.props.data.orderBy || 'concepto';
+    const check = this.props.check;
+
+    //Tributo y tipo de tributo para generar el cedulon
+    const tributo = this.props.tributoActual;
+    let tipoTributo = getIdTipoTributo(tributo);
 
     //Determinamos si el Cedulon tiene que estar deshabilitado
     let disabledCedulon = !(stringToFloat(this.state.importeAPagar) > 0);
 
     //En caso de ser juicio cambia cedulon siempre habilitado y 
     //el monto a pagar se setea el total (ya q la grilla no tiene checks)
-    let auxImporteAPagar = 0;
-    if (!check) {
+    const esJuicio = this.props.menuItemSeleccionado == 'juicios';
+    let auxImporteAPagar;
+    if (esJuicio) {
       disabledCedulon = false;
+      auxImporteAPagar = 0;
       rowList.map((item) => {
         auxImporteAPagar += stringToFloat(item['importe'], 2);
       });
@@ -92,7 +91,7 @@ class MisPagos extends React.PureComponent {
     return <div>
       <Grid container className={classes.containerDeudaAdm}>
         {/* Totalizadores */}
-        <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda {labelsTotales.totalesDeuda}</Typography>
+        <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda {this.props.data.labels.totalesDeuda}</Typography>
         <Grid item sm={4}>
           <Grid container>
             <Grid item sm={6}>
@@ -106,7 +105,7 @@ class MisPagos extends React.PureComponent {
         <Grid item sm={4}>
           <Grid container>
             <Grid item sm={6}>
-              <Typography variant="subheading" gutterBottom>{labelsTotales.vencida}: </Typography>
+              <Typography variant="subheading" gutterBottom>{this.props.data.labels.vencida}: </Typography>
             </Grid>
             <Grid item sm={6}>
               <Typography variant="subheading" gutterBottom><b>$ {formatNumber(valoresDeuda.valor2)}</b></Typography>
@@ -116,7 +115,7 @@ class MisPagos extends React.PureComponent {
         <Grid item sm={4}>
           <Grid container>
             <Grid item sm={6}>
-              <Typography variant="subheading" gutterBottom>{labelsTotales.aVencer}: </Typography>
+              <Typography variant="subheading" gutterBottom>{this.props.data.labels.aVencer}: </Typography>
             </Grid>
             <Grid item sm={6}>
               <Typography variant="subheading" gutterBottom><b>$ {formatNumber(valoresDeuda.valor3)}</b></Typography>
@@ -154,26 +153,26 @@ class MisPagos extends React.PureComponent {
           </div>
 
           <MiCedulon
-            registrosSeleccionados={registrosSeleccionados}
-            subItem={cedulonConfig.subItem}
-            tipoCedulon={cedulonConfig.tipoCedulon}
-            tipoTributo={cedulonConfig.idTipoTributo}
-            identificador={cedulonConfig.identificador}
+            registrosSeleccionados={this.props.registrosSeleccionados}
+            subItemSeleccionado={this.props.info.identificador}
+            tipoCedulon={this.props.tipoCedulon}
+            tipoTributo={tipoTributo}
+            identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
-            allSelected={!check}
+            esJuicio={esJuicio}
           />
 
           <MiMercadoPago
-            pagoRedirect={mercadoPagoConfig.pagoRedirect}
-            idBtnMercadoPago={mercadoPagoConfig.idBtnMercadoPago + "1"}
-            seccionDetalleTributo={mercadoPagoConfig.seccionDetalleTributo}
-            registrosSeleccionados={registrosSeleccionados}
-            subItem={cedulonConfig.subItem}
-            tipoCedulon={cedulonConfig.tipoCedulon}
-            tipoTributo={cedulonConfig.idTipoTributo}
-            identificador={cedulonConfig.identificador}
+            pagoRedirect={this.props.pagoRedirect}
+            idBtnMercadoPago={this.props.menuItemSeleccionado + "1"}
+            seccionDetalleTributo={this.props.menuItemSeleccionado}
+            registrosSeleccionados={this.props.registrosSeleccionados}
+            subItemSeleccionado={this.props.info.identificador}
+            tipoCedulon={this.props.tipoCedulon}
+            tipoTributo={tipoTributo}
+            identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
-            allSelected={!check}
+            esJuicio={esJuicio}
           />
         </Grid>
       </Grid>
@@ -212,26 +211,26 @@ class MisPagos extends React.PureComponent {
         </Grid>
         <Grid item sm={5} className={classes.buttonActionsContent}>
           <MiCedulon
-            registrosSeleccionados={registrosSeleccionados}
-            subItem={cedulonConfig.subItem}
-            tipoCedulon={cedulonConfig.tipoCedulon}
-            tipoTributo={cedulonConfig.idTipoTributo}
-            identificador={cedulonConfig.identificador}
+            registrosSeleccionados={this.props.registrosSeleccionados}
+            subItemSeleccionado={this.props.info.identificador}
+            tipoCedulon={this.props.tipoCedulon}
+            tipoTributo={tipoTributo}
+            identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
-            allSelected={!check}
+            esJuicio={esJuicio}
           />
 
           <MiMercadoPago
-            pagoRedirect={mercadoPagoConfig.pagoRedirect}
-            idBtnMercadoPago={mercadoPagoConfig.idBtnMercadoPago + "2"}
-            seccionDetalleTributo={mercadoPagoConfig.seccionDetalleTributo}
-            registrosSeleccionados={registrosSeleccionados}
-            subItem={cedulonConfig.subItem}
-            tipoCedulon={cedulonConfig.tipoCedulon}
-            tipoTributo={cedulonConfig.idTipoTributo}
-            identificador={cedulonConfig.identificador}
+            pagoRedirect={this.props.pagoRedirect}
+            idBtnMercadoPago={this.props.menuItemSeleccionado + "2"}
+            seccionDetalleTributo={this.props.menuItemSeleccionado}
+            registrosSeleccionados={this.props.registrosSeleccionados}
+            subItemSeleccionado={this.props.info.identificador}
+            tipoCedulon={this.props.tipoCedulon}
+            tipoTributo={tipoTributo}
+            identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
-            allSelected={!check}
+            esJuicio={esJuicio}
           />
         </Grid>
       </Grid>
@@ -294,4 +293,4 @@ const styles = theme => ({
   }
 });
 
-export default withStyles(styles)(MisPagos);
+export default withStyles(styles)(MisPagosDetalle);

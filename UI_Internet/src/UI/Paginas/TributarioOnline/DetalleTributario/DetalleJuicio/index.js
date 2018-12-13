@@ -52,10 +52,7 @@ class DetalleJuicio extends React.PureComponent {
 
         this.initialState = {
             menuItemSeleccionado: 'juicios',
-            infoDatosCuenta: '', 
             juicios: {
-                infoSeccion: undefined,
-                tieneSubMenu: true,
                 tipoCedulon: this.props.tipoCedulones.byKey[3],
                 order: 'asc',
                 orderBy: 'concepto',
@@ -66,7 +63,6 @@ class DetalleJuicio extends React.PureComponent {
                     aVencer: 'Gastos',
                     columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
                 },
-                menuItemSeleccionado: '',
                 registrosSeleccionados: [],
             }
         };
@@ -181,7 +177,7 @@ class DetalleJuicio extends React.PureComponent {
                                 {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                             </Typography>
                             <MisPagos
-                                pagoRedirect={'/DetalleTributario/' + tributo + '/' + identificador + '/' + menuItemSeleccionado}
+                                pagoRedirect={'/DetalleJuicio/' + tributo + '/' + identificador}
                                 tipoCedulon={this.state['juicio'].tipoCedulon}
                                 check={false}
                                 info={juicio || null}

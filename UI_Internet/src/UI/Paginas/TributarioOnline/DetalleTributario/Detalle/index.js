@@ -34,7 +34,7 @@ import MiCard from "@Componentes/MiCard";
 import MiTabla from "@Componentes/MiTabla";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiControledDialog from "@Componentes/MiControledDialog"
-import MisPagos from "@Componentes/MisPagos";
+import MisPagosDetalle from "@Componentes/MisPagosDetalle";
 import MiTooltip from "@Componentes/MiTooltip";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
@@ -67,7 +67,7 @@ class DetalleTributo extends React.PureComponent {
 
         this.modoInvitado = this.props.loggedUser.token == window.Config.TOKEN_INVITADO;
         this.initialState = {
-            menuItemSeleccionado: this.props.match.params.seccionMenu || 'contribucion', //Menu seleccionado que muestra contenido MisPagos
+            menuItemSeleccionado: this.props.match.params.seccionMenu || 'contribucion', //Menu seleccionado que muestra contenido MisPagosDetalle
             mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
             infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
             informeCuenta: { //Información utilizada para mostrar informe de cuenta
@@ -1540,7 +1540,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography className={classes.infoTexto}>
                                         {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                     </Typography>
-                                    <MisPagos
+                                    <MisPagosDetalle
                                         pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
                                         tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                         check={true}
@@ -1565,7 +1565,7 @@ class DetalleTributo extends React.PureComponent {
                                         <Typography className={classes.infoTexto}>
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
-                                        <MisPagos
+                                        <MisPagosDetalle
                                             pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
                                             tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                             check={true}
@@ -1595,7 +1595,7 @@ class DetalleTributo extends React.PureComponent {
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
-                                                <MisPagos
+                                                <MisPagosDetalle
                                                     pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={false}
@@ -1622,7 +1622,7 @@ class DetalleTributo extends React.PureComponent {
                                                 <Typography className={classes.infoTexto}>
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
-                                                <MisPagos
+                                                <MisPagosDetalle
                                                     pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={true}

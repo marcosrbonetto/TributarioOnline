@@ -143,7 +143,7 @@ class PagoNexo extends Component {
                             error: false,
                             exito: true,
                             finPagos: true,
-                            mensajeOK: <div>{'¡Pago realizado con éxito!'} <br/> {'El comprobante le será remitido a la casilla de correo ' + email}</div>,
+                            mensajeOK: <div>{datos.return.descripcion} <br/> {'El comprobante le será remitido a la casilla de correo ' + email}</div>,
                             btnOK: 'Finalizar'
                         });
                         return false;
