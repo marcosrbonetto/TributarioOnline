@@ -30,7 +30,7 @@ import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 //Funciones Útiles
 import { formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
-const datosJson = { "return": { "identificador": "AUT02032/2016", "titular": { "cuit": "20164095054", "titular": "DE UGARTE MANUEL ELOY" }, "datosCuenta": ["IUT DE ORIGEN:         CHT211  -3", "", "CARATULA: DE UGARTE MANUEL ELOY", "PROCURADOR: 020093-6 CPTA.: 342  CISNEROS NATALIA LORENA", "", "", "", "", "", ""], "deudaJuicio": { "total": 4290.59, "capital": 2515.0, "gastos": 1775.59 }, "periodos": [{ "concepto": "2012/004", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 296.3, "base": 137.5, "recargo": 158.8, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2012/005", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 292.0, "base": 137.5, "recargo": 154.5, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2012/006", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 287.9, "base": 137.5, "recargo": 150.4, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/001", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 283.3, "base": 137.5, "recargo": 145.8, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/002", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 279.5, "base": 137.5, "recargo": 142.0, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/003", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 275.4, "base": 137.5, "recargo": 137.9, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/004", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 271.2, "base": 137.5, "recargo": 133.7, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/005", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 267.0, "base": 137.5, "recargo": 129.5, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/006", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 262.4, "base": 137.5, "recargo": 124.9, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "HONORAR.", "fecha": "2018-12-13T00:00:00", "referencia": "HONORARIOS", "importe": { "total": 820.3, "base": 820.3, "recargo": 0.0, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "GASTOS", "fecha": "2018-12-13T00:00:00", "referencia": "GASTOS", "importe": { "total": 955.29, "base": 955.29, "recargo": 0.0, "deduccion": 0.0, "citacion": 0.0 } }] }, "error": null, "ok": true };
+const datosJson = {"return":{"identificador":"16788805","titular":{"cuit":"NO INFORMA","titular":"PREVEER S.A.         (*)"},"datosCuenta":["IUT DE ORIGEN: 121305601700000 /0 01   INM39593/2014  < PLAN ACTIVO  >","PROCURACION FISCAL P.P.C.    ","ITEM : 1.01.01.01              I N M U E B L E S","TOTAL PLAN :      4.855,80 TOT.A FIN.:      4.667,00 C.CTAS : 006 %ENT.: 00","INT.: 01,50 TASA: 27,00   ANT.:     870,10 CTA.:     878,10 FEC.OT.: 09/11/2015","VIENE DE   JUICIO N* INM39593/2014 CARP.: 096 F.PROC.: **< NO >**","OBSERVACIONES:                                         PLAN CON CBU NO"," << TELEFONO  >>  0351499999     ***","                      ","IUT DE ORIGEN: "],"deudaAdministrativa":{"total":4476.5,"vencida":4476.5,"aVencer":0.0,"ultimoPago":"23/11/2018"},"periodos":[{"concepto":"004/006","fecha":"2016-02-15T00:00:00","referencia":"","importe":{"total":1784.3,"base":878.1,"recargo":906.2,"deduccion":0.0,"citacion":0.0}},{"concepto":"005/006","fecha":"2016-03-15T00:00:00","referencia":"","importe":{"total":1758.8,"base":878.1,"recargo":880.7,"deduccion":0.0,"citacion":0.0}},{"concepto":"006/006","fecha":"2016-04-15T00:00:00","referencia":"","importe":{"total":933.4,"base":473.3,"recargo":460.1,"deduccion":0.0,"citacion":0.0}}]},"error":null,"ok":true};
 
 const mapStateToProps = state => {
     return {
@@ -49,12 +49,12 @@ const mapDispatchToProps = dispatch => ({
     },
 });
 
-class DetalleJuicio extends React.PureComponent {
+class DetallePlan extends React.PureComponent {
     constructor(props) {
         super(props);
 
         this.token = this.props.loggedUser.token;
-        this.tributo = 'Juicio';
+        this.tributo = 'Plan';
         this.idTipoTributo = getIdTipoTributo(this.tributo);
         this.identificador = decodeURIComponent(this.props.match.params.identificador);
         this.tributoPadre = {
@@ -78,7 +78,7 @@ class DetalleJuicio extends React.PureComponent {
     init = (token, identificador) => {
         this.props.mostrarCargando(true);
 
-        const deudaTotales = datosJson.return.deudaJuicio;
+        const deudaTotales = datosJson.return.deudaAdministrativa;
         const rowList = datosJson.return.periodos.map((concepto) => {
             return {
                 concepto: concepto.concepto,
@@ -112,7 +112,7 @@ class DetalleJuicio extends React.PureComponent {
     };
 
     handleCuentaOrigen = () => {
-        this.props.redireccionar('/DetalleTributario/' + this.tributoPadre.tipoTributo + '/' + this.tributoPadre.identificador + '/juicios/' + encodeURIComponent(this.identificador));
+        this.props.redireccionar('/DetalleTributario/' + this.tributoPadre.tipoTributo + '/' + this.tributoPadre.identificador + '/planesPago/' + encodeURIComponent(this.identificador));
     };
 
     render() {
@@ -131,7 +131,7 @@ class DetalleJuicio extends React.PureComponent {
                         <MiCard>
                             {/* Titulo y selección de identificador */}
                             <Typography className={classes.title} variant="title">
-                                Juicio: <b>{this.identificador}</b>
+                                Plan: <b>{this.identificador}</b>
                                 {this.tributoPadre.identificador &&
                                     <Button
                                         onClick={this.handleCuentaOrigen}
@@ -152,16 +152,16 @@ class DetalleJuicio extends React.PureComponent {
                                 registrosSeleccionados={registrosSeleccionados}
                                 tablaConfig={
                                     {
-                                        columnas: ['Concepto', 'Vencimiento', 'Importe ($)'],
+                                        columnas: ['Concepto', 'Fecha', 'Total ($)'],
                                         order: 'asc',
                                         orderBy: 'concepto',
-                                        check: false,
+                                        check: true,
                                     }
                                 }
                                 cedulonConfig={
                                     {
                                         subItem: this.identificador,
-                                        tipoCedulon: this.props.tipoCedulones.byKey[3],
+                                        tipoCedulon: this.props.tipoCedulones.byKey[5],
                                         idTipoTributo: getIdTipoTributo(this.tributo),
                                         identificador: this.identificador,
                                     }
@@ -175,9 +175,9 @@ class DetalleJuicio extends React.PureComponent {
                                 }
                                 labelsTotales={
                                     {
-                                        totalesDeuda: 'del Juicio',
-                                        vencida: 'Capital',
-                                        aVencer: 'Gastos',
+                                        totalesDeuda: 'del Plan',
+                                        vencida: 'Vencida',
+                                        aVencer: 'A vencer',
                                     }
                                 }
                             />
@@ -189,7 +189,7 @@ class DetalleJuicio extends React.PureComponent {
     }
 }
 
-let componente = DetalleJuicio;
+let componente = DetallePlan;
 componente = withStyles(styles)(componente);
 componente = connect(
     mapStateToProps,

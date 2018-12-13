@@ -59,7 +59,7 @@ class TributarioAccessBusqueda extends React.PureComponent {
         const idTipoTributo = this.props.idTipoTributo;
         const identificador = this.state.inputIdentificador;
 
-        if(identificador == '') {
+        if (identificador == '') {
             this.setState({
                 errorInputIdentificador: true,
                 mensajeError: 'Debe ingresar un identificador'
@@ -78,27 +78,28 @@ class TributarioAccessBusqueda extends React.PureComponent {
             .then((datos) => {
                 this.props.mostrarCargando(false);
 
-                if (!datos.ok) { 
+                if (!datos.ok) {
                     this.setState({
                         errorInputIdentificador: true,
                         mensajeError: datos.error
                     });
-                    return false; 
+                    return false;
                 }
 
                 const data = datos.return;
-                const valueTipoTributo = this.props.tipoTributos.byKey[data.tipoTributo];
+                const tipoTributoPadre = this.props.tipoTributos.byKey[data.tipoTributo];
+                const identificadorPadre = data.identificador;
 
-                let seccionDetalle = 'juicios'; //Esto se deberá mejorar para no hardcodear los valores
-                switch(idTipoTributo) {
-                    case 1:
-                        seccionDetalle = 'juicios';
-                    break;
-                    case 2:
-                        seccionDetalle = 'planesPago';
-                    break;
+                const tipoTributo = this.props.tipoTributos.byKey[idTipoTributo];
+
+                if (tipoTributoPadre && identificadorPadre) {
+                    this.props.redireccionar({
+                        pathname: '/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador),
+                        search: '?tipoTributo=' + tipoTributoPadre + '&identificador=' + identificadorPadre
+                    });
+                } else {
+                    this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador))
                 }
-                this.props.redireccionar('/DetalleTributario/'+valueTipoTributo+'/'+data.identificador+'/'+seccionDetalle+'/'+encodeURIComponent(identificador))
             }).catch(err => {
                 console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
             });

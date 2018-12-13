@@ -1,10 +1,28 @@
 import DetalleTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Detalle/index";
+import DetalleJuicio from "@UI/Paginas/TributarioOnline/DetalleTributario/DetalleJuicio/index";
+import DetallePlan from "@UI/Paginas/TributarioOnline/DetalleTributario/DetallePlan/index";
 import SeleccionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Seleccion/index";
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
 import Representantes from "@UI/Paginas/Representantes/index";
 import BusquedaPor from "@UI/Paginas/TributarioOnline/BusquedaPor/index";
 
 const Menu = [
+  {
+    url: "/DetalleTributario/Juicio/:identificador",
+    exact: true,
+    mostrarEnMenu: false,
+    component: DetalleJuicio,
+    nombre: "Juicio",
+    titulo: "Juicio",
+  },
+  {
+    url: "/DetalleTributario/Plan/:identificador",
+    exact: true,
+    mostrarEnMenu: false,
+    component: DetallePlan,
+    nombre: "Juicio",
+    titulo: "Juicio",
+  },
   {
     url: "/DetalleTributario/:tributo",
     exact: true,

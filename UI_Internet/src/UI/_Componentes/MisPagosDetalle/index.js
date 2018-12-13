@@ -9,13 +9,12 @@ import classNames from "classnames";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from "@material-ui/core/Button";
-import Tooltip from '@material-ui/core/Tooltip';
 
 //Custom Components
 import MiTabla from "@Componentes/MiTabla";
 import MiCedulon from "@Componentes/MiCedulon";
 import MiMercadoPago from "@Componentes/MiMercadoPago";
+import MisBeneficios from "@Componentes/MisBeneficios";
 
 //Funciones Útiles
 import { stringToFloat, formatNumber, getIdTipoTributo } from "@Utils/functions"
@@ -140,17 +139,8 @@ class MisPagosDetalle extends React.PureComponent {
           />
         </Grid>
         <Grid item sm={6} className={classes.buttonActionsContent}>
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classNames(classes.buttonActions, classes.promotionButton)}
-          >Beneficios</Button>
-
-          <div className={classes.infoContainer}>
-            <Tooltip classes={{ tooltip: classes.textTooltip }} title={<span>Las promociones estarán<br/>vigentes desde el año 2019</span>}>
-              <i className={classNames(classes.infoIcon,"material-icons")}>info</i>
-            </Tooltip>
-          </div>
+          
+          <MisBeneficios />
 
           <MiCedulon
             registrosSeleccionados={this.props.registrosSeleccionados}
@@ -271,26 +261,6 @@ const styles = theme => ({
     margin: '2px',
     borderRadius: '20px',
   },
-  promotionButton: {
-    background: '#ffa114',
-    '&:hover': {
-      background: '#ffa114'
-    }
-  },
-  infoContainer: {
-    display: 'inline-block',
-    width: '36px',
-    height: '45px',
-    textAlign: 'left',
-  },
-  infoIcon: {
-    color: '#0f8fea',
-    verticalAlign: 'middle',
-    cursor: 'help'
-  },
-  textTooltip: {
-    fontSize: 16,
-  }
 });
 
 export default withStyles(styles)(MisPagosDetalle);
