@@ -46,10 +46,19 @@ class TributarioAccessInvitado extends React.PureComponent {
         super(props);
 
         this.state = {
-            opcionesTributos: _.filter(this.props.tributosBienesPorCUIT,{ tipoTributo: parseInt(this.props.id) }) || [],
+            opcionesTributos: _.filter(this.props.tributosBienesPorCUIT, { tipoTributo: parseInt(this.props.id) }) || [],
             inputIdentificadorTributo: '',
             errorInputIdentificador: false,
             mensajeError: false
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+        if (JSON.stringify(this.props.tributosBienesPorCUIT) != JSON.stringify(nextProps.tributosBienesPorCUIT)) {
+            this.setState({
+                opcionesTributos: _.filter(nextProps.tributosBienesPorCUIT, { tipoTributo: parseInt(this.props.id) }) || [],
+            });
         }
     }
 
@@ -80,7 +89,7 @@ class TributarioAccessInvitado extends React.PureComponent {
                 } else {
                     this.setState({
                         ...this.state,
-                        mensajeError: 'El identificador es incorrecto.',
+                        mensajeError: datos.error,
                         errorInputIdentificador: true
                     })
                 }

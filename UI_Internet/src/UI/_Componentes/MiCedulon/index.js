@@ -67,7 +67,7 @@ class MiCedulon extends React.PureComponent {
     const token = this.props.loggedUser.token;
     const opcion = event.currentTarget.attributes.opcion.value;
 
-    if (registros.length > 0 || this.props.esJuicio) {
+    if (registros.length > 0 || this.props.esJuicio || this.props.allSelected) {
       services.getReporteCedulon(token,
         {
           "tipoTributo": parseInt(this.props.tipoTributo),
@@ -75,7 +75,7 @@ class MiCedulon extends React.PureComponent {
           "opcionVencimiento": parseInt(opcion),
           "periodos": registros,
           "tipoCedulon": this.props.tipoCedulon,
-          "subItem": this.props.subItemSeleccionado
+          "subItem": this.props.subItemSeleccionado || this.props.subItem
         })
         .then((datos) => {
           if (!datos.ok) {

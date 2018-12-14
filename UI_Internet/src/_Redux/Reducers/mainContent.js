@@ -2,7 +2,8 @@ import {
   MAIN_CONTENT_CARGANDO,
   SET_TIPO_TRIBUTOS,
   SET_TIPO_CEDULONES,
-  SET_TIPO_OPERACIONES
+  SET_ESTADO_PAGOS,
+  SET_PUBLIC_KEY_MERCADO_PAGO
 } from "@Redux/Constants/index";
 import _ from "lodash";
 
@@ -12,7 +13,8 @@ const initialState = {
   cantProcesosCargando: 0,
   tipoTributos: {},
   tipoCedulones: {},
-  tipoOperaciones: {},
+  estadoPagos: {},
+  publicKeyMercadoPago: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -65,20 +67,23 @@ const reducer = (state = initialState, action) => {
       tipoCedulones['result'] = action.payload;
       return { ...state, tipoCedulones: tipoCedulones };
     }
-    case SET_TIPO_OPERACIONES: {
-      let tipoOperaciones = {};
+    case SET_ESTADO_PAGOS: {
+      let estadoPagos = {};
 
-      tipoOperaciones['byKey'] = {};
-      tipoOperaciones['byValue'] = {};
-      tipoOperaciones['result'] = {};
+      estadoPagos['byKey'] = {};
+      estadoPagos['byValue'] = {};
+      estadoPagos['result'] = {};
 
       _.each(action.payload, (item) => {
-        tipoOperaciones.byKey[item.key] = item.value;
-        tipoOperaciones.byValue[item.value] = item.key;
+        estadoPagos.byKey[item.key] = item.value;
+        estadoPagos.byValue[item.value] = item.key;
       });
 
-      tipoOperaciones['result'] = action.payload;
-      return { ...state, tipoOperaciones: tipoOperaciones };
+      estadoPagos['result'] = action.payload;
+      return { ...state, estadoPagos: estadoPagos };
+    }
+    case SET_PUBLIC_KEY_MERCADO_PAGO: {
+      return { ...state, publicKeyMercadoPago: action.payload };
     }
     default:
       return state;

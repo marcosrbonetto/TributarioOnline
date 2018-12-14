@@ -52,7 +52,8 @@ const styles = theme => {
   return {
     listItem: {
       borderTopRightRadius: "2rem",
-      borderBottomRightRadius: "2rem"
+      borderBottomRightRadius: "2rem",
+      overflow: 'hidden'
     },
     texto: {
       "& span": {

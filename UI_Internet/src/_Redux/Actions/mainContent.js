@@ -2,7 +2,8 @@ import {
   MAIN_CONTENT_CARGANDO, 
   SET_TIPO_TRIBUTOS, 
   SET_TIPO_CEDULONES,
-  SET_TIPO_OPERACIONES
+  SET_ESTADO_PAGOS,
+  SET_PUBLIC_KEY_MERCADO_PAGO
 } from "@Redux/Constants/index";
 
 export const mostrarCargando = cargando => ({
@@ -20,7 +21,12 @@ export const setTipoCedulones = datos => ({
   payload: datos
 });
 
-export const setTipoOperaciones = datos => ({
-  type: SET_TIPO_OPERACIONES,
+export const setEstadoPagos = datos => ({
+  type: SET_ESTADO_PAGOS,
+  payload: datos
+});
+
+export const setPublicKeyMercadoPago = datos => ({
+  type: SET_PUBLIC_KEY_MERCADO_PAGO,
   payload: datos
 });

@@ -18,6 +18,7 @@ const mapStateToProps = state => {
         loggedUser: state.Usuario.loggedUser,
         infoPagosMercadoPago: state.DetalleTributario.infoPagosMercadoPago,
         tipoCedulones: state.MainContent.tipoCedulones,
+        estadoPagos: state.MainContent.estadoPagos,
     };
 };
 
@@ -39,6 +40,7 @@ class PagoNexo extends Component {
         this.state = {
             cargando: true,
             error: false,
+            alerta: false,
             exito: false,
             finPagos: false,
             mensajeOK: '¡Pago realizado con éxito!',
@@ -49,7 +51,7 @@ class PagoNexo extends Component {
     }
 
     componentDidMount() {
-        
+
         /* NOTA: 'this.props.infoPagosMercadoPago' tiene los nexos a pagar a partir de ellos se lo actualizará para realizar los pagos */
         const token = this.props.loggedUser.token;
         const mercadoPago = getAllUrlParams(window.location.href).mercadoPago; //Ej.: true
@@ -60,7 +62,7 @@ class PagoNexo extends Component {
         const emisor = getAllUrlParams(window.location.href).issuer_id; //Ej.: 310
         const cuotas = getAllUrlParams(window.location.href).installments; //Ej.: 1
         const metodoPago = getAllUrlParams(window.location.href).payment_method_id; //Ej.: visa
-        
+
         const tipoCedulon = getAllUrlParams(window.location.href).tipoCedulon; //Ej.: Contribuciones
         const idTipoCedulon = this.props.tipoCedulones.byValue[tipoCedulon];
 
@@ -83,7 +85,7 @@ class PagoNexo extends Component {
             if (result.length == 0) return false;
 
             let nexoActual = result[0];
-      
+
             servicesMercadoPago.pagoMercadoPago(token, {
                 nexo: nexoActual.nexo,
                 tipoTributo: parseInt(tipoTributo),
@@ -102,6 +104,7 @@ class PagoNexo extends Component {
                             ...this.state,
                             cargando: false,
                             error: true,
+                            alerta: false,
                             exito: false,
                         });
 
@@ -113,49 +116,64 @@ class PagoNexo extends Component {
                         return false;
                     }
 
-                    //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
-                    //Y muestre los nexos actualizados
-                    nexoActual.token = token;
-                    nexoActual.metodoPago = metodoPago;
-                    nexoActual.emisor = emisor;
-                    nexoActual.cuotas = cuotas;
-                    nexoActual.pagado = true;
+                    const idEstadoPagos = parseInt(this.props.estadoPagos.byValue[datos.return.estado]);
 
-                    this.props.setPropsUpdatePagosMercadoPago({
-                        email: email,
-                        arrayNexos: arrayNexos
-                    });
+                    if ([1, 2, 3].indexOf(idEstadoPagos) != -1) {
+                        //Luego del pago, seteamos al nexo como pagado para luego pasarlo al componente MiMercadoPago
+                        //Y muestre los nexos actualizados
+                        nexoActual.token = token;
+                        nexoActual.metodoPago = metodoPago;
+                        nexoActual.emisor = emisor;
+                        nexoActual.cuotas = cuotas;
+                        nexoActual.pagado = true;
 
-                    const allNexosPagos = _.filter(arrayNexos, function (nexo) {
-                        return !nexo.pagado;
-                    });
-
-                    //Corroboramos si todos los nexos estan pagos, procedemos a no mostrar el modal de pagos online
-                    if (allNexosPagos.length == 0) {
                         this.props.setPropsUpdatePagosMercadoPago({
-                            email: '',
-                            arrayNexos: []
+                            email: email,
+                            arrayNexos: arrayNexos
                         });
+
+                        const allNexosPagos = _.filter(arrayNexos, function (nexo) {
+                            return !nexo.pagado;
+                        });
+
+                        //Corroboramos si todos los nexos estan pagos, procedemos a no mostrar el modal de pagos online
+                        if (allNexosPagos.length == 0) {
+                            this.props.setPropsUpdatePagosMercadoPago({
+                                email: '',
+                                arrayNexos: []
+                            });
+
+                            this.setState({
+                                ...this.state,
+                                cargando: false,
+                                error: false,
+                                alerta: idEstadoPagos != 1 ? true : false,
+                                exito: idEstadoPagos == 1 ? true : false,
+                                finPagos: true,
+                                mensajeOK: <div>{datos.return.descripcion} <br /> {idEstadoPagos == 1 && 'El comprobante le será remitido a la casilla de correo ' + email}</div>,
+                                btnOK: 'Finalizar'
+                            });
+                            return false;
+                        }
 
                         this.setState({
                             ...this.state,
                             cargando: false,
                             error: false,
-                            exito: true,
-                            finPagos: true,
-                            mensajeOK: <div>{'¡Pago realizado con éxito!'} <br/> {'El comprobante le será remitido a la casilla de correo ' + email}</div>,
-                            btnOK: 'Finalizar'
+                            alerta: idEstadoPagos != 1 ? true : false,
+                            exito: idEstadoPagos == 1 ? true : false,
+                            mensajeOK: <div>{datos.return.descripcion} <br /> {idEstadoPagos == 1 && 'El comprobante le será remitido a la casilla de correo ' + email}</div>,
                         });
-                        return false;
+                    } else {
+                        this.setState({
+                            ...this.state,
+                            cargando: false,
+                            error: true,
+                            alerta: false,
+                            exito: false,
+                            mensajeOK: <div>{datos.return.descripcion}</div>,
+                        });
                     }
-
-                    this.setState({
-                        ...this.state,
-                        cargando: false,
-                        error: false,
-                        exito: true,
-                        mensajeOK: <div>{'¡Pago realizado con éxito!'} <br/> {'El comprobante le será remitido a la casilla de correo ' + email}</div>
-                    });
 
                 }).catch(err => {
 
@@ -163,6 +181,7 @@ class PagoNexo extends Component {
                         ...this.state,
                         cargando: false,
                         error: true,
+                        alerta: false,
                         exito: false,
                     });
 
@@ -174,6 +193,7 @@ class PagoNexo extends Component {
                 ...this.state,
                 cargando: false,
                 error: true,
+                alerta: false,
                 exito: false,
             });
 
@@ -200,9 +220,9 @@ class PagoNexo extends Component {
             {this.state.cargando &&
                 <div className="cargando">
                     <MiPanelMensaje
-                    cargando
-                    mensaje={this.state.mensajeCargando}
-                /></div>}
+                        cargando
+                        mensaje={this.state.mensajeCargando}
+                    /></div>}
 
             {this.state.error &&
                 <MiPanelMensaje
@@ -211,6 +231,15 @@ class PagoNexo extends Component {
                     tieneBoton
                     onBotonClick={this.onBotonErrorClick}
                     boton="Volver"
+                />}
+
+            {this.state.alerta &&
+                <MiPanelMensaje
+                    alerta
+                    mensaje={this.state.mensajeOK}
+                    tieneBoton
+                    onBotonClick={this.onBotonContinuarClick}
+                    boton={this.state.btnOK}
                 />}
 
             {this.state.exito &&

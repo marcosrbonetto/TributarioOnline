@@ -142,16 +142,25 @@ class MiTabla extends React.PureComponent {
 
         const gridRows = (props.rows || []);
 
+        this.rowsSetSelected = [];
         var data = (gridRows.length > 0 && !gridRows[0].id && gridRows.map((row, key) => {
             row.id = key;
+
+            if(row.data && row.data.checked)
+                this.rowsSetSelected.push(key);
+
             return row;
         })) || gridRows;
+
+        //De acuerdo a las filas seteadas como checkeadas, actualizamod el total
+        if (this.props.getFilasSeleccionadas)
+            this.props.getFilasSeleccionadas(data, this.rowsSetSelected);
 
         this.state = {
             order: this.props.order || 'desc',
             orderBy: this.props.orderBy,
             orderType: 'string',
-            selected: [],
+            selected: this.rowsSetSelected,
             data: data,
             page: 0,
             rowsPerPage: this.props.rowsPerPage || 25,
@@ -184,9 +193,16 @@ class MiTabla extends React.PureComponent {
     handleSelectAllClick = event => {
         let newSelected = [];
         if (event.target.checked) {
-            newSelected = this.state.data.map(n => n.id);
+            newSelected = this.state.data.map(n => {
+                if(n.data && n.data.disabled && !n.data.checked)
+                    return false;
+                else
+                    return n.id;
+            });
+            newSelected = _.without(newSelected,false);
             this.setState(state => ({ selected: newSelected }));
         } else {
+            newSelected = this.rowsSetSelected;
             this.setState({ selected: newSelected });
         }
 
@@ -268,7 +284,7 @@ class MiTabla extends React.PureComponent {
                                     return <MiRow
                                         key={index}
                                         check={check}
-                                        data={n}
+                                        info={n}
                                         classes={classes}
                                         onClick={this.handleClick}
                                         isSelected={isSelected}
@@ -316,29 +332,33 @@ class MiRow extends React.PureComponent {
 
     onClick = (event) => {
         if (this.props.onClick == undefined) return;
-        this.props.onClick(event, this.props.data.id);
+        this.props.onClick(event, this.props.info.id);
     }
 
     render() {
-        const check = (this.props.check || false);
+        const { isSelected, info, check } = this.props;
+        const addCheck = (check || false);
         const classes = this.props.classes;
 
         return <TableRow
             hover
-            onClick={this.onClick}
             role="checkbox"
-            aria-checked={this.props.isSelected || false}
+            aria-checked={isSelected || false}
             tabIndex={-1}
-            key={this.props.data.id}
-            selected={this.props.isSelected || false}
+            key={info.id}
+            selected={isSelected || false}
         >
-            {check &&
+            {addCheck &&
                 <TableCell padding="checkbox">
-                    <Checkbox checked={this.props.isSelected || false} />
+                    <Checkbox 
+                        onClick={this.onClick}
+                        checked={isSelected || false} 
+                        disabled={(info.data && info.data.disabled)}
+                    />
                 </TableCell>}
-            {Object.keys(this.props.data).map((cell, key) => {
+            {Object.keys(info).map((cell, key) => {
                 if (cell == 'data' || cell == 'id') return; //'id' y 'data' son datos extras para utilizar
-                return <TableCell key={cell} padding="default">{this.props.data[cell]}</TableCell>
+                return <TableCell key={cell} padding="default">{info[cell]}</TableCell>
             })}
         </TableRow>
     }

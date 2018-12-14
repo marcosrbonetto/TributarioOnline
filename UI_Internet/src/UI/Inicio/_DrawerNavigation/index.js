@@ -54,7 +54,8 @@ class MiDrawer extends React.Component {
         classes={{
           paper: classNames(
             classes.drawerPaper,
-            paraMobile == false && !open && classes.drawerPaperClose
+            paraMobile == false && !open && classes.drawerPaperClose,
+            classes.menuStyle
           )
         }}
         ModalProps={{
@@ -146,6 +147,10 @@ const styles = theme => {
       [theme.breakpoints.up("sm")]: {
         width: 0, //theme.spacing.unit * 9
       }
+    },
+    menuStyle: {
+      boxShadow: '4px 0px 16px -3px rgba(0,0,0,0.75)',
+      background: '#fff'
     }
   };
 };
