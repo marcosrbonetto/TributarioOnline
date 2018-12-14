@@ -228,9 +228,9 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
 };
 
 
-const getInfoJuiciosContribucion = (token, tipoTributo, identificador) => {
+const getInfoJuicios = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosContribuciones?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Juicios?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -255,36 +255,9 @@ const getInfoJuiciosContribucion = (token, tipoTributo, identificador) => {
   });
 };
 
-const getInfoJuiciosMulta = (token, tipoTributo, identificador) => {
+const getInfoPlanes = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/JuiciosMultas?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Token": token
-      }
-    })
-      .then(res => {
-
-        if (res.status >= 400) {
-          throw new Error("Bad response from server");
-        }
-
-        return res.json();
-      })
-      .then(datos => {
-        resolve(datos);
-      })
-      .catch(err => {
-        reject("Error procesando la solicitud");
-      });
-  });
-};
-
-const getInfoPlanesPago = (token, tipoTributo, identificador) => {
-  return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/PlanesContribuciones?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Planes?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -331,23 +304,12 @@ const getReporteCedulon = (token, body) => {
       break;
 
     case tipoCedulones[3]:
-      url = '/v1/Cedulon/JuiciosContribuciones';
+      url = '/v1/Cedulon/Juicios';
       bodyParameter.juicio= body.subItem;
       break;
 
     case tipoCedulones[4]:
-      url = '/v1/Cedulon/JuiciosMultas';
-      bodyParameter.juicio= body.subItem;
-      break;
-
-    case tipoCedulones[5]:
-      url = '/v1/Cedulon/PlanesContribuciones';
-      bodyParameter.plan= body.subItem;
-      bodyParameter.periodos= body.periodos;
-      break;
-
-    case tipoCedulones[6]:
-      url = '/v1/Cedulon/PlanesMultas';
+      url = '/v1/Cedulon/Planes';
       bodyParameter.plan= body.subItem;
       bodyParameter.periodos= body.periodos;
       break;
@@ -709,9 +671,8 @@ const services = {
   getIdTributos: getIdTributos,
   getInfoContribucion: getInfoContribucion,
   getInfoMultas: getInfoMultas,
-  getInfoJuiciosContribucion: getInfoJuiciosContribucion,
-  getInfoJuiciosMulta: getInfoJuiciosMulta,
-  getInfoPlanesPago: getInfoPlanesPago,
+  getInfoJuicios: getInfoJuicios,
+  getInfoPlanes: getInfoPlanes,
   getReporteCedulon: getReporteCedulon,
   getInformeCuenta: getInformeCuenta,
   getReporteInformeCuenta: getReporteInformeCuenta,

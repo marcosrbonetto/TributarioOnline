@@ -112,7 +112,7 @@ class DetallePlan extends React.PureComponent {
     };
 
     handleCuentaOrigen = () => {
-        this.props.redireccionar('/DetalleTributario/' + this.tributoPadre.tipoTributo + '/' + this.tributoPadre.identificador + '/planesPago/' + encodeURIComponent(this.identificador));
+        this.props.redireccionar('/DetalleTributario/' + this.tributoPadre.tipoTributo + '/' + this.tributoPadre.identificador + '/planes/' + encodeURIComponent(this.identificador));
     };
 
     render() {
@@ -161,7 +161,7 @@ class DetallePlan extends React.PureComponent {
                                 cedulonConfig={
                                     {
                                         subItem: this.identificador,
-                                        tipoCedulon: this.props.tipoCedulones.byKey[5],
+                                        tipoCedulon: this.props.tipoCedulones.byKey[4],
                                         idTipoTributo: getIdTipoTributo(this.tributo),
                                         identificador: this.identificador,
                                     }
