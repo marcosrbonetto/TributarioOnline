@@ -12,6 +12,15 @@
   display: flex;
 }
 
+.imgMuni {
+    width: 140px;
+    height: 47px;
+    background: url('https://www.cordoba.gob.ar/wp-content/uploads/2016/07/logo-oscuro-01.png') no-repeat top;
+    background-size: 140px 47px;
+    background-position: initial;
+    margin-right: 20px;
+}
+
 @media only screen and (max-width: 760px) {
   .mainContainer {
   width: calc(100% - 10px) !important;
@@ -23,7 +32,12 @@
   }
 
   .imgMuni {
-      width: 34px !important;
+    width: 50px !important;
+    height: 47px !important;
+    background: url('https://www.cordoba.gob.ar/wp-content/uploads/2016/07/favico-sm.png') no-repeat top !important;
+    background-size: 50px 47px !important;
+    background-position: initial !important;
+    margin-right: 20px !important;
   }
 
   .iconosTributarios {
@@ -32,5 +46,14 @@
 
   .botonesTributarios {
       top: 0px !important;
+  }
+
+  .btnBienesPorCUIT {
+    height: 56px !important;
+    padding: 0px !important;
+  }
+
+  .tituloTooltip {
+      display: none !important;
   }
 } 

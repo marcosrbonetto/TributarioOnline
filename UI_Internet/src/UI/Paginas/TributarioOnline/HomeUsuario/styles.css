@@ -10,15 +10,6 @@
     }
 } 
 
-.imgMuni {
-    width: 140px;
-    height: 47px;
-    background: url('https://www.cordoba.gob.ar/wp-content/uploads/2016/07/logo-oscuro-01.png') no-repeat top;
-    background-size: 140px 47px;
-    background-position: initial;
-    margin-right: 20px;
-}
-
 /* width */
 ::-webkit-scrollbar {
     width: 10px;

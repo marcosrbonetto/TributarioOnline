@@ -153,23 +153,24 @@ class MiToolbar extends React.Component {
             variant="title"
             color="inherit"
             noWrap
-            className={classes.title}
+            className={classNames(classes.title,"tituloTooltip")}
           >
             {titulo}
           </Typography>
 
           {/* Icono de Notificaciones */}
-          {this.state.datosUsuario && <MiNotificacion />}
-
           {/* Icono del usuario */}
-          {this.state.datosUsuario &&
+          {this.state.datosUsuario && <div className={classes.loggedIcons}>
+            <MiNotificacion />
+
             <IconButton onClick={this.onUsuarioPress} color="inherit">
               <Avatar alt="Menu del usuario" src={urlFotoPerfilMiniatura} className={classNames(classes.icono)} />
-            </IconButton>}
+            </IconButton>
+          </div>}
 
           {/* Importar Bienes por CUIT */}
           {!this.state.datosUsuario && <div>
-            <Button onClick={this.handleBienesPorCUIT} className={classes.btnBienesPorCUIT} variant="outlined" color="secondary">
+            <Button onClick={this.handleBienesPorCUIT} className={classNames(classes.btnBienesPorCUIT,"btnBienesPorCUIT")} variant="outlined" color="secondary">
               Importar Bienes por CUIT
             </Button>
           </div>}
@@ -297,6 +298,14 @@ const styles = theme => {
     },
     btnBienesPorCUIT: {
       marginRight: '10px'
+    },
+    loggedIcons: {
+      textAlign: 'right',
+      position: 'absolute',
+      right: '20px',  
+      '& > *': {
+        display: 'inline-block'
+      }
     }
   };
 };
