@@ -65,13 +65,14 @@ class TributarioAccessBusqueda extends React.PureComponent {
                 mensajeError: 'Debe ingresar un identificador'
             });
             return false;
-        } else if (!this.props.regexFormato.test(identificador)) {
-            this.setState({
-                errorInputIdentificador: true,
-                mensajeError: 'El formato es incorrecto'
-            });
-            return false;
-        }
+        } 
+        // else if (!this.props.regexFormato.test(identificador)) {
+        //     this.setState({
+        //         errorInputIdentificador: true,
+        //         mensajeError: 'El formato es incorrecto'
+        //     });
+        //     return false;
+        // }
 
         this.props.mostrarCargando(true);
         servicesTributarioOnline.getTributoByIdentificador(token, idTipoTributo, identificador)

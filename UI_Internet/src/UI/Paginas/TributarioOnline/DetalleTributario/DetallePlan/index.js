@@ -1,5 +1,6 @@
 import React from "react";
 import _ from "lodash";
+import { mostrarAlerta } from "@Utils/functions";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
@@ -30,7 +31,7 @@ import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 //Funciones Útiles
 import { formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
-const datosJson = {"return":{"identificador":"16788805","titular":{"cuit":"NO INFORMA","titular":"PREVEER S.A.         (*)"},"datosCuenta":["IUT DE ORIGEN: 121305601700000 /0 01   INM39593/2014  < PLAN ACTIVO  >","PROCURACION FISCAL P.P.C.    ","ITEM : 1.01.01.01              I N M U E B L E S","TOTAL PLAN :      4.855,80 TOT.A FIN.:      4.667,00 C.CTAS : 006 %ENT.: 00","INT.: 01,50 TASA: 27,00   ANT.:     870,10 CTA.:     878,10 FEC.OT.: 09/11/2015","VIENE DE   JUICIO N* INM39593/2014 CARP.: 096 F.PROC.: **< NO >**","OBSERVACIONES:                                         PLAN CON CBU NO"," << TELEFONO  >>  0351499999     ***","                      ","IUT DE ORIGEN: "],"deudaAdministrativa":{"total":4476.5,"vencida":4476.5,"aVencer":0.0,"ultimoPago":"23/11/2018"},"periodos":[{"concepto":"004/006","fecha":"2016-02-15T00:00:00","referencia":"","importe":{"total":1784.3,"base":878.1,"recargo":906.2,"deduccion":0.0,"citacion":0.0}},{"concepto":"005/006","fecha":"2016-03-15T00:00:00","referencia":"","importe":{"total":1758.8,"base":878.1,"recargo":880.7,"deduccion":0.0,"citacion":0.0}},{"concepto":"006/006","fecha":"2016-04-15T00:00:00","referencia":"","importe":{"total":933.4,"base":473.3,"recargo":460.1,"deduccion":0.0,"citacion":0.0}}]},"error":null,"ok":true};
+const datosJson = { "return": { "identificador": "16788805", "titular": { "cuit": "NO INFORMA", "titular": "PREVEER S.A.         (*)" }, "datosCuenta": ["IUT DE ORIGEN: 121305601700000 /0 01   INM39593/2014  < PLAN ACTIVO  >", "PROCURACION FISCAL P.P.C.    ", "ITEM : 1.01.01.01              I N M U E B L E S", "TOTAL PLAN :      4.855,80 TOT.A FIN.:      4.667,00 C.CTAS : 006 %ENT.: 00", "INT.: 01,50 TASA: 27,00   ANT.:     870,10 CTA.:     878,10 FEC.OT.: 09/11/2015", "VIENE DE   JUICIO N* INM39593/2014 CARP.: 096 F.PROC.: **< NO >**", "OBSERVACIONES:                                         PLAN CON CBU NO", " << TELEFONO  >>  0351499999     ***", "                      ", "IUT DE ORIGEN: "], "deudaAdministrativa": { "total": 4476.5, "vencida": 4476.5, "aVencer": 0.0, "ultimoPago": "23/11/2018" }, "periodos": [{ "concepto": "004/006", "fecha": "2016-02-15T00:00:00", "referencia": "", "importe": { "total": 1784.3, "base": 878.1, "recargo": 906.2, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "005/006", "fecha": "2016-03-15T00:00:00", "referencia": "", "importe": { "total": 1758.8, "base": 878.1, "recargo": 880.7, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "006/006", "fecha": "2016-04-15T00:00:00", "referencia": "", "importe": { "total": 933.4, "base": 473.3, "recargo": 460.1, "deduccion": 0.0, "citacion": 0.0 } }] }, "error": null, "ok": true };
 
 const mapStateToProps = state => {
     return {
@@ -78,31 +79,39 @@ class DetallePlan extends React.PureComponent {
     init = (token, identificador) => {
         this.props.mostrarCargando(true);
 
-        const deudaTotales = datosJson.return.deudaAdministrativa;
-        const rowList = datosJson.return.periodos.map((concepto) => {
-            return {
-                concepto: concepto.concepto,
-                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                importe: formatNumber(concepto.importe.total),
-                detalle: <MiTooltip
-                    contenidoDetalle={<div>
-                        <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
-                        <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
-                        <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
-                        <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
-                    </div>}>
-                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
-                </MiTooltip>,
-                data: concepto //atributo "data" no se muestra en MiTabla
-            }
-        });
+        servicesTributarioOnline.getInfoDetallePlan(token, identificador)
+            .then((datos) => {
+                if (!datos.ok) { mostrarAlerta('Error: ' + datos.error); return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
 
-        this.setState({
-            deudaTotales: deudaTotales,
-            rowList: rowList
-        });
+                const deudaTotales = datos.return.deudaAdministrativa;
+                const rowList = datos.return.periodos.map((concepto) => {
+                    return {
+                        concepto: concepto.concepto,
+                        vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                        importe: formatNumber(concepto.importe.total),
+                        detalle: <MiTooltip
+                            contenidoDetalle={<div>
+                                <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                            </div>}>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                        </MiTooltip>,
+                        data: concepto //atributo "data" no se muestra en MiTabla
+                    }
+                });
 
-        this.props.mostrarCargando(false);
+                this.setState({
+                    deudaTotales: deudaTotales,
+                    rowList: rowList
+                });
+
+                this.props.mostrarCargando(false);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                this.props.mostrarCargando(false);
+            });
     }
 
     setRegistrosSeleccionados = (registrosSeleccionados, misPagosProps) => {

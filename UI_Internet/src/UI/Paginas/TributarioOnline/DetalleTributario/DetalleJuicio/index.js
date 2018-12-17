@@ -1,5 +1,6 @@
 import React from "react";
 import _ from "lodash";
+import { mostrarAlerta } from "@Utils/functions";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
@@ -29,8 +30,6 @@ import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
 //Funciones Útiles
 import { formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
-
-const datosJson = { "return": { "identificador": "AUT02032/2016", "titular": { "cuit": "20164095054", "titular": "DE UGARTE MANUEL ELOY" }, "datosCuenta": ["IUT DE ORIGEN:         CHT211  -3", "", "CARATULA: DE UGARTE MANUEL ELOY", "PROCURADOR: 020093-6 CPTA.: 342  CISNEROS NATALIA LORENA", "", "", "", "", "", ""], "deudaJuicio": { "total": 4290.59, "capital": 2515.0, "gastos": 1775.59 }, "periodos": [{ "concepto": "2012/004", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 296.3, "base": 137.5, "recargo": 158.8, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2012/005", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 292.0, "base": 137.5, "recargo": 154.5, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2012/006", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 287.9, "base": 137.5, "recargo": 150.4, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/001", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 283.3, "base": 137.5, "recargo": 145.8, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/002", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 279.5, "base": 137.5, "recargo": 142.0, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/003", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 275.4, "base": 137.5, "recargo": 137.9, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/004", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 271.2, "base": 137.5, "recargo": 133.7, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/005", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 267.0, "base": 137.5, "recargo": 129.5, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "2013/006", "fecha": "2018-12-13T00:00:00", "referencia": "CAPITAL", "importe": { "total": 262.4, "base": 137.5, "recargo": 124.9, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "HONORAR.", "fecha": "2018-12-13T00:00:00", "referencia": "HONORARIOS", "importe": { "total": 820.3, "base": 820.3, "recargo": 0.0, "deduccion": 0.0, "citacion": 0.0 } }, { "concepto": "GASTOS", "fecha": "2018-12-13T00:00:00", "referencia": "GASTOS", "importe": { "total": 955.29, "base": 955.29, "recargo": 0.0, "deduccion": 0.0, "citacion": 0.0 } }] }, "error": null, "ok": true };
 
 const mapStateToProps = state => {
     return {
@@ -78,31 +77,39 @@ class DetalleJuicio extends React.PureComponent {
     init = (token, identificador) => {
         this.props.mostrarCargando(true);
 
-        const deudaTotales = datosJson.return.deudaJuicio;
-        const rowList = datosJson.return.periodos.map((concepto) => {
-            return {
-                concepto: concepto.concepto,
-                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                importe: formatNumber(concepto.importe.total),
-                detalle: <MiTooltip
-                    contenidoDetalle={<div>
-                        <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
-                        <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
-                        <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
-                        <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
-                    </div>}>
-                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
-                </MiTooltip>,
-                data: concepto //atributo "data" no se muestra en MiTabla
-            }
-        });
+        servicesTributarioOnline.getInfoDetalleJuicio(token, identificador)
+            .then((datos) => {
+                if (!datos.ok) { mostrarAlerta('Error: ' + datos.error); return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
 
-        this.setState({
-            deudaTotales: deudaTotales,
-            rowList: rowList
-        });
+                const deudaTotales = datos.return.deudaJuicio;
+                const rowList = datos.return.periodos.map((concepto) => {
+                    return {
+                        concepto: concepto.concepto,
+                        vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                        importe: formatNumber(concepto.importe.total),
+                        detalle: <MiTooltip
+                            contenidoDetalle={<div>
+                                <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                            </div>}>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                        </MiTooltip>,
+                        data: concepto //atributo "data" no se muestra en MiTabla
+                    }
+                });
 
-        this.props.mostrarCargando(false);
+                this.setState({
+                    deudaTotales: deudaTotales,
+                    rowList: rowList
+                });
+
+                this.props.mostrarCargando(false);
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                this.props.mostrarCargando(false);
+            });
     }
 
     setRegistrosSeleccionados = (registrosSeleccionados, misPagosProps) => {
