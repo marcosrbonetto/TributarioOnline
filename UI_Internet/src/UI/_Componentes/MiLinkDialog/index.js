@@ -16,6 +16,8 @@ class MiLinkDialog extends React.PureComponent {
   constructor(props) {
     super(props);
 
+    this.paraMobile = this.props.paraMobile || false;
+
     this.state = {
       open: false
     }
@@ -80,7 +82,7 @@ class MiLinkDialog extends React.PureComponent {
           scroll='paper'
           aria-labelledby="scroll-dialog-title"
           classes={{
-              paper: classes.root
+              paper: (this.paraMobile && classes.paraMobile) || classes.root
           }}
         >
           <DialogTitle id="scroll-dialog-title">{titulo}</DialogTitle>
@@ -125,6 +127,14 @@ const styles = theme => ({
       textDecoration: 'underline'
     }
   },
+  paraMobile: {
+    margin: '0px !important',
+    position: 'fixed !important',
+    width: '100% !important',
+    height: '100% !important',
+    maxWidth: '100% !important',
+    maxHeight: '100% !important',
+  }
 });
 
 let componente = undefined;

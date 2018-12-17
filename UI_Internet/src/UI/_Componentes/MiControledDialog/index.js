@@ -15,6 +15,8 @@ class MiControledDialog extends React.PureComponent {
 
   constructor(props) {
     super(props);
+
+    this.paraMobile = this.props.paraMobile || false;
   }
 
   getComponent(key) {
@@ -66,7 +68,7 @@ class MiControledDialog extends React.PureComponent {
           scroll='paper'
           aria-labelledby="scroll-dialog-title"
           classes={{
-            paper: this.props.classMaxWidth ? this.props.classMaxWidth : classes.maxWidth
+            paper: (this.paraMobile && classes.paraMobile) || (this.props.classMaxWidth ? this.props.classMaxWidth : classes.maxWidth)
           }}
         >
           <DialogTitle id="scroll-dialog-title">{titulo}</DialogTitle>
@@ -105,6 +107,14 @@ const styles = theme => ({
   },
   content: {
     paddingBottom: '0px'
+  },
+  paraMobile: {
+    margin: '0px !important',
+    position: 'fixed !important',
+    width: '100% !important',
+    height: '100% !important',
+    maxWidth: '100% !important',
+    maxHeight: '100% !important',
   }
 });
 

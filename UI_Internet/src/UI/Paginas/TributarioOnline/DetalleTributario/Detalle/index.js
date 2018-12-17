@@ -1485,6 +1485,7 @@ class DetalleTributo extends React.PureComponent {
                                             aria-owns={this.state.anchorElMenu ? 'simple-menu' : undefined}
                                             aria-haspopup="true"
                                             onClick={this.handleClickMenu}
+                                            className={"menuParaMobile"}
                                         >Menu</Button> {((menuItemSeleccionado == 'juicios' || menuItemSeleccionado == 'planes') && <b className={classNames(classes.subItemSeleccionadoMobile, classes.textoNoWrap)}>{this.state[menuItemSeleccionado].labels.detalleTitulo} - {this.state[menuItemSeleccionado].menuItemSeleccionado}</b>) || <b className={classNames(classes.subItemSeleccionadoMobile, classes.textoNoWrap)}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b>}
                                         <Menu
                                             id="simple-menu"
@@ -1771,6 +1772,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={10}>
                                     <MiControledDialog
+                                        paraMobile={this.props.paraMobile}
                                         open={informeCuenta.modal.open}
                                         onDialogoOpen={this.onInformeCuentaDialogoOpen}
                                         onDialogoClose={this.onInformeCuentaDialogoClose}
@@ -1931,6 +1933,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={10}>
                                     <MiLinkDialog
+                                        paraMobile={this.props.paraMobile}
                                         textoLink={'Datos de Cuenta'}
                                         titulo={'Datos de Cuenta'}
                                     >
@@ -1951,6 +1954,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={10}>
                                     <MiControledDialog
+                                        paraMobile={this.props.paraMobile}
                                         open={periodosAdeudados.modal.open}
                                         onDialogoOpen={this.onPeriodosAdeudadosDialogoOpen}
                                         onDialogoClose={this.onPeriodosAdeudadosDialogoClose}
@@ -1958,6 +1962,7 @@ class DetalleTributo extends React.PureComponent {
                                         titulo={'Períodos Adeudados'}
                                     >
                                         <MiTabla
+                                            pagination={!this.props.paraMobile}
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
                                                 { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
@@ -1985,6 +1990,7 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                                 <Grid item sm={10}>
                                     <MiControledDialog
+                                        paraMobile={this.props.paraMobile}
                                         open={ultimosPagos.modal.open == true}
                                         onDialogoOpen={this.onUltimosPagosDialogoOpen}
                                         onDialogoClose={this.onUltimosPagosDialogoClose}
@@ -1992,6 +1998,7 @@ class DetalleTributo extends React.PureComponent {
                                         titulo={'Últimos pagos'}
                                     >
                                         <MiTabla
+                                            pagination={!this.props.paraMobile}
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
                                                 { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
@@ -2026,6 +2033,7 @@ class DetalleTributo extends React.PureComponent {
                                         </Grid>
                                         <Grid item sm={10}>
                                             <MiLinkDialog
+                                                paraMobile={this.props.paraMobile}
                                                 textoLink={'Simular Plan de Pagos'}
                                                 titulo={'Simular Plan de Pagos'}
                                             >
@@ -2047,6 +2055,7 @@ class DetalleTributo extends React.PureComponent {
                                         </Grid>
                                         <Grid item sm={10}>
                                             <MiControledDialog
+                                                paraMobile={this.props.paraMobile}
                                                 open={informeAntecedentes.modal.open}
                                                 onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
                                                 onDialogoClose={this.onInformeAntecedentesDialogoClose}
@@ -2057,6 +2066,7 @@ class DetalleTributo extends React.PureComponent {
                                                 <div key="mainContent">
                                                     {!informeAntecedentes.modal.showReporte && <div>
                                                         <MiTabla
+                                                            pagination={!this.props.paraMobile}
                                                             columns={[
                                                                 { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
                                                                 { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
@@ -2114,6 +2124,7 @@ class DetalleTributo extends React.PureComponent {
                                         </Grid>
                                         <Grid item sm={10}>
                                             <MiControledDialog
+                                                paraMobile={this.props.paraMobile}
                                                 open={informeREMAT.modal.open}
                                                 onDialogoOpen={this.onInformeREMATDialogoOpen}
                                                 onDialogoClose={this.onInformeREMATDialogoClose}
@@ -2124,6 +2135,7 @@ class DetalleTributo extends React.PureComponent {
                                                 <div key="mainContent">
                                                     {!informeREMAT.modal.showReporte && <div>
                                                         <MiTabla
+                                                            pagination={!this.props.paraMobile}
                                                             columns={[
                                                                 { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
                                                                 { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
@@ -2182,6 +2194,7 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>
                                     <Grid item sm={10}>
                                         <MiLinkDialog
+                                            paraMobile={this.props.paraMobile}
                                             textoLink={'Perìodos Bloqueados'}
                                             titulo={'Perìodos Bloqueados'}
                                         >
@@ -2198,6 +2211,7 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>
                                     <Grid item sm={10}>
                                         <MiLinkDialog
+                                            paraMobile={this.props.paraMobile}
                                             textoLink={'Simulación de Caducidad'}
                                             titulo={'Simulación de Caducidad'}
                                         >
@@ -2214,6 +2228,7 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>
                                     <Grid item sm={10}>
                                         <MiLinkDialog
+                                            paraMobile={this.props.paraMobile}
                                             textoLink={'Imprimir Solicitud'}
                                             titulo={'Imprimir Solicitud'}
                                         >
@@ -2233,6 +2248,7 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>
                                     <Grid item sm={10}>
                                         <MiControledDialog
+                                            paraMobile={this.props.paraMobile}
                                             open={declaracionJurada.modal.open}
                                             onDialogoOpen={this.onDeclaracionJuradaDialogoOpen}
                                             onDialogoClose={this.onDeclaracionJuradaDialogoClose}
@@ -2243,6 +2259,7 @@ class DetalleTributo extends React.PureComponent {
                                             <div key="mainContent">
                                                 {!declaracionJurada.modal.showReporte && <div>
                                                     <MiTabla
+                                                        pagination={!this.props.paraMobile}
                                                         columns={[
                                                             { id: 'periodo', type: 'string', numeric: false, disablePadding: false, label: 'Periodos' },
                                                         ]}

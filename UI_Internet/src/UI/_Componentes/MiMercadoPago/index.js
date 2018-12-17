@@ -31,6 +31,7 @@ const mapStateToProps = state => {
     loggedUser: state.Usuario.loggedUser,
     infoPagosMercadoPago: state.DetalleTributario.infoPagosMercadoPago,
     publicKeyMercadoPago: state.MainContent.publicKeyMercadoPago,
+    paraMobile: state.MainContent.paraMobile,
   };
 };
 
@@ -241,6 +242,7 @@ class MiMercadoPago extends React.PureComponent {
     return (
       <div className={classes.root}>
         <MiControledDialog
+          paraMobile={this.props.paraMobile}
           open={this.state.dialogoOpen}
           onDialogoClose={this.onDialogoClose}
           buttonAction={true}

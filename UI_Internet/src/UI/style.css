@@ -32,12 +32,12 @@
   }
 
   .imgMuni {
-    width: 50px !important;
+    width: 100px !important;
     height: 47px !important;
     background: url('https://www.cordoba.gob.ar/wp-content/uploads/2016/07/favico-sm.png') no-repeat top !important;
     background-size: 50px 47px !important;
     background-position: initial !important;
-    margin-right: 20px !important;
+    margin-right: 0px !important;
   }
 
   .iconosTributarios {

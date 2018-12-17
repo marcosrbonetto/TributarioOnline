@@ -18,7 +18,8 @@ import { mostrarCargando } from '@Redux/Actions/mainContent';
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.Usuario.loggedUser
+    loggedUser: state.Usuario.loggedUser,
+    paraMobile: state.MainContent.paraMobile,
   };
 };
 
@@ -121,6 +122,7 @@ class MiCedulon extends React.PureComponent {
     return (
       <div className={classes.root}>
         <MiControledDialog
+          paraMobile={this.props.paraMobile}
           open={this.state.dialogoOpen}
           onDialogoOpen={this.onDialogoOpen}
           onDialogoClose={this.onDialogoClose}

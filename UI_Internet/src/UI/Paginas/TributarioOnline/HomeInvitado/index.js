@@ -28,6 +28,7 @@ import MiControledDialog from "@Componentes/MiControledDialog";
 const mapStateToProps = state => {
   return {
     loggedUser: state.Usuario.loggedUser,
+    paraMobile: state.MainContent.paraMobile,
   };
 };
 
@@ -200,6 +201,7 @@ class HomeInvitado extends React.PureComponent {
         </Grid>
 
         <MiControledDialog
+          paraMobile={this.props.paraMobile}
           open={this.state.dialogoOpenImportacionBienesCUIT}
           buttonAction={true}
           titulo={'Imporación Exitosa'}
