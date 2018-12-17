@@ -253,6 +253,10 @@ const styles = theme => ({
     btnCuentaOrigen: {
       float: 'right',
       top: '-9px'
+    },
+    btnCuentaOrigenParaMobile: {
+      float: 'none',
+      top: '0px',
     }
   });
 

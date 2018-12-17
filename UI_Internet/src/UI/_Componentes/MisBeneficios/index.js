@@ -22,7 +22,9 @@ class MisBeneficios extends React.PureComponent {
         >Beneficios</Button>
 
         <div className={classes.infoContainer}>
-          <Tooltip classes={{ tooltip: classes.textTooltip }} title={<span>Las promociones estarán<br />vigentes desde el año 2019</span>}>
+          <Tooltip 
+          disableFocusListener disableTouchListener
+          classes={{ tooltip: classes.textTooltip }} title={<span>Las promociones estarán<br />vigentes desde el año 2019</span>}>
             <i className={classNames(classes.infoIcon, "material-icons")}>info</i>
           </Tooltip>
         </div>

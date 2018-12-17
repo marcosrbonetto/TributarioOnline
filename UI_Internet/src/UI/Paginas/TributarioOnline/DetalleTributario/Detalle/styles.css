@@ -51,12 +51,14 @@
 
     .inputTotalPeriodos {
         width: 100% !important;
+        max-width: 100% !important;
         margin-right: 10px !important;
     }
 
     .buttonActionsContent {
         margin-top: 0px !important;
         width: 100% !important;
+        text-align: left !important;
     }
 
     .BtnMisBeneficios {

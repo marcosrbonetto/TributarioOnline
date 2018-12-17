@@ -37,6 +37,7 @@ const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
         tipoCedulones: state.MainContent.tipoCedulones,
+        paraMobile: state.MainContent.paraMobile,
         tributosBienesPorCUIT: state.AfipController.tributosBienesPorCUIT,
     };
 };
@@ -134,7 +135,7 @@ class DetallePlan extends React.PureComponent {
         } = this.state;
 
         return (
-            <div className={classNames(classes.mainContainer, "contentDetalleTributo")}>
+            <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
                 <Grid container className={classes.root} spacing={16} justify="center">
                     <Grid item xs={8} className={"container"}>
                         <MiCard>
@@ -144,7 +145,7 @@ class DetallePlan extends React.PureComponent {
                                 {this.tributoPadre.identificador &&
                                     <Button
                                         onClick={this.handleCuentaOrigen}
-                                        className={classes.btnCuentaOrigen}
+                                        className={this.props.paraMobile ? classes.btnCuentaOrigenParaMobile : classes.btnCuentaOrigen}
                                         variant="outlined"
                                         color="secondary">
                                         Ver Cuenta Origen</Button>
