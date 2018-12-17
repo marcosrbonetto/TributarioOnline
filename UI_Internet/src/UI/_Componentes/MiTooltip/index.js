@@ -13,6 +13,7 @@ class MiTooltip extends React.PureComponent {
     return (
       <div className={classes.root}>
         <Tooltip
+          disableFocusListener disableTouchListener 
           classes={{ tooltip: classes.lightTooltip }}
           title={this.props.contenidoDetalle}>
           {this.props.children}

@@ -1,5 +1,8 @@
 import React from "react";
 
+//Mobile
+import withWidth, { isWidthUp } from "@material-ui/core/withWidth";
+
 //Styles
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles } from "@material-ui/core/styles";
@@ -15,7 +18,7 @@ import { replace } from "connected-react-router";
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
 import { login, logout } from '@Redux/Actions/usuario';
-import { setTipoTributos, setTipoCedulones, setEstadoPagos, setPublicKeyMercadoPago } from '@Redux/Actions/mainContent';
+import { setTipoTributos, setTipoCedulones, setEstadoPagos, setPublicKeyMercadoPago, paraMobile } from '@Redux/Actions/mainContent';
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -70,11 +73,18 @@ const mapDispatchToProps = dispatch => ({
   setPublicKeyMercadoPago: data => {
     dispatch(setPublicKeyMercadoPago(data));
   },
+  paraMobile: data => {
+    dispatch(paraMobile(data));
+  }
 });
 
+const limite = 'sm';
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    const paraMobile = !isWidthUp(limite, props.width);
+    this.props.paraMobile(paraMobile);
 
     this.state = {
       validandoToken: false
@@ -269,6 +279,13 @@ class App extends React.Component {
     });
   };
 
+  onResize = () => {
+    setTimeout(() => {
+      const paraMobile = !isWidthUp(limite, this.props.width);
+      this.props.paraMobile(paraMobile);
+    }, 500);
+  };
+
   onLogin = () => {
     //Cada 5 seg valido el token
     this.intervalo = setInterval(() => {
@@ -424,6 +441,7 @@ const styles = theme => {
 
 let componente = App;
 componente = withStyles(styles)(componente);
+componente = withWidth()(componente);
 componente = connect(
   mapStateToProps,
   mapDispatchToProps

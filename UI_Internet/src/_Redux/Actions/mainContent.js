@@ -3,7 +3,8 @@ import {
   SET_TIPO_TRIBUTOS, 
   SET_TIPO_CEDULONES,
   SET_ESTADO_PAGOS,
-  SET_PUBLIC_KEY_MERCADO_PAGO
+  SET_PUBLIC_KEY_MERCADO_PAGO,
+  PARA_MOBILE
 } from "@Redux/Constants/index";
 
 export const mostrarCargando = cargando => ({
@@ -29,4 +30,9 @@ export const setEstadoPagos = datos => ({
 export const setPublicKeyMercadoPago = datos => ({
   type: SET_PUBLIC_KEY_MERCADO_PAGO,
   payload: datos
+});
+
+export const paraMobile = data => ({
+  type: PARA_MOBILE,
+  payload: data
 });

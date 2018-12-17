@@ -249,6 +249,32 @@ const styles = theme => ({
     },
     textoNoWrap: {
       whiteSpace: 'nowrap'
+    },
+    subItemSeleccionadoMobile: {
+      fontFamily: "\'Roboto\', \'Helvetica\', \'Arial\', \'sans-serif\'",
+      width: '100%',
+      display: 'inline-block',
+      textAlign: 'center',
+    },
+    itemSubMenuMobile: {
+      fontSize: '10px',
+      padding: '3px',
+      justifyContent: 'center',
+    },
+    menuMobile: {
+      width: '100%',
+      color: '#149257',
+      border: '2px solid',
+      padding: '0px 10px 0px 15px',
+      fontSize: '22px',
+      fontWeight: 'bold',
+      marginRight: '5px',
+      borderColor: '#149257',
+      marginBottom: '12px',
+      borderRadius: '20px',
+    },
+    menuContainer: {
+      width: '100%'
     }
   });
 

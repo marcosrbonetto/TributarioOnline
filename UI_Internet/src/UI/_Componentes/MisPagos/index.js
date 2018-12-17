@@ -3,6 +3,7 @@ import _ from "lodash";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
+import classNames from "classnames";
 
 //Material UI Components
 import Grid from '@material-ui/core/Grid';
@@ -87,11 +88,13 @@ class MisPagos extends React.PureComponent {
       auxImporteAPagar = formatNumber(auxImporteAPagar);
     }
 
+    const pagination = !this.props.paraMobile;
+    
     return <div>
       <Grid container className={classes.containerDeudaAdm}>
         {/* Totalizadores */}
         <Typography className={classes.tituloDeudaAdm} variant="title" gutterBottom>Deuda {labelsTotales.totalesDeuda}</Typography>
-        <Grid item sm={4}>
+        <Grid item sm={4} className={"itemTotales"}>
           <Grid container>
             <Grid item sm={6}>
               <Typography variant="subheading" gutterBottom>Total: </Typography>
@@ -101,7 +104,7 @@ class MisPagos extends React.PureComponent {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item sm={4}>
+        <Grid item sm={4} className={"itemTotales"}>
           <Grid container>
             <Grid item sm={6}>
               <Typography variant="subheading" gutterBottom>{labelsTotales.vencida}: </Typography>
@@ -111,7 +114,7 @@ class MisPagos extends React.PureComponent {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item sm={4}>
+        <Grid item sm={4} className={"itemTotales"}>
           <Grid container>
             <Grid item sm={6}>
               <Typography variant="subheading" gutterBottom>{labelsTotales.aVencer}: </Typography>
@@ -124,7 +127,7 @@ class MisPagos extends React.PureComponent {
       </Grid>
       <Grid container spacing={16}>
         {/* Totalizador de deudas seleccionadas y botones de pago */}
-        <Grid item sm={6}>
+        <Grid item sm={6} className={"inputTotalPeriodos"}>
           <TextField
             id="standard-full-width"
             label="Total a pagar"
@@ -138,7 +141,7 @@ class MisPagos extends React.PureComponent {
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
         </Grid>
-        <Grid item sm={6} className={classes.buttonActionsContent}>
+        <Grid item sm={6} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
           
           <MisBeneficios />
 
@@ -169,6 +172,7 @@ class MisPagos extends React.PureComponent {
 
       {/* Tabla de detalle del tributo */}
       <MiTabla
+        pagination={pagination}
         columns={[
           { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
           { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas[1] : 'Vencimiento') },
@@ -185,7 +189,7 @@ class MisPagos extends React.PureComponent {
 
       <Grid container spacing={16}>
         {/* Totalizador de deudas seleccionadas y botones de pago */}
-        <Grid item sm={7}>
+        <Grid item sm={7} className={"inputTotalPeriodos"}>
           <TextField
             id="standard-full-width"
             label="Total a pagar"
@@ -199,7 +203,7 @@ class MisPagos extends React.PureComponent {
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
         </Grid>
-        <Grid item sm={5} className={classes.buttonActionsContent}>
+        <Grid item sm={5} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
           <MiCedulon
             registrosSeleccionados={registrosSeleccionados}
             subItem={cedulonConfig.subItem}

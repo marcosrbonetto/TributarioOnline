@@ -1,7 +1,3 @@
-.contentDetalleTributo .otrasOperaciones {
-    margin-top: 20px;
-}
-
 @media only screen and (max-width: 1135px) {
     .contentDetalleTributo .container {
         min-width: 100%;
@@ -17,8 +13,5 @@
         margin-left: 1%;
         display: inline-block;
         vertical-align: top;
-    }
-    .contentDetalleTributo .otrasOperaciones {
-        margin-top: 0px;
     }
 } 

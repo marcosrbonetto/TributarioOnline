@@ -14,7 +14,7 @@ class MisBeneficios extends React.PureComponent {
     let { classes } = this.props;
 
     return (
-      <div className={classes.root}>
+      <div className={classNames(classes.root, "BtnMisBeneficios")}>
         <Button
           variant="contained"
           color="secondary"

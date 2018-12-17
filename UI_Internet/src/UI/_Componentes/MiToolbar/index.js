@@ -146,7 +146,7 @@ class MiToolbar extends React.Component {
             )}
 
           {/* Logo muni */}
-          {<div className="imgMuni"></div>}
+          {<div onClick={this.handleClickLogo} className={classNames("imgMuni", classes.logoMuni)}></div>}
 
 
           <Typography
@@ -241,8 +241,6 @@ const styles = theme => {
       zIndex: theme.zIndex.drawer + 2
     },
     logoMuni: {
-      width: '140px',
-      marginRight: '20px',
       cursor: 'pointer'
     },
     title: {

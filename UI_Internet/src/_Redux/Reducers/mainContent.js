@@ -3,7 +3,8 @@ import {
   SET_TIPO_TRIBUTOS,
   SET_TIPO_CEDULONES,
   SET_ESTADO_PAGOS,
-  SET_PUBLIC_KEY_MERCADO_PAGO
+  SET_PUBLIC_KEY_MERCADO_PAGO,
+  PARA_MOBILE
 } from "@Redux/Constants/index";
 import _ from "lodash";
 
@@ -14,7 +15,8 @@ const initialState = {
   tipoTributos: {},
   tipoCedulones: {},
   estadoPagos: {},
-  publicKeyMercadoPago: ''
+  publicKeyMercadoPago: '',
+  paraMobile: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -84,6 +86,9 @@ const reducer = (state = initialState, action) => {
     }
     case SET_PUBLIC_KEY_MERCADO_PAGO: {
       return { ...state, publicKeyMercadoPago: action.payload };
+    }
+    case PARA_MOBILE: {
+      return { ...state, paraMobile: action.payload };
     }
     default:
       return state;

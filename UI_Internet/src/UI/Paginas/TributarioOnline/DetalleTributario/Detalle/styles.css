@@ -18,9 +18,6 @@
         display: inline-block;
         vertical-align: top;
     }
-    .contentDetalleTributo .otrasOperaciones {
-        margin-top: 0px;
-    }
 } 
 
 @media only screen and (max-width: 760px) {
@@ -29,5 +26,40 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    .MenuItemIdentificadores {
+        margin-left: 0px !important;
+        width: 100% !important;
+    }
+
+    .tituloDetalleTributo {
+        text-align: center !important;
+    }
+
+    .itemTotales {
+        width: 100% !important;
+    }
+
+    .itemTotales > div {
+        justify-content: center !important;
+    }
+
+    .itemTotales > div > div:nth-child(2) {
+        width: 100% !important;
+    }
+
+    .inputTotalPeriodos {
+        width: 100% !important;
+        margin-right: 10px !important;
+    }
+
+    .buttonActionsContent {
+        margin-top: 0px !important;
+        width: 100% !important;
+    }
+
+    .BtnMisBeneficios {
+        width: 100% !important;
     }
 }

@@ -22,6 +22,7 @@ import { replace, push } from "connected-react-router";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
@@ -48,6 +49,7 @@ const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
         tipoCedulones: state.MainContent.tipoCedulones,
+        paraMobile: state.MainContent.paraMobile,
         tributosBienesPorCUIT: state.AfipController.tributosBienesPorCUIT,
     };
 };
@@ -67,6 +69,7 @@ class DetalleTributo extends React.PureComponent {
 
         this.modoInvitado = this.props.loggedUser.token == window.Config.TOKEN_INVITADO;
         this.initialState = {
+            anchorElMenu: null,
             menuItemSeleccionado: this.props.match.params.seccionMenu || 'contribucion', //Menu seleccionado que muestra contenido MisPagosDetalle
             mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
             infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
@@ -233,14 +236,14 @@ class DetalleTributo extends React.PureComponent {
                         "identificador": identificador,
                         "representado": undefined
                     };
-                    
+
                     const tributosBienesPorCUIT = _.filter(this.props.tributosBienesPorCUIT, (o) => {
                         return o.tipoTributo == parseInt(getIdTipoTributo(this.props.match.params.tributo)) //&& !(o.tipoTributo == idTipoTributo &&  o.identificador == identificador)
                     });
-                    
+
                     //Si el seleccionado ya esta entre los importados no lo lo mete de nuevo en el array
                     let arrayIdentificadores = [identificadorActual, ...tributosBienesPorCUIT];
-                    if(_.findIndex(tributosBienesPorCUIT,{ "tipoTributo": identificadorActual.tipoTributo, "identificador": identificadorActual.identificador }) != -1)
+                    if (_.findIndex(tributosBienesPorCUIT, { "tipoTributo": identificadorActual.tipoTributo, "identificador": identificadorActual.identificador }) != -1)
                         arrayIdentificadores = tributosBienesPorCUIT;
 
                     //Cargamos el tributo seleccionado
@@ -285,8 +288,8 @@ class DetalleTributo extends React.PureComponent {
 
         var arrayTributos = _.filter(datos, { tipoTributo: tipoTributo });
 
-        arrayTributos = _.sortBy(arrayTributos, function(o) { return o.titular.titular; });
-        
+        arrayTributos = _.sortBy(arrayTributos, function (o) { return o.titular.titular; });
+
         IdsTributos = (arrayTributos && arrayTributos.map((tributo) => {
             return {
                 representado: tributo.titular.titular,
@@ -432,9 +435,9 @@ class DetalleTributo extends React.PureComponent {
                 }
 
                 let juicios = Object.assign({}, this.state.juicios);
-                const menuItem = (this.props.match.params.seccionMenu == 'juicios' ? 
-                    decodeURIComponent(this.props.match.params.subIdentificador) 
-                    : 
+                const menuItem = (this.props.match.params.seccionMenu == 'juicios' ?
+                    decodeURIComponent(this.props.match.params.subIdentificador)
+                    :
                     ((data.lista > 0 && data.lista[0].idJuicio) || ''));
                 juicios.menuItemSeleccionado = menuItem;
 
@@ -487,9 +490,9 @@ class DetalleTributo extends React.PureComponent {
                 }
 
                 let planes = Object.assign({}, this.state.planes);
-                const menuItem = (this.props.match.params.seccionMenu == 'planes' ? 
-                    decodeURIComponent(this.props.match.params.subIdentificador) 
-                    : 
+                const menuItem = (this.props.match.params.seccionMenu == 'planes' ?
+                    decodeURIComponent(this.props.match.params.subIdentificador)
+                    :
                     ((data.lista > 0 && data.lista[0].idJuicio) || ''));
                 planes.menuItemSeleccionado = menuItem;
 
@@ -549,24 +552,25 @@ class DetalleTributo extends React.PureComponent {
 
     //Evento cuando se cambia de sección del MENU principal
     handleMenuChange = (event, value) => {
+        const seccionSeleccionada = event.currentTarget.attributes.value ? event.currentTarget.attributes.value.value : value;
 
         this.setState({
-            menuItemSeleccionado: value
+            menuItemSeleccionado: seccionSeleccionada
         });
 
         //Luego verificamos si la sección es una lista de tributos (submenu)
         //De ser asi, obtenemos los datos del primer item de la lista (submenu)
         //De lo contrario se muestra los datos de la seccion seleccionada
-        const datosItemSeleccionado = this.state[value].tieneSubMenu ? this.getDatosSubItem(this.state[value].infoSeccion) : this.state[value].infoSeccion;
+        const datosItemSeleccionado = this.state[seccionSeleccionada].tieneSubMenu ? this.getDatosSubItem(this.state[seccionSeleccionada].infoSeccion) : this.state[seccionSeleccionada].infoSeccion;
 
         //En caso de ser una lista (submenu), se selecciona el primero que aparece
         //Seleccionamos el item del SUBMENU
-        if (this.state[value].tieneSubMenu && datosItemSeleccionado.rowList && datosItemSeleccionado.rowList.length > 0) {
-            let seccionState = Object.assign({}, this.state[value]);
+        if (this.state[seccionSeleccionada].tieneSubMenu && datosItemSeleccionado.rowList && datosItemSeleccionado.rowList.length > 0) {
+            let seccionState = Object.assign({}, this.state[seccionSeleccionada]);
             //Seteamos el subitem seleccionado, como seleccionado
             seccionState.menuItemSeleccionado = datosItemSeleccionado.identificador;
             this.setState({
-                [value]: seccionState
+                [seccionSeleccionada]: seccionState
             });
         }
 
@@ -599,19 +603,21 @@ class DetalleTributo extends React.PureComponent {
 
     //Evento cuando se cambia de subsección (SUBMENU)
     handleSubMenuChange = (event, identificador) => {
+        const identificadorSeleccionado = event.currentTarget.attributes.identificador ? event.currentTarget.attributes.identificador.value : identificador;
 
         const seccionActual = this.state.menuItemSeleccionado;
 
         // Seteamos el submenu seleccionado, como seleccionado
         let seccionState = Object.assign({}, this.state[seccionActual]);
-        seccionState.menuItemSeleccionado = identificador;
+        seccionState.menuItemSeleccionado = identificadorSeleccionado;
 
         this.setState({
-            [seccionActual]: seccionState
+            [seccionActual]: seccionState,
+            anchorElMenu: null
         });
 
         //Seteamos valores de acuerdo a la subsección seleccionada
-        const datosItemSeleccionado = this.getDatosSubItem(this.state[seccionActual].infoSeccion, identificador);
+        const datosItemSeleccionado = this.getDatosSubItem(this.state[seccionActual].infoSeccion, identificadorSeleccionado);
         this.refreshValoresPantalla({
             datosItemSeleccionado: datosItemSeleccionado
         });
@@ -1306,6 +1312,20 @@ class DetalleTributo extends React.PureComponent {
         window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP?appUrlRedirect=' + '/DetalleTributario/' + tributo + '/' + encodeURIComponent(identificador));
     };
 
+    handleClickMenu = event => {
+        this.setState({ anchorElMenu: event.currentTarget });
+    };
+
+    handleMenuSubMenu = (event, cerrarMenu) => {
+        if (cerrarMenu) this.setState({ anchorElMenu: null });
+
+        this.handleMenuChange(event);
+    };
+
+    handleCloseMenu = () => {
+        this.setState({ anchorElMenu: null });
+    };
+
     render() {
         const { classes } = this.props;
 
@@ -1345,9 +1365,9 @@ class DetalleTributo extends React.PureComponent {
                     <Grid item xs={8} className={"container"}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}
-                            <Typography className={classes.title} variant="title">Identificador:
+                            <Typography className={classNames(classes.title, "tituloDetalleTributo")} variant="title">Identificador:
                             <Select
-                                    className={classNames(classes.selectIdentificador,"MenuItemIdentificadores")}
+                                    className={classNames(classes.selectIdentificador, "MenuItemIdentificadores")}
                                     inputProps={{
                                         name: 'identificador',
                                         id: 'identificador',
@@ -1361,98 +1381,161 @@ class DetalleTributo extends React.PureComponent {
                                         return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado}</MenuItem>
                                     })}
                                 </Select>
-                                - <b className={classes.textoNoWrap}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b>
+                                {!this.props.paraMobile && <span>- <b className={classes.textoNoWrap}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b></span>}
                             </Typography>
 
-                            {/* Menu de secciones */}
-                            <Grid container spacing={16}>
-                                <Grid item sm={12} className={classes.tabMenu}>
+                            {!this.props.paraMobile && <div>
 
-                                    <Tabs
-                                        value={menuItemSeleccionado}
-                                        onChange={this.handleMenuChange}
-                                        indicatorColor="secondary"
-                                        textColor="secondary"
-                                        centered
-                                        scrollButtons="auto"
-                                        classes={{ flexContainer: classes.flexContainersMenu, scrollButtons: classes.scrollButtonsMenu }}
-                                    >
-
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
-
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
-
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
-
-                                        <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="planes" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanes ? listPlanes.length : 0}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
-
-                                    </Tabs>
-
-                                </Grid>
-                            </Grid>
-
-                            {/* Sub Menus */}
-
-                            {/* Juicio */}
-                            {(menuItemSeleccionado == 'juicios' &&
-                                (listJuicios.length > 0 &&
-                                    <div>
-
-                                        <Grid container spacing={16}>
-                                            <Grid item sm={12} className={classes.tabMenu}>
-                                                {/* SubMenu */}
-                                                <Tabs
-                                                    value={juicios.menuItemSeleccionado}
-                                                    onChange={this.handleSubMenuChange}
-                                                    classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
-                                                    scrollable
-                                                    scrollButtons="auto"
-                                                >
-
-                                                    {/* Juicio por Contribución */}
-                                                    {listJuicios.map((juicio) => {
-                                                        return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
-                                                    })}
-
-                                                </Tabs>
-
-                                            </Grid>
-                                        </Grid>
-                                    </div>)
-                                || menuItemSeleccionado == 'juicios' &&
-                                <Typography className={classes.infoTexto}>
-                                    {`Le informamos que no posee juicios`}
-                                </Typography>)
-                            }
-
-                            {/* Planes de Pago */}
-                            {(menuItemSeleccionado == 'planes' && listPlanes.length > 0 && <div>
-
+                                {/* Menu de secciones */}
                                 <Grid container spacing={16}>
                                     <Grid item sm={12} className={classes.tabMenu}>
-                                        {/* SubMenu */}
+
                                         <Tabs
-                                            value={planes.menuItemSeleccionado}
-                                            onChange={this.handleSubMenuChange}
-                                            scrollable
+                                            value={menuItemSeleccionado}
+                                            onChange={this.handleMenuChange}
+                                            indicatorColor="secondary"
+                                            textColor="secondary"
+                                            centered
                                             scrollButtons="auto"
-                                            classes={{ scrollButtons: classes.scrollButtonsSubMenu }}
+                                            classes={{ flexContainer: classes.flexContainersMenu, scrollButtons: classes.scrollButtonsMenu }}
                                         >
 
-                                            {listPlanes.map((plan) => {
-                                                return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
-                                            })}
+                                            <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
+
+                                            <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
+
+                                            <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
+
+                                            <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="planes" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanes ? listPlanes.length : 0}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
 
                                         </Tabs>
 
                                     </Grid>
                                 </Grid>
-                            </div>)
-                                ||
-                                menuItemSeleccionado == 'planes' &&
-                                <Typography className={classes.infoTexto}>
-                                    {`Le informamos que no posee planes de pago`}
-                                </Typography>}
+
+                                {/* Sub Menus */}
+
+                                {/* Juicio */}
+                                {(menuItemSeleccionado == 'juicios' &&
+                                    (listJuicios.length > 0 &&
+                                        <div>
+
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={12} className={classes.tabMenu}>
+                                                    {/* SubMenu */}
+                                                    <Tabs
+                                                        value={juicios.menuItemSeleccionado}
+                                                        onChange={this.handleSubMenuChange}
+                                                        classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+                                                        scrollable
+                                                        scrollButtons="auto"
+                                                    >
+
+                                                        {/* Juicio por Contribución */}
+                                                        {listJuicios.map((juicio) => {
+                                                            return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                        })}
+
+                                                    </Tabs>
+
+                                                </Grid>
+                                            </Grid>
+                                        </div>)
+                                    || menuItemSeleccionado == 'juicios' &&
+                                    <Typography className={classes.infoTexto}>
+                                        {`Le informamos que no posee juicios`}
+                                    </Typography>)
+                                }
+
+                                {/* Planes de Pago */}
+                                {(menuItemSeleccionado == 'planes' && listPlanes.length > 0 && <div>
+
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={12} className={classes.tabMenu}>
+                                            {/* SubMenu */}
+                                            <Tabs
+                                                value={planes.menuItemSeleccionado}
+                                                onChange={this.handleSubMenuChange}
+                                                scrollable
+                                                scrollButtons="auto"
+                                                classes={{ scrollButtons: classes.scrollButtonsSubMenu }}
+                                            >
+
+                                                {listPlanes.map((plan) => {
+                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                                })}
+
+                                            </Tabs>
+
+                                        </Grid>
+                                    </Grid>
+                                </div>)
+                                    ||
+                                    menuItemSeleccionado == 'planes' &&
+                                    <Typography className={classes.infoTexto}>
+                                        {`Le informamos que no posee planes de pago`}
+                                    </Typography>}
+
+                            </div>}
+
+                            {this.props.paraMobile && <div>
+                                <Grid container spacing={16}>
+                                    <Grid item sm={12} className={classes.menuContainer}>
+                                        <Button
+                                            aria-owns={this.state.anchorElMenu ? 'simple-menu' : undefined}
+                                            aria-haspopup="true"
+                                            onClick={this.handleClickMenu}
+                                        >Menu</Button> {((menuItemSeleccionado == 'juicios' || menuItemSeleccionado == 'planes') && <b className={classNames(classes.subItemSeleccionadoMobile, classes.textoNoWrap)}>{this.state[menuItemSeleccionado].labels.detalleTitulo} - {this.state[menuItemSeleccionado].menuItemSeleccionado}</b>) || <b className={classNames(classes.subItemSeleccionadoMobile, classes.textoNoWrap)}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b>}
+                                        <Menu
+                                            id="simple-menu"
+                                            anchorEl={this.state.anchorElMenu}
+                                            open={Boolean(this.state.anchorElMenu)}
+                                            onClose={this.handleCloseMenu}
+                                        >
+                                            <MenuItem
+                                                disabled={this.state.menuItemSeleccionado == 'contribucion'}
+                                                value={'contribucion'}
+                                                onClick={(event) => this.handleMenuSubMenu(event, true)}
+                                            >Deuda Administrativa</MenuItem>
+                                            <MenuItem
+                                                disabled={this.state.menuItemSeleccionado == 'multas'}
+                                                value={'multas'}
+                                                onClick={(event) => this.handleMenuSubMenu(event, true)}
+                                            >Multas</MenuItem>
+                                            <MenuItem
+                                                disabled={this.state.menuItemSeleccionado == 'juicios'}
+                                                value={'juicios'}
+                                                onClick={(event) => this.handleMenuSubMenu(event, false)}
+                                            >Deuda Judicial</MenuItem>
+                                            {(menuItemSeleccionado == 'juicios' && listJuicios.length > 0 && <div>
+                                                {listJuicios.map((juicio) => {
+                                                    return <MenuItem
+                                                        className={classes.itemSubMenuMobile}
+                                                        disabled={this.state[menuItemSeleccionado].menuItemSeleccionado == juicio.idJuicio}
+                                                        identificador={juicio.idJuicio}
+                                                        onClick={this.handleSubMenuChange}
+                                                    >{juicio.idJuicio}</MenuItem>;
+                                                })}
+                                            </div>)}
+                                            <MenuItem
+                                                disabled={this.state.menuItemSeleccionado == 'planes'}
+                                                value={'planes'}
+                                                onClick={(event) => this.handleMenuSubMenu(event, false)}
+                                            >Planes</MenuItem>
+                                            {(menuItemSeleccionado == 'planes' && listPlanes.length > 0 && <div>
+                                                {listPlanes.map((plan) => {
+                                                    return <MenuItem
+                                                        className={classes.itemSubMenuMobile}
+                                                        disabled={this.state[menuItemSeleccionado].menuItemSeleccionado == plan.idPlan}
+                                                        identificador={plan.idPlan}
+                                                        onClick={this.handleSubMenuChange}
+                                                    >{plan.idPlan}</MenuItem>;
+                                                })}
+                                            </div>)}
+                                        </Menu>
+                                    </Grid>
+                                </Grid>
+                            </div>}
 
                             {/* Secciones */}
 
@@ -1463,7 +1546,8 @@ class DetalleTributo extends React.PureComponent {
                                         {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                     </Typography>
                                     <MisPagosDetalle
-                                        pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
+                                        paraMobile={this.props.paraMobile}
+                                        pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                         tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                         check={true}
                                         info={infoContribucion || null}
@@ -1488,7 +1572,8 @@ class DetalleTributo extends React.PureComponent {
                                             {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                         </Typography>
                                         <MisPagosDetalle
-                                            pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
+                                            paraMobile={this.props.paraMobile}
+                                            pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                             tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                             check={true}
                                             info={infoMultas || null}
@@ -1518,7 +1603,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagosDetalle
-                                                    pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
+                                                    paraMobile={this.props.paraMobile}
+                                                    pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={false}
                                                     info={juicio || null}
@@ -1545,7 +1631,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagosDetalle
-                                                    pagoRedirect={'/DetalleTributario/'+this.props.match.params.tributo+'/'+decodeURIComponent(this.props.match.params.identificador)+'/'+menuItemSeleccionado}
+                                                    paraMobile={this.props.paraMobile}
+                                                    pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={true}
                                                     info={plan || null}
@@ -1564,7 +1651,7 @@ class DetalleTributo extends React.PureComponent {
                     </Grid>
                     <Grid item xs={4} className={"container"}>
                         {/* Bloque Datos Generales */}
-                        <MiCard rootClassName={"leftBox"}>
+                        <MiCard>
                             <Typography className={classes.title} variant="title">Datos Generales</Typography>
                             <Divider className={classes.divider} />
                             <Grid container spacing={16}>
@@ -1635,7 +1722,7 @@ class DetalleTributo extends React.PureComponent {
 
                         </MiCard>
 
-                        <MiCard rootClassName={"otrasOperaciones rightBox"}>
+                        <MiCard rootClassName={"otrasOperaciones"}>
                             {/* Bloque Otras Operaciones */}
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
                             <Divider className={classes.divider} />

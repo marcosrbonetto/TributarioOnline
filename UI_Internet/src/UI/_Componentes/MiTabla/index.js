@@ -250,6 +250,7 @@ class MiTabla extends React.PureComponent {
         let { orderType } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
         const check = this.props.check;
+        const pagination = this.props.pagination == false ? false : true;
 
         //Seteamos el orderType inicial de acuerdo a orderBy
         if(this.props.columns) {
@@ -292,7 +293,7 @@ class MiTabla extends React.PureComponent {
                                 })) || <TableRow>
                                     <TableCell colSpan={6}>{this.props.msgNoRows ? this.props.msgNoRows : 'No se encontraron registros'}</TableCell>
                                 </TableRow>}
-                            {emptyRows > 0 && (
+                            {emptyRows > 0 && pagination && (
                                 <TableRow style={{ height: 45 * emptyRows }}>
                                     <TableCell colSpan={6} />
                                 </TableRow>
@@ -300,7 +301,7 @@ class MiTabla extends React.PureComponent {
                         </TableBody>
                     </Table>
                 </div>
-                <TablePagination
+                {pagination && <TablePagination
                     component="div"
                     count={data.length}
                     rowsPerPage={rowsPerPage}
@@ -320,7 +321,7 @@ class MiTabla extends React.PureComponent {
                             count = _ref.count;
                         return "".concat(from, "-").concat(to, " de ").concat(count);
                     }}
-                />
+                />}
             </Paper>
         );
     }
