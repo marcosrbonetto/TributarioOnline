@@ -282,6 +282,60 @@ const getInfoPlanes = (token, tipoTributo, identificador) => {
   });
 };
 
+const getInfoDetalleJuicio = (token, identificador) => {
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/DetalleJuicio?identificador=' + identificador, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      }
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
+
+const getInfoDetallePlan = (token, identificador) => {
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/DetallePlan?identificador=' + identificador, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      }
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        resolve(datos);
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
+
 const getReporteCedulon = (token, body) => {
   let bodyParameter = {
     "tipoTributo": body.tipoTributo,
@@ -305,12 +359,10 @@ const getReporteCedulon = (token, body) => {
 
     case tipoCedulones[3]:
       url = '/v1/Cedulon/Juicios';
-      bodyParameter.juicio= body.subItem;
       break;
 
     case tipoCedulones[4]:
       url = '/v1/Cedulon/Planes';
-      bodyParameter.plan= body.subItem;
       bodyParameter.periodos= body.periodos;
       break;
   }
@@ -673,6 +725,8 @@ const services = {
   getInfoMultas: getInfoMultas,
   getInfoJuicios: getInfoJuicios,
   getInfoPlanes: getInfoPlanes,
+  getInfoDetalleJuicio: getInfoDetalleJuicio,
+  getInfoDetallePlan: getInfoDetallePlan,
   getReporteCedulon: getReporteCedulon,
   getInformeCuenta: getInformeCuenta,
   getReporteInformeCuenta: getReporteInformeCuenta,

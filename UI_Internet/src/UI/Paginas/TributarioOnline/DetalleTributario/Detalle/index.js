@@ -1613,8 +1613,8 @@ class DetalleTributo extends React.PureComponent {
                                                     data={this.state[menuItemSeleccionado]}
                                                     registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                                    identificadorActual={decodeURIComponent(this.props.match.params.identificador)}
-                                                    tributoActual={this.props.match.params.tributo}
+                                                    identificadorActual={decodeURIComponent(this.state[menuItemSeleccionado].menuItemSeleccionado)}
+                                                    tributoActual={'Juicio'}
                                                 />
                                             </div>}
                                     </div>
@@ -1641,8 +1641,8 @@ class DetalleTributo extends React.PureComponent {
                                                     data={this.state[menuItemSeleccionado]}
                                                     registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                                     setRegistrosSeleccionados={this.setRegistrosSeleccionados}
-                                                    identificadorActual={decodeURIComponent(this.props.match.params.identificador)}
-                                                    tributoActual={this.props.match.params.tributo}
+                                                    identificadorActual={decodeURIComponent(this.state[menuItemSeleccionado].menuItemSeleccionado)}
+                                                    tributoActual={'Plan'}
                                                 />
                                             </div>}
                                     </div>
