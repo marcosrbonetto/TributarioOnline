@@ -58,9 +58,12 @@ class HomeInvitado extends React.PureComponent {
     if (!(token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO)) {
       this.props.redireccionar("/Inicio/HomeUsuario");
     }
+  }
 
+  componentWillReceiveProps() {
     //Corroboramos Resultado importacion AFIP - BIENES por CUIT
     let afipProcess = new URLSearchParams(this.props.location.search).get('status');
+
     if (afipProcess) {
       if (afipProcess == 'OK')
         this.setState({
