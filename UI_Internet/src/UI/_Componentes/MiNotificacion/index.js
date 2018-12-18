@@ -178,7 +178,7 @@ class MiNotificacion extends React.PureComponent {
       <div>
         {/* Icono de Notificaciones */}
         <IconButton
-          className={classNames(classes.marginIcon,'marginIcon')}
+          className={classNames(classes.marginIcon, 'marginIcon')}
           color="inherit"
           onClick={this.handleClick}
         >
@@ -204,7 +204,10 @@ class MiNotificacion extends React.PureComponent {
             paper: classes.contentPopover
           }}>
           <MiCard padding={false} className={classes.styleMiCard}>
-            <Typography className={classes.titleMiCard} variant="subheading"><b>Notificaciones</b></Typography>
+            <Typography className={classes.titleMiCard} variant="subheading">
+              <b>Notificaciones</b>
+              <i onClick={this.handleClose} className={classNames(classes.iconCloseNotif, "material-icons")}>cancel</i>
+            </Typography>
 
             {this.state.arrayCUITNotificaciones && this.state.arrayCUITNotificaciones.map((item, index) => {
               return <div>
@@ -306,6 +309,11 @@ const styles = theme => {
     },
     notificacionNoLeida: {
       background: '#dedede'
+    },
+    iconCloseNotif: {
+      right: '10px',
+      position: 'absolute',
+      cursor: 'pointer'
     }
   };
 };
