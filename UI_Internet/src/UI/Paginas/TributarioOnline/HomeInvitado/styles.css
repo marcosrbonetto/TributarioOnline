@@ -2,6 +2,10 @@
     .tributarioAccess {
         min-width: 100%
     }
+
+    .buttonActions {
+        right: 14px !important;
+    }
 } 
 
 @media only screen and (max-width: 1100px) and (min-width: 760px) {

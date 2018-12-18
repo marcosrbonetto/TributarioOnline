@@ -130,7 +130,7 @@ class SeleccionTributo extends React.PureComponent {
         const titulo = getTextoTipoTributo(this.props.match.params.tributo);
         
         return (
-            <div className={classNames(classes.mainContainer, "contentDetalleTributo")}>
+            <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
                 <Grid container spacing={16} justify="center">
                     <Grid item xs={5} className={"container"} >
                         <MiCard contentClassName={classes.root} >

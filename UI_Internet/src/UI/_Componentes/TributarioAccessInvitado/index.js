@@ -1,5 +1,6 @@
 import React from "react";
 import _ from "lodash";
+import classNames from "classnames";
 
 //Styles
 import { withStyles } from "@material-ui/core/styles";
@@ -153,7 +154,7 @@ class TributarioAccessInvitado extends React.PureComponent {
                                 <Button
                                     variant="contained"
                                     color="secondary"
-                                    className={classes.buttonActions}
+                                    className={classNames(classes.buttonActions, "buttonActions")}
                                     onClick={this.handleEntrarTributo}
                                 >Entrar</Button>
                             </Grid>

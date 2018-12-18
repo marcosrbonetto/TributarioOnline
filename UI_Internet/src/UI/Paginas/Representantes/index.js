@@ -51,6 +51,7 @@ const mapStateToProps = state => {
   return {
     loggedUser: state.Usuario.loggedUser,
     tipoTributos: state.MainContent.tipoTributos,
+    paraMobile: state.MainContent.paraMobile,
     datosEnvioSolicitudPermisos: state.Representantes.datosEnvioSolicitudPermisos,
     datosPedidoSolicitudPermisos: state.Representantes.datosPedidoSolicitudPermisos,
     datosMisRepresentantes: state.Representantes.datosMisRepresentantes,
@@ -594,7 +595,7 @@ class Representantes extends React.PureComponent {
     const { classes } = this.props;
 
     return (
-      <div className={classNames(classes.mainContainer, "contentRepresentantes")}>
+      <div className={classNames(classes.mainContainer, "contentRepresentantes", "mainContainer")}>
         <Grid container className={classes.root} spacing={16}>
           <Grid item xs={8} className="container">
             {/* Tabla Mis Representantes */}
@@ -602,6 +603,7 @@ class Representantes extends React.PureComponent {
               <Typography className={classes.title} variant="title">Mis Representantes</Typography>
               {/*<Divider className={classes.divider} />*/}
               <MiTabla
+                pagination={!this.props.paraMobile}
                 rowType={'Representantes'}
                 columns={[
                   { id: 'usuario', type: 'string', numeric: false, label: 'Representante' },
@@ -623,6 +625,7 @@ class Representantes extends React.PureComponent {
               {/*<Divider className={classes.divider} />*/}
 
               <MiTabla
+                pagination={!this.props.paraMobile}
                 rowType={'Representados'}
                 columns={[
                   { id: 'usuario', type: 'string', numeric: false, label: 'Representados' },
@@ -682,7 +685,7 @@ class Representantes extends React.PureComponent {
               </MiCard>*/}
 
             {/* Busqueda por Tributo */}
-            <MiCard rootClassName={"leftBox"}>
+            <MiCard>
               <Typography className={classes.title} variant="title">Agregar Representacion por Tributo</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.infoTexto}>
@@ -770,7 +773,7 @@ class Representantes extends React.PureComponent {
             </MiCard>
 
             {/* Busqueda por CUIT */}
-            <MiCard rootClassName={"busquedaCUIT rightBox"}>
+            <MiCard rootClassName={"busquedaCUIT"}>
               <Typography className={classes.title} variant="title">Agregar Representacion por CUIT</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.infoTexto}>

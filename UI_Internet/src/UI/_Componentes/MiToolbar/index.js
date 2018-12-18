@@ -295,7 +295,9 @@ const styles = theme => {
       opacity: 1
     },
     btnBienesPorCUIT: {
-      marginRight: '10px'
+      marginRight: '10px',
+      marginTop: '5px',
+      marginBottom: '5px',
     },
     loggedIcons: {
       textAlign: 'right',

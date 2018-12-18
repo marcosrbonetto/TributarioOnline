@@ -6,19 +6,4 @@
     .contentRepresentantes .container {
         min-width: 100%;
     }
-    .contentRepresentantes .leftBox {
-        width: 49%;
-        margin-right: 1%;
-        display: inline-block;
-        vertical-align: top;
-    }
-    .contentRepresentantes .rightBox {
-        width: 49%;
-        margin-left: 1%;
-        display: inline-block;
-        vertical-align: top;
-    }
-    .contentRepresentantes .busquedaCUIT {
-        margin-top: 0px !important;
-    }
-} 
+}
