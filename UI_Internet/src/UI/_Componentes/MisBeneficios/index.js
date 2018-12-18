@@ -22,9 +22,19 @@ class MisBeneficios extends React.PureComponent {
         >Beneficios</Button>
 
         <div className={classes.infoContainer}>
-          <Tooltip 
-          disableFocusListener disableTouchListener
-          classes={{ tooltip: classes.textTooltip }} title={<span>Las promociones estarán<br />vigentes desde el año 2019</span>}>
+          <Tooltip
+            disableFocusListener disableTouchListener
+            classes={{ tooltip: classes.textTooltip }}
+            title={
+              <span>CONTRIBUYENTE CUMPLIDOR 2019 INMOBILIARIO Y AUTOMOTOR<br />
+              BENEFICIO DTO. 3068/2018<br />
+              <br />
+              Cancelá tu deuda vencida hasta el 18/12/2018 y obtené el premio Contribuyente Cumplidor 2019.<br />
+              <br />
+              Recordá que se encuentra vigente una reducción del 50% de los recargos por pago de CONTADO
+              </span>
+            }
+          >
             <i className={classNames(classes.infoIcon, "material-icons")}>info</i>
           </Tooltip>
         </div>
