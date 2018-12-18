@@ -457,6 +457,9 @@ class DetalleTributo extends React.PureComponent {
                 if (data && data.length > 0) {
                     data['lista'] = data.map((plan) => {
 
+                        //Corroboramos el CBU, de ser SI, no se permite seleccionar filas en la grilla
+                        const esCbuSI = _.filter(plan.datosCuenta, function(o){ return o.indexOf('CBU SI') != -1; }).length > 0;
+
                         let rowList = plan.periodos.map((concepto) => {
 
                             return {
@@ -479,7 +482,9 @@ class DetalleTributo extends React.PureComponent {
                         return {
                             ...plan,
                             idPlan: plan.identificador,
-                            rowList: rowList
+                            rowList: rowList,
+                            esCbuSI: esCbuSI,
+                            textoInfo: (esCbuSI && 'A partir de la segunda cuota del plan, se debitarán automáticamente en la cuenta del CBU declarado') || false,
                         }
                     });
                 } else {
@@ -1629,13 +1634,14 @@ class DetalleTributo extends React.PureComponent {
                                         {planes.menuItemSeleccionado == plan.idPlan &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
-                                                    {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                                    {plan.textoInfo || `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagosDetalle
                                                     paraMobile={this.props.paraMobile}
                                                     pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
                                                     check={true}
+                                                    disabled={plan.esCbuSI || false}
                                                     info={plan || null}
                                                     menuItemSeleccionado={menuItemSeleccionado}
                                                     data={this.state[menuItemSeleccionado]}

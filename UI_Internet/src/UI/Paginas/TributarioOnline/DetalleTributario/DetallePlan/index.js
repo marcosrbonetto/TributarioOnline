@@ -67,7 +67,9 @@ class DetallePlan extends React.PureComponent {
         this.initialState = {
             registrosSeleccionados: [],
             deudaTotales: {},
-            rowList: []
+            rowList: [],
+            esCbuSI: false,
+            textoInfo: false
         };
 
         this.state = _.clone(this.initialState);
@@ -83,6 +85,9 @@ class DetallePlan extends React.PureComponent {
         servicesTributarioOnline.getInfoDetallePlan(token, identificador)
             .then((datos) => {
                 if (!datos.ok) { mostrarAlerta('Error: ' + datos.error); return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
+
+                //Corroboramos el CBU, de ser SI, no se permite seleccionar filas en la grilla
+                const esCbuSI = _.filter(datos.return.datosCuenta, function(o){ return o.indexOf('CBU SI') != -1; }).length > 0;
 
                 const deudaTotales = datos.return.deudaAdministrativa;
                 const rowList = datos.return.periodos.map((concepto) => {
@@ -105,7 +110,9 @@ class DetallePlan extends React.PureComponent {
 
                 this.setState({
                     deudaTotales: deudaTotales,
-                    rowList: rowList
+                    rowList: rowList,
+                    esCbuSI: esCbuSI,
+                    textoInfo: esCbuSI && 'A partir de la segunda cuota del plan, se debitarán automáticamente en la cuenta del CBU declarado'
                 });
 
                 this.props.mostrarCargando(false);
@@ -131,7 +138,9 @@ class DetallePlan extends React.PureComponent {
         const {
             registrosSeleccionados,
             deudaTotales,
-            rowList
+            rowList,
+            esCbuSI,
+            textoInfo
         } = this.state;
 
         return (
@@ -153,7 +162,7 @@ class DetallePlan extends React.PureComponent {
                             </Typography>
 
                             <Typography className={classes.infoTexto}>
-                                {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                {textoInfo || `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                             </Typography>
                             <MisPagos
                                 setRegistrosSeleccionados={this.setRegistrosSeleccionados}
@@ -166,6 +175,7 @@ class DetallePlan extends React.PureComponent {
                                         order: 'asc',
                                         orderBy: 'concepto',
                                         check: true,
+                                        disabled: esCbuSI || false
                                     }
                                 }
                                 cedulonConfig={

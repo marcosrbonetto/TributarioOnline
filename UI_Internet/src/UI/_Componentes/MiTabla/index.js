@@ -85,6 +85,7 @@ class EnhancedTableHead extends React.Component {
         const { classes } = this.props;
         const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
         const check = this.props.check;
+        const disabled = this.props.disabled;
 
         return (
             <TableHead className={classes.tableHead}>
@@ -96,6 +97,7 @@ class EnhancedTableHead extends React.Component {
                                 className={classes.tableCell}
                                 indeterminate={numSelected > 0 && numSelected < rowCount}
                                 checked={numSelected === rowCount}
+                                disabled={disabled}
                                 onChange={onSelectAllClick}
                             />
                         </TableCell>}
@@ -250,6 +252,7 @@ class MiTabla extends React.PureComponent {
         let { orderType } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
         const check = this.props.check;
+        const disabled = this.props.disabled;
         const pagination = this.props.pagination == false ? false : true;
 
         //Seteamos el orderType inicial de acuerdo a orderBy
@@ -275,6 +278,7 @@ class MiTabla extends React.PureComponent {
                             onRequestSort={this.handleRequestSort}
                             rowCount={data.length}
                             check={check}
+                            disabled={disabled}
                         />
                         <TableBody>
                             {(data.length > 0 && stableSort(data, getSorting(order, orderBy, orderType))
@@ -285,6 +289,7 @@ class MiTabla extends React.PureComponent {
                                     return <MiRow
                                         key={index}
                                         check={check}
+                                        disabled={disabled}
                                         info={n}
                                         classes={classes}
                                         onClick={this.handleClick}
@@ -337,7 +342,7 @@ class MiRow extends React.PureComponent {
     }
 
     render() {
-        const { isSelected, info, check } = this.props;
+        const { isSelected, info, check, disabled } = this.props;
         const addCheck = (check || false);
         const classes = this.props.classes;
 
@@ -354,7 +359,7 @@ class MiRow extends React.PureComponent {
                     <Checkbox 
                         onClick={this.onClick}
                         checked={isSelected || false} 
-                        disabled={(info.data && info.data.disabled)}
+                        disabled={disabled || (info.data && info.data.disabled) || false}
                     />
                 </TableCell>}
             {Object.keys(info).map((cell, key) => {

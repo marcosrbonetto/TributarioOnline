@@ -65,6 +65,7 @@ class MisPagosDetalle extends React.PureComponent {
     const order = this.props.data.order || 'asc';
     const orderBy = this.props.data.orderBy || 'concepto';
     const check = this.props.check;
+    const disabled = this.props.disabled;
 
     //Tributo y tipo de tributo para generar el cedulon
     const tributo = this.props.tributoActual;
@@ -183,6 +184,7 @@ class MisPagosDetalle extends React.PureComponent {
         orderBy={orderBy}
         getFilasSeleccionadas={this.getFilasSeleccionadas}
         check={check}
+        disabled={disabled}
         rowsPerPage={rowsPerPage}
       />
 

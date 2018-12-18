@@ -72,6 +72,7 @@ class MisPagos extends React.PureComponent {
     const order = tablaConfig.order || 'asc';
     const orderBy = tablaConfig.orderBy || 'concepto';
     const check = tablaConfig.check;
+    const disabled = tablaConfig.disabled;
 
     //Determinamos si el Cedulon tiene que estar deshabilitado
     let disabledCedulon = !(stringToFloat(this.state.importeAPagar) > 0);
@@ -184,6 +185,7 @@ class MisPagos extends React.PureComponent {
         orderBy={orderBy}
         getFilasSeleccionadas={this.getFilasSeleccionadas}
         check={check}
+        disabled={disabled}
         rowsPerPage={rowsPerPage}
       />
 
