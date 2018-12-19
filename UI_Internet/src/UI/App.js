@@ -34,6 +34,7 @@ import importacionIndividualAFIP from "@UI/Paginas/AfipController/importacionInd
 import importacionBienesCuitAFIP from "@UI/Paginas/AfipController/importacionBienesCuit";
 import pagoNexo from "@UI/Paginas/MercadoPagoController/pagoNexo";
 import Pagina404 from "@UI/_Pagina404";
+import IndicadorCargando from "@UI/_Componentes/IndicadorCargando"
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
 import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
@@ -87,7 +88,8 @@ class App extends React.Component {
     this.props.paraMobile(paraMobile);
 
     this.state = {
-      validandoToken: false
+      validandoToken: false,
+      cargandoVisible: true
     };
   }
 
@@ -143,92 +145,95 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    
     //Realizamos acciónes iniciales y luego seguimos cargando la aplicación
     this.init(() => {
-      let token = localStorage.getItem("token");
+        this.setState({ cargandoVisible: false }, () => {
+        let token = localStorage.getItem("token");
 
-      let search = this.props.location.search;
-      if (search.startsWith("?")) {
-        search = search.substring(1);
-        search = new URLSearchParams(search);
-        let tokenQueryString = search.get("token");
-        if (tokenQueryString) {
-          token = tokenQueryString;
-        }
-      }
-
-      //Usuario Invitado
-      if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
-
-        //Borramos el localStorage por si hay algun pago inconcluso o algun dato del redux persistente
-        if (!(token == window.Config.TOKEN_INVITADO)) //Solo en caso que no exista un token
-          localStorage.clear();
-
-        //Logueamos con el usuario Invitado
-        this.props.login({
-          datos: undefined,
-          token: window.Config.TOKEN_INVITADO
-        });
-        
-        if (search) {
-          let url = search.get("url") || "/";
-          if (url == "/") url = "/Inicio";
-          this.props.redireccionar(url);
-        } else {
-          console.log(this.props.location);
-
-          if (this.props.location.pathname == "/") {
-            this.props.redireccionar("/Inicio");
+        let search = this.props.location.search;
+        if (search.startsWith("?")) {
+          search = search.substring(1);
+          search = new URLSearchParams(search);
+          let tokenQueryString = search.get("token");
+          if (tokenQueryString) {
+            token = tokenQueryString;
           }
         }
 
-      } else { //Usuario Vecino Virtual
-        this.setState({ validandoToken: true }, () => {
-          Rules_Usuario.validarToken(token)
-            .then(resultado => {
-              if (resultado == false) {
-                this.props.logout();
-                window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-                return;
-              }
+        //Usuario Invitado
+        if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
 
-              Rules_Usuario.datos(token)
-                .then(datos => {
+          //Borramos el localStorage por si hay algun pago inconcluso o algun dato del redux persistente
+          if (!(token == window.Config.TOKEN_INVITADO)) //Solo en caso que no exista un token
+            localStorage.clear();
 
-                  this.props.login({
-                    datos: datos,
-                    token: token
-                  });
+          //Logueamos con el usuario Invitado
+          this.props.login({
+            datos: undefined,
+            token: window.Config.TOKEN_INVITADO
+          });
+          
+          if (search) {
+            let url = search.get("url") || "/";
+            if (url == "/") url = "/Inicio";
+            this.props.redireccionar(url);
+          } else {
+            console.log(this.props.location);
 
-                  //let url = "/";
-                  if (search) {
-                    let url = search.get("url") || "/";
-                    if (url == "/") url = "/Inicio";
-                    this.props.redireccionar(url);
-                  } else {
-                    console.log(this.props.location);
+            if (this.props.location.pathname == "/") {
+              this.props.redireccionar("/Inicio");
+            }
+          }
 
-                    if (this.props.location.pathname == "/") {
-                      this.props.redireccionar("/Inicio");
-                    }
-                  }
-
-                  this.onLogin();
-                })
-                .catch(() => {
+        } else { //Usuario Vecino Virtual
+          this.setState({ validandoToken: true }, () => {
+            Rules_Usuario.validarToken(token)
+              .then(resultado => {
+                if (resultado == false) {
                   this.props.logout();
                   window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-                });
-            })
-            .catch(error => {
-              this.props.logout();
-              window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-            })
-            .finally(() => {
-              this.setState({ validandoToken: false });
-            });
-        });
-      }
+                  return;
+                }
+
+                Rules_Usuario.datos(token)
+                  .then(datos => {
+
+                    this.props.login({
+                      datos: datos,
+                      token: token
+                    });
+
+                    //let url = "/";
+                    if (search) {
+                      let url = search.get("url") || "/";
+                      if (url == "/") url = "/Inicio";
+                      this.props.redireccionar(url);
+                    } else {
+                      console.log(this.props.location);
+
+                      if (this.props.location.pathname == "/") {
+                        this.props.redireccionar("/Inicio");
+                      }
+                    }
+
+                    this.onLogin();
+                  })
+                  .catch(() => {
+                    this.props.logout();
+                    window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+                  });
+              })
+              .catch(error => {
+                this.props.logout();
+                window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+              })
+              .finally(() => {
+                this.setState({ validandoToken: false });
+              });
+          });
+        }
+      });
     });
   }
 
@@ -329,12 +334,14 @@ class App extends React.Component {
 
   renderContent() {
     const { classes } = this.props;
-
+    const { cargandoVisible } = this.state;
+    
     let base = "";
     const login = this.state.validandoToken == false && this.props.loggedUser != undefined;
 
     return (
       <main className={classes.content}>
+        <IndicadorCargando visible={cargandoVisible} />
         <AnimatedSwitch
           atEnter={{ opacity: 0 }}
           atLeave={{ opacity: 0 }}
