@@ -35,6 +35,7 @@ import importacionBienesCuitAFIP from "@UI/Paginas/AfipController/importacionBie
 import pagoNexo from "@UI/Paginas/MercadoPagoController/pagoNexo";
 import Pagina404 from "@UI/_Pagina404";
 import IndicadorCargando from "@UI/_Componentes/IndicadorCargando"
+import MiSoporteUsuario from "@UI/_Componentes/MiSoporteUsuario"
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
 import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
@@ -342,6 +343,7 @@ class App extends React.Component {
     return (
       <main className={classes.content}>
         <IndicadorCargando visible={cargandoVisible} />
+        <MiSoporteUsuario />
         <AnimatedSwitch
           atEnter={{ opacity: 0 }}
           atLeave={{ opacity: 0 }}
