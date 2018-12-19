@@ -48,6 +48,7 @@ import { debug } from "util";
 const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
+        tipoTributos: state.MainContent.tipoTributos,
         tipoCedulones: state.MainContent.tipoCedulones,
         paraMobile: state.MainContent.paraMobile,
         tributosBienesPorCUIT: state.AfipController.tributosBienesPorCUIT,
@@ -151,6 +152,7 @@ class DetalleTributo extends React.PureComponent {
             juicios: { //Item Menu e información
                 infoSeccion: undefined,
                 tieneSubMenu: true,
+                subItemTipoTributos: this.props.tipoTributos.byKey[11],
                 tipoCedulon: this.props.tipoCedulones.byKey[3],
                 order: 'asc',
                 orderBy: 'concepto',
@@ -167,6 +169,7 @@ class DetalleTributo extends React.PureComponent {
             planes: { //Item Menu e información
                 infoSeccion: undefined,
                 tieneSubMenu: true,
+                subItemTipoTributos: this.props.tipoTributos.byKey[12],
                 tipoCedulon: this.props.tipoCedulones.byKey[4],
                 order: 'asc',
                 orderBy: 'concepto',
@@ -723,52 +726,55 @@ class DetalleTributo extends React.PureComponent {
     onPeriodosAdeudadosDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = decodeURIComponent(this.props.match.params.identificador);
+        let tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        let identificador = decodeURIComponent(this.props.match.params.identificador);
 
-        if (this.state.periodosAdeudados.infoGrilla.length == 0) {
-            servicesTributarioOnline.getPeriodosAdeudados(token, tipoTributo, identificador)
-                .then((datos) => {
-                    if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
+        //En caso de Juicios y Planes
+        const menuItemSeleccionado = this.state.menuItemSeleccionado;
+        if(this.state[menuItemSeleccionado].subItemTipoTributos) {
+            tipoTributo = getIdTipoTributo(this.state[menuItemSeleccionado].subItemTipoTributos);
+            identificador = decodeURIComponent(this.state[menuItemSeleccionado].menuItemSeleccionado);
+        }
 
-                    let rowList = [];
-                    let data = datos.return;
-                    //Corroboramos que existan registros
-                    if (data && data.periodos.length > 0) {
-                        rowList = data.periodos.map((concepto) => {
+        servicesTributarioOnline.getPeriodosAdeudados(token, tipoTributo, identificador)
+            .then((datos) => {
+                if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
 
-                            return {
-                                concepto: concepto.concepto,
-                                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                                importe: formatNumber(concepto.importe.total),
-                                detalle: <MiTooltip
-                                    contenidoDetalle={<div>
-                                        <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
-                                        <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
-                                        <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
-                                        <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
-                                    </div>}>
-                                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
-                                </MiTooltip>,
-                                data: concepto //atributo "data" no se muestra en MiTabla
-                            }
-                        });
-                    }
+                let rowList = [];
+                let data = datos.return;
+                //Corroboramos que existan registros
+                if (data && data.periodos.length > 0) {
+                    rowList = data.periodos.map((concepto) => {
 
-                    this.setState({
-                        periodosAdeudados: {
-                            ...this.state.periodosAdeudados,
-                            infoGrilla: rowList
+                        return {
+                            concepto: concepto.concepto,
+                            vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                            importe: formatNumber(concepto.importe.total),
+                            detalle: <MiTooltip
+                                contenidoDetalle={<div>
+                                    <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
+                                    <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
+                                    <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
+                                    <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
+                                </div>}>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            </MiTooltip>,
+                            data: concepto //atributo "data" no se muestra en MiTabla
                         }
                     });
+                }
 
-                    this.handlePeriodosAdeudadosOpenDialog();
-                }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                this.setState({
+                    periodosAdeudados: {
+                        ...this.state.periodosAdeudados,
+                        infoGrilla: rowList
+                    }
                 });
-        } else {
-            this.handlePeriodosAdeudadosOpenDialog();
-        }
+
+                this.handlePeriodosAdeudadosOpenDialog();
+            }).catch(err => {
+                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
     }
 
     //Abrimos modal periodos adeudados
