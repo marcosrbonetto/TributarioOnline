@@ -279,7 +279,7 @@ class MiMercadoPago extends React.PureComponent {
                 A continuación ingrese un correo en el que estará asociado su pago con la plataforma MercadoPago
               </Typography>
               <Grid container spacing={0} alignItems="flex-end">
-                <Grid item xs={9}>
+                <Grid item xs={12} sm={9}>
                   <TextField
                     id="email-input"
                     label="Email"
@@ -294,7 +294,7 @@ class MiMercadoPago extends React.PureComponent {
                     error={this.state.validacionEmail.errorEmail}
                   />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={3}>
                   <Button
                     variant="contained"
                     color="secondary"
