@@ -261,7 +261,7 @@ class DetalleTributo extends React.PureComponent {
                 }
 
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
 
@@ -281,7 +281,7 @@ class DetalleTributo extends React.PureComponent {
                 }
 
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
 
@@ -352,7 +352,7 @@ class DetalleTributo extends React.PureComponent {
                     datosItemSeleccionado: data
                 });
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, tipoTributo, identificador)
@@ -394,7 +394,7 @@ class DetalleTributo extends React.PureComponent {
                     }
                 });
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
         const service3 = servicesTributarioOnline.getInfoJuicios(token, tipoTributo, identificador)
@@ -449,7 +449,7 @@ class DetalleTributo extends React.PureComponent {
                 this.setState({ juicios });
 
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
         const service4 = servicesTributarioOnline.getInfoPlanes(token, tipoTributo, identificador)
@@ -508,7 +508,7 @@ class DetalleTributo extends React.PureComponent {
 
                 this.setState({ planes });
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
         Promise.all([service1,
@@ -687,7 +687,7 @@ class DetalleTributo extends React.PureComponent {
 
                     this.handleUltimosPagosOpenDialog();
                 }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
         } else {
             this.handleUltimosPagosOpenDialog();
@@ -773,7 +773,7 @@ class DetalleTributo extends React.PureComponent {
 
                 this.handlePeriodosAdeudadosOpenDialog();
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
 
@@ -847,7 +847,7 @@ class DetalleTributo extends React.PureComponent {
                     });
 
                 }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
             arrayService.push(service1);
@@ -867,7 +867,7 @@ class DetalleTributo extends React.PureComponent {
                     });
 
                 }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
             arrayService.push(service2);
@@ -977,7 +977,7 @@ class DetalleTributo extends React.PureComponent {
                     });
 
                 }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
             arrayService.push(service1);
@@ -996,7 +996,7 @@ class DetalleTributo extends React.PureComponent {
                         }
                     });
                 }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
             arrayService.push(service2);
@@ -1093,7 +1093,7 @@ class DetalleTributo extends React.PureComponent {
                     });
 
                 }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
             arrayService.push(service1);
@@ -1112,7 +1112,7 @@ class DetalleTributo extends React.PureComponent {
                         }
                     });
                 }).catch(err => {
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
             arrayService.push(service2);
@@ -1212,7 +1212,7 @@ class DetalleTributo extends React.PureComponent {
                 this.handleDeclaracionJuradaOpenDialog();
                 this.props.mostrarCargando(false);
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
 
@@ -1272,7 +1272,7 @@ class DetalleTributo extends React.PureComponent {
 
                 this.props.mostrarCargando(false);
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
 

@@ -103,7 +103,7 @@ class TributarioAccessBusqueda extends React.PureComponent {
                     this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador))
                 }
             }).catch(err => {
-                console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
 

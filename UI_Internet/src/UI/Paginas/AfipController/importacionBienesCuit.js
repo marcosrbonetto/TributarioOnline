@@ -54,7 +54,7 @@ class importacionBienesCuit extends Component {
 
                             return datos.return;
                         }).catch(err => {
-                            console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                            console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                         });
 
                     arrayServices.push(service);

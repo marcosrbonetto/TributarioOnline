@@ -111,7 +111,7 @@ class PagoNexo extends Component {
                         mostrarAlerta('Pago MercadoPago: ' + datos.error);
 
                         localStorage.removeItem('idBtnMercadoPago');
-                        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
 
                         return false;
                     }
@@ -186,7 +186,7 @@ class PagoNexo extends Component {
                     });
 
                     localStorage.removeItem('idBtnMercadoPago');
-                    console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
         } else {
             this.setState({

@@ -69,7 +69,7 @@ class HomeUsuario extends React.PureComponent {
 
         this.props.mostrarCargando(false);
       }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
       });
   }
 

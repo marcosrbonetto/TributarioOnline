@@ -180,7 +180,7 @@ class Representantes extends React.PureComponent {
         if (!datos.ok) { mostrarAlerta('Mis Representantes: ' + datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentantes(datos);
       }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
       });
 
     const service2 = servicesRepresentantes.getMisRepresentados(token)
@@ -188,7 +188,7 @@ class Representantes extends React.PureComponent {
         if (!datos.ok) { mostrarAlerta('Mis Representados: ' + datos.error); this.props.mostrarCargando(false); return false; }
         this.props.setPropsMisRepresentados(datos);
       }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
       });
 
     Promise.all([service1, service2]).then(() => {
@@ -246,7 +246,7 @@ class Representantes extends React.PureComponent {
 
         this.props.mostrarCargando(false);
       }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
       });
   }
 
@@ -335,7 +335,7 @@ class Representantes extends React.PureComponent {
 
       this.props.mostrarCargando(false);
     }).catch(err => {
-      console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+      console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
     });
   }
 
@@ -353,7 +353,7 @@ class Representantes extends React.PureComponent {
         if (typeof callback === "function")
           callback(datos);
       }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
       });
   }
 
@@ -389,7 +389,7 @@ class Representantes extends React.PureComponent {
 
         this.props.mostrarCargando(false);
       }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
       });
   }
 
@@ -423,7 +423,7 @@ class Representantes extends React.PureComponent {
 
         this.props.mostrarCargando(false);
       }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
       });
   }
 
@@ -529,7 +529,7 @@ class Representantes extends React.PureComponent {
 
         this.props.mostrarCargando(false);
       }).catch(err => {
-        console.warn("[Tributario Online] Ocurrió un error al intentar comunicarse con el servidor.");
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
       });
   }
 
