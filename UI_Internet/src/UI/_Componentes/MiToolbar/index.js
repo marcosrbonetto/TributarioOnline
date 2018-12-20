@@ -112,7 +112,7 @@ class MiToolbar extends React.Component {
   };
 
   handleBienesPorCUIT = () => {
-    window.location.href = window.Config.BASE_URL_AFIP + "afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionBienesCuitAFIP?appUrlRedirect=' + window.location.hash.substring(1));
+    window.location.href = window.Config.BASE_URL_AFIP + "/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionBienesCuitAFIP?appUrlRedirect=' + window.location.hash.substring(1));
   };
 
   render() {
