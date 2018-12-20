@@ -72,7 +72,7 @@ class TributarioAccess extends React.PureComponent {
     };
 
     handleOnClickImportarAFIP = () => {
-        window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP');
+        window.location.href = window.Config.BASE_URL_AFIP + "/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP');
     };
 
     render() {

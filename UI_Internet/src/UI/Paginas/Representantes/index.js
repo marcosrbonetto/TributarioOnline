@@ -535,7 +535,7 @@ class Representantes extends React.PureComponent {
 
   //Aceptando solicitud en busca por Tributo
   handleOnClickImportarRepresentanteAFIP = () => {
-    window.location.href = "https://servicios.cordoba.gov.ar/TributarioOnline/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionIndividualAFIP');
+    window.location.href = window.Config.BASE_URL_AFIP + "/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionIndividualAFIP');
   }
 
   //Aceptando solicitud en busca por Tributo
