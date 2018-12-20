@@ -154,8 +154,11 @@ class MiCedulon extends React.PureComponent {
           </div>
 
           <div key="mainContent">
-            {this.state.base64Cedulon != '' && <iframe src={this.state.base64Cedulon} height="410px" width="856px"></iframe>}
-            {this.state.base64Cedulon == '' && <div style={{ color: 'red'}}>Se están presentando inconvenientes para generar el cedulón, intente más tarde.</div>}
+            {this.state.base64Cedulon != '' &&
+              <object data={this.state.base64Cedulon} type="application/pdf" height="384px" width="856px">
+                <a href={this.state.base64Cedulon} download>Descargar Cedulon</a>
+              </object>}
+            {this.state.base64Cedulon == '' && <div style={{ color: 'red' }}>Se están presentando inconvenientes para generar el cedulón, intente más tarde.</div>}
           </div>
         </MiControledDialog>
       </div>

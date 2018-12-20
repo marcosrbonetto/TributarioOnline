@@ -461,7 +461,7 @@ class DetalleTributo extends React.PureComponent {
                     data['lista'] = data.map((plan) => {
 
                         //Corroboramos el CBU, de ser SI, no se permite seleccionar filas en la grilla
-                        const esCbuSI = _.filter(plan.datosCuenta, function(o){ return o.indexOf('CBU SI') != -1; }).length > 0;
+                        const esCbuSI = _.filter(plan.datosCuenta, function (o) { return o.indexOf('CBU SI') != -1; }).length > 0;
 
                         let rowList = plan.periodos.map((concepto) => {
 
@@ -731,7 +731,7 @@ class DetalleTributo extends React.PureComponent {
 
         //En caso de Juicios y Planes
         const menuItemSeleccionado = this.state.menuItemSeleccionado;
-        if(this.state[menuItemSeleccionado].subItemTipoTributos) {
+        if (this.state[menuItemSeleccionado].subItemTipoTributos) {
             tipoTributo = getIdTipoTributo(this.state[menuItemSeleccionado].subItemTipoTributos);
             identificador = decodeURIComponent(this.state[menuItemSeleccionado].menuItemSeleccionado);
         }
@@ -1408,7 +1408,7 @@ class DetalleTributo extends React.PureComponent {
                                             textColor="secondary"
                                             centered
                                             scrollButtons="auto"
-                                            classes={{ flexContainer: classes.flexContainersMenu, scrollButtons: classes.scrollButtonsMenu }}
+                                            classes={{ flexContainer: classNames(classes.flexContainersMenu, "flexContainersMenu"), scrollButtons: classes.scrollButtonsMenu }}
                                         >
 
                                             <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
@@ -1910,7 +1910,10 @@ class DetalleTributo extends React.PureComponent {
                                             </div>}
 
                                             {informeCuenta.modal.showReporte && <div>
-                                                {informeCuenta.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + informeCuenta.reporteBase64} height="342px" width="856px"></iframe>}
+                                                {informeCuenta.reporteBase64 != '' &&
+                                                    <object data={'data:application/pdf;base64,' + informeCuenta.reporteBase64} type="application/pdf" height="384px" width="856px">
+                                                        <a href={'data:application/pdf;base64,' + informeCuenta.reporteBase64} download>Descargar Informe de Cuenta</a>
+                                                    </object>}
                                                 {!informeCuenta.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                             </div>}
                                         </div>
@@ -2097,7 +2100,10 @@ class DetalleTributo extends React.PureComponent {
                                                     </div>}
 
                                                     {informeAntecedentes.modal.showReporte && <div>
-                                                        {informeAntecedentes.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64} height="342px" width="856px"></iframe>}
+                                                        {informeAntecedentes.reporteBase64 != '' &&
+                                                            <object data={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64} type="application/pdf" height="384px" width="856px">
+                                                                <a href={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64} download>Descargar Informe de Antecedentes</a>
+                                                            </object>}
                                                         {!informeAntecedentes.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     </div>}
                                                 </div>
@@ -2166,7 +2172,10 @@ class DetalleTributo extends React.PureComponent {
                                                     </div>}
 
                                                     {informeREMAT.modal.showReporte && <div>
-                                                        {informeREMAT.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + informeREMAT.reporteBase64} height="342px" width="856px"></iframe>}
+                                                        {informeREMAT.reporteBase64 != '' &&
+                                                            <object data={'data:application/pdf;base64,' + informeREMAT.reporteBase64} type="application/pdf" height="384px" width="856px">
+                                                                <a href={'data:application/pdf;base64,' + informeREMAT.reporteBase64} download>Descargar Informe REMAT</a>
+                                                            </object>}
                                                         {!informeREMAT.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     </div>}
                                                 </div>
@@ -2288,7 +2297,10 @@ class DetalleTributo extends React.PureComponent {
                                                 </div>}
 
                                                 {declaracionJurada.modal.showReporte && <div>
-                                                    {declaracionJurada.reporteBase64 != '' && <iframe src={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} height="342px" width="856px"></iframe>}
+                                                    {declaracionJurada.reporteBase64 != '' &&
+                                                        <object data={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} type="application/pdf" height="384px" width="856px">
+                                                            <a href={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} download>Descargar DDJJ</a>
+                                                        </object>}
                                                     {declaracionJurada.reporteBase64 == undefined && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     {declaracionJurada.reporteBase64 == '' && 'Generando DDJJ.'}
                                                 </div>}

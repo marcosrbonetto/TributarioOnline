@@ -65,4 +65,10 @@
         border-radius: 20px !important;
         width: 100% !important;
     }
+
+    .flexContainersMenu {
+        width: 100% !important;
+        display: block !important;
+        white-space: initial !important;
+    }
 }
