@@ -204,10 +204,19 @@ class MiNotificacion extends React.PureComponent {
             paper: classes.contentPopover
           }}>
           <MiCard padding={false} className={classes.styleMiCard}>
-            <Typography className={classes.titleMiCard} variant="subheading">
-              <b>Notificaciones</b>
-              <i onClick={this.handleClose} className={classNames(classes.iconCloseNotif, "material-icons")}>cancel</i>
-            </Typography>
+
+            {(this.state.arrayCUITNotificaciones.length == 0 &&
+              <Typography className={classes.titleMiCard} variant="subheading">
+                <b>No tiene Notificaciones</b>
+                <i onClick={this.handleClose} className={classNames(classes.iconCloseNotif, "material-icons")}>cancel</i>
+              </Typography>
+            )
+              ||
+              <Typography className={classes.titleMiCard} variant="subheading">
+                <b>Notificaciones</b>
+                <i onClick={this.handleClose} className={classNames(classes.iconCloseNotif, "material-icons")}>cancel</i>
+              </Typography>
+            }
 
             {this.state.arrayCUITNotificaciones && this.state.arrayCUITNotificaciones.map((item, index) => {
               return <div>
@@ -289,6 +298,7 @@ const styles = theme => {
       color: '#fff',
       padding: '14px',
       margin: '0px',
+      minWidth: '220px'
     },
     marginIcon: {
       margin: '0px 15px'

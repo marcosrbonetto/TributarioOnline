@@ -1411,13 +1411,13 @@ class DetalleTributo extends React.PureComponent {
                                             classes={{ flexContainer: classNames(classes.flexContainersMenu, "flexContainersMenu"), scrollButtons: classes.scrollButtonsMenu }}
                                         >
 
-                                            <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
 
-                                            <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
 
-                                            <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
 
-                                            <Tab classes={{ root: classes.itemMenu, labelContainer: classes.labelItemMenu }} value="planes" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanes ? listPlanes.length : 0}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="planes" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanes ? listPlanes.length : 0}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
 
                                         </Tabs>
 
@@ -1437,14 +1437,14 @@ class DetalleTributo extends React.PureComponent {
                                                     <Tabs
                                                         value={juicios.menuItemSeleccionado}
                                                         onChange={this.handleSubMenuChange}
-                                                        classes={{ scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+                                                        classes={{ flexContainer: "flexContainersMenu", scrollButtons: classes.scrollButtonsSubMenu, root: classes.tabsRoot, indicator: classes.tabsIndicator }}
                                                         scrollable
                                                         scrollButtons="auto"
                                                     >
 
                                                         {/* Juicio por Contribución */}
                                                         {listJuicios.map((juicio) => {
-                                                            return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
+                                                            return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                         })}
 
                                                     </Tabs>
@@ -1469,11 +1469,11 @@ class DetalleTributo extends React.PureComponent {
                                                 onChange={this.handleSubMenuChange}
                                                 scrollable
                                                 scrollButtons="auto"
-                                                classes={{ scrollButtons: classes.scrollButtonsSubMenu }}
+                                                classes={{ flexContainer: "flexContainersMenu", scrollButtons: classes.scrollButtonsSubMenu }}
                                             >
 
                                                 {listPlanes.map((plan) => {
-                                                    return <Tab classes={{ root: classes.itemSubMenu, labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                                    return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
                                                 })}
 
                                             </Tabs>
@@ -1910,7 +1910,7 @@ class DetalleTributo extends React.PureComponent {
                                             </div>}
 
                                             {informeCuenta.modal.showReporte && <div>
-                                                {informeCuenta.reporteBase64 != '' &&
+                                                {informeCuenta.reporteBase64 && informeCuenta.reporteBase64 != '' &&
                                                     <object data={'data:application/pdf;base64,' + informeCuenta.reporteBase64} type="application/pdf" height="384px" width="856px">
                                                         <a href={'data:application/pdf;base64,' + informeCuenta.reporteBase64} download>Descargar Informe de Cuenta</a>
                                                     </object>}
@@ -2100,7 +2100,7 @@ class DetalleTributo extends React.PureComponent {
                                                     </div>}
 
                                                     {informeAntecedentes.modal.showReporte && <div>
-                                                        {informeAntecedentes.reporteBase64 != '' &&
+                                                        {informeAntecedentes.reporteBase64 && informeAntecedentes.reporteBase64 != '' &&
                                                             <object data={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64} type="application/pdf" height="384px" width="856px">
                                                                 <a href={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64} download>Descargar Informe de Antecedentes</a>
                                                             </object>}
@@ -2172,7 +2172,7 @@ class DetalleTributo extends React.PureComponent {
                                                     </div>}
 
                                                     {informeREMAT.modal.showReporte && <div>
-                                                        {informeREMAT.reporteBase64 != '' &&
+                                                        {informeREMAT.reporteBase64 && informeREMAT.reporteBase64 != '' &&
                                                             <object data={'data:application/pdf;base64,' + informeREMAT.reporteBase64} type="application/pdf" height="384px" width="856px">
                                                                 <a href={'data:application/pdf;base64,' + informeREMAT.reporteBase64} download>Descargar Informe REMAT</a>
                                                             </object>}
@@ -2297,7 +2297,7 @@ class DetalleTributo extends React.PureComponent {
                                                 </div>}
 
                                                 {declaracionJurada.modal.showReporte && <div>
-                                                    {declaracionJurada.reporteBase64 != '' &&
+                                                    {declaracionJurada.reporteBase64 && declaracionJurada.reporteBase64 != '' &&
                                                         <object data={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} type="application/pdf" height="384px" width="856px">
                                                             <a href={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} download>Descargar DDJJ</a>
                                                         </object>}

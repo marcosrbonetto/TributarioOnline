@@ -71,4 +71,8 @@
         display: block !important;
         white-space: initial !important;
     }
+
+    .itemMenu {
+        width: 50% !important;
+    }
 }
