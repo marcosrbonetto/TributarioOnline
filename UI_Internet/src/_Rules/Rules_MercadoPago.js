@@ -1,10 +1,15 @@
+import Store from "@Redux/Store/index";
+//Este valor se obtiene luego de pasar la prueba del ReCaptcha
+const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
 const pagoMercadoPago = (token, body) => {
 
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/Pagar', {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       },
@@ -29,7 +34,10 @@ const pagoMercadoPago = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -43,7 +51,8 @@ const getPublicKeyMercadoPago = () => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/PublicKey', {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json"
       }
     })
@@ -56,7 +65,10 @@ const getPublicKeyMercadoPago = () => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");

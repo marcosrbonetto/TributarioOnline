@@ -1,10 +1,15 @@
+import Store from "@Redux/Store/index";
+//Este valor se obtiene luego de pasar la prueba del ReCaptcha
+const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
 const agregarSolicitudPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Agregar', {
+        fetch(window.Config.BASE_URL_WS + '/v1/Representacion/Agregar', {
             method: "POST",
             headers: {
-                Accept: "application/json",
+                "--ControlAcceso": accessCaptcha,
+                "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Token": token
             },
@@ -22,7 +27,10 @@ const agregarSolicitudPermiso = (token, body) => {
                 return res.json();
             })
             .then(datos => {
-                resolve(datos);
+                if (!datos.accesows)
+                    resolve(datos);
+                else
+                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
             })
             .catch(err => {
                 reject("Error procesando la solicitud");
@@ -33,10 +41,11 @@ const agregarSolicitudPermiso = (token, body) => {
 const cancelarPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Cancelar', {
+        fetch(window.Config.BASE_URL_WS + '/v1/Representacion/Cancelar', {
             method: "DELETE",
             headers: {
-                Accept: "application/json",
+                "--ControlAcceso": accessCaptcha,
+                "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Token": token
             },
@@ -55,7 +64,10 @@ const cancelarPermiso = (token, body) => {
                 return res.json();
             })
             .then(datos => {
-                resolve(datos);
+                if (!datos.accesows)
+                    resolve(datos);
+                else
+                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
             })
             .catch(err => {
                 reject("Error procesando la solicitud");
@@ -66,10 +78,11 @@ const cancelarPermiso = (token, body) => {
 const aceptarPermiso = (token, body) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Aceptar', {
+        fetch(window.Config.BASE_URL_WS + '/v1/Representacion/Aceptar', {
             method: "PUT",
             headers: {
-                Accept: "application/json",
+                "--ControlAcceso": accessCaptcha,
+                "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Token": token
             },
@@ -88,7 +101,10 @@ const aceptarPermiso = (token, body) => {
                 return res.json();
             })
             .then(datos => {
-                resolve(datos);
+                if (!datos.accesows)
+                    resolve(datos);
+                else
+                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
             })
             .catch(err => {
                 reject("Error procesando la solicitud");
@@ -99,10 +115,11 @@ const aceptarPermiso = (token, body) => {
 const getMisRepresentantes = (token, identificador) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/MisRepresentantes', {
+        fetch(window.Config.BASE_URL_WS + '/v1/Representacion/MisRepresentantes', {
             method: "GET",
             headers: {
-                Accept: "application/json",
+                "--ControlAcceso": accessCaptcha,
+                "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Token": token
             }
@@ -116,7 +133,10 @@ const getMisRepresentantes = (token, identificador) => {
                 return res.json();
             })
             .then(datos => {
-                resolve(datos);
+                if (!datos.accesows)
+                    resolve(datos);
+                else
+                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
             })
             .catch(err => {
                 reject("Error procesando la solicitud");
@@ -127,10 +147,11 @@ const getMisRepresentantes = (token, identificador) => {
 const getMisRepresentados = (token, identificador) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Representacion/MisRepresentantados', {
+        fetch(window.Config.BASE_URL_WS + '/v1/Representacion/MisRepresentantados', {
             method: "GET",
             headers: {
-                Accept: "application/json",
+                "--ControlAcceso": accessCaptcha,
+                "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Token": token
             }
@@ -144,7 +165,10 @@ const getMisRepresentados = (token, identificador) => {
                 return res.json();
             })
             .then(datos => {
-                resolve(datos);
+                if (!datos.accesows)
+                    resolve(datos);
+                else
+                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
             })
             .catch(err => {
                 reject("Error procesando la solicitud");
@@ -155,10 +179,11 @@ const getMisRepresentados = (token, identificador) => {
 const getTitularTributo = (token, param) => {
     return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS+'/v1/Tributario/Titular?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
+        fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Titular?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
             method: "GET",
             headers: {
-                Accept: "application/json",
+                "--ControlAcceso": accessCaptcha,
+                "Accept": "application/json",
                 "Content-Type": "application/json",
                 "Token": token
             }
@@ -172,7 +197,10 @@ const getTitularTributo = (token, param) => {
                 return res.json();
             })
             .then(datos => {
-                resolve(datos);
+                if (!datos.accesows)
+                    resolve(datos);
+                else
+                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
             })
             .catch(err => {
                 reject("Error procesando la solicitud");
@@ -187,7 +215,7 @@ const services = {
     getMisRepresentantes: getMisRepresentantes,
     getMisRepresentados: getMisRepresentados,
     getTitularTributo: getTitularTributo
-    
+
 }
 
 export default services;

@@ -144,7 +144,7 @@ class MisPagos extends React.PureComponent {
         </Grid>
         <Grid item sm={6} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
           
-          <MisBeneficios />
+          {/* Ocultamos hasta que esté listo <MisBeneficios />*/}
 
           <MiCedulon
             registrosSeleccionados={registrosSeleccionados}

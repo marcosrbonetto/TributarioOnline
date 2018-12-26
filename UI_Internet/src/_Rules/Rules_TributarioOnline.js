@@ -1,4 +1,6 @@
 import Store from "@Redux/Store/index";
+//Este valor se obtiene luego de pasar la prueba del ReCaptcha
+const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
 
 const getTipoTributos = (token, callback) => {
   return new Promise((resolve, reject) => {
@@ -6,7 +8,8 @@ const getTipoTributos = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoTributo', {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json"
       }
     })
@@ -19,7 +22,10 @@ const getTipoTributos = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -34,7 +40,8 @@ const getTipoCedulones = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoCedulon', {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json"
       }
     })
@@ -47,7 +54,10 @@ const getTipoCedulones = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -62,7 +72,8 @@ const getEstadoPagos = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/EstadoPago', {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json"
       }
     })
@@ -75,7 +86,10 @@ const getEstadoPagos = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -90,7 +104,8 @@ const getDatosUsuario = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Usuario/Usuario', {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -104,7 +119,10 @@ const getDatosUsuario = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -119,7 +137,8 @@ const getTributosByCUIT = (token, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/SusTributos?cuil=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -133,7 +152,10 @@ const getTributosByCUIT = (token, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -147,7 +169,8 @@ const getIdTributos = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos', {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -160,11 +183,14 @@ const getIdTributos = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-      
-        resolve(datos);
+
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
-      
+
         reject("Error procesando la solicitud");
       });
   });
@@ -173,10 +199,11 @@ const getIdTributos = (token, callback) => {
 
 const getInfoContribucion = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -190,7 +217,10 @@ const getInfoContribucion = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -202,10 +232,11 @@ const getInfoContribucion = (token, tipoTributo, identificador) => {
 
 const getInfoMultas = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -219,7 +250,10 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -230,10 +264,11 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
 
 const getInfoJuicios = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Juicios?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Juicios?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -247,7 +282,10 @@ const getInfoJuicios = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -257,10 +295,11 @@ const getInfoJuicios = (token, tipoTributo, identificador) => {
 
 const getInfoPlanes = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Planes?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Planes?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -274,7 +313,10 @@ const getInfoPlanes = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -287,7 +329,8 @@ const getInfoDetalleJuicio = (token, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/DetalleJuicio?identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -301,7 +344,10 @@ const getInfoDetalleJuicio = (token, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -314,7 +360,8 @@ const getInfoDetallePlan = (token, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/DetallePlan?identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -328,7 +375,10 @@ const getInfoDetallePlan = (token, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -349,12 +399,12 @@ const getReporteCedulon = (token, body) => {
   switch (body.tipoCedulon) {
     case tipoCedulones[1]:
       url = '/v1/Cedulon/Contribuciones';
-      bodyParameter.periodos= body.periodos;
+      bodyParameter.periodos = body.periodos;
       break;
 
     case tipoCedulones[2]:
       url = '/v1/Cedulon/Multas';
-      bodyParameter.periodos= body.periodos;
+      bodyParameter.periodos = body.periodos;
       break;
 
     case tipoCedulones[3]:
@@ -363,7 +413,7 @@ const getReporteCedulon = (token, body) => {
 
     case tipoCedulones[4]:
       url = '/v1/Cedulon/Planes';
-      bodyParameter.periodos= body.periodos;
+      bodyParameter.periodos = body.periodos;
       break;
   }
 
@@ -371,7 +421,8 @@ const getReporteCedulon = (token, body) => {
     fetch(window.Config.BASE_URL_WS + url, {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       },
@@ -386,7 +437,10 @@ const getReporteCedulon = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -399,7 +453,8 @@ const getInformeCuenta = (token, param) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/InformeCuenta?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -413,7 +468,10 @@ const getInformeCuenta = (token, param) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -427,7 +485,8 @@ const getReporteInformeCuenta = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeCuenta', {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       },
@@ -445,7 +504,10 @@ const getReporteInformeCuenta = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -458,7 +520,8 @@ const getUltimosPagos = (token, param) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Recaudacion/UltimosPagos?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -472,7 +535,10 @@ const getUltimosPagos = (token, param) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -485,7 +551,8 @@ const getInformeAntecedentes = (token, param) => {
     fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeAntecedente?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -499,7 +566,10 @@ const getInformeAntecedentes = (token, param) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -512,7 +582,8 @@ const getInformeREMAT = (token, param) => {
     fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeRemat?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -526,7 +597,10 @@ const getInformeREMAT = (token, param) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -540,7 +614,8 @@ const getReporteInformeREMAT = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeRemat', {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       },
@@ -558,7 +633,10 @@ const getReporteInformeREMAT = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -572,7 +650,8 @@ const getReporteInformeAntecedentes = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeAntecedente', {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       },
@@ -590,7 +669,10 @@ const getReporteInformeAntecedentes = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -600,10 +682,11 @@ const getReporteInformeAntecedentes = (token, body) => {
 
 const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
   return new Promise((resolve, reject) => {
-    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/ContribucionesConPeriodosAdeudados?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/ContribucionesConPeriodosAdeudados?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -617,7 +700,10 @@ const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -631,7 +717,8 @@ const getDeclaracionJurada = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/DeclaracionJurada/ObtenerDdjj', {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       },
@@ -648,7 +735,10 @@ const getDeclaracionJurada = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -662,7 +752,8 @@ const getImprecionDeclaracionJurada = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/DeclaracionJurada/ImprimirDdjj', {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       },
@@ -677,7 +768,10 @@ const getImprecionDeclaracionJurada = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -686,13 +780,14 @@ const getImprecionDeclaracionJurada = (token, body) => {
 };
 
 const getTributoByIdentificador = (token, tipoTributo, identificador) => {
-  const queryString = '?tipoTributo='+tipoTributo+'&identificador=' + identificador;
+  const queryString = '?tipoTributo=' + tipoTributo + '&identificador=' + identificador;
 
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributo' + queryString, {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
         "Content-Type": "application/json",
         "Token": token
       }
@@ -706,7 +801,10 @@ const getTributoByIdentificador = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        resolve(datos);
+        if (!datos.accesows)
+          resolve(datos);
+        else
+          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
       })
       .catch(err => {
         reject("Error procesando la solicitud");

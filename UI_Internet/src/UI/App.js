@@ -28,6 +28,7 @@ import CloseIcon from "@material-ui/icons/Close";
 
 //Mis componentes
 import Inicio from "./Inicio";
+import CaptchaAccess from "@UI/Paginas/CaptchaAccess/index";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
 import importacionMasivaAFIP from "@UI/Paginas/AfipController/importacionMasiva";
 import importacionIndividualAFIP from "@UI/Paginas/AfipController/importacionIndividual";
@@ -351,6 +352,7 @@ class App extends React.Component {
           className={"switch-wrapper"}
         >
           <Route exact path="/" component={null} />
+          <Route path={`${base}/CaptchaAccess/:urlRedirect`} component={login ? CaptchaAccess : null} />
           <Route path={`${base}/DetalleTributario/:tributo`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/DetalleTributario/:tributo/:identificador`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
