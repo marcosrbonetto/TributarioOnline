@@ -28,8 +28,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: false,
     component: SeleccionTributo,
-    nombre: "Tributos",
-    titulo: "Tributos",
+    nombre: "Autogestion Tributaria",
+    titulo: "Autogestion Tributaria",
   },
   {
     url: "/DetalleTributario/:tributo/:identificador/:seccionMenu/:subIdentificador",
@@ -60,8 +60,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Tributos",
-    titulo: "Tributos",
+    nombre: "Autogestion Tributaria",
+    titulo: "Autogestion Tributaria",
   },
   {
     url: "/DetalleTributario/Automotor",
