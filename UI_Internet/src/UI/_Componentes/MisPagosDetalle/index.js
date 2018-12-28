@@ -55,12 +55,13 @@ class MisPagosDetalle extends React.PureComponent {
   };
   
   handleBeneficiosResult = (result) => {
+    //Seteamos las nuevas rows con sus nuevas configuraciones de acuerdo a los beneficios y la tabla
     this.setState({
       tableDisabled: result.tableDisabled || false,
       rowList: result.rowList
     });
     
-    //Actualización Array
+    //Actualización grilla
     this.getFilasSeleccionadas(result.rowList, result.rowsSelected);
     this.forceUpdate();
   }

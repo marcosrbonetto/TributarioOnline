@@ -27,15 +27,6 @@ const beneficios = {
 
                 return row;
             },
-            reset:  (row) => {
-                row.data = {
-                    ...row.data,
-                    checked: false,
-                    disabled: false,
-                };
-
-                return row;
-            },
             tableDisabled: true
         }
     ],
@@ -56,15 +47,6 @@ const beneficios = {
                 else
                     return row;
             },
-            reset:  (row) => {
-                row.data = {
-                    ...row.data,
-                    checked: false,
-                    disabled: false,
-                };
-
-                return row;
-            },
             tableDisabled: true
         },
         {
@@ -82,15 +64,6 @@ const beneficios = {
                 }
                 else
                     return row;
-            },
-            reset:  (row) => {
-                row.data = {
-                    ...row.data,
-                    checked: false,
-                    disabled: false,
-                };
-
-                return row;
             },
             tableDisabled: true
         }

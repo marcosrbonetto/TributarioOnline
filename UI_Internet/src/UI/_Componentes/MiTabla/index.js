@@ -158,22 +158,25 @@ class MiTabla extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
+        
+        var resultSelected = undefined;
+        if (JSON.stringify(this.props.disabled) != JSON.stringify(nextProps.disabled)) {
+            resultSelected = this.handleSetSelected(nextProps);
+        }
+        
         var data = nextProps.rows.map((row, key) => {
             row.id = key;
             return row;
         });
 
-        if (JSON.stringify(this.props.disabled) != JSON.stringify(nextProps.disabled)) {
-            var resultSelected = this.handleSetSelected(nextProps);
-            this.setState({
-                data: data,
-                selected: resultSelected.rowsSetSelected
-            });
-        } else {
-            this.setState({
-                data: data,
-            });
-        }
+        let newState = {
+            data: data
+        };
+
+        if(resultSelected)
+            newState['selected'] = resultSelected.rowsSetSelected;
+        
+        this.setState(newState);
     }
 
     handleSetSelected = (props) => {

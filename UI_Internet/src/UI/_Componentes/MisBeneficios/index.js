@@ -49,14 +49,14 @@ class MisBeneficios extends React.PureComponent {
   handleClose = (event) => {
     let idItemSeleccionado = parseInt(event.currentTarget.attributes.idbeneficio.value);
 
+    //Si es el mismo quiere decir que lo estamos deschequeando
     if (this.state.itemChecked == idItemSeleccionado) {
-      //Reseteo
-      const beneficio = _.find(this.state.arrayBeneficios, { 'key': idItemSeleccionado });
       idItemSeleccionado = 0;
-      this.handleBeneficio(beneficio,idItemSeleccionado); 
+      this.handleBeneficio();
     } else {
+      //Seteamos las filas de acuerdo al beneficio
       const beneficio = _.find(this.state.arrayBeneficios, { 'key': idItemSeleccionado });
-      this.handleBeneficio(beneficio,idItemSeleccionado); //Seteo
+      this.handleBeneficio(beneficio); //Seteo
     }
 
     this.setState({
@@ -65,19 +65,20 @@ class MisBeneficios extends React.PureComponent {
     });
   };
 
-  handleBeneficio = (beneficio,idItemSeleccionado) => {
+  handleBeneficio = (beneficio) => {
     if (!this.props.rows) return [];
 
     let result = undefined;
 
-    if (idItemSeleccionado != 0) {
+    if (beneficio) {
+      //Cuando se checkea el beneficio, se setea la grilla de acuerdo a la config del mismo
       let arrayRows = this.props.rows;
       _.each(arrayRows, (row) => {
         beneficio.condicion(row);
       });
 
-      var itemsSeleccionados  =_.filter(arrayRows,(o) => { return o.data.checked == true});
-      const idSeleccionados=  _.map(itemsSeleccionados,'id');
+      var itemsSeleccionados = _.filter(arrayRows, (o) => { return o.data.checked == true });
+      const idSeleccionados = _.map(itemsSeleccionados, 'id');
 
       result = {
         rowList: arrayRows,
@@ -85,10 +86,8 @@ class MisBeneficios extends React.PureComponent {
         tableDisabled: beneficio.tableDisabled
       };
     } else {
-      let arrayRows = this.props.rows;
-      _.each(arrayRows, (row) => {
-        beneficio.reset(row);
-      });
+      //Cuando se descheckea el beneficio, se debe resetear la grilla
+      let arrayRows = this.resetearFilar(this.props.rows);
 
       result = {
         rowList: arrayRows,
@@ -98,6 +97,20 @@ class MisBeneficios extends React.PureComponent {
     }
 
     this.props.handleBeneficiosResult && this.props.handleBeneficiosResult(result);
+  }
+
+  resetearFilar = (arrayRows) => {
+    var newArrayRows = _.each(arrayRows, (row) => {
+      row.data = {
+        ...row.data,
+        checked: false,
+        disabled: false,
+      };
+
+      return row;
+    });
+
+    return newArrayRows;
   }
 
   handleCloseMenu = () => {
