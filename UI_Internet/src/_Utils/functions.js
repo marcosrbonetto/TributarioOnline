@@ -139,7 +139,6 @@ export const diffDays = (fromDate, toDate) => {
 	return Math.round(Math.abs((fromDate.getTime() - toDate.getTime()) / (24 * 60 * 60 * 1000)));
 };
 
-
 export const getAllUrlParams = function (url) {
 
 	// get query string from url (optional) or window

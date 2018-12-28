@@ -142,28 +142,16 @@ class MiTabla extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const gridRows = (props.rows || []);
-
-        this.rowsSetSelected = [];
-        var data = (gridRows.length > 0 && !gridRows[0].id && gridRows.map((row, key) => {
-            row.id = key;
-
-            if(row.data && row.data.checked)
-                this.rowsSetSelected.push(key);
-
-            return row;
-        })) || gridRows;
-
-        //De acuerdo a las filas seteadas como checkeadas, actualizamod el total
-        if (this.props.getFilasSeleccionadas)
-            this.props.getFilasSeleccionadas(data, this.rowsSetSelected);
+        var resultSelected = this.handleSetSelected(props);
+        this.data = resultSelected.data;
+        this.rowsSetSelected = resultSelected.rowsSetSelected;
 
         this.state = {
             order: this.props.order || 'desc',
             orderBy: this.props.orderBy,
             orderType: 'string',
             selected: this.rowsSetSelected,
-            data: data,
+            data: this.data,
             page: 0,
             rowsPerPage: this.props.rowsPerPage || 25,
         }
@@ -175,9 +163,40 @@ class MiTabla extends React.PureComponent {
             return row;
         });
 
-        this.setState({
-            data: data
-        });
+        if (JSON.stringify(this.props.disabled) != JSON.stringify(nextProps.disabled)) {
+            var resultSelected = this.handleSetSelected(nextProps);
+            this.setState({
+                data: data,
+                selected: resultSelected.rowsSetSelected
+            });
+        } else {
+            this.setState({
+                data: data,
+            });
+        }
+    }
+
+    handleSetSelected = (props) => {
+        const gridRows = (props.rows || []);
+
+        let rowsSetSelected = [];
+        var data = (gridRows.length > 0 && !gridRows[0].id && gridRows.map((row, key) => {
+            row.id = key;
+
+            if(row.data && row.data.checked)
+                rowsSetSelected.push(key);
+
+            return row;
+        })) || gridRows;
+
+        //De acuerdo a las filas seteadas como checkeadas, actualizamod el total
+        if (props.getFilasSeleccionadas)
+            props.getFilasSeleccionadas(data, rowsSetSelected);
+
+        return {
+            data: data,
+            rowsSetSelected: rowsSetSelected
+        };
     }
 
     handleRequestSort = (event, property, colType) => {
@@ -287,6 +306,7 @@ class MiTabla extends React.PureComponent {
                                     const isSelected = this.isSelected(n.id);
 
                                     return <MiRow
+                                        version={(new Date()).getTime()} //Esto hace que siempre se renderice, de lo contrario React ve que no cambia nada y no lo renderiza
                                         key={index}
                                         check={check}
                                         disabled={disabled}
@@ -358,7 +378,7 @@ class MiRow extends React.PureComponent {
                 <TableCell padding="checkbox">
                     <Checkbox 
                         onClick={this.onClick}
-                        checked={isSelected || false} 
+                        checked={isSelected || (info.data && info.data.checked) || false} 
                         disabled={disabled || (info.data && info.data.disabled) || false}
                     />
                 </TableCell>}

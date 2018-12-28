@@ -25,8 +25,17 @@ class MisPagosDetalle extends React.PureComponent {
     super(props);
 
     this.state = {
-      importeAPagar: '0,00'
+      importeAPagar: '0,00',
+      rowList: this.props.info ? this.props.info.rowList : [],
+      tableDisabled: this.props.disabled || false,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.info && JSON.stringify(nextProps.info) != JSON.stringify(this.props.info)) {
+      this.setState({ rowList: nextProps.info ? nextProps.info.rowList : [] });
+    }
   }
 
   //Totalizador de importe de filas seleccionadas
@@ -44,6 +53,17 @@ class MisPagosDetalle extends React.PureComponent {
     this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
     this.setState({ importeAPagar: formatNumber(importeTotal) });
   };
+  
+  handleBeneficiosResult = (result) => {
+    this.setState({
+      tableDisabled: result.tableDisabled || false,
+      rowList: result.rowList
+    });
+    
+    //Actualización Array
+    this.getFilasSeleccionadas(result.rowList, result.rowsSelected);
+    this.forceUpdate();
+  }
 
   render() {
     const classes = this.props.classes;
@@ -59,13 +79,13 @@ class MisPagosDetalle extends React.PureComponent {
     }
 
     //Datos para generar la grilla
-    const rowList = this.props.info ? this.props.info.rowList : [];
+    const rowList = this.state.rowList;
     const rowsPerPage = (rowList.length <= 5 && 5) || (rowList.length > 5 && rowList.length <= 10 && 10) || (rowList.length > 10 && 25);
     const columnas = this.props.data.labels.columnas || null;
     const order = this.props.data.order || 'asc';
     const orderBy = this.props.data.orderBy || 'concepto';
     const check = this.props.check;
-    const disabled = this.props.disabled;
+    const disabled = this.state.tableDisabled;
 
     //Tributo y tipo de tributo para generar el cedulon
     const tributo = this.props.tributoActual;
@@ -143,7 +163,11 @@ class MisPagosDetalle extends React.PureComponent {
         </Grid>
         <Grid item sm={6} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
           
-          <MisBeneficios />
+          <MisBeneficios 
+          tipoTributo={this.props.tributoActual} 
+          seccion={this.props.tipoCedulon} 
+          rows={rowList}
+          handleBeneficiosResult={this.handleBeneficiosResult}/>
 
           <MiCedulon
             registrosSeleccionados={this.props.registrosSeleccionados}
