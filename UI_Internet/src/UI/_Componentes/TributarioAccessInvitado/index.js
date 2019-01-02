@@ -77,6 +77,17 @@ class TributarioAccessInvitado extends React.PureComponent {
         const idTipoTributo = this.props.id;
         const tipoTributo = this.props.tipo;
         const identificador = this.state.inputIdentificadorTributo;
+        const validacion = this.props.validacion;
+
+        if(validacion && !validacion.test.test(identificador)) {
+            this.setState({
+                ...this.state,
+                mensajeError: validacion.msjError,
+                errorInputIdentificador: true
+            });
+            this.props.mostrarCargando(false);
+            return false;
+        }
 
         servicesRepresentantes.getTitularTributo(token, {
             "tipoTributo": idTipoTributo,
