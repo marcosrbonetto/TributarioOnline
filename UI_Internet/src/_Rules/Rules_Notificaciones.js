@@ -23,7 +23,7 @@ const getMisNotificaciones = (token) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -55,7 +55,7 @@ const setNotificacionLeida = (token, identificador) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);

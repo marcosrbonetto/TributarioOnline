@@ -22,7 +22,7 @@ const getTipoTributos = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -54,7 +54,7 @@ const getTipoCedulones = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -86,7 +86,7 @@ const getEstadoPagos = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -119,7 +119,7 @@ const getDatosUsuario = (token, callback) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -152,7 +152,7 @@ const getTributosByCUIT = (token, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -184,7 +184,7 @@ const getIdTributos = (token, callback) => {
       })
       .then(datos => {
 
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -217,7 +217,7 @@ const getInfoContribucion = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -250,7 +250,7 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -282,7 +282,7 @@ const getInfoJuicios = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -313,7 +313,7 @@ const getInfoPlanes = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -344,7 +344,7 @@ const getInfoDetalleJuicio = (token, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -375,7 +375,7 @@ const getInfoDetallePlan = (token, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -437,7 +437,7 @@ const getReporteCedulon = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -468,7 +468,7 @@ const getInformeCuenta = (token, param) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -504,7 +504,7 @@ const getReporteInformeCuenta = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -535,7 +535,7 @@ const getUltimosPagos = (token, param) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -566,7 +566,7 @@ const getInformeAntecedentes = (token, param) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -597,7 +597,7 @@ const getInformeREMAT = (token, param) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -633,7 +633,7 @@ const getReporteInformeREMAT = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -669,7 +669,7 @@ const getReporteInformeAntecedentes = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -700,7 +700,7 @@ const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -735,7 +735,7 @@ const getDeclaracionJurada = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -768,7 +768,7 @@ const getImprecionDeclaracionJurada = (token, body) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -801,7 +801,7 @@ const getTributoByIdentificador = (token, tipoTributo, identificador) => {
         return res.json();
       })
       .then(datos => {
-        if (!datos.accesows)
+        if (datos.accesoWS)
           resolve(datos);
         else
           window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);

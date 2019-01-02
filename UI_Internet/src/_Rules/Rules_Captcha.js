@@ -1,25 +1,14 @@
-const validarCaptcha = (token, body) => {
+const validarCaptcha = (token, valueCaptcha) => {
 
     return new Promise((resolve, reject) => {
-        resolve({
-            "return": "lalal",
-            "error": "string",
-            "ok": true
-        });
-    });
-    
-    return new Promise((resolve, reject) => {
 
-        fetch(window.Config.BASE_URL_WS + '/v1/ValidarCaptcha/validarCaptcha', {
-            method: "POST",
+        fetch(window.Config.BASE_URL_WS + '/v1/ControlAcceso/Validar?codigo=' + valueCaptcha, {
+            method: "GET",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
                 "Token": token
-            },
-            body: JSON.stringify({
-                "hash": body.hash,
-            })
+            }
         })
             .then(res => {
 
@@ -30,6 +19,7 @@ const validarCaptcha = (token, body) => {
                 return res.json();
             })
             .then(datos => {
+debugger;
                 resolve(datos);
             })
             .catch(err => {

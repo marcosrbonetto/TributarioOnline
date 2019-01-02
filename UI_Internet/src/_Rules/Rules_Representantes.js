@@ -27,7 +27,7 @@ const agregarSolicitudPermiso = (token, body) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -64,7 +64,7 @@ const cancelarPermiso = (token, body) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -101,7 +101,7 @@ const aceptarPermiso = (token, body) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -133,7 +133,7 @@ const getMisRepresentantes = (token, identificador) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -165,7 +165,7 @@ const getMisRepresentados = (token, identificador) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -197,7 +197,7 @@ const getTitularTributo = (token, param) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);

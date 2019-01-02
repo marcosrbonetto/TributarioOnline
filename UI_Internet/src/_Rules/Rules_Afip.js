@@ -26,7 +26,7 @@ const importarListaRepresentantesAFIP = (token, body) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -61,7 +61,7 @@ const importarRepresentanteAFIP = (token, body) => {
                 return res.json();
             })
             .then(datos => {
-                if (!datos.accesows)
+                if (datos.accesoWS)
                     resolve(datos);
                 else
                     window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);

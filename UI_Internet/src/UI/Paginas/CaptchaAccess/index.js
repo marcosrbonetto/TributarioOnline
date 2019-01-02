@@ -49,6 +49,7 @@ class CaptchaAccess extends React.PureComponent {
   constructor(props) {
     super(props);
 
+    this.token = this.props.loggedUser.token;
     this.urlRedirect = decodeURIComponent(this.props.match.params.urlRedirect) || '/';
     this.state = {
       //accessCaptcha
@@ -56,17 +57,18 @@ class CaptchaAccess extends React.PureComponent {
   }
 
   componentDidMount() {
+
     if(!this.props.match.params.urlRedirect)
       this.props.redireccionar('/Inicio');
   }
 
-  handleValidationCaptcha = () => {
+  handleValidationCaptcha = (valueCaptcha) => {
     this.props.mostrarCargando(true);
 
-    Rules_Captcha.validarCaptcha({})
+    Rules_Captcha.validarCaptcha(this.token, valueCaptcha)
     .then(datos => {
       this.props.mostrarCargando(false);
-
+      debugger;
       if (!datos.ok) { mostrarAlerta(datos.error); return false; }
 
       this.props.setAccessCaptcha(datos.return);

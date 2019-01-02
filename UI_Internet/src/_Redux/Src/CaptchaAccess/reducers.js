@@ -5,7 +5,7 @@ import {
 import storePersistent from "@Redux/Store/persistent";
 
 let initialState = {
-    accessCaptcha: undefined,
+    accessCaptcha: 0,
 };
 
 //Agrega al initialState lo que se seteo como permanente

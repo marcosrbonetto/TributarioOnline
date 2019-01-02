@@ -24,7 +24,7 @@ const metodos = {
             return;
           }
 
-          if (!data.accesows)
+          if (data.accesoWS)
             resolve(data.return);
           else
             window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
@@ -53,7 +53,7 @@ const metodos = {
             return;
           }
 
-          if (!data.accesows)
+          if (data.accesoWS)
             resolve(data.return);
           else
             window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
