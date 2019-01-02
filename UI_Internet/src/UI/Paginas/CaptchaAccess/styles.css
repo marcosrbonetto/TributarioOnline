@@ -1,0 +1,5 @@
+@media only screen and (max-width: 1030px) {
+    .contentRepresentantes .container {
+        min-width: 100%;
+    }
+}

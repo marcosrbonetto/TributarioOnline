@@ -5,6 +5,7 @@ import MainContent from "./mainContent";
 import DetalleTributario from "@ReduxSrc/TributarioOnline/DetalleTributario/reducers";
 import Representantes from "@ReduxSrc/Representantes/reducers";
 import AfipController from "@ReduxSrc/AfipController/reducers";
+import CaptchaAccess from "@ReduxSrc/CaptchaAccess/reducers";
 
 import { combineReducers } from "redux";
 
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   MainContent,
   DetalleTributario,
   Representantes,
-  AfipController
+  AfipController,
+  CaptchaAccess
 });
 
 export default rootReducer;
