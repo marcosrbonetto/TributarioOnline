@@ -165,15 +165,11 @@ class MisPagos extends React.PureComponent {
         </Grid>
         <Grid item sm={6} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
           
-<<<<<<< HEAD
           <MisBeneficios 
           tipoTributo={cedulonConfig.tipoTributo} 
           seccion={cedulonConfig.tipoCedulon} 
           rows={rowList}
           handleBeneficiosResult={this.handleBeneficiosResult}/>
-=======
-          {/* Ocultamos hasta que esté listo <MisBeneficios />*/}
->>>>>>> d5654933ed0f4db701b01adfac5bc484ea7e8a04
 
           <MiCedulon
             registrosSeleccionados={registrosSeleccionados}
