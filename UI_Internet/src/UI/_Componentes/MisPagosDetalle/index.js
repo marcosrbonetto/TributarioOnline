@@ -173,7 +173,6 @@ class MisPagosDetalle extends React.PureComponent {
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
         </Grid>
-<<<<<<< HEAD
         <Grid item sm={6} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
 
           <MisBeneficios
@@ -181,11 +180,6 @@ class MisPagosDetalle extends React.PureComponent {
             seccion={this.props.tipoCedulon}
             rows={rowList}
             handleBeneficiosResult={this.handleBeneficiosResult} />
-=======
-        <Grid item sm={6} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
-          
-          {/* Ocultamos hasta que esté listo <MisBeneficios />*/}
->>>>>>> d5654933ed0f4db701b01adfac5bc484ea7e8a04
 
           <MiCedulon
             registrosSeleccionados={this.props.registrosSeleccionados}
