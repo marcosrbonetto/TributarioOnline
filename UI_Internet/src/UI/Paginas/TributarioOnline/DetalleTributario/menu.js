@@ -1,10 +1,15 @@
 import DetalleTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Detalle/index";
 import DetalleJuicio from "@UI/Paginas/TributarioOnline/DetalleTributario/DetalleJuicio/index";
 import DetallePlan from "@UI/Paginas/TributarioOnline/DetalleTributario/DetallePlan/index";
+
 import SeleccionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Seleccion/index";
+
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
+
 import Representantes from "@UI/Paginas/Representantes/index";
-import BusquedaPor from "@UI/Paginas/TributarioOnline/BusquedaPor/index";
+
+import BusquedaPorJuicio from "@UI/Paginas/TributarioOnline/BusquedaPor/Juicio";
+import BusquedaPorPlan from "@UI/Paginas/TributarioOnline/BusquedaPor/Plan";
 
 const Menu = [
   {
@@ -136,12 +141,20 @@ const Menu = [
     titulo: "Planes De Vivienda",
   },
   {
-    url: "/Inicio/BusquedaPor",
+    url: "/Inicio/BusquedaPor/Juicio",
     exact: true,
     mostrarEnMenu: true,
-    component: BusquedaPor,
-    nombre: "Gestión por Identificador",
-    titulo: "Gestión por Identificador",
+    component: BusquedaPorJuicio,
+    nombre: "Gestión por Juicio",
+    titulo: "Gestión por Juicio",
+  },
+  {
+    url: "/Inicio/BusquedaPor/Plan",
+    exact: true,
+    mostrarEnMenu: true,
+    component: BusquedaPorPlan,
+    nombre: "Gestión por Plan",
+    titulo: "Gestión por Plan",
   },
   {
     url: "/Inicio/Representantes/:tributo",
