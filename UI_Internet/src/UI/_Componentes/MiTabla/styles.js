@@ -17,6 +17,9 @@ export const styles = theme => ({
     '& td':{
     fontSize: '15px !important'
     }
+  },
+  cellNumeric: {
+    textAlign: 'right'
   }
 });
 

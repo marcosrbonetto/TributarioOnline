@@ -269,7 +269,7 @@ class MiTabla extends React.PureComponent {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     render() {
-        const { classes } = this.props;
+        const { classes, columns } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
         let { orderType } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
@@ -278,8 +278,8 @@ class MiTabla extends React.PureComponent {
         const pagination = this.props.pagination == false ? false : true;
 
         //Seteamos el orderType inicial de acuerdo a orderBy
-        if(this.props.columns) {
-            const columnOrderBy = _.filter(this.props.columns,{id:orderBy});
+        if(columns) {
+            const columnOrderBy = _.filter(columns,{id:orderBy});
 
             if(columnOrderBy.length > 0 && columnOrderBy[0].type) {
                 orderType = columnOrderBy[0].type;
@@ -291,7 +291,7 @@ class MiTabla extends React.PureComponent {
                 <div className={classes.tableWrapper}>
                     <Table aria-labelledby="tableTitle" className={classes.fontSize}>
                         <EnhancedTableHead
-                            columns={this.props.columns}
+                            columns={columns}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
@@ -317,6 +317,7 @@ class MiTabla extends React.PureComponent {
                                         classes={classes}
                                         onClick={this.handleClick}
                                         isSelected={isSelected}
+                                        columns={columns}
                                     />
                                 })) || <TableRow>
                                     <TableCell colSpan={6}>{this.props.msgNoRows ? this.props.msgNoRows : 'No se encontraron registros'}</TableCell>
@@ -365,7 +366,7 @@ class MiRow extends React.PureComponent {
     }
 
     render() {
-        const { isSelected, info, check, disabled } = this.props;
+        const { isSelected, info, check, disabled, columns } = this.props;
         const addCheck = (check || false);
         const classes = this.props.classes;
 
@@ -387,7 +388,9 @@ class MiRow extends React.PureComponent {
                 </TableCell>}
             {Object.keys(info).map((cell, key) => {
                 if (cell == 'data' || cell == 'id') return; //'id' y 'data' son datos extras para utilizar
-                return <TableCell key={cell} padding="default">{info[cell]}</TableCell>
+                var column = _.find(columns,{id: cell});
+
+                return <TableCell className={column && column.numeric && classes.cellNumeric} key={cell} padding="default">{info[cell]}</TableCell>
             })}
         </TableRow>
     }

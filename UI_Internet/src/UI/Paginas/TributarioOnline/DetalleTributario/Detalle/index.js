@@ -1981,7 +1981,7 @@ class DetalleTributo extends React.PureComponent {
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
                                                 { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
-                                                { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe ($)' },
+                                                { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
                                             rows={periodosAdeudados.infoGrilla || []}
@@ -2017,7 +2017,7 @@ class DetalleTributo extends React.PureComponent {
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
                                                 { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
-                                                { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: 'Importe ($)' },
+                                                { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
                                             rows={ultimosPagos.infoGrilla || []}

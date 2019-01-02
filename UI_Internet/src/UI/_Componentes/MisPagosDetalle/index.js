@@ -201,7 +201,7 @@ class MisPagosDetalle extends React.PureComponent {
         columns={[
           { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
           { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas[1] : 'Vencimiento') },
-          { id: 'importe', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[2] : 'Importe ($)') },
+          { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas[2] : 'Importe ($)') },
           { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
         ]}
         rows={rowList || []}
