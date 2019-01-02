@@ -42,8 +42,7 @@ import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 import servicesRepresentantes from '@Rules/Rules_Representantes';
 
 //Funciones Útiles
-import { formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
-import { debug } from "util";
+import { getAllUrlParams, formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
 const mapStateToProps = state => {
     return {
@@ -225,6 +224,8 @@ class DetalleTributo extends React.PureComponent {
         const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
+        const representante = decodeURIComponent(getAllUrlParams(window.location.href).representante) || '';
+
         //Corroboramos que el identificador sea correcto y exista
         servicesRepresentantes.getTitularTributo(token, {
             "tipoTributo": idTipoTributo,
@@ -237,7 +238,7 @@ class DetalleTributo extends React.PureComponent {
                     let identificadorActual = {
                         "tipoTributo": idTipoTributo,
                         "identificador": identificador,
-                        "representado": undefined
+                        "representado": representante
                     };
 
                     const tributosBienesPorCUIT = _.filter(this.props.tributosBienesPorCUIT, (o) => {
