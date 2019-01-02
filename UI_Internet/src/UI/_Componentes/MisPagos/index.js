@@ -25,8 +25,17 @@ class MisPagos extends React.PureComponent {
     super(props);
 
     this.state = {
-      importeAPagar: '0,00'
+      importeAPagar: '0,00',
+      rowList: this.props.rowList || [],
+      tableDisabled: this.props.tablaConfig ? this.props.tablaConfig.disabled : false,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.rowList && JSON.stringify(nextProps.rowList) != JSON.stringify(this.props.rowList)) {
+      this.setState({ rowList: nextProps.rowList || [] });
+    }
   }
 
   //Totalizador de importe de filas seleccionadas
@@ -47,12 +56,23 @@ class MisPagos extends React.PureComponent {
     this.setState({ importeAPagar: formatNumber(importeTotal) });
   };
 
+  handleBeneficiosResult = (result) => {
+    //Seteamos las nuevas rows con sus nuevas configuraciones de acuerdo a los beneficios y la tabla
+    this.setState({
+      ...this.state,
+      tableDisabled: result.tableDisabled || false,
+      rowList: result.rowList
+    });
+
+    //Actualización grilla
+    this.getFilasSeleccionadas(result.rowList, result.rowsSelected);
+  }
+
   render() {
     const classes = this.props.classes;
 
     const { 
-      deudaTotales, 
-      rowList,
+      deudaTotales,
       registrosSeleccionados,
       tablaConfig,
       cedulonConfig,
@@ -67,12 +87,13 @@ class MisPagos extends React.PureComponent {
     }
 
     //Datos para generar la grilla
+    const rowList = this.state.rowList;
     const rowsPerPage = (rowList.length <= 5 && 5) || (rowList.length > 5 && rowList.length <= 10 && 10) || (rowList.length > 10 && 25);
     const columnas = tablaConfig.columnas || null;
     const order = tablaConfig.order || 'asc';
     const orderBy = tablaConfig.orderBy || 'concepto';
     const check = tablaConfig.check;
-    const disabled = tablaConfig.disabled;
+    const disabled = this.state.tableDisabled;
 
     //Determinamos si el Cedulon tiene que estar deshabilitado
     let disabledCedulon = !(stringToFloat(this.state.importeAPagar) > 0);
@@ -144,7 +165,11 @@ class MisPagos extends React.PureComponent {
         </Grid>
         <Grid item sm={6} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
           
-          <MisBeneficios />
+          <MisBeneficios 
+          tipoTributo={cedulonConfig.tipoTributo} 
+          seccion={cedulonConfig.tipoCedulon} 
+          rows={rowList}
+          handleBeneficiosResult={this.handleBeneficiosResult}/>
 
           <MiCedulon
             registrosSeleccionados={registrosSeleccionados}

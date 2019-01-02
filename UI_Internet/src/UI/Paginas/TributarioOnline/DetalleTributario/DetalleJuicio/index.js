@@ -170,6 +170,7 @@ class DetalleJuicio extends React.PureComponent {
                                     {
                                         subItem: this.identificador,
                                         tipoCedulon: this.props.tipoCedulones.byKey[3],
+                                        tipoTributo: this.tributo,
                                         idTipoTributo: getIdTipoTributo(this.tributo),
                                         identificador: this.identificador,
                                     }

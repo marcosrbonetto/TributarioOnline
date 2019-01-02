@@ -4,7 +4,7 @@ const getMisNotificaciones = (token) => {
         fetch(window.Config.BASE_URL_WS+'/v1/Notificacion/MisNotificaciones', {
             method: "GET",
             headers: {
-                Accept: "application/json",
+                Accept: "application/json", "--ControlAcceso": 10,
                 "Content-Type": "application/json",
                 "Token": token
             }
@@ -32,7 +32,7 @@ const setNotificacionLeida = (token, identificador) => {
         fetch(window.Config.BASE_URL_WS+'/v1/Notificacion/Leer?identificador='+identificador, {
             method: "GET",
             headers: {
-                Accept: "application/json",
+                Accept: "application/json", "--ControlAcceso": 10,
                 "Content-Type": "application/json",
                 "Token": token
             }
