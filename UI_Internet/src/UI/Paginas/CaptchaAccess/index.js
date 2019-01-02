@@ -68,7 +68,7 @@ class CaptchaAccess extends React.PureComponent {
     Rules_Captcha.validarCaptcha(this.token, valueCaptcha)
     .then(datos => {
       this.props.mostrarCargando(false);
-      debugger;
+
       if (!datos.ok) { mostrarAlerta(datos.error); return false; }
 
       this.props.setAccessCaptcha(datos.return);

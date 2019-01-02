@@ -18,7 +18,7 @@ class MisBeneficios extends React.PureComponent {
     super(props);
 
     this.state = {
-      visible: true,
+      visible: false, //false - FALTA PARTE BACK
       anchorEl: null,
       itemChecked: 0,
       arrayBeneficios: []

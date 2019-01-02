@@ -1,8 +1,9 @@
 import Store from "@Redux/Store/index";
-//Este valor se obtiene luego de pasar la prueba del ReCaptcha
-const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
 
 const pagoMercadoPago = (token, body) => {
+
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
 
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/Pagar', {
@@ -47,6 +48,9 @@ const pagoMercadoPago = (token, body) => {
 
 const getPublicKeyMercadoPago = () => {
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+  
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/PublicKey', {
       method: "POST",

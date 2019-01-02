@@ -19,7 +19,7 @@ const validarCaptcha = (token, valueCaptcha) => {
                 return res.json();
             })
             .then(datos => {
-debugger;
+
                 resolve(datos);
             })
             .catch(err => {

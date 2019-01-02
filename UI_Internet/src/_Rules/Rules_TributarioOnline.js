@@ -1,8 +1,8 @@
 import Store from "@Redux/Store/index";
-//Este valor se obtiene luego de pasar la prueba del ReCaptcha
-const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
 
 const getTipoTributos = (token, callback) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
 
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoTributo', {
@@ -35,6 +35,8 @@ const getTipoTributos = (token, callback) => {
 };
 
 const getTipoCedulones = (token, callback) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
 
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoCedulon', {
@@ -67,6 +69,8 @@ const getTipoCedulones = (token, callback) => {
 };
 
 const getEstadoPagos = (token, callback) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
 
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/EstadoPago', {
@@ -99,6 +103,8 @@ const getEstadoPagos = (token, callback) => {
 };
 
 const getDatosUsuario = (token, callback) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
 
     fetch(window.Config.BASE_URL_WS + '/v1/Usuario/Usuario', {
@@ -132,6 +138,8 @@ const getDatosUsuario = (token, callback) => {
 };
 
 const getTributosByCUIT = (token, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
 
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/SusTributos?cuil=' + identificador, {
@@ -165,6 +173,8 @@ const getTributosByCUIT = (token, identificador) => {
 
 const getIdTributos = (token, callback) => {
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos', {
       method: "GET",
@@ -198,6 +208,8 @@ const getIdTributos = (token, callback) => {
 
 
 const getInfoContribucion = (token, tipoTributo, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
@@ -231,6 +243,8 @@ const getInfoContribucion = (token, tipoTributo, identificador) => {
 
 
 const getInfoMultas = (token, tipoTributo, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
@@ -263,6 +277,8 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
 
 
 const getInfoJuicios = (token, tipoTributo, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Juicios?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
@@ -294,6 +310,8 @@ const getInfoJuicios = (token, tipoTributo, identificador) => {
 };
 
 const getInfoPlanes = (token, tipoTributo, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Planes?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
@@ -325,6 +343,8 @@ const getInfoPlanes = (token, tipoTributo, identificador) => {
 };
 
 const getInfoDetalleJuicio = (token, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/DetalleJuicio?identificador=' + identificador, {
       method: "GET",
@@ -356,6 +376,8 @@ const getInfoDetalleJuicio = (token, identificador) => {
 };
 
 const getInfoDetallePlan = (token, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/DetallePlan?identificador=' + identificador, {
       method: "GET",
@@ -417,6 +439,8 @@ const getReporteCedulon = (token, body) => {
       break;
   }
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + url, {
       method: "POST",
@@ -449,6 +473,8 @@ const getReporteCedulon = (token, body) => {
 };
 
 const getInformeCuenta = (token, param) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/InformeCuenta?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
@@ -481,6 +507,8 @@ const getInformeCuenta = (token, param) => {
 
 const getReporteInformeCuenta = (token, body) => {
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeCuenta', {
       method: "POST",
@@ -516,6 +544,8 @@ const getReporteInformeCuenta = (token, body) => {
 };
 
 const getUltimosPagos = (token, param) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Recaudacion/UltimosPagos?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
@@ -547,6 +577,8 @@ const getUltimosPagos = (token, param) => {
 };
 
 const getInformeAntecedentes = (token, param) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeAntecedente?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
@@ -578,6 +610,8 @@ const getInformeAntecedentes = (token, param) => {
 };
 
 const getInformeREMAT = (token, param) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeRemat?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
@@ -610,6 +644,8 @@ const getInformeREMAT = (token, param) => {
 
 const getReporteInformeREMAT = (token, body) => {
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeRemat', {
       method: "POST",
@@ -646,6 +682,8 @@ const getReporteInformeREMAT = (token, body) => {
 
 const getReporteInformeAntecedentes = (token, body) => {
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeAntecedente', {
       method: "POST",
@@ -681,6 +719,8 @@ const getReporteInformeAntecedentes = (token, body) => {
 };
 
 const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/ContribucionesConPeriodosAdeudados?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
@@ -713,6 +753,8 @@ const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
 
 const getDeclaracionJurada = (token, body) => {
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/DeclaracionJurada/ObtenerDdjj', {
       method: "POST",
@@ -748,6 +790,8 @@ const getDeclaracionJurada = (token, body) => {
 
 const getImprecionDeclaracionJurada = (token, body) => {
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/DeclaracionJurada/ImprimirDdjj', {
       method: "POST",
@@ -782,6 +826,8 @@ const getImprecionDeclaracionJurada = (token, body) => {
 const getTributoByIdentificador = (token, tipoTributo, identificador) => {
   const queryString = '?tipoTributo=' + tipoTributo + '&identificador=' + identificador;
 
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributo' + queryString, {
       method: "GET",

@@ -1,12 +1,13 @@
 import _ from "lodash";
 
 import Store from "@Redux/Store/index";
-//Este valor se obtiene luego de pasar la prueba del ReCaptcha
-const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
 
 const metodos = {
   validarToken: token => {
     const url = window.Config.BASE_URL_WS + "/v1/Usuario/ValidarToken";
+    //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+    const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: "GET",
@@ -36,6 +37,9 @@ const metodos = {
   },
   datos: token => {
     const url = window.Config.BASE_URL_WS + "/v1/Usuario/Usuario";
+    //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+    const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: "GET",

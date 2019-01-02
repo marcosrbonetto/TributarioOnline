@@ -1,8 +1,9 @@
 import Store from "@Redux/Store/index";
-//Este valor se obtiene luego de pasar la prueba del ReCaptcha
-const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
 
 const agregarSolicitudPermiso = (token, body) => {
+    //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+    const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
     return new Promise((resolve, reject) => {
 
         fetch(window.Config.BASE_URL_WS + '/v1/Representacion/Agregar', {
@@ -39,6 +40,9 @@ const agregarSolicitudPermiso = (token, body) => {
 };
 
 const cancelarPermiso = (token, body) => {
+    //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+    const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
     return new Promise((resolve, reject) => {
 
         fetch(window.Config.BASE_URL_WS + '/v1/Representacion/Cancelar', {
@@ -76,6 +80,9 @@ const cancelarPermiso = (token, body) => {
 };
 
 const aceptarPermiso = (token, body) => {
+    //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+    const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
     return new Promise((resolve, reject) => {
 
         fetch(window.Config.BASE_URL_WS + '/v1/Representacion/Aceptar', {
@@ -113,6 +120,9 @@ const aceptarPermiso = (token, body) => {
 };
 
 const getMisRepresentantes = (token, identificador) => {
+    //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+    const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
     return new Promise((resolve, reject) => {
 
         fetch(window.Config.BASE_URL_WS + '/v1/Representacion/MisRepresentantes', {
@@ -145,6 +155,9 @@ const getMisRepresentantes = (token, identificador) => {
 };
 
 const getMisRepresentados = (token, identificador) => {
+    //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+    const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
     return new Promise((resolve, reject) => {
 
         fetch(window.Config.BASE_URL_WS + '/v1/Representacion/MisRepresentantados', {
@@ -177,6 +190,9 @@ const getMisRepresentados = (token, identificador) => {
 };
 
 const getTitularTributo = (token, param) => {
+    //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+    const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+
     return new Promise((resolve, reject) => {
 
         fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Titular?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
