@@ -138,7 +138,7 @@ class HomeUsuario extends React.PureComponent {
               <TributarioAccess
                 id="3"
                 tipo="Comercio"
-                titulo="Comercios e Industria"
+                titulo="Comercio e Industria"
                 opciones={this.state.idsTributos}
                 identificador="Identificador"
                 icono="store"

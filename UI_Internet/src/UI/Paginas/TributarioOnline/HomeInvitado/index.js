@@ -122,7 +122,7 @@ class HomeInvitado extends React.PureComponent {
               <TributarioAccessInvitado
                 id="3"
                 tipo="Comercio"
-                titulo="Comercios e Industria"
+                titulo="Comercio e Industria"
                 identificador="Identificador"
                 eventRedirect={this.eventRedirect}
                 icono="store" />

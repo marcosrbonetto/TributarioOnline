@@ -41,7 +41,7 @@ export const getTextoTipoTributo = (valueTributo) => {
 		case 'Inmueble':
 			return 'Inmuebles';
 		case 'Comercio':
-			return 'Comercios e Industria';
+			return 'Comercio e Industria';
 		case 'Cementerio':
 			return 'Cementerios';
 		case 'FeriaMercado':

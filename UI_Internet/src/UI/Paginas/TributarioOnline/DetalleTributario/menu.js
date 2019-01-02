@@ -84,8 +84,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Comercios e Industria",
-    titulo: "Comercios e Industria",
+    nombre: "Comercio e Industria",
+    titulo: "Comercio e Industria",
   },
   {
     url: "/DetalleTributario/Cementerio",
