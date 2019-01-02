@@ -4,7 +4,7 @@ const agregarSolicitudPermiso = (token, body) => {
         fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Agregar', {
             method: "POST",
             headers: {
-                Accept: "application/json", "--ControlAcceso": 11,
+                Accept: "application/json", 
                 "Content-Type": "application/json",
                 "Token": token
             },
@@ -36,7 +36,7 @@ const cancelarPermiso = (token, body) => {
         fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Cancelar', {
             method: "DELETE",
             headers: {
-                Accept: "application/json", "--ControlAcceso": 11,
+                Accept: "application/json", 
                 "Content-Type": "application/json",
                 "Token": token
             },
@@ -69,7 +69,7 @@ const aceptarPermiso = (token, body) => {
         fetch(window.Config.BASE_URL_WS+'/v1/Representacion/Aceptar', {
             method: "PUT",
             headers: {
-                Accept: "application/json", "--ControlAcceso": 11,
+                Accept: "application/json", 
                 "Content-Type": "application/json",
                 "Token": token
             },
@@ -102,7 +102,7 @@ const getMisRepresentantes = (token, identificador) => {
         fetch(window.Config.BASE_URL_WS+'/v1/Representacion/MisRepresentantes', {
             method: "GET",
             headers: {
-                Accept: "application/json", "--ControlAcceso": 11,
+                Accept: "application/json", 
                 "Content-Type": "application/json",
                 "Token": token
             }
@@ -130,7 +130,7 @@ const getMisRepresentados = (token, identificador) => {
         fetch(window.Config.BASE_URL_WS+'/v1/Representacion/MisRepresentantados', {
             method: "GET",
             headers: {
-                Accept: "application/json", "--ControlAcceso": 11,
+                Accept: "application/json", 
                 "Content-Type": "application/json",
                 "Token": token
             }
@@ -158,7 +158,7 @@ const getTitularTributo = (token, param) => {
         fetch(window.Config.BASE_URL_WS+'/v1/Tributario/Titular?tipoTributo='+param.tipoTributo+'&identificador='+param.identificador, {
             method: "GET",
             headers: {
-                Accept: "application/json", "--ControlAcceso": 11,
+                Accept: "application/json", 
                 "Content-Type": "application/json",
                 "Token": token
             }

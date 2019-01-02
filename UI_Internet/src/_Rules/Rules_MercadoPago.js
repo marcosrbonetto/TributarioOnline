@@ -4,7 +4,7 @@ const pagoMercadoPago = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/Pagar', {
       method: "POST",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 11,
+        Accept: "application/json", 
         "Content-Type": "application/json",
         "Token": token
       },
@@ -43,7 +43,7 @@ const getPublicKeyMercadoPago = () => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/PublicKey', {
       method: "POST",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 11,
+        Accept: "application/json", 
         "Content-Type": "application/json"
       }
     })

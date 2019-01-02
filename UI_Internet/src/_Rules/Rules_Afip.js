@@ -4,7 +4,7 @@ const importarListaRepresentantesAFIP = (token, body) => {
         fetch(window.Config.BASE_URL_WS+'/v1/ValidacionAFIP/ImportarListaRepresentantesAFIP', {
             method: "POST",
             headers: {
-                Accept: "application/json", "--ControlAcceso": 11,
+                Accept: "application/json", 
                 "Content-Type": "application/json",
                 "Token": token
             },
@@ -35,7 +35,7 @@ const importarRepresentanteAFIP = (token, body) => {
         fetch(window.Config.BASE_URL_WS+'/v1/ValidacionAFIP/ImportarRepresentanteAFIP', {
             method: "POST",
             headers: {
-                Accept: "application/json", "--ControlAcceso": 11,
+                Accept: "application/json", 
                 "Content-Type": "application/json",
                 "Token": token
             },

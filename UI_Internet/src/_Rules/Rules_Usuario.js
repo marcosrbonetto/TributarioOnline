@@ -7,7 +7,7 @@ const metodos = {
       fetch(url, {
         method: "GET",
         headers: {
-          Accept: "application/json", "--ControlAcceso": 11,
+          Accept: "application/json", 
           "Content-Type": "application/json",
           "Token": token
         }
@@ -32,7 +32,7 @@ const metodos = {
       fetch(url, {
         method: "GET",
         headers: {
-          Accept: "application/json", "--ControlAcceso": 11,
+          Accept: "application/json", 
           "Content-Type": "application/json",
           "Token": token
         }
