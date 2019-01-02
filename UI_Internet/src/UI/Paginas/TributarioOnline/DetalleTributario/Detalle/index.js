@@ -668,9 +668,9 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
                                     <Typography>Deducción: <b>$ {pago.importe.deduccion}</b></Typography>
                                     <Typography>Citación: <b>{pago.citacion}</b></Typography>
-                                    <Typography>CTL: <b>$ {pago.ctl}</b></Typography>
-                                    <Typography>Estado: <b>$ {pago.estado}</b></Typography>
-                                    <Typography>Caja: <b>$ {pago.caja}</b></Typography>
+                                    <Typography>CTL: <b>{pago.ctl}</b></Typography>
+                                    <Typography>Estado: <b>{pago.estado}</b></Typography>
+                                    <Typography>Caja: <b>{pago.caja}</b></Typography>
                                 </div>}>
                                 <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
                             </MiTooltip>,
@@ -2016,7 +2016,7 @@ class DetalleTributo extends React.PureComponent {
                                             pagination={!this.props.paraMobile}
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
-                                                { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
+                                                { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
                                                 { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
