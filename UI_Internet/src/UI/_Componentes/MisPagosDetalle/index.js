@@ -26,6 +26,7 @@ class MisPagosDetalle extends React.PureComponent {
 
     this.state = {
       importeAPagar: '0,00',
+      recargoAPagar: '0,00',
       rowList: this.props.info ? this.props.info.rowList : [],
       tableDisabled: this.props.disabled || false,
     };
@@ -43,17 +44,22 @@ class MisPagosDetalle extends React.PureComponent {
     let registrosSeleccionados = []
 
     let importeTotal = 0;
+    let recargoTotal = 0;
     filas.map((item) => {
       importeTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
+      recargoTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['data'].importe.recargo) : 0);
 
       if (idFilasSeleccionadas.indexOf(item.id) != -1)
         registrosSeleccionados.push(item['concepto']);
     });
 
     this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
-    this.setState({ importeAPagar: formatNumber(importeTotal) });
+    this.setState({
+      importeAPagar: formatNumber(importeTotal),
+      recargoAPagar: formatNumber(recargoTotal),
+    });
   };
-  
+
   handleBeneficiosResult = (result) => {
     //Seteamos las nuevas rows con sus nuevas configuraciones de acuerdo a los beneficios y la tabla
     this.setState({
@@ -99,14 +105,18 @@ class MisPagosDetalle extends React.PureComponent {
     //el monto a pagar se setea el total (ya q la grilla no tiene checks)
     const esJuicio = this.props.menuItemSeleccionado == 'juicios';
     let auxImporteAPagar;
+    let auxRecargoAPagar;
     if (esJuicio) {
       disabledCedulon = false;
       auxImporteAPagar = 0;
+      auxRecargoAPagar = 0;
       rowList.map((item) => {
         auxImporteAPagar += stringToFloat(item['importe'], 2);
+        auxRecargoAPagar += stringToFloat(item['data'].importe.recargo, 2);
       });
 
       auxImporteAPagar = formatNumber(auxImporteAPagar);
+      auxRecargoAPagar = formatNumber(auxRecargoAPagar);
     }
 
     const pagination = !this.props.paraMobile;
@@ -151,7 +161,7 @@ class MisPagosDetalle extends React.PureComponent {
         <Grid item sm={6} className={"inputTotalPeriodos"}>
           <TextField
             id="standard-full-width"
-            label="Total a pagar"
+            label={<span>Total a pagar {auxRecargoAPagar ? <span className={classes.recargo}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.recargo}>(Recargo: {this.state.recargoAPagar})</span>}</span>}
             style={{ margin: 8 }}
             placeholder="0,00"
             fullWidth
@@ -159,16 +169,17 @@ class MisPagosDetalle extends React.PureComponent {
             InputLabelProps={{
               shrink: true,
             }}
+            className={classes.totalAPagar}
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
         </Grid>
-        <Grid item sm={6} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
-          
-          <MisBeneficios 
-          tipoTributo={this.props.tributoActual} 
-          seccion={this.props.tipoCedulon} 
-          rows={rowList}
-          handleBeneficiosResult={this.handleBeneficiosResult}/>
+        <Grid item sm={6} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
+
+          <MisBeneficios
+            tipoTributo={this.props.tributoActual}
+            seccion={this.props.tipoCedulon}
+            rows={rowList}
+            handleBeneficiosResult={this.handleBeneficiosResult} />
 
           <MiCedulon
             registrosSeleccionados={this.props.registrosSeleccionados}
@@ -218,7 +229,7 @@ class MisPagosDetalle extends React.PureComponent {
         <Grid item sm={7} className={"inputTotalPeriodos"}>
           <TextField
             id="standard-full-width"
-            label="Total a pagar"
+            label={<span>Total a pagar {auxRecargoAPagar ? <span className={classes.recargo}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.recargo}>(Recargo: {this.state.recargoAPagar})</span>}</span>}
             style={{ margin: 8 }}
             placeholder="0,00"
             fullWidth
@@ -226,10 +237,11 @@ class MisPagosDetalle extends React.PureComponent {
             InputLabelProps={{
               shrink: true,
             }}
+            className={classes.totalAPagar}
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
         </Grid>
-        <Grid item sm={5} className={classNames(classes.buttonActionsContent,"buttonActionsContent")}>
+        <Grid item sm={5} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
           <MiCedulon
             registrosSeleccionados={this.props.registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
@@ -291,6 +303,12 @@ const styles = theme => ({
     margin: '2px',
     borderRadius: '20px',
   },
+  recargo: {
+    color: '#aaa'
+  },
+  totalAPagar: {
+    fontWeight: 'bold'
+  }
 });
 
 export default withStyles(styles)(MisPagosDetalle);

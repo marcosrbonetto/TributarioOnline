@@ -6,7 +6,7 @@ const getTipoTributos = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoTributo', {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json"
       }
     })
@@ -34,7 +34,7 @@ const getTipoCedulones = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/TipoCedulon', {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json"
       }
     })
@@ -62,7 +62,7 @@ const getEstadoPagos = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/KeyValue/EstadoPago', {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json"
       }
     })
@@ -90,7 +90,7 @@ const getDatosUsuario = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Usuario/Usuario', {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -119,7 +119,7 @@ const getTributosByCUIT = (token, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/SusTributos?cuil=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -147,7 +147,7 @@ const getIdTributos = (token, callback) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributos', {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -176,7 +176,7 @@ const getInfoContribucion = (token, tipoTributo, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Contribuciones?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -205,7 +205,7 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Multas?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -233,7 +233,7 @@ const getInfoJuicios = (token, tipoTributo, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Juicios?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -260,7 +260,7 @@ const getInfoPlanes = (token, tipoTributo, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Planes?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -287,7 +287,7 @@ const getInfoDetalleJuicio = (token, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/DetalleJuicio?identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -314,7 +314,7 @@ const getInfoDetallePlan = (token, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/DetallePlan?identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -371,7 +371,7 @@ const getReporteCedulon = (token, body) => {
     fetch(window.Config.BASE_URL_WS + url, {
       method: "POST",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       },
@@ -399,7 +399,7 @@ const getInformeCuenta = (token, param) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/InformeCuenta?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -427,7 +427,7 @@ const getReporteInformeCuenta = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeCuenta', {
       method: "POST",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       },
@@ -458,7 +458,7 @@ const getUltimosPagos = (token, param) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Recaudacion/UltimosPagos?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -485,7 +485,7 @@ const getInformeAntecedentes = (token, param) => {
     fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeAntecedente?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -512,7 +512,7 @@ const getInformeREMAT = (token, param) => {
     fetch(window.Config.BASE_URL_WS + '/v1/TribunalFalta/InformeRemat?tipoTributo=' + param.tipoTributo + '&identificador=' + param.identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -540,7 +540,7 @@ const getReporteInformeREMAT = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeRemat', {
       method: "POST",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       },
@@ -572,7 +572,7 @@ const getReporteInformeAntecedentes = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Reporte/InformeAntecedente', {
       method: "POST",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       },
@@ -603,7 +603,7 @@ const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/ContribucionesConPeriodosAdeudados?tipoTributo='+tipoTributo+'&identificador=' + identificador, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
@@ -631,7 +631,7 @@ const getDeclaracionJurada = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/DeclaracionJurada/ObtenerDdjj', {
       method: "POST",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       },
@@ -662,7 +662,7 @@ const getImprecionDeclaracionJurada = (token, body) => {
     fetch(window.Config.BASE_URL_WS + '/v1/DeclaracionJurada/ImprimirDdjj', {
       method: "POST",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       },
@@ -692,7 +692,7 @@ const getTributoByIdentificador = (token, tipoTributo, identificador) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Tributo' + queryString, {
       method: "GET",
       headers: {
-        Accept: "application/json", "--ControlAcceso": 10,
+        Accept: "application/json", "--ControlAcceso": 11,
         "Content-Type": "application/json",
         "Token": token
       }
