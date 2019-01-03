@@ -97,7 +97,10 @@ class TributarioAccessInvitado extends React.PureComponent {
                 this.props.mostrarCargando(false);
 
                 if (datos.ok) {
-                    this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador)+'?representante='+encodeURIComponent(datos.return.titular));
+                    //CAMBIAR!!
+                    localStorage.setItem("representante", datos.return.titular);
+                    
+                    this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador));
                 } else {
                     this.setState({
                         ...this.state,

@@ -3,7 +3,7 @@ import Store from "@Redux/Store/index";
 const importarListaRepresentantesAFIP = (token, body) => {
     //Este valor se obtiene luego de pasar la prueba del ReCaptcha
     const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
-    
+
     return new Promise((resolve, reject) => {
 
         fetch(window.Config.BASE_URL_WS + '/v1/ValidacionAFIP/ImportarListaRepresentantesAFIP', {
@@ -29,8 +29,9 @@ const importarListaRepresentantesAFIP = (token, body) => {
             .then(datos => {
                 if (datos.accesoWS)
                     resolve(datos);
-                else
-                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+                else {
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                }
             })
             .catch(err => {
                 reject("Error procesando la solicitud");
@@ -67,8 +68,9 @@ const importarRepresentanteAFIP = (token, body) => {
             .then(datos => {
                 if (datos.accesoWS)
                     resolve(datos);
-                else
-                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+                else {
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                }
             })
             .catch(err => {
                 reject("Error procesando la solicitud");

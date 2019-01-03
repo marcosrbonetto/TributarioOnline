@@ -37,8 +37,9 @@ const pagoMercadoPago = (token, body) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -50,7 +51,7 @@ const getPublicKeyMercadoPago = () => {
 
   //Este valor se obtiene luego de pasar la prueba del ReCaptcha
   const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
-  
+
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/PublicKey', {
       method: "POST",
@@ -71,8 +72,9 @@ const getPublicKeyMercadoPago = () => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");

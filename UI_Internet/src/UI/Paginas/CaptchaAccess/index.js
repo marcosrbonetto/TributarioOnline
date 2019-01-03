@@ -21,7 +21,7 @@ import MiCaptcha from "@Componentes/MiCaptcha";
 import Rules_Captcha from '@Rules/Rules_Captcha';
 
 //Utils
-import { mostrarAlerta } from "@Utils/functions";
+import { getAllUrlParams, mostrarAlerta } from "@Utils/functions";
 
 //Material UI
 import Typography from "@material-ui/core/Typography";
@@ -49,8 +49,10 @@ class CaptchaAccess extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.token = this.props.loggedUser.token;
-    this.urlRedirect = decodeURIComponent(this.props.match.params.urlRedirect) || '/';
+    this.token = 'INVITADO';
+    const urlRedirect = getAllUrlParams(this.props.location.search).redirect || '/';
+    this.urlRedirect = decodeURIComponent(urlRedirect);
+
     this.state = {
       //accessCaptcha
     };
@@ -58,7 +60,7 @@ class CaptchaAccess extends React.PureComponent {
 
   componentDidMount() {
 
-    if(!this.props.match.params.urlRedirect)
+    if(!this.urlRedirect)
       this.props.redireccionar('/Inicio');
   }
 
@@ -72,7 +74,7 @@ class CaptchaAccess extends React.PureComponent {
       if (!datos.ok) { mostrarAlerta(datos.error); return false; }
 
       this.props.setAccessCaptcha(datos.return);
-      window.location.href = this.urlRedirect;
+      this.props.redireccionar(this.urlRedirect);
     })
     .catch(error => {
       mostrarAlerta('Ocurrió un error al verificar el captcha, intente nuevamente.')

@@ -27,8 +27,9 @@ const metodos = {
 
           if (data.accesoWS)
             resolve(data.return);
-          else
-            window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+          else {
+            if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+          }
         })
         .catch(error => {
           reject("Error procesando la solicitud");
@@ -59,8 +60,9 @@ const metodos = {
 
           if (data.accesoWS)
             resolve(data.return);
-          else
-            window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+          else {
+            if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+          }
         })
         .catch(error => {
           reject("Error procesando la solicitud");

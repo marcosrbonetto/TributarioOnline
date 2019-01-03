@@ -352,7 +352,7 @@ class App extends React.Component {
           className={"switch-wrapper"}
         >
           <Route exact path="/" component={null} />
-          <Route path={`${base}/CaptchaAccess/:urlRedirect`} component={CaptchaAccess} />
+          <Route path={`${base}/CaptchaAccess`} component={CaptchaAccess} />
           <Route path={`${base}/DetalleTributario/:tributo`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/DetalleTributario/:tributo/:identificador`} component={login ? DetalleTributario : null} />
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />

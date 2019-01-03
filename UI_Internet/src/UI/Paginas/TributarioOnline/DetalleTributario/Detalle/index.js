@@ -224,7 +224,8 @@ class DetalleTributo extends React.PureComponent {
         const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
-        const representante = decodeURIComponent(getAllUrlParams(window.location.href).representante) || '';
+        const representante = localStorage.getItem('representante') || undefined;
+        //localStorage.removeItem('representante');
 
         //Corroboramos que el identificador sea correcto y exista
         servicesRepresentantes.getTitularTributo(token, {

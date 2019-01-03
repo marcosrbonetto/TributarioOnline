@@ -26,8 +26,9 @@ const getMisNotificaciones = (token) => {
             .then(datos => {
                 if (datos.accesoWS)
                     resolve(datos);
-                else
-                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+                else {
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                }
             })
             .catch(err => {
                 reject("Error procesando la solicitud");
@@ -61,8 +62,9 @@ const setNotificacionLeida = (token, identificador) => {
             .then(datos => {
                 if (datos.accesoWS)
                     resolve(datos);
-                else
-                    window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+                else {
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                }
             })
             .catch(err => {
                 reject("Error procesando la solicitud");

@@ -24,8 +24,9 @@ const getTipoTributos = (token, callback) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -58,8 +59,9 @@ const getTipoCedulones = (token, callback) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -92,8 +94,9 @@ const getEstadoPagos = (token, callback) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -127,8 +130,9 @@ const getDatosUsuario = (token, callback) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -162,8 +166,9 @@ const getTributosByCUIT = (token, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -196,8 +201,9 @@ const getIdTributos = (token, callback) => {
 
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
 
@@ -231,8 +237,9 @@ const getInfoContribucion = (token, tipoTributo, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -266,8 +273,9 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -300,8 +308,9 @@ const getInfoJuicios = (token, tipoTributo, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -333,8 +342,9 @@ const getInfoPlanes = (token, tipoTributo, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -366,8 +376,9 @@ const getInfoDetalleJuicio = (token, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -399,8 +410,9 @@ const getInfoDetallePlan = (token, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -463,8 +475,9 @@ const getReporteCedulon = (token, body) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -496,8 +509,9 @@ const getInformeCuenta = (token, param) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -534,8 +548,9 @@ const getReporteInformeCuenta = (token, body) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -567,8 +582,9 @@ const getUltimosPagos = (token, param) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -600,8 +616,9 @@ const getInformeAntecedentes = (token, param) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -633,8 +650,9 @@ const getInformeREMAT = (token, param) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -671,8 +689,9 @@ const getReporteInformeREMAT = (token, body) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -709,8 +728,9 @@ const getReporteInformeAntecedentes = (token, body) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -742,8 +762,9 @@ const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -779,8 +800,9 @@ const getDeclaracionJurada = (token, body) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -814,8 +836,9 @@ const getImprecionDeclaracionJurada = (token, body) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
@@ -849,8 +872,9 @@ const getTributoByIdentificador = (token, tipoTributo, identificador) => {
       .then(datos => {
         if (datos.accesoWS)
           resolve(datos);
-        else
-          window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess/' + encodeURIComponent(window.location.href);
+        else {
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+        }
       })
       .catch(err => {
         reject("Error procesando la solicitud");
