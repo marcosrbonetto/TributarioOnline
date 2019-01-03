@@ -42,7 +42,7 @@ import Rules_Usuario from "@Rules/Rules_Usuario";
 import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
 import Rules_MercadoPago from '@Rules/Rules_MercadoPago';
 import { mostrarAlerta, mostrarMensaje } from "@Utils/functions";
-import { callbackify } from "util";
+import { callbackify, debug } from "util";
 
 const mapStateToProps = state => {
   return {
@@ -176,17 +176,20 @@ class App extends React.Component {
             token: window.Config.TOKEN_INVITADO
           });
           
-          if (search) {
-            let url = search.get("url") || "/";
-            if (url == "/") url = "/Inicio";
-            this.props.redireccionar(url);
-          } else {
-            console.log(this.props.location);
+          if(window.location.hash == '#/')
+            this.props.redireccionar("/Inicio");
+          // --------------------- OJO!! comente esto pero probar de q ande todo bien
+          // if (search) {
+          //   let url = search.get("url") || "/";
+          //   if (url == "/") url = "/Inicio";
+          //   this.props.redireccionar(url);
+          // } else {
+          //   console.log(this.props.location);
 
-            if (this.props.location.pathname == "/") {
-              this.props.redireccionar("/Inicio");
-            }
-          }
+          //   if (this.props.location.pathname == "/") {
+          //     this.props.redireccionar("/Inicio");
+          //   }
+          // }
 
         } else { //Usuario Vecino Virtual
           this.setState({ validandoToken: true }, () => {

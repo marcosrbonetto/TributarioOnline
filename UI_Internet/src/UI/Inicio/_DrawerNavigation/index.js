@@ -32,13 +32,13 @@ class MiDrawer extends React.Component {
   onDrawerItemClick = index => {
     if (this.props.onPaginaClick == undefined) return;
 
-    if(Menu[index].externalLink)
+    if (Menu[index].externalLink)
       window.location.href = Menu[index].url;
     else {
       this.setState({
         itemMenuSeleccionado: Menu[index]
       });
-      
+
       this.props.onPaginaClick(Menu[index].url);
     }
   };
@@ -74,8 +74,10 @@ class MiDrawer extends React.Component {
 
         <List component="nav" className="navMenu">
           {Menu.map((item, index) => {
-            if (item.mostrarEnMenu == false || (modoInvitado && item.mostrarUserInvitado == false)) return null;
-            
+            if (item.mostrarEnMenu == false ||
+              (modoInvitado && item.mostrarUserInvitado == false) ||
+              (!modoInvitado && item.mostrarUserVV == false)) return null;
+
             return (
               <DrawerItem
                 key={index}

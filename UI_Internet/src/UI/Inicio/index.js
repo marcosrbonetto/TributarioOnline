@@ -50,7 +50,7 @@ class App extends React.Component {
     //Subimos el scroll cada vez que se ingresa, de lo contrario a veces queda abajo
     this.refs.mainContent.scrollTop = 0;
   }
-  
+
   componentDidMount() {
     window.addEventListener("resize", this.onResize);
   }
@@ -131,7 +131,7 @@ class App extends React.Component {
           <div className={classNames(classes.main)}>
             <div className={classes.separadorToolbar} />
             <div ref="mainContent" className={classes.content}>
-              <Route path="/" render={() => {return Content(this.modoInvitado)}} />
+              <Route path="/" render={() => { return Content(this.modoInvitado) }} />
             </div>
           </div>
         </div>
@@ -157,7 +157,8 @@ const Content = (modoInvitado) => {
         className={"switch-wrapper"}
       >
         {Menu.map((item, index) => {
-          if (modoInvitado && item.mostrarUserInvitado == false) return null;
+          if (modoInvitado && item.mostrarUserInvitado == false ||
+            (!modoInvitado && item.mostrarUserVV == false)) return null;
 
           return (
             <Route

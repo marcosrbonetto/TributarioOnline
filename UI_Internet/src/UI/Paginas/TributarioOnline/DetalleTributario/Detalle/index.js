@@ -225,7 +225,7 @@ class DetalleTributo extends React.PureComponent {
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         const representante = localStorage.getItem('representante') || undefined;
-        //localStorage.removeItem('representante');
+        localStorage.removeItem('representante');
 
         //Corroboramos que el identificador sea correcto y exista
         servicesRepresentantes.getTitularTributo(token, {
@@ -751,12 +751,12 @@ class DetalleTributo extends React.PureComponent {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                            base: formatNumber(concepto.importe.base),
+                            recargo: formatNumber(concepto.importe.recargo),
+                            deduccion: formatNumber(concepto.importe.deduccion),
                             importe: formatNumber(concepto.importe.total),
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
-                                    <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
-                                    <Typography>Recargo: <b>$ {concepto.importe.recargo}</b></Typography>
-                                    <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
                                 <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
@@ -1983,7 +1983,10 @@ class DetalleTributo extends React.PureComponent {
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
                                                 { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
-                                                { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
+                                                { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base($)' },
+                                                { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo($)' },
+                                                { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción($)' },
+                                                { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe($)' },
                                                 { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
                                             ]}
                                             rows={periodosAdeudados.infoGrilla || []}
