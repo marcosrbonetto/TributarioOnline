@@ -35,6 +35,7 @@ class MiCedulon extends React.PureComponent {
 
     this.state = {
       anchorEl: null,
+      mensajeError: undefined,
       base64Cedulon: '',
       disabled: this.props.disabled
     };
@@ -82,7 +83,8 @@ class MiCedulon extends React.PureComponent {
           if (!datos.ok) {
             this.setState({
               base64Cedulon: '',
-              dialogoOpen: true
+              dialogoOpen: true,
+              mensajeError: datos.error
             });
             this.props.mostrarCargando(false);
             return false;
@@ -92,7 +94,8 @@ class MiCedulon extends React.PureComponent {
 
           this.setState({
             base64Cedulon: resultData && resultData.reporte ? 'data:application/pdf;base64,' + resultData.reporte : '',
-            dialogoOpen: true
+            dialogoOpen: true,
+            mensajeError: undefined
           });
         })
         .catch((err) => { console.log(err); })
@@ -158,7 +161,7 @@ class MiCedulon extends React.PureComponent {
               <object data={this.state.base64Cedulon} type="application/pdf" height="384px" width="856px">
                 <a href={this.state.base64Cedulon} download>Descargar Cedulon</a>
               </object>}
-            {this.state.base64Cedulon == '' && <div style={{ color: 'red' }}>Se están presentando inconvenientes para generar el cedulón, intente más tarde.</div>}
+            {this.state.base64Cedulon == '' && <div style={{ color: 'red' }}>{this.state.mensajeError || "Se están presentando inconvenientes para generar el cedulón, intente más tarde."}</div>}
           </div>
         </MiControledDialog>
       </div>
