@@ -54,6 +54,10 @@ export const getTextoTipoTributo = (valueTributo) => {
 			return 'Contribución de Mejoras';
 		case 'PlanesDeVivienda':
 			return 'Planes De Vivienda';
+		case 'InformacionTributo':
+			return 'Información Tributo';
+		case 'AgendaVencimientos':
+			return 'Agenda de Vencimientos';
 	}
 
 	return valueTributo;

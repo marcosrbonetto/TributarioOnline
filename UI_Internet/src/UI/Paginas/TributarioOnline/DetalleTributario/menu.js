@@ -2,6 +2,9 @@ import DetalleTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Detal
 import DetalleJuicio from "@UI/Paginas/TributarioOnline/DetalleTributario/DetalleJuicio/index";
 import DetallePlan from "@UI/Paginas/TributarioOnline/DetalleTributario/DetallePlan/index";
 
+import InformacionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/InformacionTributo/index";
+import AgendaVencimientos from "@UI/Paginas/TributarioOnline/DetalleTributario/AgendaVencimientos/index";
+
 import SeleccionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Seleccion/index";
 
 import TributarioOnline from "@UI/Paginas/TributarioOnline/index";
@@ -12,6 +15,22 @@ import BusquedaPorJuicio from "@UI/Paginas/TributarioOnline/BusquedaPor/Juicio";
 import BusquedaPorPlan from "@UI/Paginas/TributarioOnline/BusquedaPor/Plan";
 
 const Menu = [
+  {
+    url: "/DetalleTributario/InformacionTributo/:tributo/:urlRedirect",
+    exact: false,
+    mostrarEnMenu: false,
+    component: InformacionTributo,
+    nombre: "Información Tributo",
+    titulo: "Información Tributo",
+  },
+  {
+    url: "/DetalleTributario/AgendaVencimientos/:tributo/:urlRedirect",
+    exact: false,
+    mostrarEnMenu: false,
+    component: AgendaVencimientos,
+    nombre: "Agenda de Vencimientos",
+    titulo: "Agenda de Vencimientos",
+  },
   {
     url: "/DetalleTributario/Juicio/:identificador",
     exact: true,

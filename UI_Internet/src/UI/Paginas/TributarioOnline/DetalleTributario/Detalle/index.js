@@ -1370,6 +1370,22 @@ class DetalleTributo extends React.PureComponent {
         }
     }
     
+    informacionTributo = () => {
+        const tributo = this.props.match.params.tributo;
+        const urlRedirect = encodeURIComponent(window.location.hash.substring(1));
+        this.props.redireccionar('/DetalleTributario/InformacionTributo/' + tributo + '/' + urlRedirect);
+
+        return true;
+    }
+
+    agendaVencimientos = () => {
+        const tributo = this.props.match.params.tributo;
+        const urlRedirect = encodeURIComponent(window.location.hash.substring(1));
+        this.props.redireccionar('/DetalleTributario/AgendaVencimientos/' + tributo + '/' + urlRedirect);
+
+        return true;
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -2367,6 +2383,39 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>
                                 </Grid>
                             </div>}
+
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                    </svg>
+                                </Grid>
+                                <Grid item sm={10}>
+                                    <MiLinkDialog
+                                        paraMobile={this.props.paraMobile}
+                                        textoLink={'Información del tributo'}
+                                        titulo={'Información del tributo'}
+                                        onExternalAction={this.informacionTributo}
+                                    ></MiLinkDialog>
+                                </Grid>
+                            </Grid>
+
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                    </svg>
+                                </Grid>
+                                <Grid item sm={10}>
+                                    <MiLinkDialog
+                                        paraMobile={this.props.paraMobile}
+                                        textoLink={'Agenda de Vencimientos'}
+                                        titulo={'Agenda de Vencimientos'}
+                                        onExternalAction={this.agendaVencimientos}
+                                    ></MiLinkDialog>
+                                </Grid>
+                            </Grid>
+
                         </MiCard>
 
                     </Grid>

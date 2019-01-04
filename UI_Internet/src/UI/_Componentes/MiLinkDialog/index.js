@@ -37,6 +37,14 @@ class MiLinkDialog extends React.PureComponent {
   
   handleOpenModal = event => {
 
+    //Si hay acción externa la ejecutamos
+    if(this.props.onExternalAction) {
+      const finish = this.props.onExternalAction();
+
+      if(finish)
+        return false;
+    }
+
     this.setState({
       open: true
     });
