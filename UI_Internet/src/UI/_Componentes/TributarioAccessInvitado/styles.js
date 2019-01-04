@@ -70,6 +70,14 @@ const styles = theme => ({
   titleItem: {
     paddingBottom: '0px',
     fontSize: '1em'
+  },
+  infoIcon: {
+    color: '#0f8fea',
+    verticalAlign: 'middle',
+    cursor: 'help'
+  },
+  textTooltip: {
+    fontSize: 16,
   }
 });
 

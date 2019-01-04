@@ -107,7 +107,7 @@ class EnhancedTableHead extends React.Component {
                                 className={classes.tableCell}
                                 key={row.id}
                                 numeric={row.numeric}
-                                padding={row.disablePadding ? 'none' : 'default'}
+                                padding={row.disablePadding ? 'none' : 'dense'}
                                 sortDirection={orderBy === row.id ? order : false}
                             >
                                 <TableSortLabel
@@ -390,7 +390,7 @@ class MiRow extends React.PureComponent {
                 if (cell == 'data' || cell == 'id') return; //'id' y 'data' son datos extras para utilizar
                 var column = _.find(columns,{id: cell});
 
-                return <TableCell className={column && column.numeric && classes.cellNumeric} key={cell} padding="default">{info[cell]}</TableCell>
+                return <TableCell className={column && column.numeric && classes.cellNumeric} key={cell} padding="dense">{info[cell]}</TableCell>
             })}
         </TableRow>
     }

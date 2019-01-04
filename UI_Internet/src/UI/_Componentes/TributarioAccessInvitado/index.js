@@ -15,6 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Icon from '@material-ui/core/Icon';
 import MiCard from "@Componentes/MiCard";
+import Tooltip from '@material-ui/core/Tooltip';
 
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
@@ -79,7 +80,7 @@ class TributarioAccessInvitado extends React.PureComponent {
         const identificador = this.state.inputIdentificadorTributo;
         const validacion = this.props.validacion;
 
-        if(validacion && !validacion.test.test(identificador)) {
+        if (validacion && !validacion.test.test(identificador)) {
             this.setState({
                 ...this.state,
                 mensajeError: validacion.msjError,
@@ -98,8 +99,8 @@ class TributarioAccessInvitado extends React.PureComponent {
 
                 if (datos.ok) {
                     //CAMBIAR!!
-                    localStorage.setItem("representante", datos.return.titular);
-                    
+                    //localStorage.setItem("representante", datos.return.titular);
+
                     this.props.redireccionar('/DetalleTributario/' + tipoTributo + '/' + encodeURIComponent(identificador));
                 } else {
                     this.setState({
@@ -143,7 +144,17 @@ class TributarioAccessInvitado extends React.PureComponent {
                             ||
                             (!this.props.icono && <div className={classes.iconSvg}>{this.props.iconoSvg}</div>)
                         }
-
+                        action={
+                            this.props.infoTributo && <Tooltip
+                                disableFocusListener disableTouchListener
+                                classes={{ tooltip: classes.textTooltip }}
+                                title={
+                                    this.props.infoTributo
+                                }
+                            >
+                                <i className={classNames(classes.infoIcon, "material-icons")}>info</i>
+                            </Tooltip>
+                        }
                         title={
                             <Typography className={classes.title} variant="title">{this.props.titulo}</Typography>
                         }

@@ -229,7 +229,8 @@ const styles = theme => ({
       minWidth: '700px'
     },
     textDatosCuenta: {
-      fontFamily: "\"Courier New\", Courier, \"Lucida Sans Typewriter\", \"Lucida Typewriter\", monospace"
+      fontFamily: "\"Courier New\", Courier, \"Lucida Sans Typewriter\", \"Lucida Typewriter\", monospace",
+      color: '#000'
     },
     textList: {
       lineHeight: '28px',
@@ -275,6 +276,9 @@ const styles = theme => ({
     },
     menuContainer: {
       width: '100%'
+    },
+    maxWidthPeriodosAdeudados: {
+      minWidth: '100%'
     }
   });
 

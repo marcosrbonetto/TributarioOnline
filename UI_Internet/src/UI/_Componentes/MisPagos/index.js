@@ -34,8 +34,14 @@ class MisPagos extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
 
+    console.log(this.props.tablaConfig && this.props.tablaConfig.disabled);
+
     if (nextProps.rowList && JSON.stringify(nextProps.rowList) != JSON.stringify(this.props.rowList)) {
       this.setState({ rowList: nextProps.rowList || [] });
+    }
+
+    if (nextProps.tablaConfig && JSON.stringify(nextProps.tablaConfig) != JSON.stringify(this.props.tablaConfig)) {
+      this.setState({ tableDisabled: nextProps.tablaConfig ? nextProps.tablaConfig.disabled : false });
     }
   }
 

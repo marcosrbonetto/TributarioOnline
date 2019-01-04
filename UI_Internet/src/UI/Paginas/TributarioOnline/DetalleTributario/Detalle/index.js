@@ -224,8 +224,7 @@ class DetalleTributo extends React.PureComponent {
         const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
-        const representante = localStorage.getItem('representante') || undefined;
-        localStorage.removeItem('representante');
+        //const representante = localStorage.getItem('representante') || undefined;
 
         //Corroboramos que el identificador sea correcto y exista
         servicesRepresentantes.getTitularTributo(token, {
@@ -239,7 +238,7 @@ class DetalleTributo extends React.PureComponent {
                     let identificadorActual = {
                         "tipoTributo": idTipoTributo,
                         "identificador": identificador,
-                        "representado": representante
+                        "representado": datos.return.titular
                     };
 
                     const tributosBienesPorCUIT = _.filter(this.props.tributosBienesPorCUIT, (o) => {
@@ -319,9 +318,11 @@ class DetalleTributo extends React.PureComponent {
                 if (data && data.periodos.length > 0) {
                     data['rowList'] = data.periodos.map((concepto) => {
 
+                        let fecha = dateToString(new Date(concepto.fecha), 'DD/MM/YYYY');
+                        fecha = fecha == '31/12/1969' ? '-' : fecha;
                         return {
                             concepto: concepto.concepto,
-                            vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                            vencimiento: fecha,
                             importe: formatNumber(concepto.importe.total),
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
@@ -366,9 +367,11 @@ class DetalleTributo extends React.PureComponent {
                 if (data && data.periodos.length > 0) {
                     data['rowList'] = data.periodos.map((concepto) => {
 
+                        let fecha = dateToString(new Date(concepto.fecha), 'DD/MM/YYYY');
+                        fecha = fecha == '31/12/1969' ? '-' : fecha;
                         return {
                             concepto: concepto.concepto,
-                            vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                            vencimiento: fecha,
                             importe: formatNumber(concepto.importe.total),
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
@@ -409,9 +412,11 @@ class DetalleTributo extends React.PureComponent {
 
                         let rowList = juicio.periodos && juicio.periodos.map((concepto) => {
 
+                            let fecha = dateToString(new Date(concepto.fecha), 'DD/MM/YYYY');
+                            fecha = fecha == '31/12/1969' ? '-' : fecha;
                             return {
                                 concepto: concepto.concepto,
-                                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                                vencimiento: fecha,
                                 importe: formatNumber(concepto.importe.total),
                                 detalle: <MiTooltip
                                     contenidoDetalle={<div>
@@ -467,9 +472,11 @@ class DetalleTributo extends React.PureComponent {
 
                         let rowList = plan.periodos.map((concepto) => {
 
+                            let fecha = dateToString(new Date(concepto.fecha), 'DD/MM/YYYY');
+                            fecha = fecha == '31/12/1969' ? '-' : fecha;
                             return {
                                 concepto: concepto.concepto,
-                                vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                                vencimiento: fecha,
                                 importe: formatNumber(concepto.importe.total),
                                 detalle: <MiTooltip
                                     contenidoDetalle={<div>
@@ -755,12 +762,7 @@ class DetalleTributo extends React.PureComponent {
                             recargo: formatNumber(concepto.importe.recargo),
                             deduccion: formatNumber(concepto.importe.deduccion),
                             importe: formatNumber(concepto.importe.total),
-                            detalle: <MiTooltip
-                                contenidoDetalle={<div>
-                                    <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
-                                </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
-                            </MiTooltip>,
+                            observacion: concepto.referencia,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
                     });
@@ -1339,6 +1341,35 @@ class DetalleTributo extends React.PureComponent {
         this.setState({ anchorElMenu: null });
     };
 
+    infoTributo = () => {
+        const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        switch(idTipoTributo) {
+            case 1:
+                return `Sr. Contribuyente de Automotores:
+                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.
+                Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago anual oportuno) o el 10% (por pago bimestral oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos bimestrales de 2018.`;
+            case 2:
+                return `Sr. Contribuyente de Inmuebles:
+                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.
+                Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago semestral oportuno) o el 10% (por pago mensual oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos mensuales de 2018.`;
+            case 3:
+                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
+            case 4:
+                return `Sr. Contribuyente de Cementerios:
+                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.`;
+            case 5:
+                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
+            case 6:
+                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
+            case 7:
+                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
+            case 8:
+                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
+            case 9:
+                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
+        }
+    }
+    
     render() {
         const { classes } = this.props;
 
@@ -1371,6 +1402,7 @@ class DetalleTributo extends React.PureComponent {
         const listPlanes = infoPlanes && infoPlanes.lista ? infoPlanes.lista : [];
 
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        const infoTributo = this.infoTributo();
 
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
@@ -1557,7 +1589,7 @@ class DetalleTributo extends React.PureComponent {
                             {(menuItemSeleccionado == 'contribucion' &&
                                 listContribucion.length > 0 && <div>
                                     <Typography className={classes.infoTexto}>
-                                        {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                        {infoTributo}
                                     </Typography>
                                     <MisPagosDetalle
                                         paraMobile={this.props.paraMobile}
@@ -1583,7 +1615,7 @@ class DetalleTributo extends React.PureComponent {
                                 listMultas.length > 0 && <div>
                                     <div>
                                         <Typography className={classes.infoTexto}>
-                                            {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                            {infoTributo}
                                         </Typography>
                                         <MisPagosDetalle
                                             paraMobile={this.props.paraMobile}
@@ -1614,7 +1646,7 @@ class DetalleTributo extends React.PureComponent {
                                         {juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
                                                 <Typography className={classes.infoTexto}>
-                                                    {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
+                                                    {infoTributo}
                                                 </Typography>
                                                 <MisPagosDetalle
                                                     paraMobile={this.props.paraMobile}
@@ -1977,6 +2009,7 @@ class DetalleTributo extends React.PureComponent {
                                         onDialogoClose={this.onPeriodosAdeudadosDialogoClose}
                                         textoLink={'Períodos Adeudados'}
                                         titulo={'Períodos Adeudados'}
+                                        classMaxWidth={classes.maxWidthPeriodosAdeudados}
                                     >
                                         <MiTabla
                                             pagination={!this.props.paraMobile}
@@ -1987,7 +2020,7 @@ class DetalleTributo extends React.PureComponent {
                                                 { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo($)' },
                                                 { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción($)' },
                                                 { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe($)' },
-                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                                { id: 'observacion', type: 'string', numeric: false, disablePadding: true, label: 'Observaciones' },
                                             ]}
                                             rows={periodosAdeudados.infoGrilla || []}
                                             order='asc'
