@@ -350,10 +350,12 @@ class DetalleTributo extends React.PureComponent {
                     }
                 });
 
-                //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
-                this.refreshValoresPantalla({
-                    datosItemSeleccionado: data
-                });
+                if(!this.props.match.params.seccionMenu || (this.props.match.params.seccionMenu == 'contribucion' )) {
+                    //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
+                    this.refreshValoresPantalla({
+                        datosItemSeleccionado: data
+                    });
+                }
             }).catch(err => {
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -398,6 +400,13 @@ class DetalleTributo extends React.PureComponent {
                         infoSeccion: data
                     }
                 });
+
+                if(this.props.match.params.seccionMenu == 'multas' ) {
+                    //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
+                    this.refreshValoresPantalla({
+                        datosItemSeleccionado: data
+                    });
+                }
             }).catch(err => {
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -455,6 +464,21 @@ class DetalleTributo extends React.PureComponent {
 
                 this.setState({ juicios });
 
+                //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
+                if(this.props.match.params.seccionMenu) {
+                    if(this.props.match.params.subIdentificador) {
+                        const currentItem = _.find(data,{ identificador: menuItem});
+                        this.refreshValoresPantalla({
+                            datosItemSeleccionado: currentItem
+                        });
+
+                        return false;
+                    }
+
+                    this.refreshValoresPantalla({
+                        datosItemSeleccionado: data[0]
+                    });
+                }
             }).catch(err => {
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -514,8 +538,24 @@ class DetalleTributo extends React.PureComponent {
                 planes.menuItemSeleccionado = menuItem;
 
                 planes.infoSeccion = data;
-
+                
                 this.setState({ planes });
+
+                //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
+                if(this.props.match.params.seccionMenu) {
+                    if(this.props.match.params.subIdentificador) {
+                        const currentItem = _.find(data,{ identificador: menuItem});
+                        this.refreshValoresPantalla({
+                            datosItemSeleccionado: currentItem
+                        });
+
+                        return false;
+                    }
+
+                    this.refreshValoresPantalla({
+                        datosItemSeleccionado: data[0]
+                    });
+                }
             }).catch(err => {
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
@@ -816,74 +856,69 @@ class DetalleTributo extends React.PureComponent {
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
         let arrayService = [];
-        if (!this.state.informeAntecedentes.reporteBase64) {
-            const service1 = servicesTributarioOnline.getInformeAntecedentes(token, {
-                tipoTributo: tipoTributo,
-                identificador: identificador
-            })
-                .then((datos) => {
-                    if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Informe Antecedentes: ' + datos.error); return false; }
+        const service1 = servicesTributarioOnline.getInformeAntecedentes(token, {
+            tipoTributo: tipoTributo,
+            identificador: identificador
+        })
+            .then((datos) => {
+                if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Informe Antecedentes: ' + datos.error); return false; }
 
-                    let rowList = (datos.return && datos.return.map((row) => {
+                let rowList = (datos.return && datos.return.map((row) => {
 
-                        return {
-                            causa: row.causa,
-                            fecha: dateToString(new Date(row.fecha), 'DD/MM/YYYY'),
-                            infraccion: row.infraccion,
-                            detalle: <MiTooltip
-                                contenidoDetalle={<div>
-                                    <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
-                                    <Typography>Fallo: <b>{row.fallo}</b></Typography>
-                                    <Typography>Cad.: <b>{row.caducidad}</b></Typography>
-                                    <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
-                                </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
-                            </MiTooltip>,
-                            data: row //atributo "data" no se muestra en MiTabla
-                        }
-                    })) || [];
+                    return {
+                        causa: row.causa,
+                        fecha: dateToString(new Date(row.fecha), 'DD/MM/YYYY'),
+                        infraccion: row.infraccion,
+                        detalle: <MiTooltip
+                            contenidoDetalle={<div>
+                                <Typography>Juzg.: <b>{row.juzgado}</b></Typography>
+                                <Typography>Fallo: <b>{row.fallo}</b></Typography>
+                                <Typography>Cad.: <b>{row.caducidad}</b></Typography>
+                                <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
+                            </div>}>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                        </MiTooltip>,
+                        data: row //atributo "data" no se muestra en MiTabla
+                    }
+                })) || [];
 
-                    this.setState({
-                        informeAntecedentes: {
-                            ...this.state.informeAntecedentes,
-                            infoGrilla: rowList
-                        }
-                    });
-
-                }).catch(err => {
-                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+                this.setState({
+                    informeAntecedentes: {
+                        ...this.state.informeAntecedentes,
+                        infoGrilla: rowList
+                    }
                 });
 
-            arrayService.push(service1);
-
-            const service2 = servicesTributarioOnline.getReporteInformeAntecedentes(token, {
-                tipoTributo: tipoTributo,
-                identificador: identificador
-            })
-                .then((datos) => {
-                    if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
-
-                    this.setState({
-                        informeAntecedentes: {
-                            ...this.state.informeAntecedentes,
-                            reporteBase64: datos.return
-                        }
-                    });
-
-                }).catch(err => {
-                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
-                });
-
-            arrayService.push(service2);
-
-            Promise.all(arrayService).then(() => {
-                this.handleInformeAntecedentesOpenDialog();
-                this.props.mostrarCargando(false);
+            }).catch(err => {
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
-        } else {
+
+        arrayService.push(service1);
+
+        const service2 = servicesTributarioOnline.getReporteInformeAntecedentes(token, {
+            tipoTributo: tipoTributo,
+            identificador: identificador
+        })
+            .then((datos) => {
+                if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+
+                this.setState({
+                    informeAntecedentes: {
+                        ...this.state.informeAntecedentes,
+                        reporteBase64: datos.return
+                    }
+                });
+
+            }).catch(err => {
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
+
+        arrayService.push(service2);
+
+        Promise.all(arrayService).then(() => {
             this.handleInformeAntecedentesOpenDialog();
             this.props.mostrarCargando(false);
-        }
+        });
     }
 
     //Abrimos modal informe antecedentes
@@ -1073,8 +1108,15 @@ class DetalleTributo extends React.PureComponent {
     onInformeCuentaDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = decodeURIComponent(this.props.match.params.identificador);
+        let tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        let identificador = decodeURIComponent(this.props.match.params.identificador);
+
+        //En caso de Juicios y Planes
+        const menuItemSeleccionado = this.state.menuItemSeleccionado;
+        if (this.state[menuItemSeleccionado].subItemTipoTributos) {
+            tipoTributo = getIdTipoTributo(this.state[menuItemSeleccionado].subItemTipoTributos);
+            identificador = decodeURIComponent(this.state[menuItemSeleccionado].menuItemSeleccionado);
+        }
 
         let arrayService = [];
         if (!this.state.informeCuenta.reporteBase64) {

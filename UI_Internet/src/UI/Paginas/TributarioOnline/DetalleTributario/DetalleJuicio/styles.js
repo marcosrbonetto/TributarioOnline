@@ -257,6 +257,9 @@ const styles = theme => ({
     btnCuentaOrigenParaMobile: {
       float: 'none',
       top: '0px',
+    },
+    maxWidthPeriodosAdeudados: {
+      minWidth: '100%'
     }
   });
 
