@@ -51,7 +51,17 @@ class MiCedulon extends React.PureComponent {
   }
 
   handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget });
+    const target = event.currentTarget;
+
+    //Vemos si tiene un acción antes de mostrar el listado
+    if(this.props.onClick) {
+      this.props.onClick(() => {
+        this.setState({ anchorEl: target });
+      });
+    } else {
+      this.setState({ anchorEl: target });
+    }
+    
   };
 
   handleClose = () => {
@@ -69,6 +79,8 @@ class MiCedulon extends React.PureComponent {
     const token = this.props.loggedUser.token;
     const opcion = event.currentTarget.attributes.opcion.value;
 
+    const tieneBeneficio = this.props.tieneBeneficio || false;
+
     if (registros.length > 0 || this.props.esJuicio || this.props.allSelected) {
       services.getReporteCedulon(token,
         {
@@ -77,7 +89,9 @@ class MiCedulon extends React.PureComponent {
           "opcionVencimiento": parseInt(opcion),
           "periodos": registros,
           "tipoCedulon": this.props.tipoCedulon,
-          "subItem": this.props.subItemSeleccionado || this.props.subItem
+          "subItem": this.props.subItemSeleccionado || this.props.subItem,
+          "esPagoElectronico": false,
+          "esCuotaGlobal": tieneBeneficio
         })
         .then((datos) => {
           if (!datos.ok) {

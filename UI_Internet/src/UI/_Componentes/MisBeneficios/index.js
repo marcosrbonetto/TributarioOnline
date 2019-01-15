@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 
 import _ from "lodash";
+import memoize from 'memoize-one';
 
 import Button from "@material-ui/core/Button";
 import Tooltip from '@material-ui/core/Tooltip';
@@ -13,12 +14,67 @@ import Checkbox from '@material-ui/core/Checkbox';
 //Beneficios
 import beneficios from './beneficios';
 
+export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => {
+  let error = false;
+  let arrayBeneficios = [];
+  let resultado = false;
+
+  if(!tipoTributo || !seccion || !allRows || !selectedRows) {
+    return resultado;
+  }
+
+  const tipoTributoArrayBeneficios = beneficios[tipoTributo];
+  //Corroboramos que el tipoTributo y la sección tienen los beneficios
+  if (tipoTributoArrayBeneficios) {
+    arrayBeneficios = _.filter(tipoTributoArrayBeneficios, (beneficio) => {
+      return beneficio.secciones.indexOf(seccion) != -1;
+    });
+
+    if (arrayBeneficios.length == 0) {
+      error = true;
+    }
+  } else {
+    error = true;
+  }
+
+  if(error) {
+    return resultado;
+  }
+
+  //Si encontramos, procedemos a determinar si las filas seleccionadas coinciden con algun beneficio
+  const idRowsSeleccionados = selectedRows;
+  let arrayRows = _.cloneDeep(allRows);
+
+  _.each(arrayBeneficios, (beneficio) => {
+
+    _.each(arrayRows, (row) => {
+      beneficio.condicion(row);
+    });
+
+    const itemsSeleccionados = _.filter(arrayRows, (o) => { return o.data.checked == true });
+    const idRowsBeneficio = _.map(itemsSeleccionados, 'concepto');
+    
+    const concideConBeneficio = _.isEqual(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
+    
+    // console.log(beneficio.titulo);
+    // console.log(concideConBeneficio);
+    // console.log('-----------------------');
+
+    if(concideConBeneficio) {
+      resultado = true;
+      return false;
+    }
+  });
+
+  return resultado;
+};
+
 class MisBeneficios extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      visible: false, //false - FALTA PARTE BACK
+      visible: true, //false - FALTA PARTE BACK
       anchorEl: null,
       itemChecked: 0,
       arrayBeneficios: []
@@ -120,7 +176,7 @@ class MisBeneficios extends React.PureComponent {
   }
 
   render() {
-    let { classes, tipoTributo, seccion } = this.props;
+    let { classes } = this.props;
     const { visible, anchorEl, itemChecked, arrayBeneficios } = this.state;
 
     return (<div className={classNames(classes.root, "BtnMisBeneficios")}>

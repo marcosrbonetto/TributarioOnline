@@ -11,7 +11,7 @@ const beneficios = {
             condicion: (row) => {
                 const date = typeof row.vencimiento == 'string' ? new Date(stringToDate(row.vencimiento)) : row.vencimiento;
 
-                if (date.getFullYear() == 2018) {
+                if (date.getFullYear() == 2019) {
                     row.data = {
                         ...row.data,
                         checked: true,

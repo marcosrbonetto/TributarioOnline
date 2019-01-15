@@ -15,6 +15,7 @@ import MiTabla from "@Componentes/MiTabla";
 import MiCedulon from "@Componentes/MiCedulon";
 import MiMercadoPago from "@Componentes/MiMercadoPago";
 import MisBeneficios from "@Componentes/MisBeneficios";
+import { checkBeneficios } from "@Componentes/MisBeneficios";
 
 //Funciones Útiles
 import { stringToFloat, formatNumber, getIdTipoTributo } from "@Utils/functions"
@@ -29,6 +30,8 @@ class MisPagosDetalle extends React.PureComponent {
       recargoAPagar: '0,00',
       rowList: this.props.info ? this.props.info.rowList : [],
       tableDisabled: this.props.disabled || false,
+      registrosSeleccionados: [],
+      tieneBeneficio : false
     };
   }
 
@@ -57,6 +60,7 @@ class MisPagosDetalle extends React.PureComponent {
     this.setState({
       importeAPagar: formatNumber(importeTotal),
       recargoAPagar: formatNumber(recargoTotal),
+      registrosSeleccionados: registrosSeleccionados
     });
   };
 
@@ -70,6 +74,24 @@ class MisPagosDetalle extends React.PureComponent {
 
     //Actualización grilla
     this.getFilasSeleccionadas(result.rowList, result.rowsSelected);
+  }
+
+  //Una vez que precionamos Cedulon o PagoOnline, chequeamos si las filas seleccionadas pertenecen a algun beneficio vigente
+  chekearBeneficios = (callback) => {
+    const tipoTributo = this.props.tributoActual;
+    const seccion = this.props.tipoCedulon;
+    const allRows = this.state.rowList;
+    const selectedRows = this.state.registrosSeleccionados;
+
+    //True o False de acuerdo si coinciden con un beneficio o no
+    const tieneBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
+
+    this.setState({
+      tieneBeneficio: tieneBeneficio
+    }, () => {
+      //Seguimos con la acción del boton
+      callback();
+    });
   }
 
   render() {
@@ -182,6 +204,7 @@ class MisPagosDetalle extends React.PureComponent {
             handleBeneficiosResult={this.handleBeneficiosResult} />
 
           <MiCedulon
+            tieneBeneficio={this.state.tieneBeneficio}            
             registrosSeleccionados={this.props.registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
             tipoCedulon={this.props.tipoCedulon}
@@ -189,9 +212,11 @@ class MisPagosDetalle extends React.PureComponent {
             identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
             esJuicio={esJuicio}
+            onClick={this.chekearBeneficios}
           />
 
           <MiMercadoPago
+            tieneBeneficio={this.state.tieneBeneficio}
             pagoRedirect={this.props.pagoRedirect}
             idBtnMercadoPago={this.props.menuItemSeleccionado + "1"}
             seccionDetalleTributo={this.props.menuItemSeleccionado}
@@ -202,6 +227,7 @@ class MisPagosDetalle extends React.PureComponent {
             identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
             esJuicio={esJuicio}
+            onClick={this.chekearBeneficios}
           />
         </Grid>
       </Grid>
@@ -243,6 +269,7 @@ class MisPagosDetalle extends React.PureComponent {
         </Grid>
         <Grid item sm={5} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
           <MiCedulon
+            tieneBeneficio={this.state.tieneBeneficio}
             registrosSeleccionados={this.props.registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
             tipoCedulon={this.props.tipoCedulon}
@@ -250,9 +277,11 @@ class MisPagosDetalle extends React.PureComponent {
             identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
             esJuicio={esJuicio}
+            onClick={this.chekearBeneficios}
           />
 
           <MiMercadoPago
+            tieneBeneficio={this.state.tieneBeneficio}
             pagoRedirect={this.props.pagoRedirect}
             idBtnMercadoPago={this.props.menuItemSeleccionado + "2"}
             seccionDetalleTributo={this.props.menuItemSeleccionado}
@@ -263,6 +292,7 @@ class MisPagosDetalle extends React.PureComponent {
             identificador={this.props.identificadorActual}
             disabled={disabledCedulon}
             esJuicio={esJuicio}
+            onClick={this.chekearBeneficios}
           />
         </Grid>
       </Grid>

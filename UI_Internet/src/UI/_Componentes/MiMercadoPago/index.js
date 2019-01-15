@@ -103,14 +103,23 @@ class MiMercadoPago extends React.PureComponent {
   onBotonCedulonClick = () => {
     this.props.mostrarCargando(true);
 
-    //Carga de todos los nexos y mostramos para pagar el primero de ellos
-    this.cargarNexos();
+    if(this.props.onClick) {
+      this.props.onClick(() => {
+        //Carga de todos los nexos y mostramos para pagar el primero de ellos
+        this.cargarNexos();
+      });
+    } else {
+      //Carga de todos los nexos y mostramos para pagar el primero de ellos
+      this.cargarNexos();
+    }
   }
 
   cargarNexos = () => {
     const registros = this.props.registrosSeleccionados;
     const token = this.props.loggedUser.token;
     const opcion = "0"; // Hoy
+
+    const tieneBeneficio = this.props.tieneBeneficio || false;
 
     if (registros.length > 0 || this.props.esJuicio || this.props.allSelected) {
       services.getReporteCedulon(token,
@@ -120,7 +129,9 @@ class MiMercadoPago extends React.PureComponent {
           "opcionVencimiento": parseInt(opcion),
           "periodos": registros,
           "tipoCedulon": this.props.tipoCedulon,
-          "subItem": this.props.subItemSeleccionado || this.props.subItem
+          "subItem": this.props.subItemSeleccionado || this.props.subItem,
+          "esPagoElectronico": true,
+          "esCuotaGlobal": tieneBeneficio
         })
         .then((datos) => {
 

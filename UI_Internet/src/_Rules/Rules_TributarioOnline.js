@@ -425,6 +425,8 @@ const getReporteCedulon = (token, body) => {
     "tipoTributo": body.tipoTributo,
     "identificador": body.identificador,
     "opcionVencimiento": body.opcionVencimiento,
+    "esPagoElectronico": body.esPagoElectronico,
+    "esCuotaGlobal": body.esCuotaGlobal
   };
 
   var tipoCedulones = Store.getState().MainContent.tipoCedulones.byKey;
