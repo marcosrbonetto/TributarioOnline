@@ -142,8 +142,8 @@ class MiTabla extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        var resultSelected = this.handleSetSelected(props);
-        this.data = resultSelected.data;
+        var resultSelected = this.handleSetSelected(props.rows);
+        this.rows = resultSelected.rows;
         this.rowsSetSelected = resultSelected.rowsSetSelected;
 
         this.state = {
@@ -151,7 +151,7 @@ class MiTabla extends React.PureComponent {
             orderBy: this.props.orderBy,
             orderType: 'string',
             selected: this.rowsSetSelected,
-            data: this.data,
+            rows: this.rows,
             page: 0,
             rowsPerPage: this.props.rowsPerPage || 25,
         }
@@ -160,30 +160,29 @@ class MiTabla extends React.PureComponent {
     componentWillReceiveProps(nextProps) {
         
         var resultSelected = undefined;
-        if (JSON.stringify(this.props.disabled) != JSON.stringify(nextProps.disabled)) {
-            resultSelected = this.handleSetSelected(nextProps);
+        //Si la tabla se deshabilita o habilita, o cambian los registros seleccionados, se vuelve a
+        //calcular los resultados seleccionados (resultSelected)
+        if ((JSON.stringify(this.props.disabled) != JSON.stringify(nextProps.disabled)) || 
+        (JSON.stringify(this.props.registrosSeleccionados) != JSON.stringify(nextProps.registrosSeleccionados))) {
+            //resultSelected = this.handleSetSelected(nextProps);
+            
+            var resultSelected = this.handleSetSelected(nextProps.rows);
+            var rows = resultSelected.rows;
+            var rowsSetSelected = resultSelected.rowsSetSelected;
+
+            this.setState({
+                rows: rows,
+                selected: rowsSetSelected
+            });
         }
-        
-        var data = nextProps.rows.map((row, key) => {
-            row.id = key;
-            return row;
-        });
-
-        let newState = {
-            data: data
-        };
-
-        if(resultSelected)
-            newState['selected'] = resultSelected.rowsSetSelected;
-        
-        this.setState(newState);
     }
 
-    handleSetSelected = (props) => {
-        const gridRows = (props.rows || []);
+    handleSetSelected = (rows) => {
+        
+        const gridRows = (rows || []);
 
         let rowsSetSelected = [];
-        var data = (gridRows.length > 0 && !gridRows[0].id && gridRows.map((row, key) => {
+        var rows = (gridRows.length > 0 && !gridRows[0].id && gridRows.map((row, key) => {
             row.id = key;
 
             if(row.data && row.data.checked)
@@ -193,11 +192,11 @@ class MiTabla extends React.PureComponent {
         })) || gridRows;
 
         //De acuerdo a las filas seteadas como checkeadas, actualizamod el total
-        if (props.getFilasSeleccionadas)
-            props.getFilasSeleccionadas(data, rowsSetSelected);
+        if (this.props.getFilasSeleccionadas)
+            this.props.getFilasSeleccionadas(rows, rowsSetSelected);
 
         return {
-            data: data,
+            rows: rows,
             rowsSetSelected: rowsSetSelected
         };
     }
@@ -215,47 +214,34 @@ class MiTabla extends React.PureComponent {
     };
 
     handleSelectAllClick = event => {
-        let newSelected = [];
-        if (event.target.checked) {
-            newSelected = this.state.data.map(n => {
-                if(n.data && n.data.disabled && !n.data.checked)
-                    return false;
-                else
-                    return n.id;
-            });
-            newSelected = _.without(newSelected,false);
-            this.setState(state => ({ selected: newSelected }));
-        } else {
-            newSelected = this.rowsSetSelected;
-            this.setState({ selected: newSelected });
-        }
+        let newDataRows = [...this.state.rows];
 
-        if (this.props.getFilasSeleccionadas)
-            this.props.getFilasSeleccionadas(this.state.data, newSelected);
+        if (event.target.checked) {
+            newDataRows.map(n => {
+                n.data.checked = true;
+            });
+
+            this.handleSetSelected(newDataRows);
+            
+        } else {
+            newDataRows.map(n => {
+                n.data.checked = false;
+            });
+
+            this.handleSetSelected(newDataRows);
+        }
     };
 
     handleClick = (event, id) => {
         const { selected } = this.state;
-        const selectedIndex = selected.indexOf(id);
-        let newSelected = [];
 
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, id);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
+        let newDataRows = [...this.state.rows];
+        var currentRow = _.find(newDataRows, { id: id });
+        
+        if(currentRow) {
+            currentRow.data.checked = !currentRow.data.checked;
+            this.handleSetSelected(newDataRows);
         }
-
-        this.setState({ selected: newSelected });
-
-        if (this.props.getFilasSeleccionadas)
-            this.props.getFilasSeleccionadas(this.state.data, newSelected);
     };
 
     handleChangePage = (event, page) => {
@@ -270,9 +256,9 @@ class MiTabla extends React.PureComponent {
 
     render() {
         const { classes, columns } = this.props;
-        const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+        const { rows, order, orderBy, selected, rowsPerPage, page } = this.state;
         let { orderType } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+        const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
         const check = this.props.check;
         const disabled = this.props.disabled;
         const pagination = this.props.pagination == false ? false : true;
@@ -298,12 +284,12 @@ class MiTabla extends React.PureComponent {
                             orderType={orderType}
                             onSelectAllClick={this.handleSelectAllClick}
                             onRequestSort={this.handleRequestSort}
-                            rowCount={data.length}
+                            rowCount={rows.length}
                             check={check}
                             disabled={disabled}
                         />
                         <TableBody>
-                            {(data.length > 0 && stableSort(data, getSorting(order, orderBy, orderType))
+                            {(rows.length > 0 && stableSort(rows, getSorting(order, orderBy, orderType))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((n, index) => {
                                     const isSelected = this.isSelected(n.id);
@@ -332,7 +318,7 @@ class MiTabla extends React.PureComponent {
                 </div>
                 {pagination && <TablePagination
                     component="div"
-                    count={data.length}
+                    count={rows.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     backIconButtonProps={{

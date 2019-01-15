@@ -33,37 +33,53 @@ const beneficios = {
     'Inmueble': [ //'Inmueble'
         {
             key: 1,
-            titulo: '1as Cuotas',
+            titulo: '1ra ½ Cuota',
             secciones: ['Contribucion'], //'Contribucion'
             columnaCondicion: 'vencimiento',
             condicion: (row) => {
                 const date = typeof row.vencimiento == 'string' ? new Date(stringToDate(row.vencimiento)) : row.vencimiento;
 
-                if ([1, 2, 3, 4, 5, 6].indexOf((new Date().getMonth() + 1)) != -1 && date.getFullYear() == 2019) {
-                    row.checked = true;
-                    row.disabled = true;
-                    return row;
+                if ([1, 2, 3, 4, 5, 6].indexOf((date.getMonth() + 1)) != -1 && date.getFullYear() == 2019) {
+                    row.data = {
+                        ...row.data,
+                        checked: true,
+                        disabled: true,
+                    };
+                } else {
+                    row.data = {
+                        ...row.data,
+                        checked: false,
+                        disabled: false,
+                    };
                 }
-                else
-                    return row;
+                
+                return row;
             },
             tableDisabled: true
         },
         {
             key: 2,
-            titulo: '2as Cuotas',
+            titulo: '2da ½ Cuota',
             secciones: ['Contribucion'], //'Contribucion'
             columnaCondicion: 'vencimiento',
             condicion: (row) => {
                 const date = typeof row.vencimiento == 'string' ? new Date(stringToDate(row.vencimiento)) : row.vencimiento;
 
-                if ([7, 8, 9, 10, 11, 12].indexOf((new Date().getMonth() + 1)) != -1 && date.getFullYear() == 2019) {
-                    row.checked = true;
-                    row.disabled = true;
-                    return row;
+                if ([7, 8, 9, 10, 11, 12].indexOf((date.getMonth() + 1)) != -1 && date.getFullYear() == 2019) {
+                    row.data = {
+                        ...row.data,
+                        checked: true,
+                        disabled: true,
+                    };
+                } else {
+                    row.data = {
+                        ...row.data,
+                        checked: false,
+                        disabled: false,
+                    };
                 }
-                else
-                    return row;
+                
+                return row;
             },
             tableDisabled: true
         }

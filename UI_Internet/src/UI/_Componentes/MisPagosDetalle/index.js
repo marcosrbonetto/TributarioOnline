@@ -30,7 +30,7 @@ class MisPagosDetalle extends React.PureComponent {
       recargoAPagar: '0,00',
       rowList: this.props.info ? this.props.info.rowList : [],
       tableDisabled: this.props.disabled || false,
-      registrosSeleccionados: [],
+      registrosSeleccionados: this.props.registrosSeleccionados,
       tieneBeneficio : false
     };
   }
@@ -39,6 +39,10 @@ class MisPagosDetalle extends React.PureComponent {
 
     if (nextProps.info && JSON.stringify(nextProps.info) != JSON.stringify(this.props.info)) {
       this.setState({ rowList: nextProps.info ? nextProps.info.rowList : [] });
+    }
+
+    if (JSON.stringify(nextProps.registrosSeleccionados) != JSON.stringify(this.props.registrosSeleccionados)) {
+      this.setState({ registrosSeleccionados: nextProps.registrosSeleccionados});
     }
   }
 
@@ -57,6 +61,7 @@ class MisPagosDetalle extends React.PureComponent {
     });
 
     this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
+    
     this.setState({
       importeAPagar: formatNumber(importeTotal),
       recargoAPagar: formatNumber(recargoTotal),
@@ -109,6 +114,7 @@ class MisPagosDetalle extends React.PureComponent {
 
     //Datos para generar la grilla
     const rowList = this.state.rowList;
+    const registrosSeleccionados = this.state.registrosSeleccionados;
     const rowsPerPage = (rowList.length <= 5 && 5) || (rowList.length > 5 && rowList.length <= 10 && 10) || (rowList.length > 10 && 25);
     const columnas = this.props.data.labels.columnas || null;
     const order = this.props.data.order || 'asc';
@@ -205,7 +211,7 @@ class MisPagosDetalle extends React.PureComponent {
 
           <MiCedulon
             tieneBeneficio={this.state.tieneBeneficio}            
-            registrosSeleccionados={this.props.registrosSeleccionados}
+            registrosSeleccionados={registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
             tipoCedulon={this.props.tipoCedulon}
             tipoTributo={tipoTributo}
@@ -220,7 +226,7 @@ class MisPagosDetalle extends React.PureComponent {
             pagoRedirect={this.props.pagoRedirect}
             idBtnMercadoPago={this.props.menuItemSeleccionado + "1"}
             seccionDetalleTributo={this.props.menuItemSeleccionado}
-            registrosSeleccionados={this.props.registrosSeleccionados}
+            registrosSeleccionados={registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
             tipoCedulon={this.props.tipoCedulon}
             tipoTributo={tipoTributo}
@@ -245,6 +251,7 @@ class MisPagosDetalle extends React.PureComponent {
         order={order}
         orderBy={orderBy}
         getFilasSeleccionadas={this.getFilasSeleccionadas}
+        registrosSeleccionados={registrosSeleccionados}
         check={check}
         disabled={disabled}
         rowsPerPage={rowsPerPage}
@@ -270,7 +277,7 @@ class MisPagosDetalle extends React.PureComponent {
         <Grid item sm={5} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
           <MiCedulon
             tieneBeneficio={this.state.tieneBeneficio}
-            registrosSeleccionados={this.props.registrosSeleccionados}
+            registrosSeleccionados={registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
             tipoCedulon={this.props.tipoCedulon}
             tipoTributo={tipoTributo}
@@ -285,7 +292,7 @@ class MisPagosDetalle extends React.PureComponent {
             pagoRedirect={this.props.pagoRedirect}
             idBtnMercadoPago={this.props.menuItemSeleccionado + "2"}
             seccionDetalleTributo={this.props.menuItemSeleccionado}
-            registrosSeleccionados={this.props.registrosSeleccionados}
+            registrosSeleccionados={registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
             tipoCedulon={this.props.tipoCedulon}
             tipoTributo={tipoTributo}

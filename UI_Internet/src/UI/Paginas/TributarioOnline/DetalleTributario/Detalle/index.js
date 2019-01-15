@@ -1392,9 +1392,10 @@ class DetalleTributo extends React.PureComponent {
                 Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago anual oportuno) o el 10% (por pago bimestral oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos bimestrales de 2018.
                 <br/><br/><span style={{fontWeight: 'bold',color:'red'}}>El descuento por abonar la Cuota Anual es seleccionando el mismo desde el botón "Beneficios" y no seleccionando períodos individuales.</span></span>;
             case 2:
-                return `Sr. Contribuyente de Inmuebles:
+                return <span>Sr. Contribuyente de Inmuebles:
                 Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.
-                Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago semestral oportuno) o el 10% (por pago mensual oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos mensuales de 2018.`;
+                Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago semestral oportuno) o el 10% (por pago mensual oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos mensuales de 2018.
+                <br/><br/><span style={{fontWeight: 'bold',color:'red'}}>El descuento por abonar cada Media Cuota es seleccionando una por vez y no seleccionando períodos individuales.</span></span>;
             case 3:
                 return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
             case 4:

@@ -128,7 +128,7 @@ class MisBeneficios extends React.PureComponent {
 
     if (beneficio) {
       //Cuando se checkea el beneficio, se setea la grilla de acuerdo a la config del mismo
-      let arrayRows = this.props.rows;
+      let arrayRows = this.resetearFilar(this.props.rows);
       _.each(arrayRows, (row) => {
         beneficio.condicion(row);
       });
