@@ -9,7 +9,7 @@ import classNames from "classnames";
 import { connect } from "react-redux";
 import { mostrarCargando } from '@Redux/Actions/mainContent'
 import { replace } from "connected-react-router";
-import { setAccessCaptcha } from "@ReduxSrc/CaptchaAccess/actions";
+import { setAccessCaptcha, setStateAccess } from "@ReduxSrc/CaptchaAccess/actions";
 
 //Router
 import { withRouter } from "react-router-dom";
@@ -41,6 +41,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setAccessCaptcha: (data) => {
     dispatch(setAccessCaptcha(data));
+  },
+  setStateAccess: (data) => {
+    dispatch(setStateAccess(data));
   }
 });
 
@@ -65,20 +68,20 @@ class CaptchaAccess extends React.PureComponent {
   }
 
   handleValidationCaptcha = (valueCaptcha) => {
-    this.props.mostrarCargando(true);
 
     Rules_Captcha.validarCaptcha(this.token, valueCaptcha)
     .then(datos => {
-      this.props.mostrarCargando(false);
 
       if (!datos.ok) { mostrarAlerta(datos.error); return false; }
 
       this.props.setAccessCaptcha(datos.return);
+      this.props.setStateAccess(true); //Seteamos acceso correcto
+
+      this.props.mostrarCargando('reset');
       this.props.redireccionar(this.urlRedirect);
     })
     .catch(error => {
       mostrarAlerta('Ocurrió un error al verificar el captcha, intente nuevamente.')
-      this.props.mostrarCargando(false);
     });
   };
 

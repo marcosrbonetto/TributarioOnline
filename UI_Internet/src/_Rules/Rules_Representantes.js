@@ -1,8 +1,10 @@
 import Store from "@Redux/Store/index";
+import { setStateAccess } from "@ReduxSrc/CaptchaAccess/actions";
 
 const agregarSolicitudPermiso = (token, body) => {
     //Este valor se obtiene luego de pasar la prueba del ReCaptcha
     const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+    //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
 
     return new Promise((resolve, reject) => {
 
@@ -31,7 +33,8 @@ const agregarSolicitudPermiso = (token, body) => {
                 if (datos.accesoWS)
                     resolve(datos);
                 else {
-                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                    const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
                 }
             })
             .catch(err => {
@@ -43,6 +46,7 @@ const agregarSolicitudPermiso = (token, body) => {
 const cancelarPermiso = (token, body) => {
     //Este valor se obtiene luego de pasar la prueba del ReCaptcha
     const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+    //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
 
     return new Promise((resolve, reject) => {
 
@@ -72,7 +76,8 @@ const cancelarPermiso = (token, body) => {
                 if (datos.accesoWS)
                     resolve(datos);
                 else {
-                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                    const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
                 }
             })
             .catch(err => {
@@ -84,6 +89,7 @@ const cancelarPermiso = (token, body) => {
 const aceptarPermiso = (token, body) => {
     //Este valor se obtiene luego de pasar la prueba del ReCaptcha
     const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+    //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
 
     return new Promise((resolve, reject) => {
 
@@ -113,7 +119,8 @@ const aceptarPermiso = (token, body) => {
                 if (datos.accesoWS)
                     resolve(datos);
                 else {
-                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                    const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
                 }
             })
             .catch(err => {
@@ -125,6 +132,7 @@ const aceptarPermiso = (token, body) => {
 const getMisRepresentantes = (token, identificador) => {
     //Este valor se obtiene luego de pasar la prueba del ReCaptcha
     const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+    //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
 
     return new Promise((resolve, reject) => {
 
@@ -149,7 +157,8 @@ const getMisRepresentantes = (token, identificador) => {
                 if (datos.accesoWS)
                     resolve(datos);
                 else {
-                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                    const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
                 }
             })
             .catch(err => {
@@ -161,6 +170,7 @@ const getMisRepresentantes = (token, identificador) => {
 const getMisRepresentados = (token, identificador) => {
     //Este valor se obtiene luego de pasar la prueba del ReCaptcha
     const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+    //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
 
     return new Promise((resolve, reject) => {
 
@@ -185,7 +195,8 @@ const getMisRepresentados = (token, identificador) => {
                 if (datos.accesoWS)
                     resolve(datos);
                 else {
-                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                    const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
                 }
             })
             .catch(err => {
@@ -197,6 +208,7 @@ const getMisRepresentados = (token, identificador) => {
 const getTitularTributo = (token, param) => {
     //Este valor se obtiene luego de pasar la prueba del ReCaptcha
     const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+    //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
 
     return new Promise((resolve, reject) => {
 
@@ -221,7 +233,8 @@ const getTitularTributo = (token, param) => {
                 if (datos.accesoWS)
                     resolve(datos);
                 else {
-                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+                    const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+                    if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
                 }
             })
             .catch(err => {

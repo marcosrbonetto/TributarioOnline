@@ -1,9 +1,11 @@
 import Store from "@Redux/Store/index";
+import { setStateAccess } from "@ReduxSrc/CaptchaAccess/actions";
 
 const pagoMercadoPago = (token, body) => {
 
   //Este valor se obtiene luego de pasar la prueba del ReCaptcha
   const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+  //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
 
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/Pagar', {
@@ -38,7 +40,8 @@ const pagoMercadoPago = (token, body) => {
         if (datos.accesoWS)
           resolve(datos);
         else {
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+          const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
         }
       })
       .catch(err => {
@@ -51,6 +54,7 @@ const getPublicKeyMercadoPago = () => {
 
   //Este valor se obtiene luego de pasar la prueba del ReCaptcha
   const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+  //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
 
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/MercadoPago/PublicKey', {
@@ -73,7 +77,8 @@ const getPublicKeyMercadoPago = () => {
         if (datos.accesoWS)
           resolve(datos);
         else {
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1) window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1));
+          const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
         }
       })
       .catch(err => {

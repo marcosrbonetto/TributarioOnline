@@ -262,6 +262,7 @@ class DetalleTributo extends React.PureComponent {
                 }
 
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
@@ -282,6 +283,7 @@ class DetalleTributo extends React.PureComponent {
                 }
 
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
@@ -357,6 +359,7 @@ class DetalleTributo extends React.PureComponent {
                     });
                 }
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
@@ -408,6 +411,7 @@ class DetalleTributo extends React.PureComponent {
                     });
                 }
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
@@ -480,6 +484,7 @@ class DetalleTributo extends React.PureComponent {
                     });
                 }
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
@@ -557,6 +562,7 @@ class DetalleTributo extends React.PureComponent {
                     });
                 }
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
@@ -565,7 +571,10 @@ class DetalleTributo extends React.PureComponent {
             service3,
             service4]).then(() => {
                 this.props.mostrarCargando(false);
-            });
+            }).catch(err => {
+                this.props.mostrarCargando(false);
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+            });;
     }
 
     //- Recargamos datos en la grilla de acuerdo al menu seleccionado
@@ -703,7 +712,8 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
+                    this.props.mostrarCargando(false);
+                    if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
 
                     let rowList = (datos.return && datos.return.map((pago) => {
 
@@ -736,6 +746,7 @@ class DetalleTributo extends React.PureComponent {
 
                     this.handleUltimosPagosOpenDialog();
                 }).catch(err => {
+                    this.props.mostrarCargando(false);
                     console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
         } else {
@@ -787,7 +798,8 @@ class DetalleTributo extends React.PureComponent {
 
         servicesTributarioOnline.getPeriodosAdeudados(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
+                this.props.mostrarCargando(false);
+                if (!datos.ok) { mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
 
                 let rowList = [];
                 let data = datos.return;
@@ -817,6 +829,7 @@ class DetalleTributo extends React.PureComponent {
 
                 this.handlePeriodosAdeudadosOpenDialog();
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
@@ -890,6 +903,7 @@ class DetalleTributo extends React.PureComponent {
                 });
 
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
@@ -910,6 +924,7 @@ class DetalleTributo extends React.PureComponent {
                 });
 
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
 
@@ -988,7 +1003,8 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
+                    this.props.mostrarCargando(false);
+                    if (!datos.ok) { mostrarAlerta('Informe REMAT: ' + datos.error); return false; }
 
                     let rowList = (datos.return && datos.return.map((row) => {
 
@@ -1016,6 +1032,7 @@ class DetalleTributo extends React.PureComponent {
                     });
 
                 }).catch(err => {
+                    this.props.mostrarCargando(false);
                     console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
@@ -1035,6 +1052,7 @@ class DetalleTributo extends React.PureComponent {
                         }
                     });
                 }).catch(err => {
+                    this.props.mostrarCargando(false);
                     console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
@@ -1125,7 +1143,8 @@ class DetalleTributo extends React.PureComponent {
                 identificador: identificador
             })
                 .then((datos) => {
-                    if (!datos.ok) { this.props.mostrarCargando(false); return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+                    this.props.mostrarCargando(false);
+                    if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
 
                     this.setState({
                         informeCuenta: {
@@ -1139,6 +1158,7 @@ class DetalleTributo extends React.PureComponent {
                     });
 
                 }).catch(err => {
+                    this.props.mostrarCargando(false);
                     console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
@@ -1158,6 +1178,7 @@ class DetalleTributo extends React.PureComponent {
                         }
                     });
                 }).catch(err => {
+                    this.props.mostrarCargando(false);
                     console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                 });
 
@@ -1258,6 +1279,7 @@ class DetalleTributo extends React.PureComponent {
                 this.handleDeclaracionJuradaOpenDialog();
                 this.props.mostrarCargando(false);
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
@@ -1318,6 +1340,7 @@ class DetalleTributo extends React.PureComponent {
 
                 this.props.mostrarCargando(false);
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
