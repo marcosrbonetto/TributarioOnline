@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import MiTabla from "@Componentes/MiTabla";
 import MiCedulon from "@Componentes/MiCedulon";
 import MiMercadoPago from "@Componentes/MiMercadoPago";
+import MiInterBanking from "@Componentes/MiInterBanking";
 import MisBeneficios from "@Componentes/MisBeneficios";
 import { checkBeneficios } from "@Componentes/MisBeneficios";
 
@@ -31,7 +32,7 @@ class MisPagosDetalle extends React.PureComponent {
       rowList: this.props.info ? this.props.info.rowList : [],
       tableDisabled: this.props.disabled || false,
       registrosSeleccionados: this.props.registrosSeleccionados,
-      tieneBeneficio : false
+      tieneBeneficio: false
     };
   }
 
@@ -42,7 +43,7 @@ class MisPagosDetalle extends React.PureComponent {
     }
 
     if (JSON.stringify(nextProps.registrosSeleccionados) != JSON.stringify(this.props.registrosSeleccionados)) {
-      this.setState({ registrosSeleccionados: nextProps.registrosSeleccionados});
+      this.setState({ registrosSeleccionados: nextProps.registrosSeleccionados });
     }
   }
 
@@ -61,7 +62,7 @@ class MisPagosDetalle extends React.PureComponent {
     });
 
     this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
-    
+
     this.setState({
       importeAPagar: formatNumber(importeTotal),
       recargoAPagar: formatNumber(recargoTotal),
@@ -186,7 +187,7 @@ class MisPagosDetalle extends React.PureComponent {
       </Grid>
       <Grid container spacing={16}>
         {/* Totalizador de deudas seleccionadas y botones de pago */}
-        <Grid item sm={6} className={"inputTotalPeriodos"}>
+        <Grid item sm={4} className={"inputTotalPeriodos"}>
           <TextField
             id="standard-full-width"
             label={<span>Total a pagar {auxRecargoAPagar ? <span className={classes.recargo}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.recargo}>(Recargo: {this.state.recargoAPagar})</span>}</span>}
@@ -201,7 +202,7 @@ class MisPagosDetalle extends React.PureComponent {
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
         </Grid>
-        <Grid item sm={6} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
+        <Grid item sm={8} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
 
           <MisBeneficios
             tipoTributo={this.props.tributoActual}
@@ -210,7 +211,7 @@ class MisPagosDetalle extends React.PureComponent {
             handleBeneficiosResult={this.handleBeneficiosResult} />
 
           <MiCedulon
-            tieneBeneficio={this.state.tieneBeneficio}            
+            tieneBeneficio={this.state.tieneBeneficio}
             registrosSeleccionados={registrosSeleccionados}
             subItemSeleccionado={this.props.info.identificador}
             tipoCedulon={this.props.tipoCedulon}
@@ -235,6 +236,19 @@ class MisPagosDetalle extends React.PureComponent {
             esJuicio={esJuicio}
             onClick={this.chekearBeneficios}
           />
+
+          <MiInterBanking
+            tieneBeneficio={this.state.tieneBeneficio}
+            registrosSeleccionados={registrosSeleccionados}
+            subItemSeleccionado={this.props.info.identificador}
+            tipoCedulon={this.props.tipoCedulon}
+            tipoTributo={tipoTributo}
+            identificador={this.props.identificadorActual}
+            disabled={disabledCedulon}
+            esJuicio={esJuicio}
+            onClick={this.chekearBeneficios}
+          />
+
         </Grid>
       </Grid>
 
