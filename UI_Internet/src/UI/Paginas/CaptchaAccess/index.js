@@ -26,18 +26,21 @@ import { getAllUrlParams, mostrarAlerta } from "@Utils/functions";
 //Material UI
 import Typography from "@material-ui/core/Typography";
 
+//Cargando
+import IndicadorCargando from "@UI/_Componentes/IndicadorCargando"
+
 const mapStateToProps = state => {
   return {
-      loggedUser: state.Usuario.loggedUser
+    loggedUser: state.Usuario.loggedUser
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   mostrarCargando: (cargar) => {
-      dispatch(mostrarCargando(cargar));
+    dispatch(mostrarCargando(cargar));
   },
   redireccionar: url => {
-      dispatch(replace(url));
+    dispatch(replace(url));
   },
   setAccessCaptcha: (data) => {
     dispatch(setAccessCaptcha(data));
@@ -57,39 +60,55 @@ class CaptchaAccess extends React.PureComponent {
     this.urlRedirect = decodeURIComponent(urlRedirect);
 
     this.state = {
-      //accessCaptcha
+      cargandoVisible: true
     };
   }
 
   componentDidMount() {
 
-    if(!this.urlRedirect)
+    if (!this.urlRedirect)
       this.props.redireccionar('/Inicio');
+  }
+
+  handleAfterMount = () => {
+    this.setState({
+      cargandoVisible: false
+    });
   }
 
   handleValidationCaptcha = (valueCaptcha) => {
 
-    Rules_Captcha.validarCaptcha(this.token, valueCaptcha)
-    .then(datos => {
+    this.setState({
+      cargandoVisible: true
+    }, () => {
+      Rules_Captcha.validarCaptcha(this.token, valueCaptcha)
+        .then(datos => {
 
-      if (!datos.ok) { mostrarAlerta(datos.error); return false; }
+          if (!datos.ok) { mostrarAlerta(datos.error); return false; }
 
-      this.props.setAccessCaptcha(datos.return);
-      this.props.setStateAccess(true); //Seteamos acceso correcto
+          this.props.setAccessCaptcha(datos.return);
+          this.props.setStateAccess(true); //Seteamos acceso correcto
 
-      this.props.mostrarCargando('reset');
-      this.props.redireccionar(this.urlRedirect);
-    })
-    .catch(error => {
-      mostrarAlerta('Ocurrió un error al verificar el captcha, intente nuevamente.')
+          this.props.mostrarCargando('reset');
+          this.props.redireccionar(this.urlRedirect);
+
+          this.setState({
+            cargandoVisible: true
+          });
+        })
+        .catch(error => {
+          mostrarAlerta('Ocurrió un error al verificar el captcha, intente nuevamente.')
+        });
     });
   };
 
   render() {
     let { classes } = this.props;
+    const { cargandoVisible } = this.state;
 
     return (<div className={classes.mainContainer}>
-      <i className={classNames(classes.iconoSeguridad,"material-icons")}>
+      <IndicadorCargando visible={cargandoVisible} />
+      <i className={classNames(classes.iconoSeguridad, "material-icons")}>
         security
       </i>
       <br />
@@ -98,9 +117,10 @@ class CaptchaAccess extends React.PureComponent {
       </Typography>
       <br />
       <MiCaptcha
-      classNameCaptcha={classes.captcha}
-      handleValidationCaptcha={this.handleValidationCaptcha} />
-      </div>
+        handleAfterMount={this.handleAfterMount}
+        classNameCaptcha={classes.captcha}
+        handleValidationCaptcha={this.handleValidationCaptcha} />
+    </div>
     );
   }
 }
@@ -108,8 +128,8 @@ class CaptchaAccess extends React.PureComponent {
 let componente = CaptchaAccess;
 componente = withStyles(styles)(componente);
 componente = connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(componente);
 componente = withRouter(componente);
 export default componente;

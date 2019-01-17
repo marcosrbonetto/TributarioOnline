@@ -13,6 +13,10 @@ class MiCaptcha extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    this.props.handleAfterMount && this.props.handleAfterMount();
+  }
+
   onChangeCaprcha = (valueCaptcha) => {
     this.props.handleValidationCaptcha && this.props.handleValidationCaptcha(valueCaptcha);
   };
