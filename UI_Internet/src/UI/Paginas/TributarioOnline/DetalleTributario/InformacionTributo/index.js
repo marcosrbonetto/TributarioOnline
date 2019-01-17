@@ -24,6 +24,9 @@ import Divider from '@material-ui/core/Divider';
 //Funciones Útiles
 import { getIdTipoTributo, getTextoTipoTributo } from "@Utils/functions"
 
+//Informacion
+import { infoExplicativaTributos } from '../infoExplicativaTributos.js';
+
 const mapDispatchToProps = dispatch => ({
     redireccionar: url => {
         dispatch(replace(url));
@@ -45,31 +48,7 @@ class InformacionTributo extends React.PureComponent {
     }
 
     infoTributo = () => {
-        switch (this.idTipoTributo) {
-            case 1:
-                return `Sr. Contribuyente de Automotores:
-                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.
-                Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago anual oportuno) o el 10% (por pago bimestral oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos bimestrales de 2018.`;
-            case 2:
-                return `Sr. Contribuyente de Inmuebles:
-                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.
-                Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago semestral oportuno) o el 10% (por pago mensual oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos mensuales de 2018.`;
-            case 3:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 4:
-                return `Sr. Contribuyente de Cementerios:
-                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.`;
-            case 5:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 6:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 7:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 8:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 9:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-        }
+        return infoExplicativaTributos(this.idTipoTributo) || false;
     }
 
     handleVovler = () => {

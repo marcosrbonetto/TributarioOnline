@@ -44,6 +44,9 @@ import servicesRepresentantes from '@Rules/Rules_Representantes';
 //Funciones Útiles
 import { getAllUrlParams, formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
+//Informacion
+import { infoExplicativaTributos } from '../infoExplicativaTributos.js';
+
 const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
@@ -352,7 +355,7 @@ class DetalleTributo extends React.PureComponent {
                     }
                 });
 
-                if(!this.props.match.params.seccionMenu || (this.props.match.params.seccionMenu == 'contribucion' )) {
+                if (!this.props.match.params.seccionMenu || (this.props.match.params.seccionMenu == 'contribucion')) {
                     //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
                     this.refreshValoresPantalla({
                         datosItemSeleccionado: data
@@ -404,7 +407,7 @@ class DetalleTributo extends React.PureComponent {
                     }
                 });
 
-                if(this.props.match.params.seccionMenu == 'multas' ) {
+                if (this.props.match.params.seccionMenu == 'multas') {
                     //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
                     this.refreshValoresPantalla({
                         datosItemSeleccionado: data
@@ -469,9 +472,9 @@ class DetalleTributo extends React.PureComponent {
                 this.setState({ juicios });
 
                 //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
-                if(this.props.match.params.seccionMenu) {
-                    if(this.props.match.params.subIdentificador) {
-                        const currentItem = _.find(data,{ identificador: menuItem});
+                if (this.props.match.params.seccionMenu) {
+                    if (this.props.match.params.subIdentificador) {
+                        const currentItem = _.find(data, { identificador: menuItem });
                         this.refreshValoresPantalla({
                             datosItemSeleccionado: currentItem
                         });
@@ -543,13 +546,13 @@ class DetalleTributo extends React.PureComponent {
                 planes.menuItemSeleccionado = menuItem;
 
                 planes.infoSeccion = data;
-                
+
                 this.setState({ planes });
 
                 //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
-                if(this.props.match.params.seccionMenu) {
-                    if(this.props.match.params.subIdentificador) {
-                        const currentItem = _.find(data,{ identificador: menuItem});
+                if (this.props.match.params.seccionMenu) {
+                    if (this.props.match.params.subIdentificador) {
+                        const currentItem = _.find(data, { identificador: menuItem });
                         this.refreshValoresPantalla({
                             datosItemSeleccionado: currentItem
                         });
@@ -1408,35 +1411,10 @@ class DetalleTributo extends React.PureComponent {
 
     infoTributo = () => {
         const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-        switch(idTipoTributo) {
-            case 1:
-                return <span>Sr. Contribuyente de Automotores:
-                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.
-                Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago anual oportuno) o el 10% (por pago bimestral oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos bimestrales de 2018.
-                <br/><br/><span style={{fontWeight: 'bold',color:'red'}}>El descuento por abonar la Cuota Anual es seleccionando el mismo desde el botón "Beneficios" y no seleccionando períodos individuales.</span></span>;
-            case 2:
-                return <span>Sr. Contribuyente de Inmuebles:
-                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.
-                Le recordamos que al contribuyente cumplidor 2017 se le descontó del total a abonar en 2018, el 14% (por pago semestral oportuno) o el 10% (por pago mensual oportuno de lo vencido hasta Noviembre de 2017) y se aplicó la rebaja distribuida en los periodos mensuales de 2018.
-                <br/><br/><span style={{fontWeight: 'bold',color:'red'}}>El descuento por abonar cada Media Cuota es seleccionando una por vez y no seleccionando períodos individuales.</span></span>;
-            case 3:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 4:
-                return `Sr. Contribuyente de Cementerios:
-                Se encuentra vigente el decreto 3068/2018 que establece para el pago de contado hasta un 50% de rebaja en los recargos.`;
-            case 5:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 6:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 7:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 8:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-            case 9:
-                return `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`;
-        }
+
+        return infoExplicativaTributos(idTipoTributo) || 'No hay información para este tributo';
     }
-    
+
     informacionTributo = () => {
         const tributo = this.props.match.params.tributo;
         const urlRedirect = encodeURIComponent(window.location.hash.substring(1));
@@ -2132,6 +2110,20 @@ class DetalleTributo extends React.PureComponent {
                                         onDialogoClose={this.onUltimosPagosDialogoClose}
                                         textoLink={'Últimos pagos'}
                                         titulo={'Últimos pagos'}
+                                        textoInformativo={<div>
+                                            <b>Observaciones:</b><br /><br />
+
+                                            <b>En la grilla de pagos pueden aparecer dos estados:</b><br />
+
+                                            <ul>
+                                                <li><b>IMPUTADO:</b> el período fué abonado y el monto fué imputado.</li>
+                                                <li><b>PENDIENTE:</b> el período fué pagado, pero todavía no imputó.</li>
+                                            </ul><br /><br />
+                                            
+                                            Las imputaciones pueden demorar unos 10 días hábiles dependiendo del caso.<br /><br />
+
+                                            Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
+                                        </div>}
                                     >
                                         <MiTabla
                                             pagination={!this.props.paraMobile}

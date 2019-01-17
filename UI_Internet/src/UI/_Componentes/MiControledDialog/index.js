@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from "@material-ui/core/Button";
+import Tooltip from '@material-ui/core/Tooltip';
 
 class MiControledDialog extends React.PureComponent {
 
@@ -21,7 +22,7 @@ class MiControledDialog extends React.PureComponent {
 
   getComponent(key) {
 
-    if (Array.isArray(this.props.children) && this.props.children.filter((seccion)=>{return seccion.key == "mainContent"}).length > 0)
+    if (Array.isArray(this.props.children) && this.props.children.filter((seccion) => { return seccion.key == "mainContent" }).length > 0)
       return this.props.children.filter((comp) => {
         return comp.key === key;
       });
@@ -49,7 +50,7 @@ class MiControledDialog extends React.PureComponent {
   };
 
   render() {
-    let { classes, titulo, textoLink } = this.props;
+    let { classes, titulo, textoLink, textoInformativo } = this.props;
 
     return (
       <div>
@@ -58,7 +59,7 @@ class MiControledDialog extends React.PureComponent {
             onClick={this.handleOpenModal}
             variant="subheading" className={classNames(classes.textList, classes.link)} gutterBottom>{textoLink}</Typography>
         }
-        {this.props.buttonAction && 
+        {this.props.buttonAction &&
           <div>
             {this.getComponent('buttonAction')}
           </div>
@@ -71,7 +72,19 @@ class MiControledDialog extends React.PureComponent {
             paper: (this.paraMobile && classes.paraMobile) || (this.props.classMaxWidth ? this.props.classMaxWidth : classes.maxWidth)
           }}
         >
-          <DialogTitle id="scroll-dialog-title">{titulo}</DialogTitle>
+          <DialogTitle id="scroll-dialog-title">
+            {titulo}
+            {textoInformativo && 
+            <Tooltip
+              disableFocusListener disableTouchListener
+              classes={{ tooltip: classes.textTooltip }}
+              title={
+                textoInformativo
+              }
+            >
+              <i className={classNames(classes.infoIcon, "material-icons")}>info</i>
+            </Tooltip>}
+          </DialogTitle>
           <DialogContent className={classes.content}>
             <DialogContentText>
               {this.getComponent('headerContent')}
@@ -115,6 +128,15 @@ const styles = theme => ({
     height: '100% !important',
     maxWidth: '100% !important',
     maxHeight: '100% !important',
+  },
+  textTooltip: {
+    fontSize: 12,
+    maxWidth: '460px'
+  },
+  infoIcon: {
+    color: '#0f8fea',
+    verticalAlign: 'middle',
+    cursor: 'help'
   }
 });
 
