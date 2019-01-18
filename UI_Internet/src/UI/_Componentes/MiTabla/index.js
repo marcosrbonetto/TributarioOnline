@@ -163,7 +163,8 @@ class MiTabla extends React.PureComponent {
         //Si la tabla se deshabilita o habilita, o cambian los registros seleccionados, se vuelve a
         //calcular los resultados seleccionados (resultSelected)
         if ((JSON.stringify(this.props.disabled) != JSON.stringify(nextProps.disabled)) || 
-        (JSON.stringify(this.props.registrosSeleccionados) != JSON.stringify(nextProps.registrosSeleccionados))) {
+        (JSON.stringify(this.props.registrosSeleccionados) != JSON.stringify(nextProps.registrosSeleccionados)) || 
+        JSON.stringify(this.props.rows) != JSON.stringify(nextProps.rows)) {
             //resultSelected = this.handleSetSelected(nextProps);
             
             var resultSelected = this.handleSetSelected(nextProps.rows);
