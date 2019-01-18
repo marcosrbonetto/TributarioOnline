@@ -61,7 +61,8 @@ class MisPagosDetalle extends React.PureComponent {
         registrosSeleccionados.push(item['concepto']);
     });
 
-    this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
+    this.props.setRegistrosSeleccionados && 
+      this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
 
     this.setState({
       importeAPagar: formatNumber(importeTotal),

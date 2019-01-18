@@ -45,12 +45,14 @@ const beneficios = {
                     row.data = {
                         ...row.data,
                         checked: true,
+                        invisible: false,
                         disabled: true,
                     };
                 } else {
                     row.data = {
                         ...row.data,
                         checked: false,
+                        invisible: true,
                         disabled: false,
                     };
                 }
@@ -71,12 +73,14 @@ const beneficios = {
                     row.data = {
                         ...row.data,
                         checked: true,
+                        invisible: false,
                         disabled: true,
                     };
                 } else {
                     row.data = {
                         ...row.data,
                         checked: false,
+                        invisible: true,
                         disabled: false,
                     };
                 }

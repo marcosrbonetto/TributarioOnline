@@ -15,6 +15,10 @@ import Badge from '@material-ui/core/Badge';
 
 //Beneficios
 import beneficios from './beneficios';
+import { infoBeneficios } from './infoBeneficios.js';
+
+//Funciones
+import { getIdTipoTributo } from "@Utils/functions"
 
 export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => {
   let error = false;
@@ -187,7 +191,7 @@ class MisBeneficios extends React.PureComponent {
   }
 
   render() {
-    let { classes } = this.props;
+    let { classes, tipoTributo } = this.props;
     const { visible, anchorEl, itemChecked, arrayBeneficios } = this.state;
 
     let tituloBeneficioSelec = '';
@@ -195,6 +199,9 @@ class MisBeneficios extends React.PureComponent {
       const beneficioSelec = _.find(arrayBeneficios, { key: itemChecked });
       tituloBeneficioSelec = beneficioSelec.titulo;
     }
+
+    const idTipoTributo = getIdTipoTributo(tipoTributo) || 0;
+    const textoInfoBeneficio = infoBeneficios(idTipoTributo);
 
     return (<div className={classNames(classes.root, "BtnMisBeneficios")}>
       {visible && <div>
@@ -232,23 +239,16 @@ class MisBeneficios extends React.PureComponent {
           })}
         </Menu>
 
+        {textoInfoBeneficio &&
         <div className={classes.infoContainer}>
           <Tooltip
             disableFocusListener disableTouchListener
             classes={{ tooltip: classes.textTooltip }}
-            title={
-              <span>CONTRIBUYENTE CUMPLIDOR 2019 INMOBILIARIO Y AUTOMOTOR<br />
-                BENEFICIO DTO. 3068/2018<br />
-                <br />
-                Cancelá tu deuda vencida hasta el 18/12/2018 y obtené el premio Contribuyente Cumplidor 2019.<br />
-                <br />
-                Recordá que se encuentra vigente una reducción del 50% de los recargos por pago de CONTADO
-              </span>
-            }
+            title={textoInfoBeneficio}
           >
             <i className={classNames(classes.infoIcon, "material-icons")}>info</i>
           </Tooltip>
-        </div>
+        </div>}
       </div>}
     </div>);
   }

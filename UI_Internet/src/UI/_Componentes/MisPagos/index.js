@@ -14,7 +14,9 @@ import TextField from '@material-ui/core/TextField';
 import MiTabla from "@Componentes/MiTabla";
 import MiCedulon from "@Componentes/MiCedulon";
 import MiMercadoPago from "@Componentes/MiMercadoPago";
+import MiInterBanking from "@Componentes/MiInterBanking";
 import MisBeneficios from "@Componentes/MisBeneficios";
+import { checkBeneficios } from "@Componentes/MisBeneficios";
 
 //Funciones Útiles
 import { stringToFloat, formatNumber, getIdTipoTributo } from "@Utils/functions"
@@ -29,12 +31,12 @@ class MisPagos extends React.PureComponent {
       recargoAPagar: '0,00',
       rowList: this.props.rowList || [],
       tableDisabled: this.props.tablaConfig ? this.props.tablaConfig.disabled : false,
+      registrosSeleccionados: this.props.registrosSeleccionados,
+      tieneBeneficio: false
     };
   }
 
   componentWillReceiveProps(nextProps) {
-
-    console.log(this.props.tablaConfig && this.props.tablaConfig.disabled);
 
     if (nextProps.rowList && JSON.stringify(nextProps.rowList) != JSON.stringify(this.props.rowList)) {
       this.setState({ rowList: nextProps.rowList || [] });
@@ -65,6 +67,7 @@ class MisPagos extends React.PureComponent {
     this.setState({ 
       importeAPagar: formatNumber(importeTotal),
       recargoAPagar: formatNumber(recargoTotal),
+      registrosSeleccionados: registrosSeleccionados
     });
   };
 
@@ -78,6 +81,24 @@ class MisPagos extends React.PureComponent {
 
     //Actualización grilla
     this.getFilasSeleccionadas(result.rowList, result.rowsSelected);
+  }
+
+  //Una vez que precionamos Cedulon o PagoOnline, chequeamos si las filas seleccionadas pertenecen a algun beneficio vigente
+  chekearBeneficios = (callback) => {
+    const tipoTributo = this.props.cedulonConfig.tipoTributo;
+    const seccion = this.props.cedulonConfig.tipoCedulon;
+    const allRows = this.state.rowList;
+    const selectedRows = this.state.registrosSeleccionados;
+
+    //True o False de acuerdo si coinciden con un beneficio o no
+    const tieneBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
+
+    this.setState({
+      tieneBeneficio: tieneBeneficio
+    }, () => {
+      //Seguimos con la acción del boton
+      callback();
+    });
   }
 
   render() {
@@ -188,6 +209,8 @@ class MisPagos extends React.PureComponent {
             handleBeneficiosResult={this.handleBeneficiosResult} />
 
           <MiCedulon
+            tieneBeneficio={this.state.tieneBeneficio}
+            onClick={this.chekearBeneficios}
             registrosSeleccionados={registrosSeleccionados}
             subItem={cedulonConfig.subItem}
             tipoCedulon={cedulonConfig.tipoCedulon}
@@ -198,6 +221,8 @@ class MisPagos extends React.PureComponent {
           />
 
           <MiMercadoPago
+            tieneBeneficio={this.state.tieneBeneficio}
+            onClick={this.chekearBeneficios}
             pagoRedirect={mercadoPagoConfig.pagoRedirect}
             idBtnMercadoPago={mercadoPagoConfig.idBtnMercadoPago + "1"}
             seccionDetalleTributo={mercadoPagoConfig.seccionDetalleTributo}
@@ -225,6 +250,7 @@ class MisPagos extends React.PureComponent {
         order={order}
         orderBy={orderBy}
         getFilasSeleccionadas={this.getFilasSeleccionadas}
+        registrosSeleccionados={registrosSeleccionados}
         check={check}
         disabled={disabled}
         rowsPerPage={rowsPerPage}
@@ -249,6 +275,8 @@ class MisPagos extends React.PureComponent {
         </Grid>
         <Grid item sm={5} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
           <MiCedulon
+            tieneBeneficio={this.state.tieneBeneficio}
+            onClick={this.chekearBeneficios}
             registrosSeleccionados={registrosSeleccionados}
             subItem={cedulonConfig.subItem}
             tipoCedulon={cedulonConfig.tipoCedulon}
@@ -259,6 +287,8 @@ class MisPagos extends React.PureComponent {
           />
 
           <MiMercadoPago
+            tieneBeneficio={this.state.tieneBeneficio}
+            onClick={this.chekearBeneficios}
             pagoRedirect={mercadoPagoConfig.pagoRedirect}
             idBtnMercadoPago={mercadoPagoConfig.idBtnMercadoPago + "2"}
             seccionDetalleTributo={mercadoPagoConfig.seccionDetalleTributo}
