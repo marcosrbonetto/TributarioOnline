@@ -4,9 +4,9 @@ const LOCAL = 3;
 const ENTORNO = LOCAL;
 
 //WS Tributario
-const URL_WS_TRIBUTARIO_LOCAL = "https://srv-dev04/WSAutogestionTributaria";
+const URL_WS_TRIBUTARIO_LOCAL = "https://srv-dev04/WSAutogestionTributaria_Bridge";
 const URL_WS_TRIBUTARIO_TEST = "https://srv-dev04/WSAutogestionTributaria_Bridge";
-const URL_WS_TRIBUTARIO_DEPLOY = "https://srv-app04/WSAutogestionTributaria";
+const URL_WS_TRIBUTARIO_DEPLOY = "https://servicios2.cordoba.gov.ar/WSAutogestionTributaria_Bridge";
 let URL_WS_TRIBUTARIO = URL_WS_TRIBUTARIO_DEPLOY;
 
 //Url Login

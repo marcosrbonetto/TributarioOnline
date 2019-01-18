@@ -5,7 +5,7 @@ const beneficios = {
     'Automotor': [ //'Automotor'
         {
             key: 1,
-            titulo: 'Pago Anual',
+            titulo: 'Cuota Anual',
             secciones: ['Contribucion'], //'Contribucion'
             columnaCondicion: 'vencimiento',
             condicion: (row) => {
@@ -15,12 +15,14 @@ const beneficios = {
                     row.data = {
                         ...row.data,
                         checked: true,
+                        invisible: false,
                         disabled: true,
                     };
                 } else {
                     row.data = {
                         ...row.data,
                         checked: false,
+                        invisible: true,
                         disabled: false,
                     };
                 }

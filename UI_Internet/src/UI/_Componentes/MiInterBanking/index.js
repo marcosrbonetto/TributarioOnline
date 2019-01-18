@@ -31,7 +31,7 @@ class MiInterBanking extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const visible = props.tipoCedulon == "Contribucion" && props.tipoTributo == 3; //Comercios
+    const visible = props.tipoCedulon == "Contribucion" && [3,7].indexOf(props.tipoTributo) != -1; //Comercios
 
     this.state = {
       mensajeError: undefined,

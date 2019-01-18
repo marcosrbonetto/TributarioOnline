@@ -10,6 +10,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
+import Typography from "@material-ui/core/Typography";
+import Badge from '@material-ui/core/Badge';
 
 //Beneficios
 import beneficios from './beneficios';
@@ -19,7 +21,7 @@ export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => 
   let arrayBeneficios = [];
   let resultado = false;
 
-  if(!tipoTributo || !seccion || !allRows || !selectedRows) {
+  if (!tipoTributo || !seccion || !allRows || !selectedRows) {
     return resultado;
   }
 
@@ -37,7 +39,7 @@ export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => 
     error = true;
   }
 
-  if(error) {
+  if (error) {
     return resultado;
   }
 
@@ -53,14 +55,14 @@ export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => 
 
     const itemsSeleccionados = _.filter(arrayRows, (o) => { return o.data.checked == true });
     const idRowsBeneficio = _.map(itemsSeleccionados, 'concepto');
-    
+
     const concideConBeneficio = _.isEqual(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
-    
+
     // console.log(beneficio.titulo);
     // console.log(concideConBeneficio);
     // console.log('-----------------------');
 
-    if(concideConBeneficio) {
+    if (concideConBeneficio) {
       resultado = true;
       return false;
     }
@@ -160,6 +162,7 @@ class MisBeneficios extends React.PureComponent {
       row.data = {
         ...row.data,
         checked: false,
+        invisible: false,
         disabled: false,
       };
 
@@ -175,18 +178,43 @@ class MisBeneficios extends React.PureComponent {
     });
   }
 
+  cancelarBeneficio = () => {
+    this.setState({
+      itemChecked: 0
+    }, () => {
+      this.handleBeneficio();
+    });
+  }
+
   render() {
     let { classes } = this.props;
     const { visible, anchorEl, itemChecked, arrayBeneficios } = this.state;
 
+    let tituloBeneficioSelec = '';
+    if (itemChecked > 0) {
+      const beneficioSelec = _.find(arrayBeneficios, { key: itemChecked });
+      tituloBeneficioSelec = beneficioSelec.titulo;
+    }
+
     return (<div className={classNames(classes.root, "BtnMisBeneficios")}>
       {visible && <div>
-        <Button
-          variant="contained"
-          color="secondary"
-          className={classNames(classes.buttonActions, classes.promotionButton)}
-          onClick={this.handleClick}
-        >Beneficios</Button>
+        <Badge
+          onClick={this.cancelarBeneficio}
+          badgeContent={'X'}
+          classes={{ badge: classNames(classes.badgeCancel, itemChecked == 0 && classes.hideBadgeCancel) }}>
+
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classNames(classes.buttonActions, classes.promotionButton)}
+            onClick={this.handleClick}
+          >
+            Beneficios
+          <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
+              {tituloBeneficioSelec}
+            </Typography>
+          </Button>
+        </Badge>
 
         <Menu
           id="simple-menu"
@@ -259,6 +287,27 @@ const styles = theme => ({
   },
   textTooltip: {
     fontSize: 16,
+  },
+  buttonActionsCaption: {
+    top: '40px',
+    position: 'absolute',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '90px',
+    color: '#ffa114'
+  },
+  badgeCancel: {
+    background: 'red',
+    width: '15px',
+    height: '15px',
+    fontSize: '10px',
+    top: '0px',
+    right: '0px',
+    cursor: 'pointer',
+    color: '#fff'
+  },
+  hideBadgeCancel: {
+    display: 'none'
   }
 });
 

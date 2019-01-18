@@ -125,8 +125,8 @@ class DetalleTributo extends React.PureComponent {
                 infoSeccion: undefined,
                 tieneSubMenu: false,
                 tipoCedulon: this.props.tipoCedulones.byKey[1],
-                order: 'asc',
-                orderBy: 'concepto',
+                order: 'desc',
+                orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Deuda Administrativa',
                     totalesDeuda: 'Administrativa',
@@ -140,7 +140,7 @@ class DetalleTributo extends React.PureComponent {
                 infoSeccion: undefined,
                 tieneSubMenu: false,
                 tipoCedulon: this.props.tipoCedulones.byKey[2],
-                order: 'asc',
+                order: 'desc',
                 orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Multas',
@@ -156,8 +156,8 @@ class DetalleTributo extends React.PureComponent {
                 tieneSubMenu: true,
                 subItemTipoTributos: this.props.tipoTributos.byKey[11],
                 tipoCedulon: this.props.tipoCedulones.byKey[3],
-                order: 'asc',
-                orderBy: 'concepto',
+                order: 'desc',
+                orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Deuda Judicial',
                     totalesDeuda: 'del Juicio',
@@ -173,8 +173,8 @@ class DetalleTributo extends React.PureComponent {
                 tieneSubMenu: true,
                 subItemTipoTributos: this.props.tipoTributos.byKey[12],
                 tipoCedulon: this.props.tipoCedulones.byKey[4],
-                order: 'asc',
-                orderBy: 'concepto',
+                order: 'desc',
+                orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Planes',
                     totalesDeuda: 'Administrativa',
