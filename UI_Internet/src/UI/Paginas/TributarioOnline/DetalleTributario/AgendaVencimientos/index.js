@@ -58,12 +58,12 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'periodo': '2018/01', 'vencimiento': '15/02/2018' },
-                            { 'periodo': '2018/02', 'vencimiento': '12/04/2018' },
-                            { 'periodo': '2018/03', 'vencimiento': '13/06/2018' },
-                            { 'periodo': '2018/04', 'vencimiento': '14/08/2018' },
-                            { 'periodo': '2018/05', 'vencimiento': '12/10/2018' },
-                            { 'periodo': '2018/06', 'vencimiento': '12/12/2018' },
+                            { 'periodo': '2019/01', 'vencimiento': '13/02/2019' },
+                            { 'periodo': '2019/02', 'vencimiento': '12/04/2019' },
+                            { 'periodo': '2019/03', 'vencimiento': '14/06/2019' },
+                            { 'periodo': '2019/04', 'vencimiento': '14/08/2019' },
+                            { 'periodo': '2019/05', 'vencimiento': '15/10/2019' },
+                            { 'periodo': '2019/06', 'vencimiento': '13/12/2019' },
                         ]}
                         order={'asc'}
                         orderBy={'periodo'}
@@ -77,7 +77,7 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'cuotas': 'Cuota Única', 'vencimiento': '15/02/2018' },
+                            { 'cuotas': 'Cuota Única', 'vencimiento': '13/02/2019' },
                         ]}
                         order={'asc'}
                         orderBy={'cuotas'}
@@ -94,18 +94,18 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'periodo': '2018/01', 'vencimiento': '14/02/2018' },
-                            { 'periodo': '2018/02', 'vencimiento': '12/03/2018' },
-                            { 'periodo': '2018/03', 'vencimiento': '10/04/2018' },
-                            { 'periodo': '2018/04', 'vencimiento': '10/05/2018' },
-                            { 'periodo': '2018/05', 'vencimiento': '11/06/2018' },
-                            { 'periodo': '2018/06', 'vencimiento': '10/07/2018' },
-                            { 'periodo': '2018/07', 'vencimiento': '10/08/2018' },
-                            { 'periodo': '2018/08', 'vencimiento': '10/09/2018' },
-                            { 'periodo': '2018/09', 'vencimiento': '10/10/2018' },
-                            { 'periodo': '2018/10', 'vencimiento': '12/11/2018' },
-                            { 'periodo': '2018/11', 'vencimiento': '10/12/2018' },
-                            { 'periodo': '2018/12', 'vencimiento': '10/01/2019' },
+                            { 'periodo': '2019/01', 'vencimiento': '11/02/2019' },
+                            { 'periodo': '2019/02', 'vencimiento': '11/03/2019' },
+                            { 'periodo': '2019/03', 'vencimiento': '10/04/2019' },
+                            { 'periodo': '2019/04', 'vencimiento': '10/05/2019' },
+                            { 'periodo': '2019/05', 'vencimiento': '10/06/2019' },
+                            { 'periodo': '2019/06', 'vencimiento': '10/07/2019' },
+                            { 'periodo': '2019/07', 'vencimiento': '12/08/2019' },
+                            { 'periodo': '2019/08', 'vencimiento': '10/09/2019' },
+                            { 'periodo': '2019/09', 'vencimiento': '10/10/2019' },
+                            { 'periodo': '2019/10', 'vencimiento': '11/11/2019' },
+                            { 'periodo': '2019/11', 'vencimiento': '10/12/2019' },
+                            { 'periodo': '2019/12', 'vencimiento': '10/01/2020' },
                         ]}
                         order={'asc'}
                         orderBy={'periodo'}
@@ -119,8 +119,8 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'cuotas': '1° 1/2 Cuota', 'vencimiento': '14/02/2018' },
-                            { 'cuotas': '2° 1/2 Cuota', 'vencimiento': '10/08/2018' },
+                            { 'cuotas': '1° 1/2 Cuota', 'vencimiento': '11/02/2019' },
+                            { 'cuotas': '2° 1/2 Cuota', 'vencimiento': '12/08/2019' },
                         ]}
                         order={'asc'}
                         orderBy={'cuotas'}
@@ -140,18 +140,18 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'periodo': '2018/01', 'vencimiento': '19/02/2018' },
-                            { 'periodo': '2018/02', 'vencimiento': '16/03/2018' },
-                            { 'periodo': '2018/03', 'vencimiento': '17/04/2018' },
-                            { 'periodo': '2018/04', 'vencimiento': '16/05/2018' },
-                            { 'periodo': '2018/05', 'vencimiento': '18/06/2018' },
-                            { 'periodo': '2018/06', 'vencimiento': '18/07/2018' },
-                            { 'periodo': '2018/07', 'vencimiento': '15/08/2018' },
-                            { 'periodo': '2018/08', 'vencimiento': '18/09/2018' },
-                            { 'periodo': '2018/09', 'vencimiento': '17/10/2018' },
-                            { 'periodo': '2018/10', 'vencimiento': '16/11/2018' },
-                            { 'periodo': '2018/11', 'vencimiento': '18/12/2018' },
-                            { 'periodo': '2018/12', 'vencimiento': '17/01/2019' },
+                            { 'periodo': '2019/01', 'vencimiento': '18/02/2019' },
+                            { 'periodo': '2019/02', 'vencimiento': '18/03/2019' },
+                            { 'periodo': '2019/03', 'vencimiento': '17/04/2019' },
+                            { 'periodo': '2019/04', 'vencimiento': '17/05/2019' },
+                            { 'periodo': '2019/05', 'vencimiento': '18/06/2019' },
+                            { 'periodo': '2019/06', 'vencimiento': '18/07/2019' },
+                            { 'periodo': '2019/07', 'vencimiento': '20/08/2019' },
+                            { 'periodo': '2019/08', 'vencimiento': '18/09/2019' },
+                            { 'periodo': '2019/09', 'vencimiento': '18/10/2019' },
+                            { 'periodo': '2019/10', 'vencimiento': '19/11/2019' },
+                            { 'periodo': '2019/11', 'vencimiento': '18/12/2019' },
+                            { 'periodo': '2019/12', 'vencimiento': '17/01/2020' },
                         ]}
                         order={'asc'}
                         orderBy={'periodo'}
@@ -168,18 +168,18 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'periodo': '2018/01', 'vencimiento': '09/03/2018' },
-                            { 'periodo': '2018/02', 'vencimiento': '10/04/2018' },
-                            { 'periodo': '2018/03', 'vencimiento': '10/05/2018' },
-                            { 'periodo': '2018/04', 'vencimiento': '29/05/2018' },
-                            { 'periodo': '2018/05', 'vencimiento': '28/06/2018' },
-                            { 'periodo': '2018/06', 'vencimiento': '27/07/2018' },
-                            { 'periodo': '2018/07', 'vencimiento': '29/08/2018' },
-                            { 'periodo': '2018/08', 'vencimiento': '28/09/2018' },
-                            { 'periodo': '2018/09', 'vencimiento': '29/10/2018' },
-                            { 'periodo': '2018/10', 'vencimiento': '29/11/2018' },
-                            { 'periodo': '2018/11', 'vencimiento': '28/12/2018' },
-                            { 'periodo': '2018/12', 'vencimiento': '29/01/2019' },
+                            { 'periodo': '2019/01', 'vencimiento': '28/02/2019' },
+                            { 'periodo': '2019/02', 'vencimiento': '29/03/2019' },
+                            { 'periodo': '2019/03', 'vencimiento': '29/04/2019' },
+                            { 'periodo': '2019/04', 'vencimiento': '29/05/2019' },
+                            { 'periodo': '2019/05', 'vencimiento': '28/06/2019' },
+                            { 'periodo': '2019/06', 'vencimiento': '29/07/2019' },
+                            { 'periodo': '2019/07', 'vencimiento': '29/08/2019' },
+                            { 'periodo': '2019/08', 'vencimiento': '27/09/2019' },
+                            { 'periodo': '2019/09', 'vencimiento': '29/10/2019' },
+                            { 'periodo': '2019/10', 'vencimiento': '29/11/2019' },
+                            { 'periodo': '2019/11', 'vencimiento': '30/12/2019' },
+                            { 'periodo': '2019/12', 'vencimiento': '29/01/2020' },
                         ]}
                         order={'asc'}
                         orderBy={'periodo'}
@@ -196,18 +196,18 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'periodo': '2018/01', 'vencimiento': '23/02/2018' },
-                            { 'periodo': '2018/02', 'vencimiento': '23/03/2018' },
-                            { 'periodo': '2018/03', 'vencimiento': '23/04/2018' },
-                            { 'periodo': '2018/04', 'vencimiento': '23/05/2018' },
-                            { 'periodo': '2018/05', 'vencimiento': '22/06/2018' },
-                            { 'periodo': '2018/06', 'vencimiento': '23/07/2018' },
-                            { 'periodo': '2018/07', 'vencimiento': '23/08/2018' },
-                            { 'periodo': '2018/08', 'vencimiento': '24/09/2018' },
-                            { 'periodo': '2018/09', 'vencimiento': '24/10/2018' },
-                            { 'periodo': '2018/10', 'vencimiento': '23/11/2018' },
-                            { 'periodo': '2018/11', 'vencimiento': '21/12/2018' },
-                            { 'periodo': '2018/12', 'vencimiento': '23/01/2019' },
+                            { 'periodo': '2019/01', 'vencimiento': '22/02/2019' },
+                            { 'periodo': '2019/02', 'vencimiento': '22/03/2019' },
+                            { 'periodo': '2019/03', 'vencimiento': '23/04/2019' },
+                            { 'periodo': '2019/04', 'vencimiento': '22/05/2019' },
+                            { 'periodo': '2019/05', 'vencimiento': '24/06/2019' },
+                            { 'periodo': '2019/06', 'vencimiento': '22/07/2019' },
+                            { 'periodo': '2019/07', 'vencimiento': '23/08/2019' },
+                            { 'periodo': '2019/08', 'vencimiento': '23/09/2019' },
+                            { 'periodo': '2019/09', 'vencimiento': '22/10/2019' },
+                            { 'periodo': '2019/10', 'vencimiento': '22/11/2019' },
+                            { 'periodo': '2019/11', 'vencimiento': '23/12/2019' },
+                            { 'periodo': '2019/12', 'vencimiento': '22/01/2020' },
                         ]}
                         order={'asc'}
                         orderBy={'periodo'}
@@ -227,10 +227,10 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'periodo': '2018/01', 'vencimiento': '27/03/2018' },
-                            { 'periodo': '2018/02', 'vencimiento': '27/06/2018' },
-                            { 'periodo': '2018/03', 'vencimiento': '27/09/2018' },
-                            { 'periodo': '2018/04', 'vencimiento': '27/12/2018' },
+                            { 'periodo': '2019/01', 'vencimiento': '27/03/2019' },
+                            { 'periodo': '2019/02', 'vencimiento': '27/06/2019' },
+                            { 'periodo': '2019/03', 'vencimiento': '27/09/2019' },
+                            { 'periodo': '2019/04', 'vencimiento': '27/12/2019' },
                         ]}
                         order={'asc'}
                         orderBy={'periodo'}
@@ -248,10 +248,10 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'periodo': '2018/01', 'vencimiento': '27/03/2018' },
-                            { 'periodo': '2018/02', 'vencimiento': '27/06/2018' },
-                            { 'periodo': '2018/03', 'vencimiento': '27/09/2018' },
-                            { 'periodo': '2018/04', 'vencimiento': '27/12/2018' },
+                            { 'periodo': '2019/01', 'vencimiento': '27/03/2019' },
+                            { 'periodo': '2019/02', 'vencimiento': '27/06/2019' },
+                            { 'periodo': '2019/03', 'vencimiento': '27/09/2019' },
+                            { 'periodo': '2019/04', 'vencimiento': '27/12/2019' },
                         ]}
                         order={'asc'}
                         orderBy={'periodo'}
@@ -269,7 +269,7 @@ class AgendaVencimientos extends React.PureComponent {
                             { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                         ]}
                         rows={[
-                            { 'periodo': '2018/00', 'vencimiento': '27/03/2018' },
+                            { 'periodo': '2019/00', 'vencimiento': '27/03/2019' },
                         ]}
                         order={'asc'}
                         orderBy={'periodo'}
@@ -287,10 +287,10 @@ class AgendaVencimientos extends React.PureComponent {
                         { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                     ]}
                     rows={[
-                        { 'periodo': '2018/01', 'vencimiento': '27/03/2018' },
-                        { 'periodo': '2018/02', 'vencimiento': '27/06/2018' },
-                        { 'periodo': '2018/03', 'vencimiento': '27/09/2018' },
-                        { 'periodo': '2018/04', 'vencimiento': '27/12/2018' },
+                        { 'periodo': '2019/01', 'vencimiento': '27/03/2019' },
+                        { 'periodo': '2019/02', 'vencimiento': '27/06/2019' },
+                        { 'periodo': '2019/03', 'vencimiento': '27/09/2019' },
+                        { 'periodo': '2019/04', 'vencimiento': '27/12/2019' },
                     ]}
                     order={'asc'}
                     orderBy={'periodo'}
@@ -305,18 +305,18 @@ class AgendaVencimientos extends React.PureComponent {
                         { id: 'vencimiento', type: 'date', numeric: false, label: 'Vencimiento' },
                     ]}
                     rows={[
-                        { 'periodo': '2018/01', 'vencimiento': '07/02/2018' },
-                        { 'periodo': '2018/02', 'vencimiento': '07/03/2018' },
-                        { 'periodo': '2018/03', 'vencimiento': '06/04/2018' },
-                        { 'periodo': '2018/04', 'vencimiento': '07/05/2018' },
-                        { 'periodo': '2018/05', 'vencimiento': '07/06/2018' },
-                        { 'periodo': '2018/06', 'vencimiento': '05/07/2018' },
-                        { 'periodo': '2018/07', 'vencimiento': '06/08/2018' },
-                        { 'periodo': '2018/08', 'vencimiento': '07/09/2018' },
-                        { 'periodo': '2018/09', 'vencimiento': '05/10/2018' },
-                        { 'periodo': '2018/10', 'vencimiento': '07/11/2018' },
-                        { 'periodo': '2018/11', 'vencimiento': '07/12/2018' },
-                        { 'periodo': '2018/12', 'vencimiento': '07/01/2019' },
+                        { 'periodo': '2019/01', 'vencimiento': '07/02/2019' },
+                        { 'periodo': '2019/02', 'vencimiento': '08/03/2019' },
+                        { 'periodo': '2019/03', 'vencimiento': '08/04/2019' },
+                        { 'periodo': '2019/04', 'vencimiento': '07/05/2019' },
+                        { 'periodo': '2019/05', 'vencimiento': '07/06/2019' },
+                        { 'periodo': '2019/06', 'vencimiento': '05/07/2019' },
+                        { 'periodo': '2019/07', 'vencimiento': '07/08/2019' },
+                        { 'periodo': '2019/08', 'vencimiento': '06/09/2019' },
+                        { 'periodo': '2019/09', 'vencimiento': '07/10/2019' },
+                        { 'periodo': '2019/10', 'vencimiento': '07/11/2019' },
+                        { 'periodo': '2019/11', 'vencimiento': '06/12/2019' },
+                        { 'periodo': '2019/12', 'vencimiento': '07/01/2020' },
                     ]}
                     order={'asc'}
                     orderBy={'periodo'}
