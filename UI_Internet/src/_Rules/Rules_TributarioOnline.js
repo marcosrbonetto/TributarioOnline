@@ -28,7 +28,7 @@ const getTipoTributos = (token, callback) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -65,7 +65,7 @@ const getTipoCedulones = (token, callback) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -102,7 +102,7 @@ const getEstadoPagos = (token, callback) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -140,7 +140,7 @@ const getDatosUsuario = (token, callback) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -178,7 +178,7 @@ const getTributosByCUIT = (token, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -215,7 +215,7 @@ const getIdTributos = (token, callback) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -253,7 +253,7 @@ const getInfoContribucion = (token, tipoTributo, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -291,7 +291,7 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -328,7 +328,7 @@ const getInfoJuicios = (token, tipoTributo, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -364,7 +364,7 @@ const getInfoPlanes = (token, tipoTributo, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -400,7 +400,7 @@ const getInfoDetalleJuicio = (token, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -436,7 +436,7 @@ const getInfoDetallePlan = (token, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -505,7 +505,7 @@ const getReporteCedulon = (token, body) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -541,7 +541,7 @@ const getInformeCuenta = (token, param) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -582,7 +582,7 @@ const getReporteInformeCuenta = (token, body) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -618,7 +618,7 @@ const getUltimosPagos = (token, param) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -654,7 +654,7 @@ const getInformeAntecedentes = (token, param) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -690,7 +690,7 @@ const getInformeREMAT = (token, param) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -731,7 +731,7 @@ const getReporteInformeREMAT = (token, body) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -772,7 +772,7 @@ const getReporteInformeAntecedentes = (token, body) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -808,7 +808,7 @@ const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -848,7 +848,7 @@ const getDeclaracionJurada = (token, body) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -886,7 +886,7 @@ const getImprecionDeclaracionJurada = (token, body) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
@@ -924,7 +924,7 @@ const getTributoByIdentificador = (token, tipoTributo, identificador) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {

@@ -37,6 +37,7 @@ import pagoNexo from "@UI/Paginas/MercadoPagoController/pagoNexo";
 import Pagina404 from "@UI/_Pagina404";
 import IndicadorCargando from "@UI/_Componentes/IndicadorCargando"
 import MiSoporteUsuario from "@UI/_Componentes/MiSoporteUsuario"
+import MiCaptcha from "@Componentes/MiCaptcha";
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
 import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
@@ -346,6 +347,7 @@ class App extends React.Component {
 
     return (
       <main className={classes.content}>
+        <MiCaptcha />
         <IndicadorCargando visible={cargandoVisible} />
         <MiSoporteUsuario />
         <AnimatedSwitch

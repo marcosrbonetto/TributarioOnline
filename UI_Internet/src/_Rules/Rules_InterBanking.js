@@ -38,7 +38,7 @@ const generacionCTLInterBanking = (token, body) => {
           resolve(datos);
         else {
           const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
-          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); window.location.href = window.location.origin + window.location.pathname + '#/CaptchaAccess?redirect=' + encodeURIComponent(window.location.hash.substring(1)) };
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
         }
       })
       .catch(err => {
