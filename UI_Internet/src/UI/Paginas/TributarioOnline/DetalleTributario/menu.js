@@ -16,7 +16,7 @@ import BusquedaPorPlan from "@UI/Paginas/TributarioOnline/BusquedaPor/Plan";
 
 const Menu = [
   {
-    url: "/DetalleTributario/InformacionTributo/:tributo/:urlRedirect",
+    url: "/DetalleTributario/InformacionTributo/:tributo/:identificador",
     exact: false,
     mostrarEnMenu: false,
     component: InformacionTributo,
@@ -24,7 +24,7 @@ const Menu = [
     titulo: "Información Tributo",
   },
   {
-    url: "/DetalleTributario/AgendaVencimientos/:tributo/:urlRedirect",
+    url: "/DetalleTributario/AgendaVencimientos/:tributo/:identificador",
     exact: false,
     mostrarEnMenu: false,
     component: AgendaVencimientos,

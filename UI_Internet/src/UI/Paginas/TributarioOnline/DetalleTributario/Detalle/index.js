@@ -1417,16 +1417,16 @@ class DetalleTributo extends React.PureComponent {
 
     informacionTributo = () => {
         const tributo = this.props.match.params.tributo;
-        const urlRedirect = encodeURIComponent(window.location.hash.substring(1));
-        this.props.redireccionar('/DetalleTributario/InformacionTributo/' + tributo + '/' + urlRedirect);
+        const identificador = encodeURIComponent(this.props.match.params.identificador);
+        this.props.redireccionar('/DetalleTributario/InformacionTributo/' + tributo + '/' + identificador);
 
         return true;
     }
 
     agendaVencimientos = () => {
         const tributo = this.props.match.params.tributo;
-        const urlRedirect = encodeURIComponent(window.location.hash.substring(1));
-        this.props.redireccionar('/DetalleTributario/AgendaVencimientos/' + tributo + '/' + urlRedirect);
+        const identificador = encodeURIComponent(this.props.match.params.identificador);
+        this.props.redireccionar('/DetalleTributario/AgendaVencimientos/' + tributo + '/' + identificador);
 
         return true;
     }

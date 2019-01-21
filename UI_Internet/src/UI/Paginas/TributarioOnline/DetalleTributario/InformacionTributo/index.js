@@ -40,8 +40,8 @@ class InformacionTributo extends React.PureComponent {
         this.idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         this.tipoTributo = this.props.match.params.tributo;
 
-        this.urlRedirect = decodeURIComponent(this.props.match.params.urlRedirect);
-        
+        this.identificador = decodeURIComponent(this.props.match.params.identificador);
+
         this.state = {
             informacionTributo: this.infoTributo() || 'No hay información para este tributo'
         };
@@ -52,7 +52,10 @@ class InformacionTributo extends React.PureComponent {
     }
 
     handleVovler = () => {
-        this.props.redireccionar(this.urlRedirect);
+        const tipoTributo = this.tipoTributo;
+        const identificador = this.identificador;
+
+        this.props.redireccionar('/DetalleTributario/'+tipoTributo+'/'+ encodeURIComponent(identificador));
     }
 
     render() {

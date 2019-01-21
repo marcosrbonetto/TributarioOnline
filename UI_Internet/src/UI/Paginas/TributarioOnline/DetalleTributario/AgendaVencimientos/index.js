@@ -38,7 +38,7 @@ class AgendaVencimientos extends React.PureComponent {
         this.idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         this.tipoTributo = this.props.match.params.tributo;
 
-        this.urlRedirect = decodeURIComponent(this.props.match.params.urlRedirect);
+        this.identificador = decodeURIComponent(this.props.match.params.identificador);
 
         this.state = {
             vencimientosTributo: this.vencimientosTributo() || 'No hay vencimientos para este tributo'
@@ -331,7 +331,10 @@ class AgendaVencimientos extends React.PureComponent {
     }
 
     handleVovler = () => {
-        this.props.redireccionar(this.urlRedirect);
+        const tipoTributo = this.tipoTributo;
+        const identificador = this.identificador;
+
+        this.props.redireccionar('/DetalleTributario/'+tipoTributo+'/'+ encodeURIComponent(identificador));
     }
 
     render() {
