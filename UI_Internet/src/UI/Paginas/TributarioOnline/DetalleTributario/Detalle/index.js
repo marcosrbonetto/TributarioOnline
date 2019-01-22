@@ -76,6 +76,7 @@ class DetalleTributo extends React.PureComponent {
             menuItemSeleccionado: this.props.match.params.seccionMenu || 'contribucion', //Menu seleccionado que muestra contenido MisPagosDetalle
             mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
             infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
+            descuentoBeneficio: undefined,
             informeCuenta: { //Información utilizada para mostrar informe de cuenta
                 info: {},
                 modal: {
@@ -336,7 +337,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -388,7 +389,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -441,7 +442,7 @@ class DetalleTributo extends React.PureComponent {
                                         <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                         <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                     </div>}>
-                                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                    <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                                 </MiTooltip>,
                                 data: concepto //atributo "data" no se muestra en MiTabla
                             }
@@ -517,7 +518,7 @@ class DetalleTributo extends React.PureComponent {
                                         <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                         <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                     </div>}>
-                                    <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                    <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                                 </MiTooltip>,
                                 data: concepto //atributo "data" no se muestra en MiTabla
                             }
@@ -593,6 +594,10 @@ class DetalleTributo extends React.PureComponent {
         let infoDatosCuenta = [];
 
         infoDatosCuenta = datosItemSeleccionado.datosCuenta ? datosItemSeleccionado.datosCuenta : 'No se encontraron registros';
+        
+        let descuentoBeneficio;
+        if(infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
+            descuentoBeneficio = infoDatosCuenta[6]; //El descuento siempre viene en la linea 7 (index 6)
 
         datosItemSeleccionado.rowList && datosItemSeleccionado.rowList.some((item) => {
 
@@ -604,6 +609,7 @@ class DetalleTributo extends React.PureComponent {
 
         this.setState({
             infoDatosCuenta: infoDatosCuenta,
+            descuentoBeneficio: descuentoBeneficio,
             mostrarAlternativaPlan: mostrarAlternativaPlan
         });
     }
@@ -734,7 +740,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Estado: <b>{pago.estado}</b></Typography>
                                     <Typography>Caja: <b>{pago.caja}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: pago //atributo "data" no se muestra en MiTabla
                         }
@@ -892,7 +898,7 @@ class DetalleTributo extends React.PureComponent {
                                 <Typography>Cad.: <b>{row.caducidad}</b></Typography>
                                 <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
                             </div>}>
-                            <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                         </MiTooltip>,
                         data: row //atributo "data" no se muestra en MiTabla
                     }
@@ -1021,7 +1027,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Fallo: <b>{row.fallo}</b></Typography>
                                     <Typography>Acumulada: <b>{row.acumulada}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: row //atributo "data" no se muestra en MiTabla
                         }
@@ -1653,6 +1659,7 @@ class DetalleTributo extends React.PureComponent {
                                         {infoTributo}
                                     </Typography>
                                     <MisPagosDetalle
+                                        textoBeneficioAplicado={this.state.descuentoBeneficio}
                                         paraMobile={this.props.paraMobile}
                                         pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                         tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
@@ -1679,6 +1686,7 @@ class DetalleTributo extends React.PureComponent {
                                             {infoTributo}
                                         </Typography>
                                         <MisPagosDetalle
+                                            textoBeneficioAplicado={this.state.descuentoBeneficio}
                                             paraMobile={this.props.paraMobile}
                                             pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                             tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
@@ -1710,6 +1718,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {infoTributo}
                                                 </Typography>
                                                 <MisPagosDetalle
+                                                    textoBeneficioAplicado={this.state.descuentoBeneficio}
                                                     paraMobile={this.props.paraMobile}
                                                     pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}
@@ -1738,6 +1747,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {plan.textoInfo || `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagosDetalle
+                                                    textoBeneficioAplicado={this.state.descuentoBeneficio}
                                                     paraMobile={this.props.paraMobile}
                                                     pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
                                                     tipoCedulon={this.state[menuItemSeleccionado].tipoCedulon}

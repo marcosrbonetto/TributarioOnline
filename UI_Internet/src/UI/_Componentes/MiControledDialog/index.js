@@ -136,7 +136,7 @@ const styles = theme => ({
   infoIcon: {
     color: '#0f8fea',
     verticalAlign: 'middle',
-    cursor: 'help'
+    cursor: 'pointer'
   }
 });
 

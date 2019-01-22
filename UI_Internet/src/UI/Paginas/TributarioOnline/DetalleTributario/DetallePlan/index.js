@@ -91,6 +91,7 @@ class DetallePlan extends React.PureComponent {
                 infoGrilla: []
             },
             infoDatosCuenta: '',
+            descuentoBeneficio: undefined
         };
 
         this.state = _.clone(this.initialState);
@@ -108,10 +109,14 @@ class DetallePlan extends React.PureComponent {
                 if (!datos.ok) { mostrarAlerta('Error: ' + datos.error); return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
 
                 //Corroboramos el CBU, de ser SI, no se permite seleccionar filas en la grilla
-                const esCbuSI = _.filter(datos.return.datosCuenta, function(o){ return o.indexOf('CBU SI') != -1; }).length > 0;
+                const esCbuSI = _.filter(datos.return.datosCuenta, function (o) { return o.indexOf('CBU SI') != -1; }).length > 0;
 
                 const infoPlan = datos.return.titular || {};
                 const infoDatosCuenta = datos.return.datosCuenta || 'No se encontraron registros';
+
+                let descuentoBeneficio;
+                if (infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
+                    descuentoBeneficio = infoDatosCuenta[6]; //El descuento siempre viene en la linea 7 (index 6)
 
                 const deudaTotales = datos.return.deudaAdministrativa;
                 const rowList = datos.return.periodos.map((concepto) => {
@@ -126,7 +131,7 @@ class DetallePlan extends React.PureComponent {
                                 <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                 <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                             </div>}>
-                            <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                         </MiTooltip>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
@@ -139,6 +144,7 @@ class DetallePlan extends React.PureComponent {
                     esCbuSI: esCbuSI,
                     textoInfo: esCbuSI && 'A partir de la segunda cuota del plan, se debitarán automáticamente en la cuenta del CBU declarado',
                     infoDatosCuenta: infoDatosCuenta,
+                    descuentoBeneficio: descuentoBeneficio
                 });
 
                 this.props.mostrarCargando(false);
@@ -361,7 +367,8 @@ class DetallePlan extends React.PureComponent {
             infoPlan,
             informeCuenta,
             periodosAdeudados,
-            infoDatosCuenta
+            infoDatosCuenta,
+            descuentoBeneficio
         } = this.state;
 
         return (
@@ -386,6 +393,7 @@ class DetallePlan extends React.PureComponent {
                                 {textoInfo || `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                             </Typography>
                             <MisPagos
+                                textoBeneficioAplicado={descuentoBeneficio}
                                 setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                 deudaTotales={deudaTotales}
                                 rowList={rowList}

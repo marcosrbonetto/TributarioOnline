@@ -87,6 +87,7 @@ class DetalleJuicio extends React.PureComponent {
                 infoGrilla: []
             },
             infoDatosCuenta: '',
+            descuentoBeneficio: undefined
         };
 
         this.state = _.clone(this.initialState);
@@ -106,6 +107,10 @@ class DetalleJuicio extends React.PureComponent {
                 const infoJuicio = datos.return.titular || {};
                 const infoDatosCuenta = datos.return.datosCuenta || 'No se encontraron registros';
         
+                let descuentoBeneficio;
+                if (infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
+                    descuentoBeneficio = infoDatosCuenta[6]; //El descuento siempre viene en la linea 7 (index 6)
+
                 const deudaTotales = datos.return.deudaJuicio;
                 const rowList = datos.return.periodos.map((concepto) => {
                     return {
@@ -119,7 +124,7 @@ class DetalleJuicio extends React.PureComponent {
                                 <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                 <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                             </div>}>
-                            <i class="material-icons" style={{ color: '#149257', cursor: 'help' }}>add_circle_outline</i>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                         </MiTooltip>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
@@ -130,6 +135,7 @@ class DetalleJuicio extends React.PureComponent {
                     rowList: rowList,
                     infoJuicio: infoJuicio,
                     infoDatosCuenta: infoDatosCuenta,
+                    descuentoBeneficio: descuentoBeneficio
                 });
 
                 this.props.mostrarCargando(false);
@@ -348,7 +354,8 @@ class DetalleJuicio extends React.PureComponent {
             infoJuicio,
             informeCuenta,
             periodosAdeudados,
-            infoDatosCuenta
+            infoDatosCuenta,
+            descuentoBeneficio
         } = this.state;
 
         return (
@@ -373,6 +380,7 @@ class DetalleJuicio extends React.PureComponent {
                                 {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                             </Typography>
                             <MisPagos
+                                textoBeneficioAplicado={descuentoBeneficio}
                                 setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                 deudaTotales={deudaTotales}
                                 rowList={rowList}
