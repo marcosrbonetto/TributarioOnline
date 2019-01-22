@@ -32,6 +32,8 @@ const mapStateToProps = state => {
     infoPagosMercadoPago: state.DetalleTributario.infoPagosMercadoPago,
     publicKeyMercadoPago: state.MainContent.publicKeyMercadoPago,
     paraMobile: state.MainContent.paraMobile,
+    tipoTributos: state.MainContent.tipoTributos,
+    tipoCedulones: state.MainContent.tipoCedulones,
   };
 };
 
@@ -157,8 +159,18 @@ class MiMercadoPago extends React.PureComponent {
             arrayNexos: arrayNexos
           });
 
+          //Generamos la descripción
+          const tipoTributo = this.props.tipoTributos.byKey[parseInt(this.props.tipoTributo)];
+          const identificador = this.props.identificador;
+          const idTipoCedulon = this.props.tipoCedulones.byValue[this.props.tipoCedulon];
+
+          let descripcionRecibo = 'Periodo/s ' + _.map(registros,function(obj){return obj;}).join(', ') + ' del ' + tipoTributo + ' ' + identificador;
+          if(idTipoCedulon == 2) //Solo en tipoCedulon Multa
+            descripcionRecibo = 'Multa/s ' + _.map(registros,function(obj){return obj;}).join(', ') + ' de ' + identificador;
+
           this.props.setPropsUpdatePagosMercadoPago({
-            arrayNexos: arrayNexos
+            arrayNexos: arrayNexos,
+            descripcionRecibo: descripcionRecibo
           });
         })
         .catch((err) => { console.log(err); })

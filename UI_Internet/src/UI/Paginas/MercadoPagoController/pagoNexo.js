@@ -81,12 +81,12 @@ class PagoNexo extends Component {
                 tipoTributo: parseInt(tipoTributo),
                 identificador: identificador
             });
-
+            
             if (result.length == 0) return false;
 
             let nexoActual = result[0];
 
-            servicesMercadoPago.pagoMercadoPago(token, {
+            let datosPago = {
                 nexo: nexoActual.nexo,
                 tipoTributo: parseInt(tipoTributo),
                 identificador: identificador,
@@ -96,7 +96,17 @@ class PagoNexo extends Component {
                 cuotas: parseInt(cuotas),
                 email: email,
                 tipoCedulon: idTipoCedulon
-            })
+            };
+
+            const descripcionRecibo = this.props.infoPagosMercadoPago.descripcionRecibo;
+            if(descripcionRecibo && parseInt(tipoTributo) == 10) { //Solo en tipoTributo multas
+                datosPago = {
+                    ...datosPago,
+                    descripcion: descripcionRecibo
+                };
+            }
+
+            servicesMercadoPago.pagoMercadoPago(token, datosPago)
                 .then((datos) => {
 
                     if (!datos.ok) {
