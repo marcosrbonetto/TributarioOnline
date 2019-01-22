@@ -99,10 +99,12 @@ class PagoNexo extends Component {
             };
 
             const descripcionRecibo = this.props.infoPagosMercadoPago.descripcionRecibo;
+            const causa = this.props.infoPagosMercadoPago.causa; //N° Causa de la Multa
             if(descripcionRecibo && parseInt(tipoTributo) == 10) { //Solo en tipoTributo multas
                 datosPago = {
                     ...datosPago,
-                    descripcion: descripcionRecibo
+                    descripcion: descripcionRecibo,
+                    causa: causa
                 };
             }
 

@@ -165,12 +165,16 @@ class MiMercadoPago extends React.PureComponent {
           const idTipoCedulon = this.props.tipoCedulones.byValue[this.props.tipoCedulon];
 
           let descripcionRecibo = 'Periodo/s ' + _.map(registros,function(obj){return obj;}).join(', ') + ' del ' + tipoTributo + ' ' + identificador;
-          if(idTipoCedulon == 2) //Solo en tipoCedulon Multa
+          let causa = undefined;
+          if(idTipoCedulon == 2) { //Solo en tipoCedulon Multa 
             descripcionRecibo = 'Multa/s ' + _.map(registros,function(obj){return obj;}).join(', ') + ' de ' + identificador;
+            causa = registros[0];
+          }
 
           this.props.setPropsUpdatePagosMercadoPago({
             arrayNexos: arrayNexos,
-            descripcionRecibo: descripcionRecibo
+            descripcionRecibo: descripcionRecibo,
+            causa: causa //Solo en Multas
           });
         })
         .catch((err) => { console.log(err); })
