@@ -108,7 +108,7 @@ class DetalleJuicio extends React.PureComponent {
                 const infoDatosCuenta = datos.return.datosCuenta || 'No se encontraron registros';
         
                 let descuentoBeneficio;
-                if (infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
+                if(infoDatosCuenta && infoDatosCuenta[6] && infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
                     descuentoBeneficio = infoDatosCuenta[6]; //El descuento siempre viene en la linea 7 (index 6)
 
                 const deudaTotales = datos.return.deudaJuicio;

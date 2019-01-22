@@ -596,7 +596,7 @@ class DetalleTributo extends React.PureComponent {
         infoDatosCuenta = datosItemSeleccionado.datosCuenta ? datosItemSeleccionado.datosCuenta : 'No se encontraron registros';
         
         let descuentoBeneficio;
-        if(infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
+        if(infoDatosCuenta && infoDatosCuenta[6] && infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
             descuentoBeneficio = infoDatosCuenta[6]; //El descuento siempre viene en la linea 7 (index 6)
 
         datosItemSeleccionado.rowList && datosItemSeleccionado.rowList.some((item) => {
@@ -1697,7 +1697,7 @@ class DetalleTributo extends React.PureComponent {
                                             registrosSeleccionados={this.state[menuItemSeleccionado].registrosSeleccionados}
                                             setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                             identificadorActual={decodeURIComponent(this.props.match.params.identificador)}
-                                            tributoActual={this.props.match.params.tributo}
+                                            tributoActual={'Multa'}
                                         />
                                     </div>
                                 </div>)
