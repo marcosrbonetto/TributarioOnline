@@ -4,6 +4,9 @@ import _ from "lodash";
 //Styles
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
+import { withRouter } from "react-router-dom";
 
 //Material UI Components
 import Grid from '@material-ui/core/Grid';
@@ -23,6 +26,25 @@ import Button from "@material-ui/core/Button";
 //Funciones Útiles
 import { stringToFloat, formatNumber, getIdTipoTributo } from "@Utils/functions"
 
+import { mostrarCargando } from '@Redux/Actions/mainContent';
+
+//Services
+import services from '@Rules/Rules_TributarioOnline';
+
+const mapStateToProps = state => {
+  return {
+      loggedUser: state.Usuario.loggedUser,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  redireccionar: url => {
+      dispatch(push(url));
+  },
+  mostrarCargando: (cargar) => {
+      dispatch(mostrarCargando(cargar));
+  },
+});
 
 class MisPagosDetalle extends React.PureComponent {
   constructor(props) {
@@ -35,7 +57,6 @@ class MisPagosDetalle extends React.PureComponent {
       tableDisabled: this.props.disabled || false,
       registrosSeleccionados: this.props.registrosSeleccionados,
       tieneBeneficio: false,
-      textoBeneficioAplicado: undefined,
       beneficioKey: {
         key: 0,
         version: (new Date()).getTime()
@@ -61,7 +82,7 @@ class MisPagosDetalle extends React.PureComponent {
   }
 
   //Totalizador de importe de filas seleccionadas
-  getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
+  getFilasSeleccionadas = (filas, idFilasSeleccionadas, totalCedulonBeneficio) => {
     let registrosSeleccionados = []
 
     let importeTotal = 0;
@@ -78,28 +99,68 @@ class MisPagosDetalle extends React.PureComponent {
       this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
 
     this.setState({
-      importeAPagar: formatNumber(importeTotal),
+      importeAPagar: totalCedulonBeneficio ? formatNumber(totalCedulonBeneficio) : formatNumber(importeTotal),
       recargoAPagar: formatNumber(recargoTotal),
       registrosSeleccionados: registrosSeleccionados
     });
   };
 
   handleBeneficiosResult = (result) => {
-    //Cuando aplicamos beneficio mostramos cuanto es
-    let textoBeneficioAplicado;
-    if (result.rowsSelected.length > 0)
-      textoBeneficioAplicado = 'El ' + this.props.textoBeneficioAplicado + ', se verá reflejado en el cedulón o pago online.';
+    let resultBeneficios = result;
 
+    if(result.rowsSelected.length == 0) {
+      this.handleAplicarBeneficiosResult(resultBeneficios);
+    } else {
+      this.handleCalculoTotalCedulon(resultBeneficios, (totalCedulon) => {
+        this.handleAplicarBeneficiosResult({
+          ...resultBeneficios,
+          totalCedulonBeneficio: totalCedulon
+        });
+      });
+    }
+  }
+
+  handleAplicarBeneficiosResult = (result) => {
     //Seteamos las nuevas rows con sus nuevas configuraciones de acuerdo a los beneficios y la tabla
     this.setState({
       ...this.state,
       tableDisabled: result.tableDisabled || false,
-      rowList: result.rowList,
-      textoBeneficioAplicado: textoBeneficioAplicado
+      rowList: result.rowList
     });
 
     //Actualización grilla
-    this.getFilasSeleccionadas(result.rowList, result.rowsSelected);
+    this.getFilasSeleccionadas(result.rowList, result.rowsSelected, result.totalCedulonBeneficio);
+  }
+
+  handleCalculoTotalCedulon = (resultBeneficios, callback) => {
+    this.props.mostrarCargando(true);
+
+    const { identificadorActual, tipoCedulon, tributoActual } = this.props;
+    const token = this.props.loggedUser.token;
+
+    const idTipoTributo = getIdTipoTributo(tributoActual);
+    const periodosBeneficio = _.filter(resultBeneficios.rowList,(o) => { return resultBeneficios.rowsSelected.indexOf(o.id) != -1});
+    const periodos = _.map(periodosBeneficio,'concepto');
+
+    services.getReporteCedulon(token,
+      {
+        "tipoTributo": parseInt(idTipoTributo),
+        "identificador": identificadorActual,
+        "opcionVencimiento": 0,
+        "periodos": periodos,
+        "tipoCedulon": tipoCedulon,
+        "esPagoElectronico": false,
+        "esCuotaGlobal": true,
+      })
+      .then((datos) => {
+        const resultData = datos.return;
+
+        callback(resultData.totalCedulon || 0);
+      })
+      .catch((err) => { console.log(err); })
+      .finally(() => {
+        this.props.mostrarCargando(false);
+      });
   }
 
   //Una vez que precionamos Cedulon o PagoOnline, chequeamos si las filas seleccionadas pertenecen a algun beneficio vigente
@@ -226,7 +287,6 @@ class MisPagosDetalle extends React.PureComponent {
     const orderBy = this.props.data.orderBy || 'concepto';
     const check = this.props.check;
     const disabled = this.state.tableDisabled;
-    const textoBeneficioAplicado = this.state.textoBeneficioAplicado;
     const revisionBeneficios = this.state.revisionBeneficios;
     const beneficioKey = this.state.beneficioKey;
 
@@ -308,7 +368,6 @@ class MisPagosDetalle extends React.PureComponent {
             className={classes.totalAPagar}
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
-          {textoBeneficioAplicado && <Typography className={classes.textoBeneficioAplicado} variant="subheading" gutterBottom>{textoBeneficioAplicado}</Typography>}
         </Grid>
         <Grid item sm={8} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
 
@@ -481,15 +540,14 @@ const styles = theme => ({
   },
   totalAPagar: {
     fontWeight: 'bold'
-  },
-  textoBeneficioAplicado: {
-    fontSize: '11px',
-    marginLeft: '8px',
-    color: '#ffa114',
-    marginTop: '-8px',
-    fontWeight: '500'
-
   }
 });
 
-export default withStyles(styles)(MisPagosDetalle);
+let componente = MisPagosDetalle;
+componente = withStyles(styles)(componente);
+componente = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(componente);
+componente = withRouter(componente);
+export default componente;
