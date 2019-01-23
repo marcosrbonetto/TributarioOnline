@@ -491,7 +491,7 @@ class MisPagosDetalle extends React.PureComponent {
         open={revisionBeneficios.modal.open}
         onDialogoOpen={this.onRevisionBeneficiosDialogoOpen}
         onDialogoClose={this.onRevisionBeneficiosDialogoClose}
-        textoLink={'Revisión de períodos seleccionados'}
+        textoLink={''}
         titulo={'Revisión de períodos seleccionados'}
       >
         {revisionBeneficios.arrayTextoBeneficios && revisionBeneficios.arrayTextoBeneficios.map((textoBeneficio) => {
