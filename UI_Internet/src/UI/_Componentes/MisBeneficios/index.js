@@ -23,7 +23,10 @@ import { getIdTipoTributo } from "@Utils/functions"
 export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => {
   let error = false;
   let arrayBeneficios = [];
-  let resultado = false;
+  let resultado = {
+    seleccionBeneficios: false,
+    tieneBeneficio: false
+  };
 
   if (!tipoTributo || !seccion || !allRows || !selectedRows) {
     return resultado;
@@ -50,6 +53,8 @@ export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => 
   //Si encontramos, procedemos a determinar si las filas seleccionadas coinciden con algun beneficio
   const idRowsSeleccionados = selectedRows;
   let arrayRows = _.cloneDeep(allRows);
+  //Determinamos cantidad de beneficios que se cumplen
+  let arrayResultBeneficios = [];
 
   _.each(arrayBeneficios, (beneficio) => {
 
@@ -60,17 +65,47 @@ export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => 
     const itemsSeleccionados = _.filter(arrayRows, (o) => { return o.data.checked == true });
     const idRowsBeneficio = _.map(itemsSeleccionados, 'concepto');
 
-    const concideConBeneficio = _.isEqual(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
+    //const concideConBeneficio = _.isEqual(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
+    const difference = _.difference(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
+    const difference2 = _.difference(idRowsSeleccionados.sort(), idRowsBeneficio.sort());
+    const concideConBeneficio = difference.length == 0;
+    const concideExactamenteBeneficio = difference2.length == 0;
 
     // console.log(beneficio.titulo);
     // console.log(concideConBeneficio);
     // console.log('-----------------------');
 
     if (concideConBeneficio) {
-      resultado = true;
-      return false;
+      arrayResultBeneficios.push({
+        beneficio: beneficio,
+        rows: idRowsBeneficio.sort(),
+        exacto: concideExactamenteBeneficio
+      });
     }
   });
+
+  //Por defecto el resultado viene como si no hubiera coincidencia con algun beneficio
+  if (arrayResultBeneficios.length == 1) { //En este caso el beneficio encontrado se aplica directamente
+    if(arrayResultBeneficios[0].exacto) {
+      resultado = {
+        seleccionBeneficios: false,
+        tieneBeneficio: true,
+        arrayResultBeneficios: arrayResultBeneficios
+      };
+    } else {
+      resultado = { //En este caso aparecerá para seleccion solo el beneficio encontrado (evitando los demas seleccionados que no entran en el beneficio)
+        seleccionBeneficios: true,
+        tieneBeneficio: true,
+        arrayResultBeneficios: arrayResultBeneficios
+      };
+    }
+  } if (arrayResultBeneficios.length > 1) { //El usuario deberá elegir entre alguno beneficio
+    resultado = {
+      seleccionBeneficios: true,
+      tieneBeneficio: true,
+      arrayResultBeneficios: arrayResultBeneficios
+    };
+  }
 
   return resultado;
 };
@@ -104,6 +139,10 @@ class MisBeneficios extends React.PureComponent {
     this.setState({ visible: false });
   }
 
+  handleChangeBeneficio = memoize((seleccionBeneficioByKey) => {
+    this.handleAplicarBeneficio(seleccionBeneficioByKey.key);
+  });
+
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
@@ -111,6 +150,10 @@ class MisBeneficios extends React.PureComponent {
   handleClose = (event) => {
     let idItemSeleccionado = parseInt(event.currentTarget.attributes.idbeneficio.value);
 
+    this.handleAplicarBeneficio(idItemSeleccionado);
+  };
+
+  handleAplicarBeneficio = (idItemSeleccionado) => {
     //Si es el mismo quiere decir que lo estamos deschequeando
     if (this.state.itemChecked == idItemSeleccionado) {
       idItemSeleccionado = 0;
@@ -125,7 +168,7 @@ class MisBeneficios extends React.PureComponent {
       anchorEl: null,
       itemChecked: idItemSeleccionado
     });
-  };
+  }
 
   handleBeneficio = (beneficio) => {
     if (!this.props.rows) return [];
@@ -191,7 +234,7 @@ class MisBeneficios extends React.PureComponent {
   }
 
   render() {
-    let { classes, tipoTributo } = this.props;
+    let { classes, tipoTributo, seleccionBeneficioByKey } = this.props;
     const { visible, anchorEl, itemChecked, arrayBeneficios } = this.state;
 
     let tituloBeneficioSelec = '';
@@ -202,6 +245,13 @@ class MisBeneficios extends React.PureComponent {
 
     const idTipoTributo = getIdTipoTributo(tipoTributo) || 0;
     const textoInfoBeneficio = infoBeneficios(idTipoTributo);
+
+    this.handleChangeBeneficio(seleccionBeneficioByKey);
+    /*
+    if (JSON.stringify(this.props.seleccionBeneficioByKey) != JSON.stringify(nextProps.seleccionBeneficioByKey)) {
+      this.handleAplicarBeneficio(nextProps.seleccionBeneficioByKey);
+    }
+    */
 
     return (<div className={classNames(classes.root, "BtnMisBeneficios")}>
       {visible && <div>
@@ -240,15 +290,15 @@ class MisBeneficios extends React.PureComponent {
         </Menu>
 
         {textoInfoBeneficio &&
-        <div className={classes.infoContainer}>
-          <Tooltip
-            disableFocusListener disableTouchListener
-            classes={{ tooltip: classes.textTooltip }}
-            title={textoInfoBeneficio}
-          >
-            <i className={classNames(classes.infoIcon, "material-icons")}>info</i>
-          </Tooltip>
-        </div>}
+          <div className={classes.infoContainer}>
+            <Tooltip
+              disableFocusListener disableTouchListener
+              classes={{ tooltip: classes.textTooltip }}
+              title={textoInfoBeneficio}
+            >
+              <i className={classNames(classes.infoIcon, "material-icons")}>info</i>
+            </Tooltip>
+          </div>}
       </div>}
     </div>);
   }

@@ -9,9 +9,9 @@ const beneficios = {
             secciones: ['Contribucion'], //'Contribucion'
             columnaCondicion: 'vencimiento',
             condicion: (row) => {
-                const date = typeof row.vencimiento == 'string' ? new Date(stringToDate(row.vencimiento)) : row.vencimiento;
+                const year = typeof row.concepto.split('/')[0] == 'string' ? parseInt(row.concepto.split('/')[0]) : 1900;
 
-                if (date.getFullYear() == 2019) {
+                if (year == 2019) {
                     row.data = {
                         ...row.data,
                         checked: true,
@@ -39,9 +39,10 @@ const beneficios = {
             secciones: ['Contribucion'], //'Contribucion'
             columnaCondicion: 'vencimiento',
             condicion: (row) => {
-                const date = typeof row.vencimiento == 'string' ? new Date(stringToDate(row.vencimiento)) : row.vencimiento;
+                const year = typeof row.concepto.split('/')[0] == 'string' ? parseInt(row.concepto.split('/')[0]) : 1900;
+                const month = typeof row.concepto.split('/')[1] == 'string' ? parseInt(row.concepto.split('/')[1]) : -1;
 
-                if ([1, 2, 3, 4, 5, 6].indexOf((date.getMonth() + 1)) != -1 && date.getFullYear() == 2019) {
+                if ([1, 2, 3, 4, 5, 6].indexOf(month) != -1 && year == 2019) {
                     row.data = {
                         ...row.data,
                         checked: true,
@@ -67,9 +68,10 @@ const beneficios = {
             secciones: ['Contribucion'], //'Contribucion'
             columnaCondicion: 'vencimiento',
             condicion: (row) => {
-                const date = typeof row.vencimiento == 'string' ? new Date(stringToDate(row.vencimiento)) : row.vencimiento;
+                const year = typeof row.concepto.split('/')[0] == 'string' ? parseInt(row.concepto.split('/')[0]) : 1900;
+                const month = typeof row.concepto.split('/')[1] == 'string' ? parseInt(row.concepto.split('/')[1]) : -1;
 
-                if ([7, 8, 9, 10, 11, 12].indexOf((date.getMonth() + 1)) != -1 && date.getFullYear() == 2019) {
+                if ([7, 8, 9, 10, 11, 12].indexOf(month) != -1 && year == 2019) {
                     row.data = {
                         ...row.data,
                         checked: true,

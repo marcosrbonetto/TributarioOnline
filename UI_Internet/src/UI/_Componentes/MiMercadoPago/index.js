@@ -106,7 +106,9 @@ class MiMercadoPago extends React.PureComponent {
     this.props.mostrarCargando(true);
 
     if(this.props.onClick) {
+      this.props.mostrarCargando(false);
       this.props.onClick(() => {
+        this.props.mostrarCargando(true);
         //Carga de todos los nexos y mostramos para pagar el primero de ellos
         this.cargarNexos();
       });

@@ -17,6 +17,8 @@ import MiMercadoPago from "@Componentes/MiMercadoPago";
 import MiInterBanking from "@Componentes/MiInterBanking";
 import MisBeneficios from "@Componentes/MisBeneficios";
 import { checkBeneficios } from "@Componentes/MisBeneficios";
+import MiControledDialog from "@Componentes/MiControledDialog"
+import Button from "@material-ui/core/Button";
 
 //Funciones Útiles
 import { stringToFloat, formatNumber, getIdTipoTributo } from "@Utils/functions"
@@ -33,7 +35,17 @@ class MisPagos extends React.PureComponent {
       tableDisabled: this.props.tablaConfig ? this.props.tablaConfig.disabled : false,
       registrosSeleccionados: this.props.registrosSeleccionados,
       tieneBeneficio: false,
-      textoBeneficioAplicado: undefined
+      textoBeneficioAplicado: undefined,
+      beneficioKey: {
+        key: 0,
+        version: (new Date()).getTime()
+      },
+      revisionBeneficios: {
+        arrayTextoBeneficios: undefined,
+        modal: {
+          open: false
+        }
+      }
     };
   }
 
@@ -97,14 +109,98 @@ class MisPagos extends React.PureComponent {
     const allRows = this.state.rowList;
     const selectedRows = this.state.registrosSeleccionados;
 
-    //True o False de acuerdo si coinciden con un beneficio o no
-    const tieneBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
+    //Si seleccionBeneficios = True quiere decir que encontró:
+    //Más de un beneficio
+    //O un beneficio/s con otro periodo más que no pertenece al mismo
+    //Si seleccionBeneficios = False se ve tieneBeneficio (True/False) de acuerdo si coinciden con un beneficio o no
+    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
+
+    if (resultCheckBeneficio.seleccionBeneficios) {
+      //En caso que:
+      //Más de un beneficio
+      //O un beneficio/s con otro periodo más que no pertenece al mismo
+      //Preguntaremos que si quiere aplicar algún beneficio
+
+      let arrayTextoSeleccionBeneficio = [];
+      _.each(resultCheckBeneficio.arrayResultBeneficios, (beneficio, index) => {
+        arrayTextoSeleccionBeneficio.push(<div>
+          Dentro de los períodos seleccionados se encuentran: {beneficio.rows.join(', ')}.
+          Los cuales pertenecen al beneficio <b>{beneficio.beneficio.titulo}</b>, desea aplicar el descuento?
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            style={{
+              background: '#ffa114',
+              borderRadius: '20px',
+              marginLeft: '10px',
+              minHeight: '22px',
+              lineHeight: '11px',
+            }}
+            keyBeneficio={beneficio.beneficio.key}
+            onClick={this.selectBeneficio}
+          >
+            Aplicar
+          </Button>
+          <br />
+          <span style={{color: 'red', fontSize: '12px', position: 'relative', top: '-8px'}}>(Recuerde que los periodos que quedan fuera del beneficio deberán ser pagados aparte)</span>
+          {!index == (resultCheckBeneficio.arrayResultBeneficios.length-1) && <div><br /><br /></div>}</div>);
+      });
+
+      this.setState({
+        revisionBeneficios: {
+          ...this.state.revisionBeneficios,
+          arrayTextoBeneficios: arrayTextoSeleccionBeneficio
+        }
+      }, () => {
+        this.onRevisionBeneficiosDialogoOpen();
+      });
+
+    } else {
+      //tieneBeneficio True o False, continuamos el cedulon o pago online con beneficio (o no)
+      this.setState({
+        tieneBeneficio: resultCheckBeneficio.tieneBeneficio
+      }, () => {
+        //Seguimos con la acción del boton
+        callback();
+      });
+    }
+  }
+
+  selectBeneficio = (event) => {
+    const key = event.currentTarget.attributes.keyBeneficio.value;
 
     this.setState({
-      tieneBeneficio: tieneBeneficio
+      beneficioKey: {
+        key: parseInt(key),
+        version: (new Date()).getTime()
+      }
     }, () => {
-      //Seguimos con la acción del boton
-      callback();
+      this.onRevisionBeneficiosDialogoClose();
+    });
+  }
+
+  onRevisionBeneficiosDialogoOpen = () => {
+    this.setState({
+      revisionBeneficios: {
+        ...this.state.revisionBeneficios,
+        modal: {
+          ...this.state.revisionBeneficios.modal,
+          open: true
+        }
+      }
+    });
+  }
+
+  onRevisionBeneficiosDialogoClose = () => {
+    this.setState({
+      revisionBeneficios: {
+        ...this.state.revisionBeneficios,
+        modal: {
+          ...this.state.revisionBeneficios.modal,
+          open: false
+        }
+      }
     });
   }
 
@@ -135,6 +231,8 @@ class MisPagos extends React.PureComponent {
     const check = tablaConfig.check;
     const disabled = this.state.tableDisabled;
     const textoBeneficioAplicado = this.state.textoBeneficioAplicado;
+    const revisionBeneficios = this.state.revisionBeneficios;
+    const beneficioKey = this.state.beneficioKey;
 
     //Determinamos si el Cedulon tiene que estar deshabilitado
     let disabledCedulon = !(stringToFloat(this.state.importeAPagar) > 0);
@@ -215,7 +313,8 @@ class MisPagos extends React.PureComponent {
             tipoTributo={cedulonConfig.tipoTributo}
             seccion={cedulonConfig.tipoCedulon}
             rows={rowList}
-            handleBeneficiosResult={this.handleBeneficiosResult} />
+            handleBeneficiosResult={this.handleBeneficiosResult}
+            seleccionBeneficioByKey={beneficioKey} />
 
           <MiCedulon
             tieneBeneficio={this.state.tieneBeneficio}
@@ -311,6 +410,19 @@ class MisPagos extends React.PureComponent {
           />
         </Grid>
       </Grid>
+
+      <MiControledDialog
+        paraMobile={this.props.paraMobile}
+        open={revisionBeneficios.modal.open}
+        onDialogoOpen={this.onRevisionBeneficiosDialogoOpen}
+        onDialogoClose={this.onRevisionBeneficiosDialogoClose}
+        textoLink={'Revisión de períodos seleccionados'}
+        titulo={'Revisión de períodos seleccionados'}
+      >
+        {revisionBeneficios.arrayTextoBeneficios && revisionBeneficios.arrayTextoBeneficios.map((textoBeneficio) => {
+          return textoBeneficio;
+        })}
+      </MiControledDialog>
 
     </div>
   }
