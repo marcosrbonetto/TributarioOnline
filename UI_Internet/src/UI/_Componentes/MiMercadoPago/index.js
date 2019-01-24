@@ -25,6 +25,7 @@ import { mostrarCargando } from '@Redux/Actions/mainContent';
 import { setPagosMercadoPago } from "@ReduxSrc/TributarioOnline/DetalleTributario/actions";
 import { stringToFloat, formatNumber } from "@Utils/functions"
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
+import { debug } from "util";
 
 const mapStateToProps = state => {
   return {
@@ -57,6 +58,7 @@ class MiMercadoPago extends React.PureComponent {
       disabled: this.props.disabled,
       arrayNexos: [],
       email: email,
+      base64Cedulon: '',
       validacionEmail: {
         errorEmail: false,
         emailValidado: false
@@ -105,7 +107,7 @@ class MiMercadoPago extends React.PureComponent {
   onBotonCedulonClick = () => {
     this.props.mostrarCargando(true);
 
-    if(this.props.onClick) {
+    if (this.props.onClick) {
       this.props.mostrarCargando(false);
       this.props.onClick(() => {
         this.props.mostrarCargando(true);
@@ -158,7 +160,8 @@ class MiMercadoPago extends React.PureComponent {
           this.setState({
             ...this.state,
             dialogoOpen: true,
-            arrayNexos: arrayNexos
+            arrayNexos: arrayNexos,
+            base64Cedulon: resultData && resultData.reporte ? 'data:application/pdf;base64,' + resultData.reporte : ''
           });
 
           //Generamos la descripción
@@ -166,10 +169,10 @@ class MiMercadoPago extends React.PureComponent {
           const identificador = this.props.identificador;
           const idTipoCedulon = this.props.tipoCedulones.byValue[this.props.tipoCedulon];
 
-          let descripcionRecibo = 'Periodo/s ' + _.map(registros,function(obj){return obj;}).join(', ') + ' del ' + tipoTributo + ' ' + identificador;
+          let descripcionRecibo = 'Periodo/s ' + _.map(registros, function (obj) { return obj; }).join(', ') + ' del ' + tipoTributo + ' ' + identificador;
           let causa = undefined;
-          if(idTipoCedulon == 2) { //Solo en tipoCedulon Multa 
-            descripcionRecibo = 'Multa/s ' + _.map(registros,function(obj){return obj;}).join(', ') + ' de ' + identificador;
+          if (idTipoCedulon == 2) { //Solo en tipoCedulon Multa 
+            descripcionRecibo = 'Multa/s ' + _.map(registros, function (obj) { return obj; }).join(', ') + ' de ' + identificador;
             causa = registros[0];
           }
 
@@ -187,7 +190,8 @@ class MiMercadoPago extends React.PureComponent {
       this.setState({
         ...this.state,
         dialogoOpen: false,
-        arrayNexos: []
+        arrayNexos: [],
+        base64Cedulon: ''
       });
       this.props.mostrarCargando(false);
     }
@@ -198,7 +202,8 @@ class MiMercadoPago extends React.PureComponent {
     this.setState({
       ...this.state,
       dialogoOpen: false,
-      arrayNexos: []
+      arrayNexos: [],
+      base64Cedulon: ''
     });
   }
 
@@ -266,6 +271,7 @@ class MiMercadoPago extends React.PureComponent {
 
   render() {
     let { classes } = this.props;
+    const { base64Cedulon } = this.state;
     const activeStep = 0;
 
     return (
@@ -390,7 +396,11 @@ class MiMercadoPago extends React.PureComponent {
             {this.state.arrayNexos && !this.state.arrayNexos.length > 0 && <div style={{ color: 'red' }}>Se están presentando inconvenientes para pagar con MercadoPago, intente más tarde.</div>}
           </div>
 
-          <div key="footerContent"></div>
+          <div key="footerContent">
+            {base64Cedulon != '' && <Typography variant="subheading" gutterBottom>
+              Si lo desea puede descargar el cedulón que comprende los períodos que pagará a continuación mediante Mercado Pago: <a href={base64Cedulon} download="Cedulon Mercado Pago" className={classes.buttonDescarga}>Descargar Cedulón</a>
+              </Typography>}
+          </div>
         </MiControledDialog>
       </div>
     );
@@ -453,6 +463,20 @@ const styles = theme => ({
   },
   selectTipoTributo: {
     width: '100%'
+  },
+  buttonDescarga: {
+    color: '#fff',
+    height: '25px',
+    borderColor: '#46b8da',
+    background: '#46b8da',
+    textDecoration: 'none',
+    display: 'block',
+    maxWidth: '150px',
+    textAlign: 'center',
+    lineHeight: '25px',
+    borderRadius: '15px',
+    display: 'inline-block',
+    padding: '0px 6px'
   },
 });
 
