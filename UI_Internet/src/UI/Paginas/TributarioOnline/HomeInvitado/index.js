@@ -24,6 +24,7 @@ import TributarioAccessInvitado from '@Componentes/TributarioAccessInvitado';
 import { mostrarAlerta, mostrarMensaje } from "@Utils/functions";
 
 import MiControledDialog from "@Componentes/MiControledDialog";
+import { debug } from "util";
 
 const mapStateToProps = state => {
   return {
@@ -48,7 +49,6 @@ class HomeInvitado extends React.PureComponent {
     this.tipoTributo = this.props.match.params.tributo;
 
     this.state = {
-      dialogoOpenImportacionBienesCUIT: false
     };
   }
 
@@ -58,30 +58,17 @@ class HomeInvitado extends React.PureComponent {
     if (!(token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO)) {
       this.props.redireccionar("/Inicio/HomeUsuario");
     }
-  }
 
-  componentWillReceiveProps(nextProps) {
+    //Corroboramos Resultado importacion AFIP - BIENES por CUIT
+    let afipProcess = new URLSearchParams(this.props.location.search).get('status');
 
-    if(nextProps.history.location.search == this.props.location.search) {
-      //Corroboramos Resultado importacion AFIP - BIENES por CUIT
-      let afipProcess = new URLSearchParams(this.props.location.search).get('status');
-
-      if (afipProcess) {
-        if (afipProcess == 'OK')
-          this.setState({
-            dialogoOpenImportacionBienesCUIT: true
-          });
-        else {
-          mostrarAlerta('Ocurrió un error al intentar importar los bienes, intente nuevamente.');
-        }
+    if (afipProcess) {
+      if (afipProcess == 'OK')
+        mostrarMensaje('¡Importación Exitosa! La imporación de bienes se realizó exitosamente. Los mismos se encontrarán en cada sección del tributo al que pertenece.');
+      else {
+        mostrarAlerta(afipProcess);
       }
     }
-  }
-
-  onDialogoCloseImportacionBienesCUIT = () => {
-    this.setState({
-      dialogoOpenImportacionBienesCUIT: false
-    });
   }
 
   eventRedirect = (tipoTributo, identificador) => {
@@ -219,15 +206,6 @@ class HomeInvitado extends React.PureComponent {
             </Grid>
           )}
         </Grid>
-
-        <MiControledDialog
-          paraMobile={this.props.paraMobile}
-          open={this.state.dialogoOpenImportacionBienesCUIT}
-          buttonAction={true}
-          titulo={'Imporación Exitosa'}
-          onDialogoClose={this.onDialogoCloseImportacionBienesCUIT}>
-          La imporación de bienes se realizó exitosamente. <br /> Los mismos se encontrarán en cada sección del tributo al que pertenece.
-        </MiControledDialog>
       </div>
     );
   }

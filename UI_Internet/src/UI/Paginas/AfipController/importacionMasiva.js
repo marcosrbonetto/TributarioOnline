@@ -44,6 +44,17 @@ class importacionMasiva extends Component {
         else 
             appUrlRedirect = appUrlRedirect + '&';
 
+        const cuitUsuarioLog = this.props.loggedUser.datos.cuil || '';
+        const cuitLogAFIP = hash.split(',')[0];
+
+        if(cuitUsuarioLog != cuitLogAFIP) {
+            this.props.mostrarCargando(false);
+            
+            localStorage.setItem('statusAfipImportacionMasiva', 'Los datos que ingresó en AFIP no pertenecen al usuario el logueado.');
+            this.props.redireccionar(appUrlRedirect);
+            return false;
+        }
+
         if (hash) {
             servicesAfip.importarListaRepresentantesAFIP(token, {
                 hash: hash
@@ -52,9 +63,11 @@ class importacionMasiva extends Component {
                     this.props.mostrarCargando(false);
 
                     if (!datos.ok) {
-                        this.props.redireccionar(appUrlRedirect + 'afipProcess=' + datos.error);
+                        localStorage.setItem('statusAfipImportacionMasiva', datos.error);
+                        this.props.redireccionar(appUrlRedirect);
                     } else {
-                        this.props.redireccionar(appUrlRedirect + 'afipProcess=OK');
+                        localStorage.setItem('statusAfipImportacionMasiva', 'OK');
+                        this.props.redireccionar(appUrlRedirect);
                     }
                 }).catch(err => {
                     this.props.mostrarCargando(false);

@@ -25,7 +25,7 @@ import TributarioAccess from '@Componentes/TributarioAccess';
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline.js';
 
 //Alerta
-import { mostrarAlerta } from "@Utils/functions";
+import { mostrarAlerta, mostrarMensaje } from "@Utils/functions";
 
 const mapStateToProps = state => {
   return {
@@ -56,9 +56,29 @@ class HomeUsuario extends React.PureComponent {
     }
   }
 
+  componentWillReceiveProps() {
+    //Corroboramos Resultado importacion AFIP - BIENES por CUIT
+    let afipProcess = localStorage.getItem('statusAfipImportacionMasiva');
+    localStorage.removeItem('statusAfipImportacionMasiva');
+
+    if (afipProcess) {
+      if (afipProcess == 'OK')
+        mostrarMensaje('¡Importación Exitosa! La imporación de bienes se realizó exitosamente. Los mismos se encontrarán en cada sección del tributo al que pertenece.');
+      else {
+        mostrarAlerta(afipProcess);
+      }
+    }
+    
+    this.cargarTributos();
+  }
+
   componentWillMount() {
     this.props.mostrarCargando(true);
 
+    this.cargarTributos();
+  }
+
+  cargarTributos = () => {
     const token = this.props.loggedUser.token;
 
     servicesTributarioOnline.getIdTributos(token)
