@@ -465,18 +465,11 @@ const styles = theme => ({
     width: '100%'
   },
   buttonDescarga: {
-    color: '#fff',
-    height: '25px',
     borderColor: '#46b8da',
-    background: '#46b8da',
-    textDecoration: 'none',
-    display: 'block',
-    maxWidth: '150px',
-    textAlign: 'center',
-    lineHeight: '25px',
-    borderRadius: '15px',
-    display: 'inline-block',
-    padding: '0px 6px'
+    color: '#46b8da',
+    minHeight: '0px',
+    height: '24px',
+    marginLeft: '8px',
   },
 });
 

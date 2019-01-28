@@ -35,7 +35,7 @@ class MiInterBanking extends React.PureComponent {
 
     this.state = {
       mensajeError: undefined,
-      //base64Cedulon: '',
+      base64Cedulon: '',
       infoCupon: undefined,
       disabled: this.props.disabled,
       visible: visible
@@ -87,7 +87,7 @@ class MiInterBanking extends React.PureComponent {
         .then((datos) => {
           if (!datos.ok) {
             this.setState({
-              //base64Cedulon: '',
+              base64Cedulon: '',
               dialogoOpen: true,
               infoCupon: undefined,
               mensajeError: datos.error
@@ -100,7 +100,7 @@ class MiInterBanking extends React.PureComponent {
 
           this.setState({
             //No vamos a mostrar el cedulon, pero lo dejamos por si las dudas
-            //base64Cedulon: '',// resultData && resultData.reporte ? 'data:application/pdf;base64,' + resultData.reporte : '',
+            base64Cedulon: resultData && resultData.reporte ? 'data:application/pdf;base64,' + resultData.reporte : '',
             dialogoOpen: true,
             infoCupon: resultData,
             mensajeError: undefined
@@ -112,7 +112,7 @@ class MiInterBanking extends React.PureComponent {
         });
     } else {
       this.setState({
-        //base64Cedulon: '',
+        base64Cedulon: '',
         dialogoOpen: true,
         infoCupon: undefined,
       });
@@ -130,7 +130,7 @@ class MiInterBanking extends React.PureComponent {
 
   render() {
     let { classes } = this.props;
-    const { visible, mensajeError, infoCupon } = this.state;
+    const { visible, mensajeError, infoCupon, base64Cedulon } = this.state;
 
     return (<div className={classNames(classes.root, "BtnMisBeneficios")}>
       {visible && 
@@ -200,6 +200,12 @@ class MiInterBanking extends React.PureComponent {
               </object>*/}
             {/*this.state.base64Cedulon == '' && <div style={{ color: 'red' }}>{this.state.mensajeError || "Se están presentando inconvenientes para generar el cedulón, intente más tarde."}</div>*/}
           </div>
+
+          <div key="footerContent">
+            {base64Cedulon != '' && <Typography variant="subheading" gutterBottom>
+              Si lo desea puede descargar el cedulón que comprende los períodos que pagará a continuación mediante InterBaking: <a href={base64Cedulon} download="Cedulon InterBanking" className={classes.buttonDescarga}>Descargar Cedulón</a>
+              </Typography>}
+          </div>
         </MiControledDialog>
       </div>
     }</div>);
@@ -252,6 +258,13 @@ const styles = theme => ({
   },
   textoCTL: {
     color: '#149257'
+  },
+  buttonDescarga: {
+    borderColor: '#46b8da',
+    color: '#46b8da',
+    minHeight: '0px',
+    height: '24px',
+    marginLeft: '8px',
   }
 });
 
