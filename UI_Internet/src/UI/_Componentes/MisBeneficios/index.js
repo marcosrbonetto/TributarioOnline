@@ -68,7 +68,7 @@ export const checkBeneficios = (tipoTributo, seccion, allRows, selectedRows) => 
     //const concideConBeneficio = _.isEqual(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
     const difference = _.difference(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
     const difference2 = _.difference(idRowsSeleccionados.sort(), idRowsBeneficio.sort());
-    const concideConBeneficio = difference.length == 0;
+    const concideConBeneficio = difference.length == 0 && idRowsBeneficio.length > 0; //Si o si tiene que idRowsBeneficio.length > 0
     const concideExactamenteBeneficio = difference2.length == 0;
 
     // console.log(beneficio.titulo);
@@ -143,6 +143,10 @@ class MisBeneficios extends React.PureComponent {
     this.handleAplicarBeneficio(seleccionBeneficioByKey.key);
   });
 
+  handleSetVisible = memoize((visible) => {
+    this.setState({ visible: visible });
+  });
+
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
@@ -186,6 +190,7 @@ class MisBeneficios extends React.PureComponent {
       const idSeleccionados = _.map(itemsSeleccionados, 'id');
 
       result = {
+        beneficio: beneficio,
         rowList: arrayRows,
         rowsSelected: idSeleccionados,
         tableDisabled: beneficio.tableDisabled
@@ -195,6 +200,7 @@ class MisBeneficios extends React.PureComponent {
       let arrayRows = this.resetearFilar(this.props.rows);
 
       result = {
+        beneficio: undefined,
         rowList: arrayRows,
         rowsSelected: [],
         tableDisabled: false
@@ -234,7 +240,7 @@ class MisBeneficios extends React.PureComponent {
   }
 
   render() {
-    let { classes, tipoTributo, seleccionBeneficioByKey } = this.props;
+    let { classes, visible: buttonVisible, tipoTributo, seleccionBeneficioByKey } = this.props;
     const { visible, anchorEl, itemChecked, arrayBeneficios } = this.state;
 
     let tituloBeneficioSelec = '';
@@ -247,11 +253,7 @@ class MisBeneficios extends React.PureComponent {
     const textoInfoBeneficio = infoBeneficios(idTipoTributo);
 
     this.handleChangeBeneficio(seleccionBeneficioByKey);
-    /*
-    if (JSON.stringify(this.props.seleccionBeneficioByKey) != JSON.stringify(nextProps.seleccionBeneficioByKey)) {
-      this.handleAplicarBeneficio(nextProps.seleccionBeneficioByKey);
-    }
-    */
+    this.handleSetVisible(buttonVisible);
 
     return (<div className={classNames(classes.root, "BtnMisBeneficios")}>
       {visible && <div>

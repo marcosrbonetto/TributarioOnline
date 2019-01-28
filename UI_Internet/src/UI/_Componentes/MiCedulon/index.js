@@ -55,8 +55,11 @@ class MiCedulon extends React.PureComponent {
 
     //Vemos si tiene un acción antes de mostrar el listado
     if(this.props.onClick) {
-      this.props.onClick(() => {
-        this.setState({ anchorEl: target });
+      this.props.onClick((tieneBeneficio) => {
+        if(tieneBeneficio)
+          this.onBotonCedulonClick();
+        else
+          this.setState({ anchorEl: target });
       });
     } else {
       this.setState({ anchorEl: target });
@@ -77,7 +80,7 @@ class MiCedulon extends React.PureComponent {
     this.props.mostrarCargando(true);
     const registros = this.props.registrosSeleccionados;
     const token = this.props.loggedUser.token;
-    const opcion = event.currentTarget.attributes.opcion.value;
+    const opcion = event && event.currentTarget.attributes.opcion.value || 0;
 
     const tieneBeneficio = this.props.tieneBeneficio || false;
 

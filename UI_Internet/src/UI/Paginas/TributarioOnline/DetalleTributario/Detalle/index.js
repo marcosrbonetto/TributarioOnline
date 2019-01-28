@@ -126,7 +126,7 @@ class DetalleTributo extends React.PureComponent {
                 infoSeccion: undefined,
                 tieneSubMenu: false,
                 tipoCedulon: this.props.tipoCedulones.byKey[1],
-                order: 'desc',
+                order: 'asc',
                 orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Deuda Administrativa',
@@ -141,11 +141,11 @@ class DetalleTributo extends React.PureComponent {
                 infoSeccion: undefined,
                 tieneSubMenu: false,
                 tipoCedulon: this.props.tipoCedulones.byKey[2],
-                order: 'desc',
+                order: 'asc',
                 orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Multas',
-                    totalesDeuda: 'Administrativa',
+                    totalesDeuda: 'Administrativa de Multas',
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
                     columnas: ['Causa', 'Fecha', 'Total ($)']
@@ -157,7 +157,7 @@ class DetalleTributo extends React.PureComponent {
                 tieneSubMenu: true,
                 subItemTipoTributos: this.props.tipoTributos.byKey[11],
                 tipoCedulon: this.props.tipoCedulones.byKey[3],
-                order: 'desc',
+                order: 'asc',
                 orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Deuda Judicial',
@@ -174,11 +174,11 @@ class DetalleTributo extends React.PureComponent {
                 tieneSubMenu: true,
                 subItemTipoTributos: this.props.tipoTributos.byKey[12],
                 tipoCedulon: this.props.tipoCedulones.byKey[4],
-                order: 'desc',
+                order: 'asc',
                 orderBy: 'vencimiento',
                 labels: {
                     detalleTitulo: 'Planes',
-                    totalesDeuda: 'Administrativa',
+                    totalesDeuda: 'Administrativa de Planes',
                     vencida: 'Vencida',
                     aVencer: 'A vencer',
                     columnas: ['Concepto', 'Fecha', 'Total ($)']
@@ -708,6 +708,10 @@ class DetalleTributo extends React.PureComponent {
         this.setState({ [menuItemSeleccionado]: itemSeleccionado });
     };
 
+    //OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- 
+    //OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- 
+    //OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- OTRAS OPERACIONES -- 
+
     //Traemos datos de últimos pagos trayendo datos del WS
     onUltimosPagosDialogoOpen = () => {
         this.props.mostrarCargando(true);
@@ -715,52 +719,48 @@ class DetalleTributo extends React.PureComponent {
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
         const identificador = decodeURIComponent(this.props.match.params.identificador);
 
-        if (this.state.ultimosPagos.infoGrilla.length == 0) {
-            servicesTributarioOnline.getUltimosPagos(token, {
-                tipoTributo: tipoTributo,
-                identificador: identificador
-            })
-                .then((datos) => {
-                    this.props.mostrarCargando(false);
-                    if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
+        servicesTributarioOnline.getUltimosPagos(token, {
+            tipoTributo: tipoTributo,
+            identificador: identificador
+        })
+            .then((datos) => {
+                this.props.mostrarCargando(false);
+                if (!datos.ok) { mostrarAlerta('Últimos Pagos: ' + datos.error); return false; }
 
-                    let rowList = (datos.return && datos.return.map((pago) => {
+                let rowList = (datos.return && datos.return.map((pago) => {
 
-                        return {
-                            concepto: pago.concepto,
-                            vencimiento: dateToString(new Date(pago.fecha), 'DD/MM/YYYY'),
-                            importe: formatNumber(pago.importe.total),
-                            detalle: <MiTooltip
-                                contenidoDetalle={<div>
-                                    <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
-                                    <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
-                                    <Typography>Deducción: <b>$ {pago.importe.deduccion}</b></Typography>
-                                    <Typography>Citación: <b>{pago.citacion}</b></Typography>
-                                    <Typography>CTL: <b>{pago.ctl}</b></Typography>
-                                    <Typography>Estado: <b>{pago.estado}</b></Typography>
-                                    <Typography>Caja: <b>{pago.caja}</b></Typography>
-                                </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
-                            </MiTooltip>,
-                            data: pago //atributo "data" no se muestra en MiTabla
-                        }
-                    })) || [];
+                    return {
+                        concepto: pago.concepto,
+                        vencimiento: dateToString(new Date(pago.fecha), 'DD/MM/YYYY'),
+                        importe: formatNumber(pago.importe.total),
+                        detalle: <MiTooltip
+                            contenidoDetalle={<div>
+                                <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
+                                <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
+                                <Typography>Deducción: <b>$ {pago.importe.deduccion}</b></Typography>
+                                <Typography>Citación: <b>{pago.citacion}</b></Typography>
+                                <Typography>CTL: <b>{pago.ctl}</b></Typography>
+                                <Typography>Estado: <b>{pago.estado}</b></Typography>
+                                <Typography>Caja: <b>{pago.caja}</b></Typography>
+                            </div>}>
+                            <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                        </MiTooltip>,
+                        data: pago //atributo "data" no se muestra en MiTabla
+                    }
+                })) || [];
 
-                    this.setState({
-                        ultimosPagos: {
-                            ...this.state.ultimosPagos,
-                            infoGrilla: rowList
-                        }
-                    });
-
-                    this.handleUltimosPagosOpenDialog();
-                }).catch(err => {
-                    this.props.mostrarCargando(false);
-                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+                this.setState({
+                    ultimosPagos: {
+                        ...this.state.ultimosPagos,
+                        infoGrilla: rowList
+                    }
                 });
-        } else {
-            this.handleUltimosPagosOpenDialog();
-        }
+
+                this.handleUltimosPagosOpenDialog();
+            }).catch(err => {
+                this.props.mostrarCargando(false);
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
     }
 
     //Abrimos modal últimos pagos
@@ -1146,53 +1146,51 @@ class DetalleTributo extends React.PureComponent {
         }
 
         let arrayService = [];
-        if (!this.state.informeCuenta.reporteBase64) {
-            const service1 = servicesTributarioOnline.getInformeCuenta(token, {
-                tipoTributo: tipoTributo,
-                identificador: identificador
-            })
-                .then((datos) => {
-                    this.props.mostrarCargando(false);
-                    if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+        const service1 = servicesTributarioOnline.getInformeCuenta(token, {
+            tipoTributo: tipoTributo,
+            identificador: identificador
+        })
+            .then((datos) => {
+                this.props.mostrarCargando(false);
+                if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
 
-                    this.setState({
-                        informeCuenta: {
-                            ...this.state.informeCuenta,
-                            info: datos.return,
-                            modal: {
-                                ...this.state.informeCuenta.modal,
-                                open: false
-                            }
+                this.setState({
+                    informeCuenta: {
+                        ...this.state.informeCuenta,
+                        info: datos.return,
+                        modal: {
+                            ...this.state.informeCuenta.modal,
+                            open: false
                         }
-                    });
-
-                }).catch(err => {
-                    this.props.mostrarCargando(false);
-                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+                    }
                 });
 
-            arrayService.push(service1);
+            }).catch(err => {
+                this.props.mostrarCargando(false);
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
 
-            const service2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
-                tipoTributo: tipoTributo,
-                identificador: identificador
-            })
-                .then((datos) => {
-                    if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+        arrayService.push(service1);
 
-                    this.setState({
-                        informeCuenta: {
-                            ...this.state.informeCuenta,
-                            reporteBase64: datos.return
-                        }
-                    });
-                }).catch(err => {
-                    this.props.mostrarCargando(false);
-                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+        const service2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
+            tipoTributo: tipoTributo,
+            identificador: identificador
+        })
+            .then((datos) => {
+                if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+
+                this.setState({
+                    informeCuenta: {
+                        ...this.state.informeCuenta,
+                        reporteBase64: datos.return
+                    }
                 });
+            }).catch(err => {
+                this.props.mostrarCargando(false);
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
 
-            arrayService.push(service2);
-        }
+        arrayService.push(service2);
 
         Promise.all(arrayService).then(() => {
             this.handleInformeCuentaOpenDialog();
@@ -1493,7 +1491,7 @@ class DetalleTributo extends React.PureComponent {
                                         return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado}</MenuItem>
                                     })}
                                 </Select>
-                                {!this.props.paraMobile && <span>- <b className={classes.textoNoWrap}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b></span>}
+                                {!this.props.paraMobile && <div>- <b className={classes.textoNoWrap}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b></div>}
                             </Typography>
 
                             {!this.props.paraMobile && <div>
@@ -1659,6 +1657,7 @@ class DetalleTributo extends React.PureComponent {
                                         {infoTributo}
                                     </Typography>
                                     <MisPagosDetalle
+                                        datosCuenta={this.state.infoDatosCuenta}
                                         textoBeneficioAplicado={this.state.descuentoBeneficio}
                                         paraMobile={this.props.paraMobile}
                                         pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
@@ -1686,6 +1685,7 @@ class DetalleTributo extends React.PureComponent {
                                             {infoTributo}
                                         </Typography>
                                         <MisPagosDetalle
+                                            datosCuenta={this.state.infoDatosCuenta}
                                             textoBeneficioAplicado={this.state.descuentoBeneficio}
                                             paraMobile={this.props.paraMobile}
                                             pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
@@ -1718,6 +1718,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {infoTributo}
                                                 </Typography>
                                                 <MisPagosDetalle
+                                                    datosCuenta={this.state.infoDatosCuenta}
                                                     textoBeneficioAplicado={this.state.descuentoBeneficio}
                                                     paraMobile={this.props.paraMobile}
                                                     pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}
@@ -1747,6 +1748,7 @@ class DetalleTributo extends React.PureComponent {
                                                     {plan.textoInfo || `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagosDetalle
+                                                    datosCuenta={this.state.infoDatosCuenta}
                                                     textoBeneficioAplicado={this.state.descuentoBeneficio}
                                                     paraMobile={this.props.paraMobile}
                                                     pagoRedirect={'/DetalleTributario/' + this.props.match.params.tributo + '/' + decodeURIComponent(this.props.match.params.identificador) + '/' + menuItemSeleccionado}

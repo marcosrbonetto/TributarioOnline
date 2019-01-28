@@ -66,8 +66,14 @@ class MisPagosDetalle extends React.PureComponent {
         modal: {
           open: false
         }
-      }
+      },
+      beneficioVisible: false,
+      descuentoBeneficio: 0
     };
+  }
+
+  componentDidMount() {
+    this.verificarTributoSeccionTieneBeneficio();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -82,7 +88,9 @@ class MisPagosDetalle extends React.PureComponent {
   }
 
   //Totalizador de importe de filas seleccionadas
-  getFilasSeleccionadas = (filas, idFilasSeleccionadas, totalCedulonBeneficio) => {
+  getFilasSeleccionadas = (filas, idFilasSeleccionadas) => {
+    const descuentoBeneficio = stringToFloat(this.state.descuentoBeneficio) || 0;
+
     let registrosSeleccionados = []
 
     let importeTotal = 0;
@@ -98,29 +106,15 @@ class MisPagosDetalle extends React.PureComponent {
     this.props.setRegistrosSeleccionados &&
       this.props.setRegistrosSeleccionados(this.props.menuItemSeleccionado, registrosSeleccionados);
 
+    importeTotal = descuentoBeneficio ? stringToFloat(importeTotal) - stringToFloat(descuentoBeneficio) : importeTotal;
     this.setState({
-      importeAPagar: totalCedulonBeneficio ? formatNumber(totalCedulonBeneficio) : formatNumber(importeTotal),
+      importeAPagar: formatNumber(importeTotal),
       recargoAPagar: formatNumber(recargoTotal),
       registrosSeleccionados: registrosSeleccionados
     });
   };
 
   handleBeneficiosResult = (result) => {
-    let resultBeneficios = result;
-
-    if(result.rowsSelected.length == 0) {
-      this.handleAplicarBeneficiosResult(resultBeneficios);
-    } else {
-      this.handleCalculoTotalCedulon(resultBeneficios, (totalCedulon) => {
-        this.handleAplicarBeneficiosResult({
-          ...resultBeneficios,
-          totalCedulonBeneficio: totalCedulon
-        });
-      });
-    }
-  }
-
-  handleAplicarBeneficiosResult = (result) => {
     //Seteamos las nuevas rows con sus nuevas configuraciones de acuerdo a los beneficios y la tabla
     this.setState({
       ...this.state,
@@ -128,8 +122,21 @@ class MisPagosDetalle extends React.PureComponent {
       rowList: result.rowList
     });
 
-    //Actualización grilla
-    this.getFilasSeleccionadas(result.rowList, result.rowsSelected, result.totalCedulonBeneficio);
+    const descuento = result.beneficio ? this.getDescuentoBeneficio() : 0;
+
+    this.setState({
+      descuentoBeneficio: descuento
+    }, () => {
+      //Actualización grilla
+      this.getFilasSeleccionadas(result.rowList, result.rowsSelected);
+    });
+  }
+
+  getDescuentoBeneficio = () => {
+    const datosCuenta = this.props.datosCuenta;
+    if(!datosCuenta) return 0;
+
+    return datosCuenta[6] ? stringToFloat(datosCuenta[6].split('$')[1]) : 0;
   }
 
   handleCalculoTotalCedulon = (resultBeneficios, callback) => {
@@ -218,15 +225,30 @@ class MisPagosDetalle extends React.PureComponent {
       });
 
     } else {
+      const tieneBeneficio = resultCheckBeneficio.tieneBeneficio;
       //tieneBeneficio True o False, continuamos el cedulon o pago online con beneficio (o no)
       this.setState({
-        tieneBeneficio: resultCheckBeneficio.tieneBeneficio
+        tieneBeneficio: tieneBeneficio,
+        descuentoBeneficio: tieneBeneficio ? this.state.descuentoBeneficio : 0
       }, () => {
         //Seguimos con la acción del boton
-        callback();
+        callback(tieneBeneficio);
       });
     }
   }
+
+  verificarTributoSeccionTieneBeneficio = () => {
+    const tipoTributo = this.props.tributoActual;
+    const seccion = this.props.tipoCedulon;
+    const allRows = this.state.rowList;
+    const selectedRows = _.map(this.state.rowList,'concepto');
+
+    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
+
+    this.setState({
+      beneficioVisible: resultCheckBeneficio.tieneBeneficio || false
+    });
+  };
 
   selectBeneficio = (event) => {
     const key = event.currentTarget.attributes.keyBeneficio.value;
@@ -289,6 +311,7 @@ class MisPagosDetalle extends React.PureComponent {
     const disabled = this.state.tableDisabled;
     const revisionBeneficios = this.state.revisionBeneficios;
     const beneficioKey = this.state.beneficioKey;
+    const beneficioVisible = this.state.beneficioVisible;
 
     //Tributo y tipo de tributo para generar el cedulon
     const tributo = this.props.tributoActual;
@@ -372,6 +395,7 @@ class MisPagosDetalle extends React.PureComponent {
         <Grid item sm={8} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
 
           <MisBeneficios
+            visible={beneficioVisible}
             tipoTributo={this.props.tributoActual}
             seccion={this.props.tipoCedulon}
             rows={rowList}
