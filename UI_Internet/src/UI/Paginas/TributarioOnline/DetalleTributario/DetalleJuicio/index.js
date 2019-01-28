@@ -58,7 +58,7 @@ class DetalleJuicio extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.token = this.props.loggedUser.token;
+        this.token = 'INVITADO'; //this.props.loggedUser.token; -- Permitimos que INVITADOS Y VV Vean Juicios
         this.tributo = 'Juicio';
         this.idTipoTributo = getIdTipoTributo(this.tributo);
         this.identificador = decodeURIComponent(this.props.match.params.identificador);
@@ -165,50 +165,48 @@ class DetalleJuicio extends React.PureComponent {
         const identificador = this.identificador;
 
         let arrayService = [];
-        if (!this.state.informeCuenta.reporteBase64) {
-            const service1 = servicesTributarioOnline.getInformeCuenta(token, {
-                tipoTributo: tipoTributo,
-                identificador: identificador
-            })
-                .then((datos) => {
-                    if (!datos.ok) { this.props.mostrarCargando(false); return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+        const service1 = servicesTributarioOnline.getInformeCuenta(token, {
+            tipoTributo: tipoTributo,
+            identificador: identificador
+        })
+            .then((datos) => {
+                if (!datos.ok) { this.props.mostrarCargando(false); return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
 
-                    this.setState({
-                        informeCuenta: {
-                            ...this.state.informeCuenta,
-                            info: datos.return,
-                            modal: {
-                                ...this.state.informeCuenta.modal,
-                                open: false
-                            }
+                this.setState({
+                    informeCuenta: {
+                        ...this.state.informeCuenta,
+                        info: datos.return,
+                        modal: {
+                            ...this.state.informeCuenta.modal,
+                            open: false
                         }
-                    });
-
-                }).catch(err => {
-                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+                    }
                 });
 
-            arrayService.push(service1);
+            }).catch(err => {
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
 
-            const service2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
-                tipoTributo: tipoTributo,
-                identificador: identificador
-            })
-                .then((datos) => {
-                    if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+        arrayService.push(service1);
 
-                    this.setState({
-                        informeCuenta: {
-                            ...this.state.informeCuenta,
-                            reporteBase64: datos.return
-                        }
-                    });
-                }).catch(err => {
-                    console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+        const service2 = servicesTributarioOnline.getReporteInformeCuenta(token, {
+            tipoTributo: tipoTributo,
+            identificador: identificador
+        })
+            .then((datos) => {
+                if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+
+                this.setState({
+                    informeCuenta: {
+                        ...this.state.informeCuenta,
+                        reporteBase64: datos.return
+                    }
                 });
+            }).catch(err => {
+                console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+            });
 
-            arrayService.push(service2);
-        }
+        arrayService.push(service2);
 
         Promise.all(arrayService).then(() => {
             this.handleInformeCuentaOpenDialog();

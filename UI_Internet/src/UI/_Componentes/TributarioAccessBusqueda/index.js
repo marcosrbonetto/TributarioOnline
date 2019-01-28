@@ -56,7 +56,7 @@ class TributarioAccessBusqueda extends React.PureComponent {
     }
 
     handleEntrarIdentificador = () => {
-        const token = this.props.loggedUser.token;
+        const token = 'INVITADO'; //Tanto el Invitado con el VV pueden consultar (defecto INVITADO)
         const idTipoTributo = this.props.idTipoTributo;
         const identificador = this.state.inputIdentificador;
 
