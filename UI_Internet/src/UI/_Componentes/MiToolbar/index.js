@@ -15,6 +15,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 
 import MiNotificacion from "@Componentes/MiNotificacion";
+import MiInformacionTributos from "@Componentes/MiInformacionTributos";
 
 //REDUX
 import { connect } from "react-redux";
@@ -29,7 +30,8 @@ import { getTextoTipoTributo } from "@Utils/functions"
 const mapStateToProps = state => {
   return {
     usuario: state.Usuario.usuario,
-    loggedUser: state.Usuario.loggedUser
+    loggedUser: state.Usuario.loggedUser,
+    paraMobile: state.MainContent.paraMobile
   };
 };
 
@@ -158,6 +160,11 @@ class MiToolbar extends React.Component {
             {titulo}
           </Typography>
 
+          {/* Información de Tributos */}
+          <MiInformacionTributos
+            paraMobile={this.props.paraMobile}
+          />
+
           {/* Icono de Notificaciones */}
           {/* Icono del usuario */}
           {this.state.datosUsuario && <div className={classes.loggedIcons}>
@@ -234,8 +241,8 @@ const styles = theme => {
       ...theme.mixins.toolbar
     },
     menuButton: {
-      marginLeft: 12,
-      marginRight: 12
+      marginLeft: 6,
+      marginRight: 6
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 2
@@ -301,7 +308,7 @@ const styles = theme => {
     },
     loggedIcons: {
       textAlign: 'right',
-      position: 'absolute',
+      minWidth: '100px',
       right: '20px',  
       '& > *': {
         display: 'inline-block'

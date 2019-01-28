@@ -177,8 +177,9 @@ class App extends React.Component {
             token: window.Config.TOKEN_INVITADO
           });
           
-          if(window.location.hash == '#/')
+          if(window.location.hash == '#/') {
             this.props.redireccionar("/Inicio");
+          }
           // --------------------- OJO!! comente esto pero probar de q ande todo bien
           // if (search) {
           //   let url = search.get("url") || "/";
@@ -244,6 +245,13 @@ class App extends React.Component {
   }
 
   init = (callback) => {
+    //Quitamos variable para mostra info de tributos solo en Home
+    if(window.location.hash == '#/' || 
+    window.location.hash.indexOf('HomeInvitado') != -1 ||
+    window.location.hash.indexOf('HomeUsuario') != -1) {
+      localStorage.removeItem("timeInfoTributos");
+    }
+
     //Seteamos los tipo tributos en la aplicacion
     this.setTipoTributos(callback);
   }

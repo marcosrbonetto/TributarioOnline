@@ -44,9 +44,6 @@ import servicesRepresentantes from '@Rules/Rules_Representantes';
 //Funciones Útiles
 import { getAllUrlParams, formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
-//Informacion
-import { infoExplicativaTributos } from '../infoExplicativaTributos.js';
-
 const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
@@ -1413,12 +1410,6 @@ class DetalleTributo extends React.PureComponent {
         this.setState({ anchorElMenu: null });
     };
 
-    infoTributo = () => {
-        const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-
-        return infoExplicativaTributos(idTipoTributo) || 'No hay información para este tributo';
-    }
-
     informacionTributo = () => {
         const tributo = this.props.match.params.tributo;
         const identificador = encodeURIComponent(this.props.match.params.identificador);
@@ -1467,8 +1458,7 @@ class DetalleTributo extends React.PureComponent {
         const listPlanes = infoPlanes && infoPlanes.lista ? infoPlanes.lista : [];
 
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-        const infoTributo = this.infoTributo();
-
+  
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
                 <Grid container className={classes.root} spacing={16}>
@@ -1653,9 +1643,9 @@ class DetalleTributo extends React.PureComponent {
                             {/* Contribución por período */}
                             {(menuItemSeleccionado == 'contribucion' &&
                                 listContribucion.length > 0 && <div>
-                                    <Typography className={classes.infoTexto}>
+                                    {/* <Typography className={classes.infoTexto}>
                                         {infoTributo}
-                                    </Typography>
+                                    </Typography> */}
                                     <MisPagosDetalle
                                         datosCuenta={this.state.infoDatosCuenta}
                                         textoBeneficioAplicado={this.state.descuentoBeneficio}
@@ -1681,9 +1671,9 @@ class DetalleTributo extends React.PureComponent {
                             {(menuItemSeleccionado == 'multas' &&
                                 listMultas.length > 0 && <div>
                                     <div>
-                                        <Typography className={classes.infoTexto}>
+                                        {/* <Typography className={classes.infoTexto}>
                                             {infoTributo}
-                                        </Typography>
+                                        </Typography> */}
                                         <MisPagosDetalle
                                             datosCuenta={this.state.infoDatosCuenta}
                                             textoBeneficioAplicado={this.state.descuentoBeneficio}
@@ -1714,9 +1704,9 @@ class DetalleTributo extends React.PureComponent {
                                     return <div>
                                         {juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
-                                                <Typography className={classes.infoTexto}>
+                                                {/* <Typography className={classes.infoTexto}>
                                                     {infoTributo}
-                                                </Typography>
+                                                </Typography> */}
                                                 <MisPagosDetalle
                                                     datosCuenta={this.state.infoDatosCuenta}
                                                     textoBeneficioAplicado={this.state.descuentoBeneficio}

@@ -63,6 +63,32 @@ export const getTextoTipoTributo = (valueTributo) => {
 	return valueTributo;
 }
 
+export const getTextoTipoTributoById = (idTributo) => {
+
+	switch (idTributo) {
+		case 1:
+			return 'Automotores';
+		case 2:
+			return 'Inmuebles';
+		case 3:
+			return 'Comercio e Industria';
+		case 4:
+			return 'Cementerios';
+		case 5:
+			return 'Ferias y Mercados';
+		case 6:
+			return 'Taxis y Remises';
+		case 7:
+			return 'Agente de Percepción y Retención';
+		case 8:
+			return 'Contribución de Mejoras';
+		case 9:
+			return 'Planes De Vivienda';
+	}
+
+	return false;
+}
+
 export const stringToFloat = (str, decimales, opciones) => {
 	if (opciones && opciones.permitirVacio && str == "") {
 		return str;
