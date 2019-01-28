@@ -1148,8 +1148,7 @@ class DetalleTributo extends React.PureComponent {
             identificador: identificador
         })
             .then((datos) => {
-                this.props.mostrarCargando(false);
-                if (!datos.ok) { return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+                if (!datos.ok) { this.props.mostrarCargando(false); return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
 
                 this.setState({
                     informeCuenta: {
