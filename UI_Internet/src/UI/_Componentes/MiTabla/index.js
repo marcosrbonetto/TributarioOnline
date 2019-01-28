@@ -285,13 +285,16 @@ class MiTabla extends React.PureComponent {
 
     render() {
         const { classes, columns } = this.props;
-        const { rows, order, orderBy, selected, rowsPerPage, page } = this.state;
+        const { rows, order, orderBy, selected, rowsPerPage:rowsPerPageRender, page } = this.state;
         let { orderType } = this.state;
-        let emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+        let emptyRows = rowsPerPageRender - Math.min(rowsPerPageRender, rows.length - page * rowsPerPageRender);
         emptyRows = emptyRows - _.filter(rows || [], {invisible: true}).length;
         const check = this.props.check;
         const disabled = this.props.disabled;
         const pagination = this.props.pagination == false ? false : true;
+
+        //En caso de no haber paginación, se agranda el rango para que no corte las filas
+        const rowsPerPage = pagination ? rowsPerPageRender : 9999999999999;
 
         //Seteamos el orderType inicial de acuerdo a orderBy
         if(columns) {

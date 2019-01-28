@@ -118,7 +118,8 @@ class MisPagos extends React.PureComponent {
     this.setState({
       ...this.state,
       tableDisabled: result.tableDisabled || false,
-      rowList: result.rowList
+      rowList: result.rowList,
+      tieneBeneficio: result.beneficio ? true : false
     });
 
     const descuento = result.beneficio ? this.getDescuentoBeneficio() : 0;
@@ -335,7 +336,7 @@ class MisPagos extends React.PureComponent {
       auxRecargoAPagar = formatNumber(auxRecargoAPagar);
     }
 
-    const pagination = !this.props.paraMobile;
+    const pagination = this.props.paraMobile ? false : (this.state.tieneBeneficio ? false : true);
 
     return <div>
       <Grid container className={classes.containerDeudaAdm}>
