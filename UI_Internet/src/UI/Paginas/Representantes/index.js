@@ -773,7 +773,7 @@ class Representantes extends React.PureComponent {
             </MiCard>
 
             {/* Busqueda por CUIT */}
-            <MiCard rootClassName={"busquedaCUIT"}>
+            {/* <MiCard rootClassName={"busquedaCUIT"}>
               <Typography className={classes.title} variant="title">Agregar Representacion por CUIT</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.infoTexto}>
@@ -847,7 +847,7 @@ class Representantes extends React.PureComponent {
                 <Typography className={classes.mensajeError} variant="subheading">{this.state.busquedaCUIT.mensajeError}</Typography>
               </div>}
 
-            </MiCard>
+            </MiCard> */}
           </Grid>
         </Grid>
       </div>
