@@ -398,7 +398,17 @@ class MiMercadoPago extends React.PureComponent {
 
           <div key="footerContent">
             {base64Cedulon != '' && <Typography variant="subheading" gutterBottom>
-              Si lo desea puede descargar el cedulón que comprende los períodos que pagará a continuación mediante Mercado Pago: <a href={base64Cedulon} download="Cedulon Mercado Pago" className={classes.buttonDescarga}>Descargar Cedulón</a>
+              Si lo desea puede descargar el cedulón que comprende los períodos que pagará a continuación mediante Mercado Pago: 
+              <Button
+                size="small"
+                variant="outlined"
+                color="secondary"
+                href={base64Cedulon}
+                download="Cedulon Mercado Pago"
+                className={classes.buttonDescarga}
+              >
+                Descargar Cedulón
+            </Button>
               </Typography>}
           </div>
         </MiControledDialog>
@@ -469,7 +479,6 @@ const styles = theme => ({
     color: '#46b8da',
     minHeight: '0px',
     height: '24px',
-    marginLeft: '8px',
   },
 });
 
