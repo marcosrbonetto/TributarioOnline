@@ -27,6 +27,7 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
+// En desuso por ahora 28/01/19
 class importacionIndividual extends Component {
     constructor() {
         super();

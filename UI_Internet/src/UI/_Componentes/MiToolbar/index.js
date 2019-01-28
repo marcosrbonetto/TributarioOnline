@@ -117,6 +117,10 @@ class MiToolbar extends React.Component {
     window.location.href = window.Config.BASE_URL_AFIP + "/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionBienesCuitAFIP?appUrlRedirect=' + window.location.hash.substring(1));
   };
 
+  handleBienesPorCUITRepresentantes = () => {
+    window.location.href = window.Config.BASE_URL_AFIP + "/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP?appUrlRedirect=' + window.location.hash.substring(1));
+  };
+
   render() {
     let { classes, titulo } = this.props;
 
@@ -155,7 +159,7 @@ class MiToolbar extends React.Component {
             variant="title"
             color="inherit"
             noWrap
-            className={classNames(classes.title,"tituloTooltip")}
+            className={classNames(classes.title, "tituloTooltip")}
           >
             {titulo}
           </Typography>
@@ -165,6 +169,16 @@ class MiToolbar extends React.Component {
             paraMobile={this.props.paraMobile}
           />
 
+          {/* Importar Bienes por CUIT */}
+          {(!this.state.datosUsuario && <div>
+            <Button onClick={this.handleBienesPorCUIT} className={classNames(classes.btnBienesPorCUIT, "btnBienesPorCUIT")} variant="outlined" color="secondary">
+              Importar Bienes por CUIT
+            </Button>
+          </div>) ||
+            <Button onClick={this.handleBienesPorCUITRepresentantes} className={classNames(classes.btnBienesPorCUIT, "btnBienesPorCUIT")} variant="outlined" color="secondary">
+              Importar Bienes por CUIT</Button>}
+
+          
           {/* Icono de Notificaciones */}
           {/* Icono del usuario */}
           {this.state.datosUsuario && <div className={classes.loggedIcons}>
@@ -174,13 +188,7 @@ class MiToolbar extends React.Component {
               <Avatar alt="Menu del usuario" src={urlFotoPerfilMiniatura} className={classNames(classes.icono)} />
             </IconButton>
           </div>}
-
-          {/* Importar Bienes por CUIT */}
-          {!this.state.datosUsuario && <div>
-            <Button onClick={this.handleBienesPorCUIT} className={classNames(classes.btnBienesPorCUIT,"btnBienesPorCUIT")} variant="outlined" color="secondary">
-              Importar Bienes por CUIT
-            </Button>
-          </div>}
+          
 
           {/* Inicio sesion Vecino Virtual */}
           {!this.state.datosUsuario && <div>
@@ -309,7 +317,7 @@ const styles = theme => {
     loggedIcons: {
       textAlign: 'right',
       minWidth: '100px',
-      right: '20px',  
+      right: '20px',
       '& > *': {
         display: 'inline-block'
       }

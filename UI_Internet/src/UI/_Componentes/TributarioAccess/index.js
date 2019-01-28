@@ -71,10 +71,6 @@ class TributarioAccess extends React.PureComponent {
         this.props.eventRedirect(tipoTributo, identificador);
     };
 
-    handleOnClickImportarAFIP = () => {
-        window.location.href = window.Config.BASE_URL_AFIP + "/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP');
-    };
-
     render() {
         const { classes } = this.props;
 
@@ -96,32 +92,14 @@ class TributarioAccess extends React.PureComponent {
                         }
                         action={
                             <div>
-                                {(this.props.id == 3 && <div className="botonesTributarios">
-                                    <Button //Comercio
-                                        variant="outlined"
-                                        color="secondary"
-                                        className={classNames(classes.buttonActions, classes.buttonAddTributo)}
-                                        tributo={this.props.tipo}
-                                        onClick={this.handleOnClickImportarAFIP}>
-                                        Importar AFIP
-                                    </Button>
-                                    <Button
-                                        variant="outlined"
-                                        color="secondary"
-                                        className={classNames(classes.buttonActions, classes.buttonAddTributo)}
-                                        tributo={this.props.tipo}
-                                        onClick={this.handleOnClickAddTributo}>
-                                        +
-                                    </Button>
-                                </div>) ||
-                                    <Button
-                                        variant="outlined"
-                                        color="secondary"
-                                        className={classNames(classes.buttonActions, classes.buttonAddTributo, 'botonesTributarios')}
-                                        tributo={this.props.tipo}
-                                        onClick={this.handleOnClickAddTributo}>
-                                        + Agregar
-                            </Button>}
+                                <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    className={classNames(classes.buttonActions, classes.buttonAddTributo, 'botonesTributarios')}
+                                    tributo={this.props.tipo}
+                                    onClick={this.handleOnClickAddTributo}>
+                                    + Agregar
+                            </Button>
                             </div>
                         }
                         title={

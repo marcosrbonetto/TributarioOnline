@@ -534,11 +534,6 @@ class Representantes extends React.PureComponent {
   }
 
   //Aceptando solicitud en busca por Tributo
-  handleOnClickImportarRepresentanteAFIP = () => {
-    window.location.href = window.Config.BASE_URL_AFIP + "/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionIndividualAFIP');
-  }
-
-  //Aceptando solicitud en busca por Tributo
   handleAceptarSolicitudPermisoTitular = () => {
     this.props.mostrarCargando(true);
 
@@ -759,7 +754,7 @@ class Representantes extends React.PureComponent {
                     <Button
                       size="small"
                       color="secondary"
-                      onClick={this.state.selectTributos != '3' ? this.handleAceptarSolicitudPermisoTitular : this.handleOnClickImportarRepresentanteAFIP}>
+                      onClick={this.handleAceptarSolicitudPermisoTitular}>
                       Agregar
                   </Button>
                   </ExpansionPanelActions>
