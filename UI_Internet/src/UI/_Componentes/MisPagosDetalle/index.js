@@ -67,7 +67,7 @@ class MisPagosDetalle extends React.PureComponent {
           open: false
         }
       },
-      beneficioVisible: false,
+      beneficiosDisponibles: [],
       descuentoBeneficio: 0
     };
   }
@@ -175,14 +175,13 @@ class MisPagosDetalle extends React.PureComponent {
   chekearBeneficios = (callback) => {
     const tipoTributo = this.props.tributoActual;
     const seccion = this.props.tipoCedulon;
-    const allRows = this.state.rowList;
     const selectedRows = this.state.registrosSeleccionados;
 
     //Si seleccionBeneficios = True quiere decir que encontró:
     //Más de un beneficio
     //O un beneficio/s con otro periodo más que no pertenece al mismo
     //Si seleccionBeneficios = False se ve tieneBeneficio (True/False) de acuerdo si coinciden con un beneficio o no
-    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
+    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, selectedRows);
 
     if (resultCheckBeneficio.seleccionBeneficios) {
       //En caso que:
@@ -241,13 +240,12 @@ class MisPagosDetalle extends React.PureComponent {
   verificarTributoSeccionTieneBeneficio = () => {
     const tipoTributo = this.props.tributoActual;
     const seccion = this.props.tipoCedulon;
-    const allRows = this.state.rowList;
     const selectedRows = _.map(this.state.rowList,'concepto');
 
-    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
-
+    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, selectedRows);
+    
     this.setState({
-      beneficioVisible: resultCheckBeneficio.tieneBeneficio || false
+      beneficiosDisponibles: resultCheckBeneficio.arrayResultBeneficios || []
     });
   };
 
@@ -312,7 +310,7 @@ class MisPagosDetalle extends React.PureComponent {
     const disabled = this.state.tableDisabled;
     const revisionBeneficios = this.state.revisionBeneficios;
     const beneficioKey = this.state.beneficioKey;
-    const beneficioVisible = this.state.beneficioVisible;
+    const beneficiosDisponibles = this.state.beneficiosDisponibles;
 
     //Tributo y tipo de tributo para generar el cedulon
     const tributo = this.props.tributoActual;
@@ -396,7 +394,7 @@ class MisPagosDetalle extends React.PureComponent {
         <Grid item sm={8} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
 
           <MisBeneficios
-            visible={beneficioVisible}
+            beneficiosDisponibles={beneficiosDisponibles}
             tipoTributo={this.props.tributoActual}
             seccion={this.props.tipoCedulon}
             rows={rowList}

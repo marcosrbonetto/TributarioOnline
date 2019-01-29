@@ -67,7 +67,8 @@ class MisPagos extends React.PureComponent {
           open: false
         }
       },
-      beneficioVisible: false
+      beneficiosDisponibles: [],
+      descuentoBeneficio: 0
     };
   }
 
@@ -175,14 +176,13 @@ class MisPagos extends React.PureComponent {
   chekearBeneficios = (callback) => {
     const tipoTributo = this.props.cedulonConfig.tipoTributo;
     const seccion = this.props.cedulonConfig.tipoCedulon;
-    const allRows = this.state.rowList;
     const selectedRows = this.state.registrosSeleccionados;
 
     //Si seleccionBeneficios = True quiere decir que encontró:
     //Más de un beneficio
     //O un beneficio/s con otro periodo más que no pertenece al mismo
     //Si seleccionBeneficios = False se ve tieneBeneficio (True/False) de acuerdo si coinciden con un beneficio o no
-    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
+    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, selectedRows);
 
     if (resultCheckBeneficio.seleccionBeneficios) {
       //En caso que:
@@ -241,13 +241,12 @@ class MisPagos extends React.PureComponent {
   verificarTributoSeccionTieneBeneficio = () => {
     const tipoTributo = this.props.tributoActual;
     const seccion = this.props.tipoCedulon;
-    const allRows = this.state.rowList;
     const selectedRows = _.map(this.state.rowList,'concepto');
 
-    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, allRows, selectedRows);
+    const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, selectedRows);
     
     this.setState({
-      beneficioVisible: resultCheckBeneficio.tieneBeneficio || false
+      beneficiosDisponibles: resultCheckBeneficio.arrayResultBeneficios || []
     });
   };
 
@@ -316,7 +315,7 @@ class MisPagos extends React.PureComponent {
     const disabled = this.state.tableDisabled;
     const revisionBeneficios = this.state.revisionBeneficios;
     const beneficioKey = this.state.beneficioKey;
-    const beneficioVisible = this.state.beneficioVisible;
+    const beneficiosDisponibles = this.state.beneficiosDisponibles;
 
     //Determinamos si el Cedulon tiene que estar deshabilitado
     let disabledCedulon = !(stringToFloat(this.state.importeAPagar) > 0);
@@ -393,7 +392,7 @@ class MisPagos extends React.PureComponent {
         <Grid item sm={6} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
 
           <MisBeneficios
-            visible={beneficioVisible}
+            beneficiosDisponibles={beneficiosDisponibles}
             tipoTributo={cedulonConfig.tipoTributo}
             seccion={cedulonConfig.tipoCedulon}
             rows={rowList}
