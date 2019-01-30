@@ -713,9 +713,16 @@ class DetalleTributo extends React.PureComponent {
     onUltimosPagosDialogoOpen = () => {
         this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
-        const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-        const identificador = decodeURIComponent(this.props.match.params.identificador);
+        let tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        let identificador = decodeURIComponent(this.props.match.params.identificador);
 
+        //En caso de Juicios y Planes
+        const menuItemSeleccionado = this.state.menuItemSeleccionado;
+        if (this.state[menuItemSeleccionado].subItemTipoTributos) {
+            tipoTributo = getIdTipoTributo(this.state[menuItemSeleccionado].subItemTipoTributos);
+            identificador = decodeURIComponent(this.state[menuItemSeleccionado].menuItemSeleccionado);
+        }
+        
         servicesTributarioOnline.getUltimosPagos(token, {
             tipoTributo: tipoTributo,
             identificador: identificador
@@ -729,19 +736,13 @@ class DetalleTributo extends React.PureComponent {
                     return {
                         concepto: pago.concepto,
                         vencimiento: dateToString(new Date(pago.fecha), 'DD/MM/YYYY'),
+                        base: formatNumber(pago.importe.base),
+                        recargo: formatNumber(pago.importe.recargo),
+                        deduccion: formatNumber(pago.importe.deduccion),
                         importe: formatNumber(pago.importe.total),
-                        detalle: <MiTooltip
-                            contenidoDetalle={<div>
-                                <Typography>Base: <b>$ {pago.importe.base}</b></Typography>
-                                <Typography>Recargo: <b>$ {pago.importe.recargo}</b></Typography>
-                                <Typography>Deducción: <b>$ {pago.importe.deduccion}</b></Typography>
-                                <Typography>Citación: <b>{pago.citacion}</b></Typography>
-                                <Typography>CTL: <b>{pago.ctl}</b></Typography>
-                                <Typography>Estado: <b>{pago.estado}</b></Typography>
-                                <Typography>Caja: <b>{pago.caja}</b></Typography>
-                            </div>}>
-                            <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
-                        </MiTooltip>,
+                        ctl: pago.ctl,
+                        estado: pago.estado,
+                        caja: pago.caja,
                         data: pago //atributo "data" no se muestra en MiTabla
                     }
                 })) || [];
@@ -816,10 +817,6 @@ class DetalleTributo extends React.PureComponent {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
-                            base: formatNumber(concepto.importe.base),
-                            recargo: formatNumber(concepto.importe.recargo),
-                            deduccion: formatNumber(concepto.importe.deduccion),
-                            importe: formatNumber(concepto.importe.total),
                             observacion: concepto.referencia,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -2071,17 +2068,12 @@ class DetalleTributo extends React.PureComponent {
                                         onDialogoClose={this.onPeriodosAdeudadosDialogoClose}
                                         textoLink={'Períodos Adeudados'}
                                         titulo={'Períodos Adeudados'}
-                                        classMaxWidth={classes.maxWidthPeriodosAdeudados}
                                     >
                                         <MiTabla
                                             pagination={!this.props.paraMobile}
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
                                                 { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
-                                                { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base($)' },
-                                                { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo($)' },
-                                                { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción($)' },
-                                                { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe($)' },
                                                 { id: 'observacion', type: 'string', numeric: false, disablePadding: true, label: 'Observaciones' },
                                             ]}
                                             rows={periodosAdeudados.infoGrilla || []}
@@ -2125,14 +2117,20 @@ class DetalleTributo extends React.PureComponent {
 
                                             Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
                                         </div>}
+                                        classMaxWidth={classes.maxWidthUltimosPagos}
                                     >
                                         <MiTabla
                                             pagination={!this.props.paraMobile}
                                             columns={[
                                                 { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
                                                 { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base ($)' },
+                                                { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo ($)' },
+                                                { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción ($)' },
                                                 { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
-                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                                { id: 'ctl', type: 'string', numeric: false, disablePadding: false, label: 'CTL' },
+                                                { id: 'estado', type: 'string', numeric: false, disablePadding: false, label: 'Estado' },
+                                                { id: 'caja', type: 'string', numeric: false, disablePadding: false, label: 'Caja' },
                                             ]}
                                             rows={ultimosPagos.infoGrilla || []}
                                             msgNoRows={'No existen pagos registrados en los últimos dos años'}

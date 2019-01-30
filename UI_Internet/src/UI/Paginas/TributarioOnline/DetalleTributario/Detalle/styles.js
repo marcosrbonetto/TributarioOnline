@@ -277,9 +277,9 @@ const styles = theme => ({
     menuContainer: {
       width: '100%'
     },
-    maxWidthPeriodosAdeudados: {
+    maxWidthUltimosPagos: {
       minWidth: '100%'
-    }
+    },
   });
 
   
