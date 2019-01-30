@@ -24,7 +24,7 @@ import MiControledDialog from "@Componentes/MiControledDialog"
 import Button from "@material-ui/core/Button";
 
 //Funciones Útiles
-import { stringToFloat, formatNumber, getIdTipoTributo } from "@Utils/functions"
+import { stringToFloat, formatNumber, getIdTipoTributo, mostrarAlerta } from "@Utils/functions"
 
 import { mostrarCargando } from '@Redux/Actions/mainContent';
 
@@ -33,16 +33,17 @@ import services from '@Rules/Rules_TributarioOnline';
 
 const mapStateToProps = state => {
   return {
-      loggedUser: state.Usuario.loggedUser,
+    loggedUser: state.Usuario.loggedUser,
+    tipoTributos: state.MainContent.tipoTributos,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   redireccionar: url => {
-      dispatch(push(url));
+    dispatch(push(url));
   },
   mostrarCargando: (cargar) => {
-      dispatch(mostrarCargando(cargar));
+    dispatch(mostrarCargando(cargar));
   },
 });
 
@@ -101,7 +102,7 @@ class MisPagosDetalle extends React.PureComponent {
       importeTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
       recargoTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['data'].importe.recargo) : 0);
       deduccionTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['data'].importe.deduccion) : 0);
-      
+
       if (idFilasSeleccionadas.indexOf(item.id) != -1)
         registrosSeleccionados.push(item['concepto']);
     });
@@ -119,6 +120,62 @@ class MisPagosDetalle extends React.PureComponent {
       registrosSeleccionados: registrosSeleccionados
     });
   };
+
+  condicionFilasTabla = (params, callback) => {
+    //CONDICIÓN: No debe permitir superar los 7 digitos (excepto en Comercio)
+    const tributo = this.props.tributoActual;
+    const idTipoTributo = getIdTipoTributo(tributo);
+    let newDataRows = _.cloneDeep(params.rows);
+    let importeTotal = 0;
+    
+    //Calculamos el total
+    newDataRows.map((item) => {
+      importeTotal += parseFloat(params.rowsSetSelected.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
+    });
+
+    if (importeTotal >= 10000000 && idTipoTributo != this.props.tipoTributos.byValue['Comercio']) {
+      mostrarAlerta('Para generar generar el cedulon o realizar un pago, el monto total no puede superar los $9.999.999');
+
+      if (params.lastClickedRow) { //Cuando se preciona una fila en particular
+        var currentRow = _.find(newDataRows, { id: params.lastClickedRow.id });
+
+        currentRow.data.checked = false;
+
+        const rowsSetSelected = _.filter(params.rowsSetSelected,function(ele){
+            return ele != currentRow.id;
+        });
+
+        this.setState({
+          rowList: newDataRows
+        }, () => {
+          callback({
+            rows: newDataRows,
+            rowsSetSelected: rowsSetSelected
+          });
+        });
+
+      } else {
+        newDataRows.map(n => {
+          n.data.checked = false;
+        });
+
+        this.setState({
+          rowList: newDataRows
+        }, () => {
+          callback({
+            rows: newDataRows,
+            rowsSetSelected: []
+          });
+        });
+      }
+
+    } else {
+      callback({
+        rows: params.rows,
+        rowsSetSelected: params.rowsSetSelected
+      });
+    }
+  }
 
   handleBeneficiosResult = (result) => {
     //Seteamos las nuevas rows con sus nuevas configuraciones de acuerdo a los beneficios y la tabla
@@ -141,7 +198,7 @@ class MisPagosDetalle extends React.PureComponent {
 
   getDescuentoBeneficio = () => {
     const datosCuenta = this.props.datosCuenta;
-    if(!datosCuenta) return 0;
+    if (!datosCuenta) return 0;
 
     return datosCuenta[6] ? stringToFloat(datosCuenta[6].split('$')[1]) : 0;
   }
@@ -153,8 +210,8 @@ class MisPagosDetalle extends React.PureComponent {
     const token = this.props.loggedUser.token;
 
     const idTipoTributo = getIdTipoTributo(tributoActual);
-    const periodosBeneficio = _.filter(resultBeneficios.rowList,(o) => { return resultBeneficios.rowsSelected.indexOf(o.id) != -1});
-    const periodos = _.map(periodosBeneficio,'concepto');
+    const periodosBeneficio = _.filter(resultBeneficios.rowList, (o) => { return resultBeneficios.rowsSelected.indexOf(o.id) != -1 });
+    const periodos = _.map(periodosBeneficio, 'concepto');
 
     services.getReporteCedulon(token,
       {
@@ -217,8 +274,8 @@ class MisPagosDetalle extends React.PureComponent {
             Aplicar
           </Button>
           <br />
-          <span style={{color: 'red', fontSize: '12px', position: 'relative', top: '-8px'}}>(Recuerde que los periodos que quedan fuera del beneficio deberán ser pagados aparte)</span>
-          {!index == (resultCheckBeneficio.arrayResultBeneficios.length-1) && <div><br /><br /></div>}</div>);
+          <span style={{ color: 'red', fontSize: '12px', position: 'relative', top: '-8px' }}>(Recuerde que los periodos que quedan fuera del beneficio deberán ser pagados aparte)</span>
+          {!index == (resultCheckBeneficio.arrayResultBeneficios.length - 1) && <div><br /><br /></div>}</div>);
       });
 
       this.setState({
@@ -246,10 +303,10 @@ class MisPagosDetalle extends React.PureComponent {
   verificarTributoSeccionTieneBeneficio = () => {
     const tipoTributo = this.props.tributoActual;
     const seccion = this.props.tipoCedulon;
-    const selectedRows = _.map(this.state.rowList,'concepto');
+    const selectedRows = _.map(this.state.rowList, 'concepto');
 
     const resultCheckBeneficio = checkBeneficios(tipoTributo, seccion, selectedRows);
-    
+
     this.setState({
       beneficiosDisponibles: resultCheckBeneficio.arrayResultBeneficios || []
     });
@@ -386,7 +443,7 @@ class MisPagosDetalle extends React.PureComponent {
       </Grid>
       <Grid container spacing={16}>
         {/* Totalizador de deudas seleccionadas y botones de pago */}
-        <Grid item sm={4} className={classNames(classes.inputTotalPeriodos,"inputTotalPeriodos")}>
+        <Grid item sm={4} className={classNames(classes.inputTotalPeriodos, "inputTotalPeriodos")}>
           <TextField
             id="standard-full-width"
             label={<span className={classes.textoTotalAPagar}>Total a pagar</span>}
@@ -456,6 +513,7 @@ class MisPagosDetalle extends React.PureComponent {
 
       {/* Tabla de detalle del tributo */}
       <MiTabla
+        checkCondicion={this.condicionFilasTabla}
         pagination={pagination}
         columns={[
           { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
@@ -475,7 +533,7 @@ class MisPagosDetalle extends React.PureComponent {
 
       <Grid container spacing={16}>
         {/* Totalizador de deudas seleccionadas y botones de pago */}
-        <Grid item sm={4} className={classNames(classes.inputTotalPeriodos,"inputTotalPeriodos")}>
+        <Grid item sm={4} className={classNames(classes.inputTotalPeriodos, "inputTotalPeriodos")}>
           <TextField
             id="standard-full-width"
             label={<span className={classes.textoTotalAPagar}>Total a pagar</span>}
@@ -489,7 +547,7 @@ class MisPagosDetalle extends React.PureComponent {
             className={classes.totalAPagar}
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
-          <div className={classNames(classes.contentRecargoDeduccion,classes.contentRecargoDeduccionBottom)}>{auxRecargoAPagar ? <span className={classes.totalRecargoDeduccion}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.totalRecargoDeduccion}>(Recargo: {this.state.recargoAPagar})</span>} {auxDeduccionAPagar ? <span className={classes.totalRecargoDeduccion}>(Deducción: {auxDeduccionAPagar})</span> : <span className={classes.totalRecargoDeduccion}>(Deducción: {this.state.deduccionAPagar})</span>}</div>
+          <div className={classNames(classes.contentRecargoDeduccion, classes.contentRecargoDeduccionBottom)}>{auxRecargoAPagar ? <span className={classes.totalRecargoDeduccion}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.totalRecargoDeduccion}>(Recargo: {this.state.recargoAPagar})</span>} {auxDeduccionAPagar ? <span className={classes.totalRecargoDeduccion}>(Deducción: {auxDeduccionAPagar})</span> : <span className={classes.totalRecargoDeduccion}>(Deducción: {this.state.deduccionAPagar})</span>}</div>
         </Grid>
         <Grid item sm={8} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
           <MiCedulon
@@ -602,8 +660,8 @@ const styles = theme => ({
 let componente = MisPagosDetalle;
 componente = withStyles(styles)(componente);
 componente = connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(componente);
 componente = withRouter(componente);
 export default componente;
