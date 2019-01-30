@@ -176,7 +176,7 @@ class App extends React.Component {
             token: window.Config.TOKEN_INVITADO
           });
           
-          if(window.location.hash == '#/') {
+          if(window.location.hash == '#/' || window.location.hash == '#/Inicio/HomeUsuario') {
             this.props.redireccionar("/Inicio");
           }
           // --------------------- OJO!! comente esto pero probar de q ande todo bien

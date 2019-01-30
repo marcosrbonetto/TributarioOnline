@@ -50,7 +50,7 @@ class importacionMasiva extends Component {
         if(cuitUsuarioLog != cuitLogAFIP) {
             this.props.mostrarCargando(false);
             
-            localStorage.setItem('statusAfipImportacionMasiva', 'Los datos que ingresó en AFIP no pertenecen al usuario el logueado.');
+            localStorage.setItem('statusAfipImportacionMasiva', 'Los datos que ingresó en AFIP no pertenecen al usuario logueado.');
             this.props.redireccionar(appUrlRedirect);
             return false;
         }

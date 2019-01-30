@@ -2035,7 +2035,8 @@ class DetalleTributo extends React.PureComponent {
                                     >
                                         <div className={classes.textDatosCuenta}>
                                             {(Array.isArray(infoDatosCuenta) && infoDatosCuenta.map((item, index) => {
-                                                return <div key={index}>{item}</div>;
+                                                const content = item == '' ? <br/> : item;
+                                                return <div key={index}>{content}</div>;
                                             })) || (!Array.isArray(infoDatosCuenta) && infoDatosCuenta)}
                                         </div>
                                     </MiLinkDialog>
