@@ -41,6 +41,10 @@ import MiTooltip from "@Componentes/MiTooltip";
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 import servicesRepresentantes from '@Rules/Rules_Representantes';
 
+//Información
+import { vencimientosTributo } from '../vencimientosTributos';
+import { infoExplicativaTributos } from '../infoExplicativaTributos.js';
+
 //Funciones Útiles
 import { getAllUrlParams, formatNumber, stringToDate, diffDays, getIdTipoTributo, dateToString } from "@Utils/functions"
 
@@ -1406,22 +1410,6 @@ class DetalleTributo extends React.PureComponent {
         this.setState({ anchorElMenu: null });
     };
 
-    informacionTributo = () => {
-        const tributo = this.props.match.params.tributo;
-        const identificador = encodeURIComponent(this.props.match.params.identificador);
-        this.props.redireccionar('/DetalleTributario/InformacionTributo/' + tributo + '/' + identificador);
-
-        return true;
-    }
-
-    agendaVencimientos = () => {
-        const tributo = this.props.match.params.tributo;
-        const identificador = encodeURIComponent(this.props.match.params.identificador);
-        this.props.redireccionar('/DetalleTributario/AgendaVencimientos/' + tributo + '/' + identificador);
-
-        return true;
-    }
-
     render() {
         const { classes } = this.props;
 
@@ -2453,8 +2441,9 @@ class DetalleTributo extends React.PureComponent {
                                         paraMobile={this.props.paraMobile}
                                         textoLink={'Información del tributo'}
                                         titulo={'Información del tributo'}
-                                        onExternalAction={this.informacionTributo}
-                                    ></MiLinkDialog>
+                                    >
+                                    {infoExplicativaTributos(tipoTributo)}
+                                    </MiLinkDialog>
                                 </Grid>
                             </Grid>
 
@@ -2469,8 +2458,9 @@ class DetalleTributo extends React.PureComponent {
                                         paraMobile={this.props.paraMobile}
                                         textoLink={'Agenda de Vencimientos'}
                                         titulo={'Agenda de Vencimientos'}
-                                        onExternalAction={this.agendaVencimientos}
-                                    ></MiLinkDialog>
+                                    >
+                                    {vencimientosTributo(tipoTributo)}
+                                    </MiLinkDialog>
                                 </Grid>
                             </Grid>
 
