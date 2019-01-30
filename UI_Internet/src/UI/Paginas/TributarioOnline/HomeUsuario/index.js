@@ -67,9 +67,9 @@ class HomeUsuario extends React.PureComponent {
       else {
         mostrarAlerta(afipProcess);
       }
+
+      this.cargarTributos();
     }
-    
-    this.cargarTributos();
   }
 
   componentWillMount() {
