@@ -53,6 +53,7 @@ class MisPagos extends React.PureComponent {
     this.state = {
       importeAPagar: '0,00',
       recargoAPagar: '0,00',
+      deduccionAPagar: '0,00',
       rowList: this.props.rowList || [],
       tableDisabled: this.props.tablaConfig ? this.props.tablaConfig.disabled : false,
       registrosSeleccionados: this.props.registrosSeleccionados,
@@ -95,9 +96,11 @@ class MisPagos extends React.PureComponent {
 
     let importeTotal = 0;
     let recargoTotal = 0;
+    let deduccionTotal = 0;
     filas.map((item) => {
       importeTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
       recargoTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['data'].importe.recargo) : 0);
+      deduccionTotal += parseFloat(idFilasSeleccionadas.indexOf(item.id) != -1 ? stringToFloat(item['data'].importe.deduccion) : 0);
 
       if (idFilasSeleccionadas.indexOf(item.id) != -1)
         registrosSeleccionados.push(item['concepto']);
@@ -107,9 +110,12 @@ class MisPagos extends React.PureComponent {
       this.props.setRegistrosSeleccionados(registrosSeleccionados, this.props);
 
     importeTotal = descuentoBeneficio ? stringToFloat(importeTotal) - stringToFloat(descuentoBeneficio) : importeTotal;
+    deduccionTotal = descuentoBeneficio ? stringToFloat(deduccionTotal) + stringToFloat(descuentoBeneficio) : deduccionTotal;
+
     this.setState({ 
       importeAPagar: formatNumber(importeTotal),
       recargoAPagar: formatNumber(recargoTotal),
+      deduccionAPagar: formatNumber(deduccionTotal),
       registrosSeleccionados: registrosSeleccionados
     });
   };
@@ -324,15 +330,18 @@ class MisPagos extends React.PureComponent {
     //el monto a pagar se setea el total (ya q la grilla no tiene checks)
     let auxImporteAPagar = 0;
     let auxRecargoAPagar = 0;
+    let auxDeduccionAPagar = 0;
     if (!check) {
       disabledCedulon = false;
       rowList.map((item) => {
         auxImporteAPagar += stringToFloat(item['importe'], 2);
         auxRecargoAPagar += stringToFloat(item['data'].importe.recargo, 2);
+        auxDeduccionAPagar += stringToFloat(item['data'].importe.deduccion, 2);
       });
 
       auxImporteAPagar = formatNumber(auxImporteAPagar);
       auxRecargoAPagar = formatNumber(auxRecargoAPagar);
+      auxDeduccionAPagar = formatNumber(auxDeduccionAPagar);
     }
 
     const pagination = this.props.paraMobile ? false : (this.state.tieneBeneficio ? false : true);
@@ -374,10 +383,10 @@ class MisPagos extends React.PureComponent {
       </Grid>
       <Grid container spacing={16}>
         {/* Totalizador de deudas seleccionadas y botones de pago */}
-        <Grid item sm={6} className={"inputTotalPeriodos"}>
+        <Grid item sm={6} className={classNames(classes.inputTotalPeriodos,"inputTotalPeriodos")}>
           <TextField
             id="standard-full-width"
-            label={<span>Total a pagar {auxRecargoAPagar ? <span className={classes.recargo}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.recargo}>(Recargo: {this.state.recargoAPagar})</span>}</span>}
+            label={<span className={classes.textoTotalAPagar}>Total a pagar</span>}
             style={{ margin: 8 }}
             placeholder="0,00"
             fullWidth
@@ -388,6 +397,7 @@ class MisPagos extends React.PureComponent {
             className={classes.totalAPagar}
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
+          <div className={classNames(classes.contentRecargoDeduccion, classes.contentRecargoDeduccionTop)}>{auxRecargoAPagar ? <span className={classes.totalRecargoDeduccion}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.totalRecargoDeduccion}>(Recargo: {this.state.recargoAPagar})</span>} {auxDeduccionAPagar ? <span className={classes.totalRecargoDeduccion}>(Deducción: {auxDeduccionAPagar})</span> : <span className={classes.totalRecargoDeduccion}>(Deducción: {this.state.deduccionAPagar})</span>}</div>
         </Grid>
         <Grid item sm={6} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
 
@@ -449,10 +459,10 @@ class MisPagos extends React.PureComponent {
 
       <Grid container spacing={16}>
         {/* Totalizador de deudas seleccionadas y botones de pago */}
-        <Grid item sm={4} className={"inputTotalPeriodos"}>
+        <Grid item sm={4} className={classNames(classes.inputTotalPeriodos,"inputTotalPeriodos")}>
           <TextField
             id="standard-full-width"
-            label={<span>Total a pagar {auxRecargoAPagar ? <span className={classes.recargo}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.recargo}>(Recargo: {this.state.recargoAPagar})</span>}</span>}
+            label={<span className={classes.textoTotalAPagar}>Total a pagar</span>}
             style={{ margin: 8 }}
             placeholder="0,00"
             fullWidth
@@ -463,6 +473,7 @@ class MisPagos extends React.PureComponent {
             className={classes.totalAPagar}
             value={auxImporteAPagar ? auxImporteAPagar : this.state.importeAPagar}
           />
+          <div className={classNames(classes.contentRecargoDeduccion,classes.contentRecargoDeduccionBottom)}>{auxRecargoAPagar ? <span className={classes.totalRecargoDeduccion}>(Recargo: {auxRecargoAPagar})</span> : <span className={classes.totalRecargoDeduccion}>(Recargo: {this.state.recargoAPagar})</span>} {auxDeduccionAPagar ? <span className={classes.totalRecargoDeduccion}>(Deducción: {auxDeduccionAPagar})</span> : <span className={classes.totalRecargoDeduccion}>(Deducción: {this.state.deduccionAPagar})</span>}</div>
         </Grid>
         <Grid item sm={8} className={classNames(classes.buttonActionsContent, "buttonActionsContent")}>
           <MiCedulon
@@ -543,11 +554,32 @@ const styles = theme => ({
     margin: '2px',
     borderRadius: '20px',
   },
-  recargo: {
-    color: '#aaa'
+  contentRecargoDeduccion: {
+    position: 'absolute',
+    marginLeft: '8px',
+  },
+  contentRecargoDeduccionTop: {
+    bottom: '0px',
+  },
+  contentRecargoDeduccionBottom: {
+    bottom: '0px',
+  },
+  totalRecargoDeduccion: {
+    color: '#aaa',
+    padding: '0',
+    fontSize: '12px',
+    fontFamily: '\"Roboto\", \"Helvetica\", \"Arial\", sans-serif',
+    lineHeight: '1',
+    fontWeight: 'bold',
+  },
+  inputTotalPeriodos: {
+    position: 'relative'
+  },
+  textoTotalAPagar: {
+    fontSize: '18px'
   },
   totalAPagar: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   }
 });
 
