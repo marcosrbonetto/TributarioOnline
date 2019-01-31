@@ -341,6 +341,14 @@ class DetalleJuicio extends React.PureComponent {
     }
 
 
+    hableRedirectLocation = () => {
+        if(!this.idTipoTributo == this.props.tipoTributos.byValue['Inmueble']) return false;
+
+        const identificador = this.identificador;
+        const identificadorLocation = identificador.substr(0,2) + '-' + identificador.substr(2,2) + '-' + identificador.substr(4,3) + '-' + identificador.substr(7,3);
+
+        window.open('http://srv-lincatastro04/emap/?nomenclatura='+identificadorLocation,'_blank');
+    }
 
 
     render() {
@@ -451,6 +459,18 @@ class DetalleJuicio extends React.PureComponent {
                                     </Typography>
                                 </Grid>
                             </Grid>
+
+                            {this.idTipoTributo ==  this.props.tipoTributos.byValue['Inmueble'] &&
+                            <Grid container spacing={16}>
+                                <Grid item sm={4}>
+                                    <Typography variant="subheading" gutterBottom>Ubicación: </Typography>
+                                </Grid>
+                                <Grid item sm={8}>
+                                    <i className={classes.locationIcon} onClick={this.hableRedirectLocation} class="material-icons">
+                                        location_on
+                                    </i>
+                                </Grid>
+                            </Grid>}
 
                         </MiCard>
 

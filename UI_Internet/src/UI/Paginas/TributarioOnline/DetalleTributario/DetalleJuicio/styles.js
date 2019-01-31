@@ -260,6 +260,15 @@ const styles = theme => ({
     },
     maxWidthPeriodosAdeudados: {
       minWidth: '100%'
+    },
+    locationIcon: {
+      color: '#149257',
+      cursor: 'pointer',
+      border: '1px solid #149257',
+      borderRadius: '15px',
+      width: '32px',
+      height: '32px',
+      padding: '3px',
     }
   });
 

@@ -1411,6 +1411,16 @@ class DetalleTributo extends React.PureComponent {
         this.setState({ anchorElMenu: null });
     };
 
+    hableRedirectLocation = () => {
+        const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
+        if(!idTipoTributo == this.props.tipoTributos.byValue['Inmueble']) return false;
+
+        const identificador = decodeURIComponent(this.props.match.params.identificador);
+        const identificadorLocation = identificador.substr(0,2) + '-' + identificador.substr(2,2) + '-' + identificador.substr(4,3) + '-' + identificador.substr(7,3);
+
+        window.open('http://srv-lincatastro04/emap/?nomenclatura='+identificadorLocation,'_blank');
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -1814,6 +1824,18 @@ class DetalleTributo extends React.PureComponent {
                                     </Typography>
                                 </Grid>
                             </Grid>
+
+                            {tipoTributo ==  this.props.tipoTributos.byValue['Inmueble'] &&
+                            <Grid container spacing={16}>
+                                <Grid item sm={4}>
+                                    <Typography variant="subheading" gutterBottom>Ubicación: </Typography>
+                                </Grid>
+                                <Grid item sm={8}>
+                                    <i className={classes.locationIcon} onClick={this.hableRedirectLocation} class="material-icons">
+                                        location_on
+                                    </i>
+                                </Grid>
+                            </Grid>}
 
                         </MiCard>
 
