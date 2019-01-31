@@ -466,7 +466,7 @@ class DetalleJuicio extends React.PureComponent {
                                     <Typography variant="subheading" gutterBottom>Ubicación: </Typography>
                                 </Grid>
                                 <Grid item sm={8}>
-                                    <i className={classes.locationIcon} onClick={this.hableRedirectLocation} class="material-icons">
+                                <i className={classNames(classes.locationIcon,'material-icons')} onClick={this.hableRedirectLocation}>
                                         location_on
                                     </i>
                                 </Grid>
