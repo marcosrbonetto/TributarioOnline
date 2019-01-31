@@ -29,6 +29,7 @@ import MiTooltip from "@Componentes/MiTooltip";
 import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiControledDialog from "@Componentes/MiControledDialog"
 import MiTabla from "@Componentes/MiTabla";
+import MiPDFPrinter from "@Componentes/MiPDFPrinter";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
@@ -115,7 +116,7 @@ class DetallePlan extends React.PureComponent {
                 const infoDatosCuenta = datos.return.datosCuenta || 'No se encontraron registros';
 
                 let descuentoBeneficio;
-                if(infoDatosCuenta && infoDatosCuenta[6] && infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
+                if (infoDatosCuenta && infoDatosCuenta[6] && infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
                     descuentoBeneficio = infoDatosCuenta[6]; //El descuento siempre viene en la linea 7 (index 6)
 
                 const deudaTotales = datos.return.deudaAdministrativa;
@@ -603,9 +604,10 @@ class DetallePlan extends React.PureComponent {
 
                                             {informeCuenta.modal.showReporte && <div>
                                                 {informeCuenta.reporteBase64 && informeCuenta.reporteBase64 != '' &&
-                                                    <object data={'data:application/pdf;base64,' + informeCuenta.reporteBase64} type="application/pdf" height="384px" width="856px">
-                                                        <a href={'data:application/pdf;base64,' + informeCuenta.reporteBase64} download>Descargar Informe de Cuenta</a>
-                                                    </object>}
+                                                    <MiPDFPrinter
+                                                        base64File={'data:application/pdf;base64,' + informeCuenta.reporteBase64}
+                                                        textoLink={'Descargar Informe de Cuenta'}
+                                                        textoFile={'Informe de Cuenta'} />}
                                                 {!informeCuenta.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                             </div>}
                                         </div>
