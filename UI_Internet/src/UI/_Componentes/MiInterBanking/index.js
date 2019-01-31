@@ -251,6 +251,7 @@ const styles = theme => ({
     display: 'inline-block'
   },
   buttonActions: {
+    overflow: 'visible',
     display: 'inline-block',
     minWidth: 'auto',
     margin: '2px',

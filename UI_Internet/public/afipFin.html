@@ -7,6 +7,16 @@
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript">
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
         function getCookie(cname) {
             var name = cname + "=";
             var decodedCookie = decodeURIComponent(document.cookie);
@@ -31,7 +41,7 @@
 
         document.cookie = "Modo=None;path=/";
         document.cookie = "afipUrlRedirect=None;path=/";
-        document.location.href = urlRedirect + 'data=' + new URLSearchParams(window.location.search).get('data')
+        document.location.href = urlRedirect + 'data=' + getParameterByName('data')
     </script>
 </head>
 

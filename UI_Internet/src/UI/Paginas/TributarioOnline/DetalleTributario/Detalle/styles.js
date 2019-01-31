@@ -278,7 +278,9 @@ const styles = theme => ({
       width: '100%'
     },
     maxWidthUltimosPagos: {
-      minWidth: '100%'
+      minWidth: '100%',
+      maxWidth: '100%',
+      margin: '0px'
     },
   });
 
