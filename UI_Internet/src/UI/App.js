@@ -14,6 +14,9 @@ import { Route, Redirect } from "react-router-dom";
 import { AnimatedSwitch } from "react-router-transition";
 import { replace } from "connected-react-router";
 
+//URL Search (IE11)
+import 'url-search-params-polyfill';
+
 //REDUX
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
@@ -154,7 +157,7 @@ class App extends React.Component {
         let token = localStorage.getItem("token");
 
         let search = this.props.location.search;
-        if (search.startsWith("?")) {
+        if (search.charAt(0) == "?") {
           search = search.substring(1);
           search = new URLSearchParams(search);
           let tokenQueryString = search.get("token");
@@ -229,12 +232,13 @@ class App extends React.Component {
                     this.props.logout();
                     window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
                   });
+
+                  this.setState({ validandoToken: false });
               })
               .catch(error => {
                 this.props.logout();
                 window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
-              })
-              .finally(() => {
+
                 this.setState({ validandoToken: false });
               });
           });

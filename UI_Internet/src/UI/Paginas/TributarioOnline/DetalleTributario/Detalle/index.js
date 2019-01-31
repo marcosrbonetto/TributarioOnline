@@ -37,6 +37,7 @@ import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiControledDialog from "@Componentes/MiControledDialog"
 import MisPagosDetalle from "@Componentes/MisPagosDetalle";
 import MiTooltip from "@Componentes/MiTooltip";
+import MiPDFPrinter from "@Componentes/MiPDFPrinter";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 import servicesRepresentantes from '@Rules/Rules_Representantes';
@@ -595,9 +596,9 @@ class DetalleTributo extends React.PureComponent {
         let infoDatosCuenta = [];
 
         infoDatosCuenta = datosItemSeleccionado.datosCuenta ? datosItemSeleccionado.datosCuenta : 'No se encontraron registros';
-        
+
         let descuentoBeneficio;
-        if(infoDatosCuenta && infoDatosCuenta[6] && infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
+        if (infoDatosCuenta && infoDatosCuenta[6] && infoDatosCuenta[6].indexOf('DESCUENTO') != 1)
             descuentoBeneficio = infoDatosCuenta[6]; //El descuento siempre viene en la linea 7 (index 6)
 
         datosItemSeleccionado.rowList && datosItemSeleccionado.rowList.some((item) => {
@@ -726,7 +727,7 @@ class DetalleTributo extends React.PureComponent {
             tipoTributo = getIdTipoTributo(this.state[menuItemSeleccionado].subItemTipoTributos);
             identificador = decodeURIComponent(this.state[menuItemSeleccionado].menuItemSeleccionado);
         }
-        
+
         servicesTributarioOnline.getUltimosPagos(token, {
             tipoTributo: tipoTributo,
             identificador: identificador
@@ -1442,7 +1443,7 @@ class DetalleTributo extends React.PureComponent {
         const listPlanes = infoPlanes && infoPlanes.lista ? infoPlanes.lista : [];
 
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-  
+
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
                 <Grid container className={classes.root} spacing={16}>
@@ -1992,9 +1993,10 @@ class DetalleTributo extends React.PureComponent {
 
                                             {informeCuenta.modal.showReporte && <div>
                                                 {informeCuenta.reporteBase64 && informeCuenta.reporteBase64 != '' &&
-                                                    <object data={'data:application/pdf;base64,' + informeCuenta.reporteBase64} type="application/pdf" height="384px" width="856px">
-                                                        <a href={'data:application/pdf;base64,' + informeCuenta.reporteBase64} download>Descargar Informe de Cuenta</a>
-                                                    </object>}
+                                                    <MiPDFPrinter
+                                                        base64File={'data:application/pdf;base64,' + informeCuenta.reporteBase64}
+                                                        textoLink={'Descargar Informe de Cuenta'}
+                                                        textoFile={'Informe de Cuenta'} />}
                                                 {!informeCuenta.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                             </div>}
                                         </div>
@@ -2035,7 +2037,7 @@ class DetalleTributo extends React.PureComponent {
                                     >
                                         <div className={classes.textDatosCuenta}>
                                             {(Array.isArray(infoDatosCuenta) && infoDatosCuenta.map((item, index) => {
-                                                const content = item == '' ? <br/> : item;
+                                                const content = item == '' ? <br /> : item;
                                                 return <div key={index}>{content}</div>;
                                             })) || (!Array.isArray(infoDatosCuenta) && infoDatosCuenta)}
                                         </div>
@@ -2101,7 +2103,7 @@ class DetalleTributo extends React.PureComponent {
                                                 <li><b>IMPUTADO:</b> el período fué abonado y el monto fué imputado.</li>
                                                 <li><b>PENDIENTE:</b> el período fué pagado, pero todavía no imputó.</li>
                                             </ul><br /><br />
-                                            
+
                                             Las imputaciones pueden demorar unos 10 días hábiles dependiendo del caso.<br /><br />
 
                                             Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
@@ -2202,9 +2204,10 @@ class DetalleTributo extends React.PureComponent {
 
                                                     {informeAntecedentes.modal.showReporte && <div>
                                                         {informeAntecedentes.reporteBase64 && informeAntecedentes.reporteBase64 != '' &&
-                                                            <object data={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64} type="application/pdf" height="384px" width="856px">
-                                                                <a href={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64} download>Descargar Informe de Antecedentes</a>
-                                                            </object>}
+                                                            <MiPDFPrinter
+                                                                base64File={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64}
+                                                                textoLink={'Descargar Informe de Antecedentes'}
+                                                                textoFile={'Informe Informe de Antecedentes'} />}
                                                         {!informeAntecedentes.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     </div>}
                                                 </div>
@@ -2274,9 +2277,10 @@ class DetalleTributo extends React.PureComponent {
 
                                                     {informeREMAT.modal.showReporte && <div>
                                                         {informeREMAT.reporteBase64 && informeREMAT.reporteBase64 != '' &&
-                                                            <object data={'data:application/pdf;base64,' + informeREMAT.reporteBase64} type="application/pdf" height="384px" width="856px">
-                                                                <a href={'data:application/pdf;base64,' + informeREMAT.reporteBase64} download>Descargar Informe REMAT</a>
-                                                            </object>}
+                                                            <MiPDFPrinter
+                                                                base64File={'data:application/pdf;base64,' + informeREMAT.reporteBase64}
+                                                                textoLink={'Descargar Informe REMAT'}
+                                                                textoFile={'Informe REMAT'} />}
                                                         {!informeREMAT.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     </div>}
                                                 </div>
@@ -2399,9 +2403,10 @@ class DetalleTributo extends React.PureComponent {
 
                                                 {declaracionJurada.modal.showReporte && <div>
                                                     {declaracionJurada.reporteBase64 && declaracionJurada.reporteBase64 != '' &&
-                                                        <object data={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} type="application/pdf" height="384px" width="856px">
-                                                            <a href={'data:application/pdf;base64,' + declaracionJurada.reporteBase64} download>Descargar DDJJ</a>
-                                                        </object>}
+                                                        <MiPDFPrinter
+                                                            base64File={'data:application/pdf;base64,' + declaracionJurada.reporteBase64}
+                                                            textoLink={'Descargar DDJJ'}
+                                                            textoFile={'DDJJ'} />}
                                                     {declaracionJurada.reporteBase64 == undefined && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
                                                     {declaracionJurada.reporteBase64 == '' && 'Generando DDJJ.'}
                                                 </div>}
@@ -2443,7 +2448,7 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Información del tributo'}
                                         titulo={'Información del tributo'}
                                     >
-                                    {infoExplicativaTributos(tipoTributo)}
+                                        {infoExplicativaTributos(tipoTributo)}
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>
@@ -2460,7 +2465,7 @@ class DetalleTributo extends React.PureComponent {
                                         textoLink={'Agenda de Vencimientos'}
                                         titulo={'Agenda de Vencimientos'}
                                     >
-                                    {vencimientosTributo(tipoTributo)}
+                                        {vencimientosTributo(tipoTributo)}
                                     </MiLinkDialog>
                                 </Grid>
                             </Grid>

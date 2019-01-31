@@ -8,6 +8,7 @@ import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
 import MiControledDialog from "@Componentes/MiControledDialog";
+import MiPDFPrinter from "@Componentes/MiPDFPrinter";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 import servicesInterBanking from '@Rules/Rules_InterBanking';
@@ -32,7 +33,7 @@ class MiInterBanking extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const visible = props.tipoCedulon == "Contribucion" && [3,7].indexOf(props.tipoTributo) != -1; //Comercios
+    const visible = props.tipoCedulon == "Contribucion" && [3, 7].indexOf(props.tipoTributo) != -1; //Comercios
 
     this.state = {
       mensajeError: undefined,
@@ -101,7 +102,7 @@ class MiInterBanking extends React.PureComponent {
         })
         .catch((err) => { console.log(err); });
 
-        const servicio2 = servicesInterBanking.generacionCTLInterBanking(token,
+      const servicio2 = servicesInterBanking.generacionCTLInterBanking(token,
         {
           "tipoTributo": parseInt(this.props.tipoTributo),
           "identificador": this.props.identificador,
@@ -134,11 +135,11 @@ class MiInterBanking extends React.PureComponent {
         })
         .catch((err) => { console.log(err); });
 
-        Promise.all([servicio1,servicio2]).then(() => {
-          this.props.mostrarCargando(false);
-        }).catch(err => {
-          console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
-        });
+      Promise.all([servicio1, servicio2]).then(() => {
+        this.props.mostrarCargando(false);
+      }).catch(err => {
+        console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
+      });
     } else {
       this.setState({
         dialogoOpen: true,
@@ -161,93 +162,87 @@ class MiInterBanking extends React.PureComponent {
     const { visible, mensajeError, infoCupon, base64Cedulon } = this.state;
 
     return (<div className={classNames(classes.root, "BtnMisBeneficios")}>
-      {visible && 
-      <div className={classes.root}>
-        <MiControledDialog
-          paraMobile={this.props.paraMobile}
-          open={this.state.dialogoOpen}
-          onDialogoOpen={this.onDialogoOpen}
-          onDialogoClose={this.onDialogoClose}
-          buttonAction={true}
-          textoLink={'Plataforma Online de InterBanking'}
-          titulo={'Plataforma Online de InterBanking'}
-        >
-          <div key="buttonAction">
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classNames(classes.buttonActions, classes.buttonMercadoLibre)}
-              onClick={this.handleClick}
-              disabled={this.state.disabled}
-            >
-              <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
-                Pago Online
-                    </Typography>
-            </Button>
-          </div>
-
-          <div key="mainContent">
-            <div>
-              Sr. Contribuyente:<br />
-              Le recordamos que para poder realizar el pago mediante Interbanking, Ud. deberá previamente vincular su cuenta a la comunidad correspondiente de pago (En éste caso la Municipalidad de Córdoba).<br />
-              Manual de ayuda para vincular su cuenta:
-              <Button
-                size="small"
-                variant="outlined"
-                color="secondary"
-                href={'data:application/pdf;base64,' + encodeURIComponent(infoPDF)}
-                download="Manual de Ayuda - InterBaking"
-                className={classes.buttonAyuda}
-              >
-                Descargar
-            </Button><br/><br/>
-            </div>
-
-            {infoCupon && 
-            <div>
-              <span className={classes.textoInfoCupon}>Se generó correctamente {infoCupon.lenght > 1 ? 'los cupones': 'el cupón'} de pago. </span>
+      {visible &&
+        <div className={classes.root}>
+          <MiControledDialog
+            paraMobile={this.props.paraMobile}
+            open={this.state.dialogoOpen}
+            onDialogoOpen={this.onDialogoOpen}
+            onDialogoClose={this.onDialogoClose}
+            buttonAction={true}
+            textoLink={'Plataforma Online de InterBanking'}
+            titulo={'Plataforma Online de InterBanking'}
+          >
+            <div key="buttonAction">
               <Button
                 variant="contained"
                 color="secondary"
-                href={'https://sib1.interbanking.com.ar/secureLogin.do?from=home'}
-                target="_blank"
+                className={classNames(classes.buttonActions, classes.buttonMercadoLibre)}
+                onClick={this.handleClick}
+                disabled={this.state.disabled}
               >
-                Pagar
+                <Typography className={classes.buttonActionsCaption} variant="caption" gutterBottom align="center">
+                  Pago Online
+                    </Typography>
               </Button>
-              {infoCupon.map((cuponCTL) => {
-                return <div className={classes.textoCTL}>{cuponCTL.descripcion}</div>;
-              })}
-            </div>}
-            {mensajeError && 
-              <div style={{ color: 'red' }}>{mensajeError}</div>
-            }
-            {/* MUESTRA DE CEDULON */}
-            {/*this.state.base64Cedulon != '' &&
+            </div>
+
+            <div key="mainContent">
+              <div>
+                Sr. Contribuyente:<br />
+                Le recordamos que para poder realizar el pago mediante Interbanking, Ud. deberá previamente vincular su cuenta a la comunidad correspondiente de pago (En éste caso la Municipalidad de Córdoba).<br />
+                Manual de ayuda para vincular su cuenta:
+              <MiPDFPrinter
+                  base64File={'data:application/pdf;base64,' + encodeURIComponent(infoPDF)}
+                  textoLink={'Descargar'}
+                  textoFile={'Manual de Ayuda - InterBaking'}
+                  descargaDirecta={true}
+                  buttonStyle={classes.buttonAyuda}
+                /><br /><br />
+              </div>
+
+              {infoCupon &&
+                <div>
+                  <span className={classes.textoInfoCupon}>Se generó correctamente {infoCupon.lenght > 1 ? 'los cupones' : 'el cupón'} de pago. </span>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    href={'https://sib1.interbanking.com.ar/secureLogin.do?from=home'}
+                    target="_blank"
+                  >
+                    Pagar
+              </Button>
+                  {infoCupon.map((cuponCTL) => {
+                    return <div className={classes.textoCTL}>{cuponCTL.descripcion}</div>;
+                  })}
+                </div>}
+              {mensajeError &&
+                <div style={{ color: 'red' }}>{mensajeError}</div>
+              }
+              {/* MUESTRA DE CEDULON */}
+              {/*this.state.base64Cedulon != '' &&
               <object data={this.state.base64Cedulon} type="application/pdf" height="384px" width="856px">
                 <a href={this.state.base64Cedulon} download>Descargar Cedulon</a>
               </object>*/}
-            {/*this.state.base64Cedulon == '' && <div style={{ color: 'red' }}>{this.state.mensajeError || "Se están presentando inconvenientes para generar el cedulón, intente más tarde."}</div>*/}
-          <br/>
-          </div>
+              {/*this.state.base64Cedulon == '' && <div style={{ color: 'red' }}>{this.state.mensajeError || "Se están presentando inconvenientes para generar el cedulón, intente más tarde."}</div>*/}
+              <br />
+            </div>
 
-          <div key="footerContent">
-            {base64Cedulon != '' && <Typography variant="subheading" gutterBottom>
-              Si lo desea puede descargar el cedulón que comprende los períodos que pagará a continuación mediante InterBaking: 
-              <Button
-                size="small"
-                variant="outlined"
-                color="secondary"
-                href={base64Cedulon}
-                download="Cedulon InterBanking"
-                className={classes.buttonDescarga}
-              >
-                Descargar Cedulón
-            </Button>
+            <div key="footerContent">
+              {base64Cedulon != '' && <Typography variant="subheading" gutterBottom>
+                Si lo desea puede descargar el cedulón que comprende los períodos que pagará a continuación mediante InterBaking:
+                <MiPDFPrinter
+                  base64File={base64Cedulon}
+                  textoLink={'Descargar Cedulón'}
+                  textoFile={'Cedulon InterBanking'}
+                  descargaDirecta={true}
+                  buttonStyle={classes.buttonDescarga}
+                />
               </Typography>}
-          </div>
-        </MiControledDialog>
-      </div>
-    }</div>);
+            </div>
+          </MiControledDialog>
+        </div>
+      }</div>);
   }
 }
 

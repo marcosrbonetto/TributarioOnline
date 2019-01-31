@@ -19,6 +19,7 @@ import StepContent from '@material-ui/core/StepContent';
 import TextField from "@material-ui/core/TextField";
 
 import MiControledDialog from "@Componentes/MiControledDialog";
+import MiPDFPrinter from "@Componentes/MiPDFPrinter";
 
 import services from '@Rules/Rules_TributarioOnline';
 import { mostrarCargando } from '@Redux/Actions/mainContent';
@@ -181,9 +182,10 @@ class MiMercadoPago extends React.PureComponent {
             descripcionRecibo: descripcionRecibo,
             causa: causa //Solo en Multas
           });
+          this.props.mostrarCargando(false);
         })
-        .catch((err) => { console.log(err); })
-        .finally(() => {
+        .catch((err) => { 
+          console.log(err);
           this.props.mostrarCargando(false);
         });
     } else {
@@ -399,16 +401,13 @@ class MiMercadoPago extends React.PureComponent {
           <div key="footerContent">
             {base64Cedulon != '' && <Typography variant="subheading" gutterBottom>
               Si lo desea puede descargar el cedulón que comprende los períodos que pagará a continuación mediante Mercado Pago: 
-              <Button
-                size="small"
-                variant="outlined"
-                color="secondary"
-                href={base64Cedulon}
-                download="Cedulon Mercado Pago"
-                className={classes.buttonDescarga}
-              >
-                Descargar Cedulón
-            </Button>
+              <MiPDFPrinter
+                  base64File={base64Cedulon}
+                  textoLink={'Descargar Cedulón'}
+                  textoFile={'Cedulon Mercado Pago'}
+                  descargaDirecta={true}
+                  buttonStyle={classes.buttonDescarga}
+                />
               </Typography>}
           </div>
         </MiControledDialog>

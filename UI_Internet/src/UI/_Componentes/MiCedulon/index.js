@@ -12,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from "@material-ui/core/Button";
 
 import MiControledDialog from "@Componentes/MiControledDialog";
+import MiPDFPrinter from "@Componentes/MiPDFPrinter";
 
 import services from '@Rules/Rules_TributarioOnline';
 import { mostrarCargando } from '@Redux/Actions/mainContent';
@@ -54,9 +55,9 @@ class MiCedulon extends React.PureComponent {
     const target = event.currentTarget;
 
     //Vemos si tiene un acción antes de mostrar el listado
-    if(this.props.onClick) {
+    if (this.props.onClick) {
       this.props.onClick((tieneBeneficio) => {
-        if(tieneBeneficio)
+        if (tieneBeneficio)
           this.onBotonCedulonClick();
         else
           this.setState({ anchorEl: target });
@@ -64,7 +65,7 @@ class MiCedulon extends React.PureComponent {
     } else {
       this.setState({ anchorEl: target });
     }
-    
+
   };
 
   handleClose = () => {
@@ -114,9 +115,10 @@ class MiCedulon extends React.PureComponent {
             dialogoOpen: true,
             mensajeError: undefined
           });
+          this.props.mostrarCargando(false);
         })
-        .catch((err) => { console.log(err); })
-        .finally(() => {
+        .catch((err) => {
+          console.log(err);
           this.props.mostrarCargando(false);
         });
     } else {
@@ -174,11 +176,12 @@ class MiCedulon extends React.PureComponent {
           </div>
 
           <div key="mainContent">
-            {this.state.base64Cedulon != '' &&
-              <object data={this.state.base64Cedulon} type="application/pdf" height="384px" width="856px">
-                <a href={this.state.base64Cedulon} download>Descargar Cedulon</a>
-              </object>}
-            {this.state.base64Cedulon == '' && <div style={{ color: 'red' }}>{this.state.mensajeError || "Se están presentando inconvenientes para generar el cedulón, intente más tarde."}</div>}
+            <MiPDFPrinter
+              base64File={this.state.base64Cedulon}
+              textoLink={'Descargar Cedulón'}
+              textoFile={'Cedulón'}
+              callback={this.onDialogoClose}
+            />
           </div>
         </MiControledDialog>
       </div>
@@ -202,7 +205,7 @@ const styles = theme => ({
     left: '50%',
     transform: 'translateX(-50%)',
     width: '90px'
-  },
+  }
 });
 
 let componente = MiCedulon;

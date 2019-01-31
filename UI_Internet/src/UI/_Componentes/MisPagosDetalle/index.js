@@ -227,9 +227,10 @@ class MisPagosDetalle extends React.PureComponent {
         const resultData = datos.return;
 
         callback(resultData.totalCedulon || 0);
+        this.props.mostrarCargando(false);
       })
-      .catch((err) => { console.log(err); })
-      .finally(() => {
+      .catch((err) => { 
+        console.log(err);
         this.props.mostrarCargando(false);
       });
   }
