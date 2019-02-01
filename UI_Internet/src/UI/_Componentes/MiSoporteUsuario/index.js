@@ -53,7 +53,7 @@ class MiSoporteUsuario extends React.PureComponent {
 const styles = theme => ({
   button: {
     position: 'fixed',
-    right: '0px',
+    left: '0px',
     bottom: '0px',
     zIndex: '9999999999999999',
     '&:hover > span > span': {

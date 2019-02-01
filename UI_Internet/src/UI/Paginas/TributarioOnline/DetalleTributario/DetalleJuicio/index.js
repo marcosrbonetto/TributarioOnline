@@ -495,7 +495,7 @@ class DetalleJuicio extends React.PureComponent {
                                         onDialogoClose={this.onInformeCuentaDialogoClose}
                                         textoLink={'Informe de Cuenta'}
                                         titulo={'Informe de Cuenta al día ' + dateToString(new Date(), 'DD/MM/YYYY')}
-                                        classMaxWidth={classes.maxWidthInformeCuenta}
+                                        classMaxWidth={!informeCuenta.modal.showReporte ? classes.maxWidthInformeCuenta : classes.maxWidthPDF}
                                         footerFixed={true}
                                     >
                                         <div key="headerContent"></div>

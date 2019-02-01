@@ -151,6 +151,7 @@ class MiCedulon extends React.PureComponent {
           buttonAction={true}
           textoLink={'Cedulon'}
           titulo={'Cedulon'}
+          classMaxWidth={classes.maxWidth}
         >
           <div key="buttonAction">
             <Button
@@ -206,6 +207,10 @@ const styles = theme => ({
     left: '50%',
     transform: 'translateX(-50%)',
     width: '90px'
+  },
+  maxWidth: {
+    minWidth: '100%',
+    minHeight: '100%',
   }
 });
 

@@ -45,7 +45,7 @@ class MiPDFPrinter extends React.PureComponent {
                   className={buttonStyle || classes.bottonDescarga}
                 >{textoLink}</Button>
                 ||
-                <object data={base64File} type="application/pdf" height="384px" width="856px">
+                <object data={base64File} type="application/pdf" className={classes.sizePDF}>
                   <a className={buttonStyle || classes.bottonDescarga} href={base64File} download>{textoLink}</a>
                 </object>}
             </div>}
@@ -63,6 +63,11 @@ const styles = theme => ({
   bottonDescarga: {
     borderColor: '#46b8da',
     color: '#46b8da',
+  },
+  sizePDF: {
+    width: 'calc(100% - 46px)',
+    height: 'calc(100% - 136px)',
+    position: 'absolute'
   }
 });
 

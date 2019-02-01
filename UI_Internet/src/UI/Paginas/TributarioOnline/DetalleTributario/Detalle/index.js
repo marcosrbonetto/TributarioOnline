@@ -1894,7 +1894,7 @@ class DetalleTributo extends React.PureComponent {
                                         onDialogoClose={this.onInformeCuentaDialogoClose}
                                         textoLink={'Informe de Cuenta'}
                                         titulo={'Informe de Cuenta al día ' + dateToString(new Date(), 'DD/MM/YYYY')}
-                                        classMaxWidth={classes.maxWidthInformeCuenta}
+                                        classMaxWidth={!informeCuenta.modal.showReporte ? classes.maxWidthInformeCuenta : classes.maxWidthPDF}
                                         footerFixed={true}
                                     >
                                         <div key="headerContent"></div>
@@ -2201,6 +2201,7 @@ class DetalleTributo extends React.PureComponent {
                                                 onDialogoClose={this.onInformeAntecedentesDialogoClose}
                                                 textoLink={'Informe Antecedentes'}
                                                 titulo={'Informe Antecedentes'}
+                                                classMaxWidth={informeAntecedentes.modal.showReporte && classes.maxWidthPDF}
                                             >
                                                 <div key="headerContent"></div>
                                                 <div key="mainContent">
@@ -2274,6 +2275,7 @@ class DetalleTributo extends React.PureComponent {
                                                 onDialogoClose={this.onInformeREMATDialogoClose}
                                                 textoLink={'Informe REMAT'}
                                                 titulo={'Informe REMAT'}
+                                                classMaxWidth={informeREMAT.modal.showReporte && classes.maxWidthPDF}
                                             >
                                                 <div key="headerContent"></div>
                                                 <div key="mainContent">

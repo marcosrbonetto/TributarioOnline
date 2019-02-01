@@ -269,6 +269,12 @@ const styles = theme => ({
       width: '32px',
       height: '32px',
       padding: '3px',
+    },
+    maxWidthPDF: {
+      minWidth: '100%',
+      minHeight: '100%',
+      position: 'absolute',
+      margin: '0px'
     }
   });
 
