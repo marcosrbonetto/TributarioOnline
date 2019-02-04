@@ -12,8 +12,9 @@ const beneficios = {
             columnaCondicion: 'vencimiento',
             seteoFila: (row) => {
                 const year = typeof row.concepto.split('/')[0] == 'string' ? parseInt(row.concepto.split('/')[0]) : 1900;
+                const month = typeof row.concepto.split('/')[1] == 'string' ? parseInt(row.concepto.split('/')[1]) : -1;
 
-                if (year == 2019) {
+                if ([1, 2, 3, 4, 5, 6].indexOf(month) != -1 && year == 2019) {
                     row.data = {
                         ...row.data,
                         checked: true,
@@ -28,11 +29,11 @@ const beneficios = {
                         disabled: false,
                     };
                 }
-
+                
                 return row;
             },
             cumpleCondicionBeneficio: (idRowsSeleccionados) => {
-                const idRowsBeneficio = ['2019/001','2019/002','2019/003','2019/004','2019/005','2019/006','2019/007','2019/008','2019/009','2019/010','2019/011','2019/012'];
+                const idRowsBeneficio = ['2019/001','2019/002','2019/003','2019/004','2019/005','2019/006'];
 
                 const difference = _.difference(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
                 const difference2 = _.difference(idRowsSeleccionados.sort(), idRowsBeneficio.sort());

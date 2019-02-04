@@ -35,6 +35,7 @@ import CaptchaAccess from "@UI/Paginas/CaptchaAccess/index";
 import DetalleTributario from "@UI/Paginas/TributarioOnline/DetalleTributario/index";
 import importacionMasivaAFIP from "@UI/Paginas/AfipController/importacionMasiva";
 import importacionBienesCuitAFIP from "@UI/Paginas/AfipController/importacionBienesCuit";
+import importacionInformeDeudasAFIP from "@UI/Paginas/AfipController/importacionInformeDeudas";
 import pagoNexo from "@UI/Paginas/MercadoPagoController/pagoNexo";
 import Pagina404 from "@UI/_Pagina404";
 import IndicadorCargando from "@UI/_Componentes/IndicadorCargando"
@@ -374,6 +375,7 @@ class App extends React.Component {
           <Route path={`${base}/Inicio`} component={login ? Inicio : null} />
           <Route path={`${base}/importacionMasivaAFIP`} component={login ? importacionMasivaAFIP : null} />
           <Route path={`${base}/importacionBienesCuitAFIP`} component={login ? importacionBienesCuitAFIP : null} />
+          <Route path={`${base}/importacionInformeDeudasAFIP`} component={login ? importacionInformeDeudasAFIP : null} />
           <Route path={`${base}/PagoNexo`} component={login ? pagoNexo : null} />
           <Route component={login ? Pagina404 : null} />
         </AnimatedSwitch>

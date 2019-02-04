@@ -9,6 +9,8 @@ import SeleccionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Sel
 import BusquedaPorJuicio from "@UI/Paginas/TributarioOnline/BusquedaPor/Juicio";
 import BusquedaPorPlan from "@UI/Paginas/TributarioOnline/BusquedaPor/Plan";
 
+import InformeDeudasCUIT from "@UI/Paginas/TributarioOnline/InformeDeudasCUIT/index";
+
 const Menu = [
   {
     url: "/Inicio",
@@ -156,6 +158,14 @@ const Menu = [
     component: Representantes,
     nombre: "Representantes",
     titulo: "Representantes",
+  },
+  {
+    url: "/Inicio/InformeDeudasCUIT",
+    exact: false,
+    mostrarEnMenu: true,
+    component: InformeDeudasCUIT,
+    nombre: "Informe de Deudas",
+    titulo: "Informe de Deudas",
   },
   {
     url: "/Inicio/Representantes",

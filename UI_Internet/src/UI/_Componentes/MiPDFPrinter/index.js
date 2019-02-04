@@ -50,7 +50,7 @@ class MiPDFPrinter extends React.PureComponent {
                 </object>}
             </div>}
         </div>}
-        {base64File == '' && <div style={{ color: 'red' }}>{this.state.mensajeError || "Se están presentando inconvenientes para generar el cedulón, intente más tarde."}</div>}
+        {base64File == '' && <div style={{ color: 'red' }}>{this.props.mensajeError || "Se están presentando inconvenientes para generar el cedulón, intente más tarde."}</div>}
       </div>
     );
   }
