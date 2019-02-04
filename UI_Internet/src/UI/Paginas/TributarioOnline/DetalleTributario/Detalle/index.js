@@ -1413,12 +1413,12 @@ class DetalleTributo extends React.PureComponent {
 
     hableRedirectLocation = () => {
         const idTipoTributo = getIdTipoTributo(this.props.match.params.tributo);
-        if(!idTipoTributo == this.props.tipoTributos.byValue['Inmueble']) return false;
+        if (!idTipoTributo == this.props.tipoTributos.byValue['Inmueble']) return false;
 
         const identificador = decodeURIComponent(this.props.match.params.identificador);
-        const identificadorLocation = identificador.substr(0,2) + '-' + identificador.substr(2,2) + '-' + identificador.substr(4,3) + '-' + identificador.substr(7,3);
+        const identificadorLocation = identificador.substr(0, 2) + '-' + identificador.substr(2, 2) + '-' + identificador.substr(4, 3) + '-' + identificador.substr(7, 3);
 
-        window.open('http://srv-lincatastro04/emap/?nomenclatura='+identificadorLocation,'_blank');
+        window.open('http://srv-lincatastro04/emap/?nomenclatura=' + identificadorLocation, '_blank');
     }
 
     render() {
@@ -1825,17 +1825,17 @@ class DetalleTributo extends React.PureComponent {
                                 </Grid>
                             </Grid>
 
-                            {tipoTributo ==  this.props.tipoTributos.byValue['Inmueble'] &&
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Ubicación: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <i className={classNames(classes.locationIcon,'material-icons')} onClick={this.hableRedirectLocation}>
-                                        location_on
+                            {tipoTributo == this.props.tipoTributos.byValue['Inmueble'] &&
+                                <Grid container spacing={16}>
+                                    <Grid item sm={4}>
+                                        <Typography variant="subheading" gutterBottom>Ubicación: </Typography>
+                                    </Grid>
+                                    <Grid item sm={8}>
+                                        <i className={classNames(classes.locationIcon, 'material-icons')} onClick={this.hableRedirectLocation}>
+                                            location_on
                                     </i>
-                                </Grid>
-                            </Grid>}
+                                    </Grid>
+                                </Grid>}
 
                         </MiCard>
 
@@ -1880,289 +1880,294 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>}
                             </div>}
 
-                            <Grid container spacing={16}>
-                                <Grid item sm={2}>
-                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                    </svg>
-                                </Grid>
-                                <Grid item sm={10}>
-                                    <MiControledDialog
-                                        paraMobile={this.props.paraMobile}
-                                        open={informeCuenta.modal.open}
-                                        onDialogoOpen={this.onInformeCuentaDialogoOpen}
-                                        onDialogoClose={this.onInformeCuentaDialogoClose}
-                                        textoLink={'Informe de Cuenta'}
-                                        titulo={'Informe de Cuenta al día ' + dateToString(new Date(), 'DD/MM/YYYY')}
-                                        classMaxWidth={!informeCuenta.modal.showReporte ? classes.maxWidthInformeCuenta : classes.maxWidthPDF}
-                                        footerFixed={true}
-                                    >
-                                        <div key="headerContent"></div>
-                                        <div key="mainContent">
-                                            {!informeCuenta.modal.showReporte && <div>
-                                                <Typography className={classes.title} variant="title">Deuda Total: <b>$ {formatNumber(informeCuenta.info.total)} </b></Typography>
-                                                <Divider className={classes.divider} />
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Total vencida: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.totalVencida)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Total a vencer: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.totalAVencer)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <br />
-                                                <Typography className={classes.title} variant="title">Administrativa</Typography>
-                                                <Divider className={classes.divider} />
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Vencida: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.administrativaVencida)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>A vencer: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.administrativaAVencer)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Fiscalizacion: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.fiscalizacion)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Quiebra: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.quiebra)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <br />
-                                                <Typography className={classes.title} variant="title">Plan</Typography>
-                                                <Divider className={classes.divider} />
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Vencida: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.planesVencida)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>A vencer: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.planAVencer)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <br />
-                                                <Typography className={classes.title} variant="title">Capital - Gastos</Typography>
-                                                <Divider className={classes.divider} />
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Juicios Capital: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.capitalVencida)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={16}>
-                                                    <Grid item sm={4}>
-                                                        <Typography variant="subheading" gutterBottom>Honorarios-Gastos: </Typography>
-                                                    </Grid>
-                                                    <Grid item sm={8}>
-                                                        <Typography variant="subheading" gutterBottom>
-                                                            <b>$ {formatNumber(informeCuenta.info.gastosVencida)} </b>
-                                                        </Typography>
-                                                    </Grid>
-                                                </Grid>
-                                            </div>}
-
-                                            {informeCuenta.modal.showReporte && <div>
-                                                {informeCuenta.reporteBase64 && informeCuenta.reporteBase64 != '' &&
-                                                    <MiPDFPrinter
-                                                        base64File={'data:application/pdf;base64,' + informeCuenta.reporteBase64}
-                                                        textoLink={'Descargar Informe de Cuenta'}
-                                                        textoFile={'Informe de Cuenta'} />}
-                                                {!informeCuenta.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
-                                            </div>}
-                                        </div>
-                                        <div key="footerContent" className={classes.buttonFotterDialog}>
-                                            {!informeCuenta.modal.showReporte && <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                className={classes.buttonActions}
-                                                onClick={this.onInformeCuentaShowReporte}
+                            {(menuItemSeleccionado != 'multas' && (
+                                menuItemSeleccionado == 'contribucion' ||
+                                (menuItemSeleccionado == 'juicios' && listJuicios.length > 0) ||
+                                (menuItemSeleccionado == 'planes' && listPlanes.length > 0))
+                            ) && <div>
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <MiControledDialog
+                                                paraMobile={this.props.paraMobile}
+                                                open={informeCuenta.modal.open}
+                                                onDialogoOpen={this.onInformeCuentaDialogoOpen}
+                                                onDialogoClose={this.onInformeCuentaDialogoClose}
+                                                textoLink={'Informe de Cuenta'}
+                                                titulo={'Informe de Cuenta al día ' + dateToString(new Date(), 'DD/MM/YYYY')}
+                                                classMaxWidth={!informeCuenta.modal.showReporte ? classes.maxWidthInformeCuenta : classes.maxWidthPDF}
+                                                footerFixed={true}
                                             >
-                                                Imprimir Detalle
+                                                <div key="headerContent"></div>
+                                                <div key="mainContent">
+                                                    {!informeCuenta.modal.showReporte && <div>
+                                                        <Typography className={classes.title} variant="title">Deuda Total: <b>$ {formatNumber(informeCuenta.info.total)} </b></Typography>
+                                                        <Divider className={classes.divider} />
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>Total vencida: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.totalVencida)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>Total a vencer: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.totalAVencer)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <br />
+                                                        <Typography className={classes.title} variant="title">Administrativa</Typography>
+                                                        <Divider className={classes.divider} />
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>Vencida: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.administrativaVencida)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>A vencer: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.administrativaAVencer)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>Fiscalizacion: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.fiscalizacion)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>Quiebra: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.quiebra)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <br />
+                                                        <Typography className={classes.title} variant="title">Plan</Typography>
+                                                        <Divider className={classes.divider} />
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>Vencida: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.planesVencida)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>A vencer: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.planAVencer)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <br />
+                                                        <Typography className={classes.title} variant="title">Capital - Gastos</Typography>
+                                                        <Divider className={classes.divider} />
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>Juicios Capital: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.capitalVencida)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid container spacing={16}>
+                                                            <Grid item sm={4}>
+                                                                <Typography variant="subheading" gutterBottom>Honorarios-Gastos: </Typography>
+                                                            </Grid>
+                                                            <Grid item sm={8}>
+                                                                <Typography variant="subheading" gutterBottom>
+                                                                    <b>$ {formatNumber(informeCuenta.info.gastosVencida)} </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </div>}
+
+                                                    {informeCuenta.modal.showReporte && <div>
+                                                        {informeCuenta.reporteBase64 && informeCuenta.reporteBase64 != '' &&
+                                                            <MiPDFPrinter
+                                                                base64File={'data:application/pdf;base64,' + informeCuenta.reporteBase64}
+                                                                textoLink={'Descargar Informe de Cuenta'}
+                                                                textoFile={'Informe de Cuenta'} />}
+                                                        {!informeCuenta.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
+                                                    </div>}
+                                                </div>
+                                                <div key="footerContent" className={classes.buttonFotterDialog}>
+                                                    {!informeCuenta.modal.showReporte && <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        className={classes.buttonActions}
+                                                        onClick={this.onInformeCuentaShowReporte}
+                                                    >
+                                                        Imprimir Detalle
                                         </Button>}
 
-                                            {informeCuenta.modal.showReporte && <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                className={classes.buttonActions}
-                                                onClick={this.onInformeCuentaHideReporte}
-                                            >
-                                                Volver
+                                                    {informeCuenta.modal.showReporte && <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        className={classes.buttonActions}
+                                                        onClick={this.onInformeCuentaHideReporte}
+                                                    >
+                                                        Volver
                                         </Button>}
-                                        </div>
-                                    </MiControledDialog>
-                                </Grid>
-                            </Grid>
+                                                </div>
+                                            </MiControledDialog>
+                                        </Grid>
+                                    </Grid>
 
-                            <Grid container spacing={16}>
-                                <Grid item sm={2}>
-                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                    </svg>
-                                </Grid>
-                                <Grid item sm={10}>
-                                    <MiLinkDialog
-                                        paraMobile={this.props.paraMobile}
-                                        textoLink={'Datos de Cuenta'}
-                                        titulo={'Datos de Cuenta'}
-                                    >
-                                        <div className={classes.textDatosCuenta}>
-                                            {(Array.isArray(infoDatosCuenta) && infoDatosCuenta.map((item, index) => {
-                                                const content = item == '' ? <br /> : item;
-                                                return <div key={index}>{content}</div>;
-                                            })) || (!Array.isArray(infoDatosCuenta) && infoDatosCuenta)}
-                                        </div>
-                                    </MiLinkDialog>
-                                </Grid>
-                            </Grid>
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <MiLinkDialog
+                                                paraMobile={this.props.paraMobile}
+                                                textoLink={'Datos de Cuenta'}
+                                                titulo={'Datos de Cuenta'}
+                                            >
+                                                <div className={classes.textDatosCuenta}>
+                                                    {(Array.isArray(infoDatosCuenta) && infoDatosCuenta.map((item, index) => {
+                                                        const content = item == '' ? <br /> : item;
+                                                        return <div key={index}>{content}</div>;
+                                                    })) || (!Array.isArray(infoDatosCuenta) && infoDatosCuenta)}
+                                                </div>
+                                            </MiLinkDialog>
+                                        </Grid>
+                                    </Grid>
 
-                            <Grid container spacing={16}>
-                                <Grid item sm={2}>
-                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                    </svg>
-                                </Grid>
-                                <Grid item sm={10}>
-                                    <MiControledDialog
-                                        paraMobile={this.props.paraMobile}
-                                        open={periodosAdeudados.modal.open}
-                                        onDialogoOpen={this.onPeriodosAdeudadosDialogoOpen}
-                                        onDialogoClose={this.onPeriodosAdeudadosDialogoClose}
-                                        textoLink={'Períodos Adeudados'}
-                                        titulo={'Períodos Adeudados'}
-                                    >
-                                        <MiTabla
-                                            pagination={!this.props.paraMobile}
-                                            columns={[
-                                                { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
-                                                { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
-                                                { id: 'observacion', type: 'string', numeric: false, disablePadding: true, label: 'Observaciones' },
-                                            ]}
-                                            rows={periodosAdeudados.infoGrilla || []}
-                                            order='asc'
-                                            orderBy='vencimiento'
-                                            check={false}
-                                            rowsPerPage={5}
-                                            classes={{
-                                                root: classes.miTabla
-                                            }}
-                                        />
-                                    </MiControledDialog>
-                                </Grid>
-                            </Grid>
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <MiControledDialog
+                                                paraMobile={this.props.paraMobile}
+                                                open={periodosAdeudados.modal.open}
+                                                onDialogoOpen={this.onPeriodosAdeudadosDialogoOpen}
+                                                onDialogoClose={this.onPeriodosAdeudadosDialogoClose}
+                                                textoLink={'Períodos Adeudados'}
+                                                titulo={'Períodos Adeudados'}
+                                            >
+                                                <MiTabla
+                                                    pagination={!this.props.paraMobile}
+                                                    columns={[
+                                                        { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
+                                                        { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Vencimiento' },
+                                                        { id: 'observacion', type: 'string', numeric: false, disablePadding: true, label: 'Observaciones' },
+                                                    ]}
+                                                    rows={periodosAdeudados.infoGrilla || []}
+                                                    order='asc'
+                                                    orderBy='vencimiento'
+                                                    check={false}
+                                                    rowsPerPage={5}
+                                                    classes={{
+                                                        root: classes.miTabla
+                                                    }}
+                                                />
+                                            </MiControledDialog>
+                                        </Grid>
+                                    </Grid>
 
-                            <Grid container spacing={16}>
-                                <Grid item sm={2}>
-                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                    </svg>
-                                </Grid>
-                                <Grid item sm={10}>
-                                    <MiControledDialog
-                                        paraMobile={this.props.paraMobile}
-                                        open={ultimosPagos.modal.open == true}
-                                        onDialogoOpen={this.onUltimosPagosDialogoOpen}
-                                        onDialogoClose={this.onUltimosPagosDialogoClose}
-                                        textoLink={'Últimos pagos'}
-                                        titulo={'Últimos pagos'}
-                                        textoInformativo={<div>
-                                            <b>Observaciones:</b><br /><br />
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <MiControledDialog
+                                                paraMobile={this.props.paraMobile}
+                                                open={ultimosPagos.modal.open == true}
+                                                onDialogoOpen={this.onUltimosPagosDialogoOpen}
+                                                onDialogoClose={this.onUltimosPagosDialogoClose}
+                                                textoLink={'Últimos pagos'}
+                                                titulo={'Últimos pagos'}
+                                                textoInformativo={<div>
+                                                    <b>Observaciones:</b><br /><br />
 
-                                            <b>En la grilla de pagos pueden aparecer dos estados:</b><br />
+                                                    <b>En la grilla de pagos pueden aparecer dos estados:</b><br />
 
-                                            <ul>
-                                                <li><b>IMPUTADO:</b> el período fué abonado y el monto fué imputado.</li>
-                                                <li><b>PENDIENTE:</b> el período fué pagado, pero todavía no imputó.</li>
-                                            </ul><br /><br />
+                                                    <ul>
+                                                        <li><b>IMPUTADO:</b> el período fué abonado y el monto fué imputado.</li>
+                                                        <li><b>PENDIENTE:</b> el período fué pagado, pero todavía no imputó.</li>
+                                                    </ul><br /><br />
 
-                                            Las imputaciones pueden demorar unos 10 días hábiles dependiendo del caso.<br /><br />
+                                                    Las imputaciones pueden demorar unos 10 días hábiles dependiendo del caso.<br /><br />
 
-                                            Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
+                                                    Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
                                         </div>}
-                                        classMaxWidth={classes.maxWidthUltimosPagos}
-                                    >
-                                        <MiTabla
-                                            pagination={!this.props.paraMobile}
-                                            columns={[
-                                                { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
-                                                { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base ($)' },
-                                                { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo ($)' },
-                                                { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción ($)' },
-                                                { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
-                                                { id: 'ctl', type: 'string', numeric: false, disablePadding: false, label: 'CTL' },
-                                                { id: 'estado', type: 'string', numeric: false, disablePadding: false, label: 'Estado' },
-                                                { id: 'caja', type: 'string', numeric: false, disablePadding: false, label: 'Caja' },
-                                            ]}
-                                            rows={ultimosPagos.infoGrilla || []}
-                                            msgNoRows={'No existen pagos registrados en los últimos dos años'}
-                                            order='desc'
-                                            orderBy='vencimiento'
-                                            check={false}
-                                            rowsPerPage={5}
-                                            classes={{
-                                                root: classes.miTabla
-                                            }}
-                                        />
-                                    </MiControledDialog>
-                                </Grid>
-                            </Grid>
+                                                classMaxWidth={classes.maxWidthUltimosPagos}
+                                            >
+                                                <MiTabla
+                                                    pagination={!this.props.paraMobile}
+                                                    columns={[
+                                                        { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
+                                                        { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                        { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base ($)' },
+                                                        { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo ($)' },
+                                                        { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción ($)' },
+                                                        { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
+                                                        { id: 'ctl', type: 'string', numeric: false, disablePadding: false, label: 'CTL' },
+                                                        { id: 'estado', type: 'string', numeric: false, disablePadding: false, label: 'Estado' },
+                                                        { id: 'caja', type: 'string', numeric: false, disablePadding: false, label: 'Caja' },
+                                                    ]}
+                                                    rows={ultimosPagos.infoGrilla || []}
+                                                    msgNoRows={'No existen pagos registrados en los últimos dos años'}
+                                                    order='desc'
+                                                    orderBy='vencimiento'
+                                                    check={false}
+                                                    rowsPerPage={5}
+                                                    classes={{
+                                                        root: classes.miTabla
+                                                    }}
+                                                />
+                                            </MiControledDialog>
+                                        </Grid>
+                                    </Grid>
 
-                            {/* Cuando no este seleccionado Planes de Pago */}
-                            {menuItemSeleccionado != 'planes' && <div>
+                                    {/* Cuando no este seleccionado Planes de Pago */}
+                                    {menuItemSeleccionado != 'planes' && <div>
 
-                                {/* SE QUITA HASTA QUE SE IMPLEMENTE
+                                        {/* SE QUITA HASTA QUE SE IMPLEMENTE
                                 
                                 mostrarAlternativaPlan && <div>
                                     <Grid container spacing={16}>
@@ -2183,155 +2188,156 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>
                                 </div>*/}
 
-                                {tipoTributo == 1 && <div>
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={2}>
-                                            {/*<svg className={classes.icon} viewBox="0 0 24 24">
+                                        {tipoTributo == 1 && <div>
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={2}>
+                                                    {/*<svg className={classes.icon} viewBox="0 0 24 24">
                                                 <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
                                             </svg>*/}
-                                            <svg className={classes.icon} viewBox="0 0 24 24">
-                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                            </svg>
-                                        </Grid>
-                                        <Grid item sm={10}>
-                                            <MiControledDialog
-                                                paraMobile={this.props.paraMobile}
-                                                open={informeAntecedentes.modal.open}
-                                                onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
-                                                onDialogoClose={this.onInformeAntecedentesDialogoClose}
-                                                textoLink={'Informe Antecedentes'}
-                                                titulo={'Informe Antecedentes'}
-                                                classMaxWidth={informeAntecedentes.modal.showReporte && classes.maxWidthPDF}
-                                            >
-                                                <div key="headerContent"></div>
-                                                <div key="mainContent">
-                                                    {!informeAntecedentes.modal.showReporte && <div>
-                                                        <MiTabla
-                                                            pagination={!this.props.paraMobile}
-                                                            columns={[
-                                                                { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
-                                                                { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                                { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
-                                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
-                                                            ]}
-                                                            rows={informeAntecedentes.infoGrilla || []}
-                                                            order='desc'
-                                                            orderBy='fecha'
-                                                            check={false}
-                                                            rowsPerPage={5}
-                                                            classes={{
-                                                                root: classes.miTabla
-                                                            }}
-                                                        />
-                                                    </div>}
-
-                                                    {informeAntecedentes.modal.showReporte && <div>
-                                                        {informeAntecedentes.reporteBase64 && informeAntecedentes.reporteBase64 != '' &&
-                                                            <MiPDFPrinter
-                                                                base64File={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64}
-                                                                textoLink={'Descargar Informe de Antecedentes'}
-                                                                textoFile={'Informe Informe de Antecedentes'} />}
-                                                        {!informeAntecedentes.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
-                                                    </div>}
-                                                </div>
-                                                <div key="footerContent" className={classes.buttonFotterDialog}>
-                                                    {!informeAntecedentes.modal.showReporte && <Button
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        className={classes.buttonActions}
-                                                        onClick={this.onInformeAntecedentesShowReporte}
+                                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                                    </svg>
+                                                </Grid>
+                                                <Grid item sm={10}>
+                                                    <MiControledDialog
+                                                        paraMobile={this.props.paraMobile}
+                                                        open={informeAntecedentes.modal.open}
+                                                        onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
+                                                        onDialogoClose={this.onInformeAntecedentesDialogoClose}
+                                                        textoLink={'Informe Antecedentes'}
+                                                        titulo={'Informe Antecedentes'}
+                                                        classMaxWidth={informeAntecedentes.modal.showReporte && classes.maxWidthPDF}
                                                     >
-                                                        Imprimir Informe
+                                                        <div key="headerContent"></div>
+                                                        <div key="mainContent">
+                                                            {!informeAntecedentes.modal.showReporte && <div>
+                                                                <MiTabla
+                                                                    pagination={!this.props.paraMobile}
+                                                                    columns={[
+                                                                        { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
+                                                                        { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                                        { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
+                                                                        { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                                                    ]}
+                                                                    rows={informeAntecedentes.infoGrilla || []}
+                                                                    order='desc'
+                                                                    orderBy='fecha'
+                                                                    check={false}
+                                                                    rowsPerPage={5}
+                                                                    classes={{
+                                                                        root: classes.miTabla
+                                                                    }}
+                                                                />
+                                                            </div>}
+
+                                                            {informeAntecedentes.modal.showReporte && <div>
+                                                                {informeAntecedentes.reporteBase64 && informeAntecedentes.reporteBase64 != '' &&
+                                                                    <MiPDFPrinter
+                                                                        base64File={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64}
+                                                                        textoLink={'Descargar Informe de Antecedentes'}
+                                                                        textoFile={'Informe Informe de Antecedentes'} />}
+                                                                {!informeAntecedentes.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
+                                                            </div>}
+                                                        </div>
+                                                        <div key="footerContent" className={classes.buttonFotterDialog}>
+                                                            {!informeAntecedentes.modal.showReporte && <Button
+                                                                variant="contained"
+                                                                color="secondary"
+                                                                className={classes.buttonActions}
+                                                                onClick={this.onInformeAntecedentesShowReporte}
+                                                            >
+                                                                Imprimir Informe
                                             </Button>}
 
-                                                    {informeAntecedentes.modal.showReporte && <Button
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        className={classes.buttonActions}
-                                                        onClick={this.onInformeAntecedentesHideReporte}
-                                                    >
-                                                        Volver
+                                                            {informeAntecedentes.modal.showReporte && <Button
+                                                                variant="contained"
+                                                                color="secondary"
+                                                                className={classes.buttonActions}
+                                                                onClick={this.onInformeAntecedentesHideReporte}
+                                                            >
+                                                                Volver
                                             </Button>}
-                                                </div>
+                                                        </div>
 
-                                            </MiControledDialog>
-                                        </Grid>
-                                    </Grid>
+                                                    </MiControledDialog>
+                                                </Grid>
+                                            </Grid>
 
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={2}>
-                                            {/*<svg className={classes.icon} viewBox="0 0 24 24">
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={2}>
+                                                    {/*<svg className={classes.icon} viewBox="0 0 24 24">
                                                 <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
                                             </svg>*/}
-                                            <svg className={classes.icon} viewBox="0 0 24 24">
-                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                            </svg>
-                                        </Grid>
-                                        <Grid item sm={10}>
-                                            <MiControledDialog
-                                                paraMobile={this.props.paraMobile}
-                                                open={informeREMAT.modal.open}
-                                                onDialogoOpen={this.onInformeREMATDialogoOpen}
-                                                onDialogoClose={this.onInformeREMATDialogoClose}
-                                                textoLink={'Informe REMAT'}
-                                                titulo={'Informe REMAT'}
-                                                classMaxWidth={informeREMAT.modal.showReporte && classes.maxWidthPDF}
-                                            >
-                                                <div key="headerContent"></div>
-                                                <div key="mainContent">
-                                                    {!informeREMAT.modal.showReporte && <div>
-                                                        <MiTabla
-                                                            pagination={!this.props.paraMobile}
-                                                            columns={[
-                                                                { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
-                                                                { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                                { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
-                                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
-                                                            ]}
-                                                            rows={informeREMAT.infoGrilla || []}
-                                                            order='desc'
-                                                            orderBy='fecha'
-                                                            check={false}
-                                                            rowsPerPage={5}
-                                                            classes={{
-                                                                root: classes.miTabla
-                                                            }}
-                                                        />
-                                                    </div>}
-
-                                                    {informeREMAT.modal.showReporte && <div>
-                                                        {informeREMAT.reporteBase64 && informeREMAT.reporteBase64 != '' &&
-                                                            <MiPDFPrinter
-                                                                base64File={'data:application/pdf;base64,' + informeREMAT.reporteBase64}
-                                                                textoLink={'Descargar Informe REMAT'}
-                                                                textoFile={'Informe REMAT'} />}
-                                                        {!informeREMAT.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
-                                                    </div>}
-                                                </div>
-                                                <div key="footerContent" className={classes.buttonFotterDialog}>
-                                                    {!informeREMAT.modal.showReporte && <Button
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        className={classes.buttonActions}
-                                                        onClick={this.onInformeREMATShowReporte}
+                                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                                    </svg>
+                                                </Grid>
+                                                <Grid item sm={10}>
+                                                    <MiControledDialog
+                                                        paraMobile={this.props.paraMobile}
+                                                        open={informeREMAT.modal.open}
+                                                        onDialogoOpen={this.onInformeREMATDialogoOpen}
+                                                        onDialogoClose={this.onInformeREMATDialogoClose}
+                                                        textoLink={'Informe REMAT'}
+                                                        titulo={'Informe REMAT'}
+                                                        classMaxWidth={informeREMAT.modal.showReporte && classes.maxWidthPDF}
                                                     >
-                                                        Imprimir Informe
+                                                        <div key="headerContent"></div>
+                                                        <div key="mainContent">
+                                                            {!informeREMAT.modal.showReporte && <div>
+                                                                <MiTabla
+                                                                    pagination={!this.props.paraMobile}
+                                                                    columns={[
+                                                                        { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
+                                                                        { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                                        { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
+                                                                        { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                                                    ]}
+                                                                    rows={informeREMAT.infoGrilla || []}
+                                                                    order='desc'
+                                                                    orderBy='fecha'
+                                                                    check={false}
+                                                                    rowsPerPage={5}
+                                                                    classes={{
+                                                                        root: classes.miTabla
+                                                                    }}
+                                                                />
+                                                            </div>}
+
+                                                            {informeREMAT.modal.showReporte && <div>
+                                                                {informeREMAT.reporteBase64 && informeREMAT.reporteBase64 != '' &&
+                                                                    <MiPDFPrinter
+                                                                        base64File={'data:application/pdf;base64,' + informeREMAT.reporteBase64}
+                                                                        textoLink={'Descargar Informe REMAT'}
+                                                                        textoFile={'Informe REMAT'} />}
+                                                                {!informeREMAT.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
+                                                            </div>}
+                                                        </div>
+                                                        <div key="footerContent" className={classes.buttonFotterDialog}>
+                                                            {!informeREMAT.modal.showReporte && <Button
+                                                                variant="contained"
+                                                                color="secondary"
+                                                                className={classes.buttonActions}
+                                                                onClick={this.onInformeREMATShowReporte}
+                                                            >
+                                                                Imprimir Informe
                                             </Button>}
 
-                                                    {informeREMAT.modal.showReporte && <Button
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        className={classes.buttonActions}
-                                                        onClick={this.onInformeREMATHideReporte}
-                                                    >
-                                                        Volver
+                                                            {informeREMAT.modal.showReporte && <Button
+                                                                variant="contained"
+                                                                color="secondary"
+                                                                className={classes.buttonActions}
+                                                                onClick={this.onInformeREMATHideReporte}
+                                                            >
+                                                                Volver
                                             </Button>}
-                                                </div>
-                                            </MiControledDialog>
-                                        </Grid>
-                                    </Grid>
+                                                        </div>
+                                                    </MiControledDialog>
+                                                </Grid>
+                                            </Grid>
+                                        </div>}
+                                    </div>}
                                 </div>}
-                            </div>}
 
                             {/* Cuando no este seleccionado Planes de Pago */}
                             {menuItemSeleccionado == 'planes' && <div>
