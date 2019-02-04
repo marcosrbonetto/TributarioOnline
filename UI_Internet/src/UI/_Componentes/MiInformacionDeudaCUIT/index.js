@@ -8,7 +8,6 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 
 import { mostrarCargando } from '@Redux/Actions/mainContent'
-import { mostrarAlerta } from "@Utils/functions";
 
 import Button from "@material-ui/core/Button";
 import CardHeader from '@material-ui/core/CardHeader';
@@ -43,34 +42,8 @@ class MiInformacionDeudaCUIT extends Component {
 
         this.state = {
             dialogoOpen: false,
-            arrayCuits: [],
             mensajeError: undefined,
             base64File: ''
-        }
-    }
-
-    componentDidMount() {
-
-        //Corroboramos Resultado importacion AFIP - BIENES por CUIT
-        let statusAfipImportacion = localStorage.getItem('statusAfipImportacion');
-        localStorage.removeItem('statusAfipImportacion');
-
-        //CUITs a mostrar
-        let cuitsInformeDeudas = localStorage.getItem('cuitsInformeDeudas');
-        localStorage.removeItem('cuitsInformeDeudas');
-
-        if (statusAfipImportacion && cuitsInformeDeudas) {
-            if (statusAfipImportacion == 'OK') {
-                //Quitamos al primer cuit ya que es el del log de afip
-                cuitsInformeDeudas = cuitsInformeDeudas.split(',');
-                cuitsInformeDeudas.shift();
-
-                this.setState({
-                    arrayCuits: cuitsInformeDeudas
-                });
-            } else {
-                mostrarAlerta(statusAfipImportacion);
-            }
         }
     }
 
@@ -79,6 +52,7 @@ class MiInformacionDeudaCUIT extends Component {
     }
 
     handleShowReport = (event) => {
+        this.props.mostrarCargando(true);
         const token = this.props.loggedUser.token;
         const cuit = event.currentTarget.attributes.cuit.value;
 
@@ -89,8 +63,8 @@ class MiInformacionDeudaCUIT extends Component {
                 if (!datos.ok) {
                     this.setState({
                         base64File: '',
-                        dialogoOpen: false,
-                        mensajeError: datos.error
+                        dialogoOpen: true,
+                        mensajeError: 'Ocurrió un error al intentar generar el informe de deuda, intente nuevamente.'
                     });
                     return false;
                 }
@@ -98,12 +72,13 @@ class MiInformacionDeudaCUIT extends Component {
                 const data = datos.return;
 
                 this.setState({
-                    base64File: data,
+                    base64File: (data && 'data:application/pdf;base64,' + data) || '',
                     dialogoOpen: true,
                     mensajeError: undefined
                 });
 
             }).catch(err => {
+                this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
             });
     }
@@ -123,8 +98,8 @@ class MiInformacionDeudaCUIT extends Component {
     }
 
     render() {
-        const { classes, paraMobile } = this.props;
-        const { arrayCuits, base64File, mensajeError } = this.state;
+        const { arrayCuits, classes, paraMobile } = this.props;
+        const { base64File, mensajeError } = this.state;
 
         return (
             <div>

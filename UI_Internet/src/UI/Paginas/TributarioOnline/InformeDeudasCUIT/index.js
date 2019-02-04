@@ -17,6 +17,8 @@ import { replace, push } from "connected-react-router";
 
 import MiInformacionDeudaCUIT from "@Componentes/MiInformacionDeudaCUIT";
 
+import { mostrarAlerta } from "@Utils/functions";
+
 //Material UI Components
 import Grid from '@material-ui/core/Grid';
 
@@ -39,11 +41,38 @@ class InformeDeudasCUIT extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      arrayCuits: []
+    };
+  }
+
+  componentDidMount() {
+    //Corroboramos Resultado importacion AFIP - BIENES por CUIT
+    let statusAfipImportacion = localStorage.getItem('statusAfipImportacion');
+    localStorage.removeItem('statusAfipImportacion');
+
+    //CUITs a mostrar
+    let cuitsInformeDeudas = localStorage.getItem('cuitsInformeDeudas');
+    localStorage.removeItem('cuitsInformeDeudas');
+
+    if (statusAfipImportacion && cuitsInformeDeudas) {
+        if (statusAfipImportacion == 'OK') {
+            //Quitamos al primer cuit ya que es el del log de afip
+            cuitsInformeDeudas = cuitsInformeDeudas.split(',');
+            cuitsInformeDeudas.shift();
+
+            this.setState({
+                arrayCuits: cuitsInformeDeudas
+            });
+        } else {
+            mostrarAlerta(statusAfipImportacion);
+        }
+    }
   }
 
   render() {
     const { classes } = this.props;
+    const { arrayCuits } = this.state;
 
     return (
       <div className={classes.mainContainer}>
@@ -52,6 +81,7 @@ class InformeDeudasCUIT extends React.PureComponent {
             <MiInformacionDeudaCUIT
               titulo="Informe de Deudas"
               icono="list_alt"
+              arrayCuits={arrayCuits}
             />
           </Grid>
         </Grid>
