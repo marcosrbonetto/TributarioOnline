@@ -1,24 +1,24 @@
 const DEPLOY = 1;
 const TEST = 2;
 const LOCAL = 3;
-const ENTORNO = LOCAL;
+const ENTORNO = DEPLOY;
 
 //WS Tributario
-const URL_WS_TRIBUTARIO_LOCAL = "https://srv-dev04/WSAutogestionTributaria";
+const URL_WS_TRIBUTARIO_LOCAL = "https://srv-dev04/WSAutogestionTributaria_Bridge";
 const URL_WS_TRIBUTARIO_TEST = "https://srv-dev04/WSAutogestionTributaria_Bridge";
 const URL_WS_TRIBUTARIO_DEPLOY = "https://servicios2.cordoba.gov.ar/WSAutogestionTributaria_Bridge";
 let URL_WS_TRIBUTARIO = URL_WS_TRIBUTARIO_DEPLOY;
 
 //Url Login
-const URL_LOGIN_LOCAL = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/#/Login/AutogestionTributariaLocal";
-const URL_LOGIN_TEST = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/#/Login/AutogestionTributariaTest";
-const URL_LOGIN_DEPLOY = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/#/Login/AutogestionTributaria";
+const URL_LOGIN_LOCAL = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/#/Login/MuniDigitalLocal";
+const URL_LOGIN_TEST = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/#/Login/MuniDigitalTest";
+const URL_LOGIN_DEPLOY = "https://servicios2.cordoba.gov.ar/VecinoVirtual/Login/#/Login/MuniDigital";
 let URL_LOGIN = URL_LOGIN_DEPLOY;
 
 //Url AFIP
 const BASE_URL_SET_AFIP_LOCAL = "http://localhost:3000/#";
-const BASE_URL_SET_AFIP_TEST = "https://srv-dev04/AutogestionTributaria/#";
-const BASE_URL_SET_AFIP_DEPLOY = "https://servicios2.cordoba.gov.ar/AutogestionTributaria/#";
+const BASE_URL_SET_AFIP_TEST = "https://srv-dev04/MuniDigital/#";
+const BASE_URL_SET_AFIP_DEPLOY = "https://servicios2.cordoba.gov.ar/MuniDigital/#";
 
 //Segun el entorno, cargo las variables
 switch (ENTORNO) {
@@ -48,9 +48,9 @@ switch (ENTORNO) {
 }
 
 var Config = {
-  BASE_URL: "/AutogestionTributaria",
+  BASE_URL: "/MuniDigital",
   BASE_URL_WS: URL_WS_TRIBUTARIO,
-  BASE_URL_AFIP: "https://servicios.cordoba.gov.ar/AutogestionTributaria",
+  BASE_URL_AFIP: "https://servicios.cordoba.gov.ar/MuniDigital",
   BASE_URL_SET_AFIP: BASE_URL_SET_AFIP,
   WS_CORDOBA_GEO: "https://servicios2.cordoba.gov.ar/CordobaGeoApi",
   URL_LOGIN: URL_LOGIN,
