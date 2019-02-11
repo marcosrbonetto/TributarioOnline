@@ -52,8 +52,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: false,
     component: SeleccionTributo,
-    nombre: "Muni Digital",
-    titulo: "Muni Digital",
+    nombre: "Autogestión Tributaria",
+    titulo: "Autogestión Tributaria",
   },
   {
     url: "/DetalleTributario/:tributo/:identificador/:seccionMenu/:subIdentificador",
@@ -84,8 +84,8 @@ const Menu = [
     exact: true,
     mostrarEnMenu: true,
     component: TributarioOnline,
-    nombre: "Muni Digital",
-    titulo: "Muni Digital",
+    nombre: "Autogestión Tributaria",
+    titulo: "Autogestión Tributaria",
   },
   {
     url: "/DetalleTributario/Automotor",
