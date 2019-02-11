@@ -45,6 +45,7 @@ class App extends React.Component {
       paraMobile: paraMobile
     };
   }
+  
 
   componentWillReceiveProps() {
     //Subimos el scroll cada vez que se ingresa, de lo contrario a veces queda abajo
