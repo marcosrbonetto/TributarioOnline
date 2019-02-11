@@ -157,6 +157,7 @@ const Content = (modoInvitado) => {
         className={"switch-wrapper"}
       >
         {Menu.map((item, index) => {
+          
           if (modoInvitado && item.mostrarUserInvitado == false ||
             (!modoInvitado && item.mostrarUserVV == false)) return null;
 
