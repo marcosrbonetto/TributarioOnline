@@ -132,7 +132,7 @@ class App extends React.Component {
 
     const token = localStorage.getItem('token');
 
-    if(!token) window.location.href = "https://servicios2.cordoba.gov.ar/MuniDigital/vecino-virtual.html";
+    if(!token) window.location.href = "https://servicios2.cordoba.gov.ar/AutogestionTributaria/vecino-virtual.html";
 
     this.props.login({
       token: token
