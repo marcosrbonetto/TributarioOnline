@@ -38,6 +38,7 @@ import MiControledDialog from "@Componentes/MiControledDialog"
 import MisPagosDetalle from "@Componentes/MisPagosDetalle";
 import MiTooltip from "@Componentes/MiTooltip";
 import MiPDFPrinter from "@Componentes/MiPDFPrinter";
+import MiAlternativaPlan from "@Componentes/MiAlternativaPlan";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 import servicesRepresentantes from '@Rules/Rules_Representantes';
@@ -1452,6 +1453,14 @@ class DetalleTributo extends React.PureComponent {
         const listJuicios = infoJuicios && infoJuicios.lista ? infoJuicios.lista : [];
         const listPlanes = infoPlanes && infoPlanes.lista ? infoPlanes.lista : [];
 
+        let currentRowList = listContribucion;
+        switch(menuItemSeleccionado) {
+            case 'contribucion': currentRowList = listContribucion; break;
+            case 'multas': currentRowList = listMultas; break;
+            case 'juicios': currentRowList = listJuicios; break;
+            case 'planes': currentRowList = listPlanes; break;
+        }
+
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
 
         return (
@@ -2167,26 +2176,20 @@ class DetalleTributo extends React.PureComponent {
                                     {/* Cuando no este seleccionado Planes de Pago */}
                                     {menuItemSeleccionado != 'planes' && <div>
 
-                                        {/* SE QUITA HASTA QUE SE IMPLEMENTE
-                                
-                                mostrarAlternativaPlan && <div>
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={2}>
-                                            <svg className={classes.icon} viewBox="0 0 24 24">
-                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                            </svg>
-                                        </Grid>
-                                        <Grid item sm={10}>
-                                            <MiLinkDialog
-                                                paraMobile={this.props.paraMobile}
-                                                textoLink={'Simular Plan de Pagos'}
-                                                titulo={'Simular Plan de Pagos'}
-                                            >
-                                                Simulador en proceso, estamos trabajando en ello.
-                                            </MiLinkDialog>
-                                        </Grid>
-                                    </Grid>
-                                </div>*/}
+                                        {mostrarAlternativaPlan && <div>
+                                            <Grid container spacing={16}>
+                                                <Grid item sm={2}>
+                                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                                    </svg>
+                                                </Grid>
+                                                <Grid item sm={10}>
+                                                    <MiAlternativaPlan
+                                                    rowList={currentRowList}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </div>}
 
                                         {tipoTributo == 1 && <div>
                                             <Grid container spacing={16}>

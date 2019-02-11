@@ -166,7 +166,10 @@ export const stringToDate = (stringDate) => {
 };
 
 export const diffDays = (fromDate, toDate) => {
-	return Math.round(Math.abs((fromDate.getTime() - toDate.getTime()) / (24 * 60 * 60 * 1000)));
+	let cantDias = Math.round(Math.abs((fromDate.getTime() - toDate.getTime()) / (24 * 60 * 60 * 1000)));
+	if(fromDate > toDate)
+		cantDias = cantDias * -1;
+	return cantDias;
 };
 
 export const getAllUrlParams = function (url) {
