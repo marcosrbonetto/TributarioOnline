@@ -248,7 +248,7 @@ class MiToolbar extends React.Component {
                   urlRedirect = item.urlToken.replace(/{token}/g, this.props.loggedUser.token);
                 }
 
-                return <a href={urlRedirect} target="_blank"><Avatar alt={'Aplicacion '+index} src={item.urlIcono} className={classes.bigAvatar} /></a>;
+                return <a href={urlRedirect} target="_blank"><Avatar title={item.nombre} alt={item.nombre} src={item.urlIcono} className={classes.bigAvatar} /></a>;
               })}
               </MiCard>
           </Popover>
