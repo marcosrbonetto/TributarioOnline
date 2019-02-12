@@ -50,6 +50,7 @@ switch (ENTORNO) {
 var Config = {
   BASE_URL: "/AutogestionTributaria",
   BASE_URL_WS: URL_WS_TRIBUTARIO,
+  VV_URL_WS: "https://servicios2.cordoba.gov.ar/WSVecinoVirtual_Bridge",
   BASE_URL_AFIP: "https://servicios.cordoba.gov.ar/AutogestionTributaria",
   BASE_URL_SET_AFIP: BASE_URL_SET_AFIP,
   WS_CORDOBA_GEO: "https://servicios2.cordoba.gov.ar/CordobaGeoApi",

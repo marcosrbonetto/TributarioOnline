@@ -21,7 +21,7 @@ import 'url-search-params-polyfill';
 import { connect } from "react-redux";
 import { ocultarAlerta } from "@Redux/Actions/alerta";
 import { login, logout } from '@Redux/Actions/usuario';
-import { setTipoTributos, setTipoCedulones, setEstadoPagos, setPublicKeyMercadoPago, paraMobile } from '@Redux/Actions/mainContent';
+import { setTipoTributos, setTipoCedulones, setEstadoPagos, setAplicacionPanel, setPublicKeyMercadoPago, paraMobile } from '@Redux/Actions/mainContent';
 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
@@ -44,6 +44,7 @@ import MiCaptcha from "@Componentes/MiCaptcha";
 
 import Rules_Usuario from "@Rules/Rules_Usuario";
 import Rules_TributarioOnline from '@Rules/Rules_TributarioOnline';
+import Rules_VecinoVirtual from '@Rules/Rules_VecinoVirtual';
 import Rules_MercadoPago from '@Rules/Rules_MercadoPago';
 import { mostrarAlerta, mostrarMensaje } from "@Utils/functions";
 import { callbackify, debug } from "util";
@@ -76,6 +77,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setEstadoPagos: data => {
     dispatch(setEstadoPagos(data));
+  },
+  setAplicacionPanel: data => {
+    dispatch(setAplicacionPanel(data));
   },
   setPublicKeyMercadoPago: data => {
     dispatch(setPublicKeyMercadoPago(data));
@@ -257,10 +261,10 @@ class App extends React.Component {
     }
 
     //Seteamos los tipo tributos en la aplicacion
-    this.setTipoTributos(callback);
+    this.cargarDatosIniciales(callback);
   }
 
-  setTipoTributos = (callback) => {
+  cargarDatosIniciales = (callback) => {
     const service1 = Rules_TributarioOnline.getTipoTributos()
       .then(datos => {
         this.props.setTipoTributos(datos.return);
@@ -297,7 +301,16 @@ class App extends React.Component {
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
 
-    Promise.all([service1, service2, service3, service4]).then(() => {
+      const service5 = Rules_VecinoVirtual.AplicacionPanel()
+      .then(datos => {
+        this.props.setAplicacionPanel(datos);
+      })
+      .catch(error => {
+        this.props.logout();
+        window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
+      });
+      
+    Promise.all([service1, service2, service3, service4, service5]).then(() => {
       callback();
     });
   };

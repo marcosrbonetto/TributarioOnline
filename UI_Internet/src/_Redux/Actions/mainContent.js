@@ -4,7 +4,8 @@ import {
   SET_TIPO_CEDULONES,
   SET_ESTADO_PAGOS,
   SET_PUBLIC_KEY_MERCADO_PAGO,
-  PARA_MOBILE
+  PARA_MOBILE,
+  SET_APLICACION_PANEL
 } from "@Redux/Constants/index";
 
 export const mostrarCargando = cargando => ({
@@ -24,6 +25,11 @@ export const setTipoCedulones = datos => ({
 
 export const setEstadoPagos = datos => ({
   type: SET_ESTADO_PAGOS,
+  payload: datos
+});
+
+export const setAplicacionPanel = datos => ({
+  type: SET_APLICACION_PANEL,
   payload: datos
 });
 

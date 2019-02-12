@@ -2176,7 +2176,7 @@ class DetalleTributo extends React.PureComponent {
                                     {/* Cuando no este seleccionado Planes de Pago */}
                                     {menuItemSeleccionado != 'planes' && <div>
 
-                                        {mostrarAlternativaPlan && <div>
+                                        {/*mostrarAlternativaPlan && <div>
                                             <Grid container spacing={16}>
                                                 <Grid item sm={2}>
                                                     <svg className={classes.icon} viewBox="0 0 24 24">
@@ -2189,7 +2189,7 @@ class DetalleTributo extends React.PureComponent {
                                                     />
                                                 </Grid>
                                             </Grid>
-                                        </div>}
+                                        </div>*/}
 
                                         {tipoTributo == 1 && <div>
                                             <Grid container spacing={16}>
