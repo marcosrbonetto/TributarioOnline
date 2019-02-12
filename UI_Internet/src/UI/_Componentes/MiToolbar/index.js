@@ -13,12 +13,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Popover from "@material-ui/core/Popover";
 
 import MiNotificacion from "@Componentes/MiNotificacion";
 import MiInformacionTributos from "@Componentes/MiInformacionTributos";
-import MiCard from "@Componentes/MiCard";
+import AppsPanel from "@Componentes/AppsPanel";
 
 //REDUX
 import { connect } from "react-redux";
@@ -126,18 +124,6 @@ class MiToolbar extends React.Component {
     window.location.href = window.Config.BASE_URL_AFIP + "/afipInicio.html?urlRedirect=" + encodeURIComponent(window.Config.BASE_URL_SET_AFIP + '/importacionMasivaAFIP?appUrlRedirect=' + window.location.hash.substring(1));
   };
 
-  handleClickPanelVV = event => {
-    this.setState({
-      anchorElVV: event.currentTarget
-    });
-  }
-
-  handleClosePanelVV = () => {
-    this.setState({
-      anchorElVV: null,
-    });
-  };
-
   render() {
     let { classes, titulo } = this.props;
 
@@ -196,17 +182,6 @@ class MiToolbar extends React.Component {
               Importar Bienes por CUIT</Button>}
 
 
-          {/* Icono de Notificaciones */}
-          {/* Icono del usuario */}
-          {this.state.datosUsuario && <div className={classes.loggedIcons}>
-            <MiNotificacion />
-
-            <IconButton onClick={this.onUsuarioPress} color="inherit">
-              <Avatar alt="Menu del usuario" src={urlFotoPerfilMiniatura} className={classNames(classes.icono)} />
-            </IconButton>
-          </div>}
-
-
           {/* Inicio sesion Vecino Virtual */}
           {!this.state.datosUsuario && <div>
             <Button onClick={this.handleInicioSesion} variant="contained" color="secondary">
@@ -214,44 +189,23 @@ class MiToolbar extends React.Component {
             </Button>
           </div>}
 
-          <IconButton
-            aria-label="More"
-            //aria-owns={open ? 'long-menu' : undefined}
-            aria-haspopup="true"
-            //onClick={this.handleClick}
-            style={{ marginLeft: '10px' }}
-            onClick={this.handleClickPanelVV}
-          >
-            <MoreVertIcon />
-          </IconButton>
+          {/* Icono de Notificaciones */}
+          {this.state.datosUsuario && <div className={classes.loggedIcons}>
+            <MiNotificacion />
+          </div>}
 
-          <Popover
-            open={Boolean(this.state.anchorElVV)}
-            anchorEl={this.state.anchorElVV}
-            onClose={this.handleClosePanelVV}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            classes={{
-              paper: classes.contentPopover
-            }}
-            >
-              <MiCard padding={false} className={classes.styleMiCard}>
-              {this.props.aplicacionesPanel && this.props.aplicacionesPanel.map((item, index)=>{
-                let urlRedirect = item.url;
-                if(item.urlToken && this.props.loggedUser.token && this.props.loggedUser.token != 'INVITADO') {
-                  urlRedirect = item.urlToken.replace(/{token}/g, this.props.loggedUser.token);
-                }
+          <AppsPanel
+            token={this.props.loggedUser.token}
+            aplicacionesPanel={this.props.aplicacionesPanel}
+          />
 
-                return <a href={urlRedirect} target="_blank"><Avatar title={item.nombre} alt={item.nombre} src={item.urlIcono} className={classes.bigAvatar} /></a>;
-              })}
-              </MiCard>
-          </Popover>
+          {/* Icono del usuario */}
+          {this.state.datosUsuario && <div className={classes.loggedIcons}>
+            <IconButton onClick={this.onUsuarioPress} color="inherit">
+              <Avatar alt="Menu del usuario" src={urlFotoPerfilMiniatura} className={classNames(classes.icono)} />
+            </IconButton>
+          </div>}
+
         </Toolbar>
 
         {this.state.datosUsuario && <Menu
@@ -372,28 +326,9 @@ const styles = theme => {
     },
     loggedIcons: {
       textAlign: 'right',
-      minWidth: '100px',
       right: '20px',
       '& > *': {
         display: 'inline-block'
-      }
-    },
-    contentPopover: {
-      borderRadius: '10px'
-    },
-    styleMiCard: {
-      borderRadius: '10px',
-      padding: '10px',
-      width: '264px'
-    },
-    bigAvatar: {
-      margin: 10,
-      width: 60,
-      height: 60,
-      display: 'inline-block',
-      cursor: 'pointer',
-      '&:hover': {
-        boxShadow: '0px 0px 16px 0px #149257'
       }
     },
   };

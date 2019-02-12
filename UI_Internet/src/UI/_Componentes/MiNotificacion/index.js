@@ -301,7 +301,6 @@ const styles = theme => {
       minWidth: '220px'
     },
     marginIcon: {
-      margin: '0px 15px'
     },
     detalleNotificacion: {
       padding: '0px',
