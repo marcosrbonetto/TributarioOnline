@@ -9,7 +9,7 @@ export const infoExplicativaTributos = (idTipoTributo) => {
 
                 Para el <b>Contribuyente Cumplidor 2018</b> (sin deuda al 18 de diciembre), <b>se descontó</b> del total a abonar en 2019 <b>el 10%</b> sobre la Tasa Anual y se aplicó la rebaja <b>distribuida en los periodos bimestrales</b>.<br /><br />
 
-                <span style={{ fontWeight: 'bold', color: 'red' }}>El descuento por abonar la Cuota Anual es seleccionando el mismo desde el botón "Beneficios" y no seleccionando períodos individuales.</span></span>;
+                <span style={{ fontWeight: 'bold' }}>El descuento por abonar la Cuota Anual es seleccionando el mismo desde el botón "Beneficios" y no seleccionando períodos individuales.</span></span>;
         case 2:
             return <span><b>Sr. Contribuyente de Inmuebles:</b><br /><br />
 
@@ -17,7 +17,7 @@ export const infoExplicativaTributos = (idTipoTributo) => {
 
                 Para el <b>Contribuyente Cumplidor 2018</b> (sin deuda al 18 de diciembre), <b>se descontó</b> del total a abonar en 2019 <b>el 10%</b> sobre la Tasa Anual y se aplicó la rebaja <b>distribuida en los periodos mensuales</b>.<br /><br />
 
-                <span style={{ fontWeight: 'bold', color: 'red' }}>El descuento por abonar cada Media Cuota es seleccionando una por vez y no seleccionando períodos individuales.</span></span>;
+                <span style={{ fontWeight: 'bold' }}>El descuento por abonar cada Media Cuota es seleccionando una por vez y no seleccionando períodos individuales.</span></span>;
         case 3:
             return false;
         case 4:

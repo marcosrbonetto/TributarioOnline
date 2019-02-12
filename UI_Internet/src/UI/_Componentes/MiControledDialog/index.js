@@ -73,7 +73,7 @@ class MiControledDialog extends React.PureComponent {
           }}
         >
           <DialogTitle id="scroll-dialog-title">
-            {titulo}
+            <span className={this.props.classTitulo}>{titulo}</span>
             {textoInformativo && 
             <Tooltip
               disableFocusListener disableTouchListener

@@ -62,6 +62,7 @@ class MiInformacionTributos extends React.Component {
           textoLink={'Información de Tributos'}
           titulo={'Información de Tributos'}
           classMaxWidth={classes.maxWidth}
+          classTitulo={classes.tituloDialog}
         >
           <div key="buttonAction">
             <Button onClick={this.onDialogoOpen} className={classNames(classes.btnInfoTributos, "btnInfoTributos")} variant="outlined" color="secondary">
@@ -99,6 +100,9 @@ const styles = theme => ({
   maxWidth: {
     maxWidth: '900px'
   },
+  tituloDialog: {
+    color: '#149257',
+  },
   btnInfoTributos: {
     marginRight: '10px',
     marginTop: '5px',
@@ -106,10 +110,10 @@ const styles = theme => ({
   },
   tributoContent: {
     display: 'block',
-    background: '#ece3e3',
     padding: '10px',
   },
   tributoTitle: {
+    color: '#149257',
     marginBottom: '10px'
   }
 });
