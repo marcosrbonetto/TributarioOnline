@@ -18,7 +18,7 @@ const initialState = {
   estadoPagos: {},
   publicKeyMercadoPago: '',
   paraMobile: false,
-  aplicacionesPanel: {}
+  aplicacionesPanel: []
 };
 
 const reducer = (state = initialState, action) => {
