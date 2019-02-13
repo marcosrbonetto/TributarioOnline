@@ -114,44 +114,49 @@ class MisPagosDetalle extends React.PureComponent {
     deduccionTotal = descuentoBeneficio ? stringToFloat(deduccionTotal) + stringToFloat(descuentoBeneficio) : deduccionTotal;
 
     this.setState({
-      importeAPagar: formatNumber(importeTotal),
+      importeAPagar: importeTotal >= 0 ? formatNumber(importeTotal) : formatNumber(0),
       recargoAPagar: formatNumber(recargoTotal),
       deduccionAPagar: formatNumber(deduccionTotal),
       registrosSeleccionados: registrosSeleccionados
     });
   };
 
-  condicionFilasTabla = (params, callback) => {
+  verificacionCondicionTabla = (params, callback) => {
     //CONDICIÓN: No debe permitir superar los 7 digitos (excepto en Comercio)
     const tributo = this.props.tributoActual;
     const idTipoTributo = getIdTipoTributo(tributo);
     let newDataRows = _.cloneDeep(params.rows);
     let importeTotal = 0;
-    
+
     //Calculamos el total
     newDataRows.map((item) => {
       importeTotal += parseFloat(params.rowsSetSelected.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
     });
 
-    if (importeTotal >= 10000000 && idTipoTributo != this.props.tipoTributos.byValue['Comercio']) {
-      mostrarAlerta('Para generar generar el cedulon o realizar un pago, el monto total no puede superar los $9.999.999');
+    //Verificamos la condición de la tabla
+    const pasaCondicion = this.condicionTabla(params);
+
+    if (!pasaCondicion) {
 
       if (params.lastClickedRow) { //Cuando se preciona una fila en particular
         var currentRow = _.find(newDataRows, { id: params.lastClickedRow.id });
 
         currentRow.data.checked = false;
 
-        const rowsSetSelected = _.filter(params.rowsSetSelected,function(ele){
-            return ele != currentRow.id;
+        const rowsSetSelected = _.filter(params.rowsSetSelected, function (ele) {
+          return ele != currentRow.id;
         });
 
         this.setState({
           rowList: newDataRows
         }, () => {
-          callback({
+          const resultCallback = {
             rows: newDataRows,
             rowsSetSelected: rowsSetSelected
-          });
+          };
+
+          if (callback instanceof Function)
+            callback(resultCallback);
         });
 
       } else {
@@ -162,22 +167,51 @@ class MisPagosDetalle extends React.PureComponent {
         this.setState({
           rowList: newDataRows
         }, () => {
-          callback({
+          const resultCallback = {
             rows: newDataRows,
             rowsSetSelected: []
-          });
+          };
+
+          if (callback instanceof Function)
+            callback(resultCallback);
         });
       }
 
     } else {
-      callback({
+      const resultCallback = {
         rows: params.rows,
         rowsSetSelected: params.rowsSetSelected
-      });
+      };
+
+      if (callback instanceof Function)
+        callback(resultCallback);
     }
   }
 
-  handleBeneficiosResult = (result) => {
+
+  condicionTabla = (params) => {
+    //CONDICIÓN: No debe permitir superar los 7 digitos (excepto en Comercio)
+    const tributo = this.props.tributoActual;
+    const idTipoTributo = getIdTipoTributo(tributo);
+    let newDataRows = _.cloneDeep(params.rows);
+    let importeTotal = 0;
+
+    //Calculamos el total
+    newDataRows.map((item) => {
+      importeTotal += parseFloat(params.rowsSetSelected.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
+    });
+
+    if (importeTotal >= 10000000 && idTipoTributo != this.props.tipoTributos.byValue['Comercio']) {
+      mostrarAlerta('Para generar generar el cedulon o realizar un pago, el monto total no puede superar los $9.999.999');
+
+      return false;
+    } else {
+
+      return true;
+    }
+  }
+
+  handleBeneficiosResult = (result, callback) => {
     //Seteamos las nuevas rows con sus nuevas configuraciones de acuerdo a los beneficios y la tabla
     this.setState({
       ...this.state,
@@ -187,6 +221,23 @@ class MisPagosDetalle extends React.PureComponent {
     });
 
     const descuento = result.beneficio ? this.getDescuentoBeneficio() : 0;
+
+    //Verificamos condición de tabla
+    const pasaCondicion = this.condicionTabla({
+      rows: result.rowList,
+      rowsSetSelected: result.rowsSelected
+    });
+
+    //En caso que no pase la condición (de Tabla) se procedera a no aplicarlo (destildarlo) y ademas destildar el beneficio
+    if(!pasaCondicion) {
+      this.setState({
+        rowList: result.rowList
+      }, () => {
+        callback(pasaCondicion);
+      });
+      
+      return false;
+    }
 
     this.setState({
       descuentoBeneficio: descuento
@@ -229,7 +280,7 @@ class MisPagosDetalle extends React.PureComponent {
         callback(resultData.totalCedulon || 0);
         this.props.mostrarCargando(false);
       })
-      .catch((err) => { 
+      .catch((err) => {
         console.log(err);
         this.props.mostrarCargando(false);
       });
@@ -514,7 +565,7 @@ class MisPagosDetalle extends React.PureComponent {
 
       {/* Tabla de detalle del tributo */}
       <MiTabla
-        checkCondicion={this.condicionFilasTabla}
+        checkCondicion={this.verificacionCondicionTabla}
         pagination={pagination}
         columns={[
           { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },

@@ -74,7 +74,7 @@ export const checkBeneficios = (tipoTributo, seccion, idSelectedRows) => {
 
   //Por defecto el resultado viene como si no hubiera coincidencia con algun beneficio
   if (arrayResultBeneficios.length == 1) { //En este caso el beneficio encontrado se aplica directamente
-    if(arrayResultBeneficios[0].exacto) {
+    if (arrayResultBeneficios[0].exacto) {
       resultado = {
         seleccionBeneficios: false,
         tieneBeneficio: true,
@@ -132,7 +132,7 @@ class MisBeneficios extends React.PureComponent {
   });
 
   handleSetVisible = memoize((beneficiosDisponibles) => {
-    if(!Array.isArray(beneficiosDisponibles)) return false;
+    if (!Array.isArray(beneficiosDisponibles)) return false;
 
     this.setState({ visible: beneficiosDisponibles.length > 0 });
   });
@@ -150,18 +150,22 @@ class MisBeneficios extends React.PureComponent {
   handleAplicarBeneficio = (idItemSeleccionado) => {
     //Si es el mismo quiere decir que lo estamos deschequeando
     if (this.state.itemChecked == idItemSeleccionado) {
-      idItemSeleccionado = 0;
-      this.handleBeneficio();
+      this.setState({
+        anchorEl: null,
+        itemChecked: 0
+      }, () => {
+        this.handleBeneficio();
+      });
     } else {
-      //Seteamos las filas de acuerdo al beneficio
-      const beneficio = _.find(this.state.arrayBeneficios, { 'key': idItemSeleccionado });
-      this.handleBeneficio(beneficio); //Seteo
+      this.setState({
+        anchorEl: null,
+        itemChecked: idItemSeleccionado
+      }, () => {
+        //Seteamos las filas de acuerdo al beneficio
+        const beneficio = _.find(this.state.arrayBeneficios, { 'key': idItemSeleccionado });
+        this.handleBeneficio(beneficio); //Seteo
+      });
     }
-
-    this.setState({
-      anchorEl: null,
-      itemChecked: idItemSeleccionado
-    });
   }
 
   handleBeneficio = (beneficio) => {
@@ -197,7 +201,17 @@ class MisBeneficios extends React.PureComponent {
       };
     }
 
-    this.props.handleBeneficiosResult && this.props.handleBeneficiosResult(result);
+    this.props.handleBeneficiosResult && this.props.handleBeneficiosResult(result, (pasaCondicion) => {
+      //Si no se pasa la condición se procede a destilar cualquier beneficio que esté chequeado
+      if (!pasaCondicion) {
+        this.setState({
+          anchorEl: null,
+          itemChecked: 0
+        }, () => {
+          this.handleBeneficio();
+        });
+      }
+    });
   }
 
   resetearFilar = (arrayRows) => {
@@ -273,11 +287,11 @@ class MisBeneficios extends React.PureComponent {
         >
           {arrayBeneficios.map((beneficio, key) => {
             //Quitamos aquellos beneficios que no se encuentran entre los disponibles
-            if(!_.find(beneficiosDisponibles, (o) => {
+            if (!_.find(beneficiosDisponibles, (o) => {
               return o.beneficio.key == beneficio.key;
             }))
               return true;
-            
+
             return <MenuItem key={key} idbeneficio={beneficio.key} onClick={this.handleClose}>
               <Checkbox
                 checked={itemChecked == beneficio.key}
