@@ -120,6 +120,11 @@ const styles = theme => ({
         borderRadius: '12px',
       }
     },
+    badgeWhite: {
+      background: '#fff',
+      top: '-4px',
+      right: '0px',
+    },
     badgeGreen: {
       background: theme.color.ok.main,
       top: '-4px',
@@ -211,6 +216,14 @@ const styles = theme => ({
         right: '4px',
         cursor: 'pointer'
       }
+    },
+    textTooltipInfoMultas: {
+      fontSize: 16,
+    },
+    infoIconInfoMultas: {
+      color: '#0f8fea',
+      verticalAlign: 'middle',
+      cursor: 'pointer'
     },
     progress: {
       width: '15px !important',

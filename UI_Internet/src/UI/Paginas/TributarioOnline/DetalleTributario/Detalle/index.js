@@ -30,6 +30,7 @@ import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 
 //Custom Components
 import MiCard from "@Componentes/MiCard";
@@ -1465,6 +1466,9 @@ class DetalleTributo extends React.PureComponent {
 
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
 
+        //En esta condición si viene en multas "Si tiene" pero la consulta trae 0, procedemos a mostrar un cartel de información
+        const condicionMulta = infoContribucion && infoContribucion.tieneMultas && listMultas && listMultas.length == 0;
+
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
                 <Grid container className={classes.root} spacing={16}>
@@ -1508,7 +1512,20 @@ class DetalleTributo extends React.PureComponent {
 
                                             <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: !condicionMulta ? classes.badgeGreen : classes.badgeWhite  }} color="secondary" 
+                                            badgeContent={
+                                                condicionMulta &&
+                                                (<Tooltip
+                                                    disableFocusListener disableTouchListener
+                                                    classes={{ tooltip: classes.textTooltipInfoMultas }}
+                                                    title={'Comuniquese con Tribunar de Faltas'}
+                                                  >
+                                                    <i className={classNames(classes.infoIconInfoMultas, "material-icons")}>info</i>
+                                                  </Tooltip>)
+                                                ||
+                                                (listMultas ? listMultas.length : <CircularProgress className={classes.progress} color="secondary" />)
+                                            }
+                                            ><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
 
                                             <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
 
@@ -1700,7 +1717,7 @@ class DetalleTributo extends React.PureComponent {
                                 </div>)
                                 || menuItemSeleccionado == 'multas' &&
                                 <Typography className={classes.infoTexto}>
-                                    {listMultas ? `Le informamos que no posee multas` : `Cargando...`}
+                                    {condicionMulta ? `Comuniquese con Tribunar de Faltas` : (listMultas ? `Le informamos que no posee multas` : `Cargando...`)}
                                 </Typography>}
 
                             {/* Sub Secciones */}
