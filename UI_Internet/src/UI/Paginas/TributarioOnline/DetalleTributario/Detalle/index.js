@@ -322,7 +322,17 @@ class DetalleTributo extends React.PureComponent {
 
         const service1 = servicesTributarioOnline.getInfoContribucion(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
+                if (!datos.ok) { 
+                    this.setState({
+                        contribucion: {
+                            ...this.state.contribucion,
+                            infoSeccion: {
+                                rowList: []
+                            }
+                        }
+                    });
+                    return false; 
+                } //mostrarAlerta('Períodos: ' + datos.error); return false; }
 
                 let data = datos.return;
                 //Corroboramos que existan registros
@@ -375,7 +385,17 @@ class DetalleTributo extends React.PureComponent {
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { return false; } //mostrarAlerta('Multas: ' + datos.error); return false; }
+                if (!datos.ok) { 
+                    this.setState({
+                        multas: {
+                            ...this.state.multas,
+                            infoSeccion: {
+                                rowList: []
+                            }
+                        }
+                    });
+                    return false; 
+                } //mostrarAlerta('Multas: ' + datos.error); return false; }
 
                 let data = datos.return;
                 //Corroboramos que existan registros
@@ -427,7 +447,17 @@ class DetalleTributo extends React.PureComponent {
 
         const service3 = servicesTributarioOnline.getInfoJuicios(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { return false; } //mostrarAlerta('Juicios: ' + datos.error); return false; }
+                if (!datos.ok) { 
+                    this.setState({
+                        juicios: {
+                            ...this.state.juicios,
+                            infoSeccion: {
+                                lista: []
+                            }
+                        }
+                    });
+                    return false; 
+                } //mostrarAlerta('Juicios: ' + datos.error); return false; }
 
                 let data = datos.return;
                 if (data && data.length > 0) {
@@ -500,7 +530,17 @@ class DetalleTributo extends React.PureComponent {
 
         const service4 = servicesTributarioOnline.getInfoPlanes(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { return false; } //mostrarAlerta('Planes Pago: ' + datos.error); return false; }
+                if (!datos.ok) { 
+                    this.setState({
+                        planes: {
+                            ...this.state.planes,
+                            infoSeccion: {
+                                lista: []
+                            }
+                        }
+                    });
+                    return false; 
+                } //mostrarAlerta('Planes Pago: ' + datos.error); return false; }
 
                 let data = datos.return;
                 if (data && data.length > 0) {
@@ -1788,79 +1828,10 @@ class DetalleTributo extends React.PureComponent {
 
                         </MiCard>
                     </Grid>
+
+
                     <Grid item xs={4} className={"container"}>
-                        {/* Bloque Datos Generales */}
-                        <MiCard>
-                            <Typography className={classes.title} variant="title">Datos Generales</Typography>
-                            <Divider className={classes.divider} />
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Titular: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.titular && infoContribucion.titular.titular}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>CUIT: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.titular && infoContribucion.titular.cuit}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Identificador: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{decodeURIComponent(this.props.match.params.identificador)}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Juicios: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.tieneJuicios ? 'Si tiene' : 'No tiene'}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Planes: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.tienePlanes ? 'Si tiene' : 'No tiene'}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Multas: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.tieneMultas ? 'Si tiene' : 'No tiene'}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                        </MiCard>
-
+                        {/* Bloque Otras Operaciones */}
                         <MiCard rootClassName={"otrasOperaciones"}>
                             {/* Bloque Otras Operaciones */}
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
