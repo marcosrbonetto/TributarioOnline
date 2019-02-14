@@ -525,7 +525,7 @@ const getInformeCuenta = (token, param) => {
         "--ControlAcceso": accessCaptcha,
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Token": token
+        "Token": 'INVITADO' // Por cuestiones de permisos en Vecino Virtual (ademas que no influye en la seguridad) enviamos siempre token INVITADO
       }
     })
       .then(res => {
@@ -602,7 +602,7 @@ const getUltimosPagos = (token, param) => {
         "--ControlAcceso": accessCaptcha,
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Token": token
+        "Token": 'INVITADO' // Por cuestiones de permisos en Vecino Virtual (ademas que no influye en la seguridad) enviamos siempre token INVITADO
       }
     })
       .then(res => {
@@ -792,7 +792,7 @@ const getPeriodosAdeudados = (token, tipoTributo, identificador) => {
         "--ControlAcceso": accessCaptcha,
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Token": token
+        "Token": 'INVITADO' // Por cuestiones de permisos en Vecino Virtual (ademas que no influye en la seguridad) enviamos siempre token INVITADO
       }
     })
       .then(res => {
