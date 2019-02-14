@@ -29,6 +29,7 @@ import Divider from '@material-ui/core/Divider';
 import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 //Custom Components
 import MiCard from "@Componentes/MiCard";
@@ -364,6 +365,7 @@ class DetalleTributo extends React.PureComponent {
                     this.refreshValoresPantalla({
                         datosItemSeleccionado: data
                     });
+                    this.props.mostrarCargando(false);
                 }
             }).catch(err => {
                 this.props.mostrarCargando(false);
@@ -1448,17 +1450,17 @@ class DetalleTributo extends React.PureComponent {
 
         //rowList - Filas de grilla
         //lista - lista de tributos que contienen rowLists para mostrar en la grilla
-        const listContribucion = infoContribucion && infoContribucion.rowList ? infoContribucion.rowList : [];
-        const listMultas = infoMultas && infoMultas.rowList ? infoMultas.rowList : [];
-        const listJuicios = infoJuicios && infoJuicios.lista ? infoJuicios.lista : [];
-        const listPlanes = infoPlanes && infoPlanes.lista ? infoPlanes.lista : [];
+        const listContribucion = infoContribucion && infoContribucion.rowList;
+        const listMultas = infoMultas && infoMultas.rowList;
+        const listJuicios = infoJuicios && infoJuicios.lista;
+        const listPlanes = infoPlanes && infoPlanes.lista;
 
         let currentRowList = listContribucion;
         switch (menuItemSeleccionado) {
-            case 'contribucion': currentRowList = listContribucion; break;
-            case 'multas': currentRowList = listMultas; break;
-            case 'juicios': currentRowList = listJuicios; break;
-            case 'planes': currentRowList = listPlanes; break;
+            case 'contribucion': currentRowList = listContribucion || []; break;
+            case 'multas': currentRowList = listMultas || []; break;
+            case 'juicios': currentRowList = listJuicios || []; break;
+            case 'planes': currentRowList = listPlanes || []; break;
         }
 
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
@@ -1504,13 +1506,13 @@ class DetalleTributo extends React.PureComponent {
                                             classes={{ flexContainer: classNames(classes.flexContainersMenu, "flexContainersMenu"), scrollButtons: classes.scrollButtonsMenu }}
                                         >
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="planes" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanes ? listPlanes.length : 0}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="planes" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanes ? listPlanes.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
 
                                         </Tabs>
 
@@ -1521,7 +1523,7 @@ class DetalleTributo extends React.PureComponent {
 
                                 {/* Juicio */}
                                 {(menuItemSeleccionado == 'juicios' &&
-                                    (listJuicios.length > 0 &&
+                                    (listJuicios && listJuicios.length > 0 &&
                                         <div>
 
                                             <Grid container spacing={16}>
@@ -1536,7 +1538,7 @@ class DetalleTributo extends React.PureComponent {
                                                     >
 
                                                         {/* Juicio por Contribución */}
-                                                        {listJuicios.map((juicio) => {
+                                                        {listJuicios && listJuicios.map((juicio) => {
                                                             return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                         })}
 
@@ -1547,12 +1549,13 @@ class DetalleTributo extends React.PureComponent {
                                         </div>)
                                     || menuItemSeleccionado == 'juicios' &&
                                     <Typography className={classes.infoTexto}>
-                                        {`Le informamos que no posee juicios`}
+                                        {listJuicios ? `Le informamos que no posee juicios` : `Cargando...`}
                                     </Typography>)
                                 }
 
                                 {/* Planes de Pago */}
-                                {(menuItemSeleccionado == 'planes' && listPlanes.length > 0 && <div>
+                                {(menuItemSeleccionado == 'planes' && 
+                                listPlanes && listPlanes.length > 0 && <div>
 
                                     <Grid container spacing={16}>
                                         <Grid item sm={12} className={classes.tabMenu}>
@@ -1565,7 +1568,7 @@ class DetalleTributo extends React.PureComponent {
                                                 classes={{ flexContainer: "flexContainersMenu", scrollButtons: classes.scrollButtonsSubMenu }}
                                             >
 
-                                                {listPlanes.map((plan) => {
+                                                {listPlanes && listPlanes.map((plan) => {
                                                     return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
                                                 })}
 
@@ -1577,7 +1580,7 @@ class DetalleTributo extends React.PureComponent {
                                     ||
                                     menuItemSeleccionado == 'planes' &&
                                     <Typography className={classes.infoTexto}>
-                                        {`Le informamos que no posee planes de pago`}
+                                        {listPlanes ? `Le informamos que no posee planes de pago` : `Cargando...`}
                                     </Typography>}
 
                             </div>}
@@ -1612,8 +1615,8 @@ class DetalleTributo extends React.PureComponent {
                                                 value={'juicios'}
                                                 onClick={(event) => this.handleMenuSubMenu(event, false)}
                                             >Deuda Judicial</MenuItem>
-                                            {(menuItemSeleccionado == 'juicios' && listJuicios.length > 0 && <div>
-                                                {listJuicios.map((juicio) => {
+                                            {(menuItemSeleccionado == 'juicios' && listJuicios && listJuicios.length > 0 && <div>
+                                                {listJuicios && listJuicios.map((juicio) => {
                                                     return <MenuItem
                                                         className={classes.itemSubMenuMobile}
                                                         disabled={this.state[menuItemSeleccionado].menuItemSeleccionado == juicio.idJuicio}
@@ -1627,8 +1630,8 @@ class DetalleTributo extends React.PureComponent {
                                                 value={'planes'}
                                                 onClick={(event) => this.handleMenuSubMenu(event, false)}
                                             >Planes</MenuItem>
-                                            {(menuItemSeleccionado == 'planes' && listPlanes.length > 0 && <div>
-                                                {listPlanes.map((plan) => {
+                                            {(menuItemSeleccionado == 'planes' && listPlanes && listPlanes.length > 0 && <div>
+                                                {listPlanes && listPlanes.map((plan) => {
                                                     return <MenuItem
                                                         className={classes.itemSubMenuMobile}
                                                         disabled={this.state[menuItemSeleccionado].menuItemSeleccionado == plan.idPlan}
@@ -1646,7 +1649,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Contribución por período */}
                             {(menuItemSeleccionado == 'contribucion' &&
-                                listContribucion.length > 0 && <div>
+                                listContribucion && listContribucion.length > 0 && <div>
                                     {/* <Typography className={classes.infoTexto}>
                                         {infoTributo}
                                     </Typography> */}
@@ -1668,12 +1671,12 @@ class DetalleTributo extends React.PureComponent {
                                 </div>)
                                 || menuItemSeleccionado == 'contribucion' &&
                                 <Typography className={classes.infoTexto}>
-                                    {`Le informamos que no posee deudas`}
+                                    {listContribucion ? `Le informamos que no posee deudas` : `Cargando...`}
                                 </Typography>}
 
                             {/* Multas */}
                             {(menuItemSeleccionado == 'multas' &&
-                                listMultas.length > 0 && <div>
+                                listMultas && listMultas.length > 0 && <div>
                                     <div>
                                         {/* <Typography className={classes.infoTexto}>
                                             {infoTributo}
@@ -1697,14 +1700,14 @@ class DetalleTributo extends React.PureComponent {
                                 </div>)
                                 || menuItemSeleccionado == 'multas' &&
                                 <Typography className={classes.infoTexto}>
-                                    {`Le informamos que no posee multas`}
+                                    {listMultas ? `Le informamos que no posee multas` : `Cargando...`}
                                 </Typography>}
 
                             {/* Sub Secciones */}
 
                             {/* Juicio por Contribucion */}
                             {menuItemSeleccionado == 'juicios' &&
-                                listJuicios.map((juicio) => {
+                                listJuicios && listJuicios.map((juicio) => {
                                     return <div>
                                         {juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
@@ -1734,7 +1737,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Planes de Pago */}
                             {menuItemSeleccionado == 'planes' &&
-                                listPlanes.map((plan) => {
+                                listPlanes && listPlanes.map((plan) => {
                                     return <div>
                                         {planes.menuItemSeleccionado == plan.idPlan &&
                                             <div>
@@ -1891,8 +1894,8 @@ class DetalleTributo extends React.PureComponent {
 
                             {(menuItemSeleccionado != 'multas' && (
                                 menuItemSeleccionado == 'contribucion' ||
-                                (menuItemSeleccionado == 'juicios' && listJuicios.length > 0) ||
-                                (menuItemSeleccionado == 'planes' && listPlanes.length > 0))
+                                (menuItemSeleccionado == 'juicios' && listJuicios && listJuicios.length > 0) ||
+                                (menuItemSeleccionado == 'planes' && listPlanes && listPlanes.length > 0))
                             ) && <div>
                                     <Grid container spacing={16}>
                                         <Grid item sm={2}>

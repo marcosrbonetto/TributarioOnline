@@ -212,6 +212,13 @@ const styles = theme => ({
         cursor: 'pointer'
       }
     },
+    progress: {
+      width: '15px !important',
+      height: '15px !important',
+      marginRight: '1px !important',
+      marginBottom: '1px !important',
+      color: '#fff !important'
+    },
     buttonFotterDialog: {
       textAlign: 'center',
       paddingTop: '10px'
