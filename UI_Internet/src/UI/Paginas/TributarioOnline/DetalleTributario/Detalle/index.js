@@ -2136,6 +2136,7 @@ class DetalleTributo extends React.PureComponent {
                                         </Grid>
                                     </Grid>
 
+                                    {menuItemSeleccionado != 'juicios' && 
                                     <Grid container spacing={16}>
                                         <Grid item sm={2}>
                                             <svg className={classes.icon} viewBox="0 0 24 24">
@@ -2191,7 +2192,7 @@ class DetalleTributo extends React.PureComponent {
                                                 />
                                             </MiControledDialog>
                                         </Grid>
-                                    </Grid>
+                                    </Grid>}
                                 </div>}
                                 
                             {/* Cuando no este seleccionado Planes de Pago */}
