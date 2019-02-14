@@ -30,6 +30,7 @@ import { mostrarCargando } from '@Redux/Actions/mainContent';
 
 //Services
 import services from '@Rules/Rules_TributarioOnline';
+import { debug } from "util";
 
 const mapStateToProps = state => {
   return {
@@ -340,14 +341,12 @@ class MisPagosDetalle extends React.PureComponent {
       });
 
     } else {
-      const tieneBeneficio = resultCheckBeneficio.tieneBeneficio;
-      //tieneBeneficio True o False, continuamos el cedulon o pago online con beneficio (o no)
       this.setState({
-        tieneBeneficio: tieneBeneficio,
-        descuentoBeneficio: tieneBeneficio ? this.state.descuentoBeneficio : 0
+        tieneBeneficio: false,
+        descuentoBeneficio: 0
       }, () => {
-        //Seguimos con la acción del boton
-        callback(tieneBeneficio);
+        //Seguimos con la acción del boton sin beneficio
+        callback(false);
       });
     }
   }

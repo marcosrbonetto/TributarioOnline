@@ -67,30 +67,16 @@ export const checkBeneficios = (tipoTributo, seccion, idSelectedRows) => {
     if (resultadoCondicion.concideConBeneficio) {
       arrayResultBeneficios.push({
         beneficio: beneficio,
-        exacto: resultadoCondicion.concideExactamenteBeneficio
+        rows: resultadoCondicion.filasCoincidentes,
+        exacto: resultadoCondicion.concideExactamenteBeneficio //(EN DESUSO) Determina que las filas seleccionadas coinciden exactamente con el beneficio 
       });
     }
   });
 
-  //Por defecto el resultado viene como si no hubiera coincidencia con algun beneficio
-  if (arrayResultBeneficios.length == 1) { //En este caso el beneficio encontrado se aplica directamente
-    if (arrayResultBeneficios[0].exacto) {
-      resultado = {
-        seleccionBeneficios: false,
-        tieneBeneficio: true,
-        arrayResultBeneficios: arrayResultBeneficios
-      };
-    } else {
-      resultado = { //En este caso aparecerá para seleccion solo el beneficio encontrado (evitando los demas seleccionados que no entran en el beneficio)
-        seleccionBeneficios: true,
-        tieneBeneficio: true,
-        arrayResultBeneficios: arrayResultBeneficios
-      };
-    }
-  } if (arrayResultBeneficios.length > 1) { //El usuario deberá elegir entre alguno beneficio
+  //El usuario deberá elegir entre alguno beneficio
+  if (arrayResultBeneficios.length > 0) { 
     resultado = {
-      seleccionBeneficios: true,
-      tieneBeneficio: true,
+      seleccionBeneficios: true, //Mostramos ventana de selección de beneficios
       arrayResultBeneficios: arrayResultBeneficios
     };
   }
