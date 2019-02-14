@@ -1423,6 +1423,8 @@ class DetalleTributo extends React.PureComponent {
         const identificadorLocation = identificador.substr(0, 2) + '-' + identificador.substr(2, 2) + '-' + identificador.substr(4, 3) + '-' + identificador.substr(7, 3);
 
         window.open('http://srv-lincatastro04/emap/?nomenclatura=' + identificadorLocation, '_blank');
+
+        return true;
     }
 
     render() {
@@ -1468,6 +1470,9 @@ class DetalleTributo extends React.PureComponent {
 
         //En esta condición si viene en multas "Si tiene" pero la consulta trae 0, procedemos a mostrar un cartel de información
         const condicionMulta = infoContribucion && infoContribucion.tieneMultas && listMultas && listMultas.length == 0;
+
+        //Esta variable es para determinar si se muestra el "Ver ubicacion del inmueble"
+        const esInmueble = tipoTributo == this.props.tipoTributos.byValue['Inmueble'];
 
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
@@ -1853,18 +1858,6 @@ class DetalleTributo extends React.PureComponent {
                                     </Typography>
                                 </Grid>
                             </Grid>
-
-                            {tipoTributo == this.props.tipoTributos.byValue['Inmueble'] &&
-                                <Grid container spacing={16}>
-                                    <Grid item sm={4}>
-                                        <Typography variant="subheading" gutterBottom>Ubicación: </Typography>
-                                    </Grid>
-                                    <Grid item sm={8}>
-                                        <i className={classNames(classes.locationIcon, 'material-icons')} onClick={this.hableRedirectLocation}>
-                                            location_on
-                                    </i>
-                                    </Grid>
-                                </Grid>}
 
                         </MiCard>
 
@@ -2490,6 +2483,24 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>
                                 </Grid>
                             </div>}
+
+                            {esInmueble &&
+                            <Grid container spacing={16}>
+                                <Grid item sm={2}>
+                                    <svg className={classes.icon} viewBox="0 0 24 24">
+                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                    </svg>
+                                </Grid>
+                                <Grid item sm={10}>
+                                    <MiLinkDialog
+                                        paraMobile={this.props.paraMobile}
+                                        textoLink={'Ver ubicación del inmueble'}
+                                        titulo={'Ver ubicación del inmueble'}
+                                        onExternalAction={this.hableRedirectLocation}
+                                    >
+                                    </MiLinkDialog>
+                                </Grid>
+                            </Grid>}
 
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>
