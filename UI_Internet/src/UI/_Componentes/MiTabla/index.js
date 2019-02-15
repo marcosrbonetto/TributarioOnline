@@ -110,14 +110,21 @@ class EnhancedTableHead extends React.Component {
                                 padding={row.disablePadding ? 'none' : 'dense'}
                                 sortDirection={orderBy === row.id ? order : false}
                             >
-                                <TableSortLabel
-                                    className={classes.tableCell}
-                                    active={orderBy === row.id}
-                                    direction={order}
-                                    onClick={this.createSortHandler(row.id, row.type)}
-                                >
-                                    {row.label}
-                                </TableSortLabel>
+                                {row.noSort &&
+                                    <React.Fragment>
+                                        {row.label}
+                                    </React.Fragment>
+                                    ||
+                                    <TableSortLabel
+                                        className={classes.tableCell}
+                                        active={orderBy === row.id}
+                                        direction={order}
+                                        onClick={this.createSortHandler(row.id, row.type)}
+                                    >
+                                        {row.label}
+                                    </TableSortLabel>
+                                }
+
                             </TableCell>
                         );
                     }, this)}
@@ -170,7 +177,7 @@ class MiTabla extends React.PureComponent {
             var rows = resultSelected.rows;
             var rowsSetSelected = resultSelected.rowsSetSelected;
 
-            this.updateRowsTable({rows, rowsSetSelected});
+            this.updateRowsTable({ rows, rowsSetSelected });
         }
     }
 
@@ -239,7 +246,7 @@ class MiTabla extends React.PureComponent {
         var rows = resultSelected.rows;
         var rowsSetSelected = resultSelected.rowsSetSelected;
 
-        this.updateRowsTable({rows, rowsSetSelected});
+        this.updateRowsTable({ rows, rowsSetSelected });
     };
 
     updateRowsTable = (params) => {
@@ -278,7 +285,7 @@ class MiTabla extends React.PureComponent {
             var rows = resultSelected.rows;
             var rowsSetSelected = resultSelected.rowsSetSelected;
 
-            this.updateRowsTable({rows, rowsSetSelected, lastClickedRow: currentRow});
+            this.updateRowsTable({ rows, rowsSetSelected, lastClickedRow: currentRow });
         }
     };
 

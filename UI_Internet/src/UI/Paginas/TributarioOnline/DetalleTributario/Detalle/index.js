@@ -78,6 +78,7 @@ class DetalleTributo extends React.PureComponent {
         this.modoInvitado = this.props.loggedUser.token == window.Config.TOKEN_INVITADO;
         this.initialState = {
             anchorElMenu: null,
+            tablaExpandida: false,
             menuItemSeleccionado: this.props.match.params.seccionMenu || 'contribucion', //Menu seleccionado que muestra contenido MisPagosDetalle
             mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
             infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
@@ -1467,6 +1468,12 @@ class DetalleTributo extends React.PureComponent {
         return true;
     }
 
+    handleExpandirTabla = () => {
+        this.setState({
+            tablaExpandida: !this.state.tablaExpandida
+        });
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -1517,7 +1524,7 @@ class DetalleTributo extends React.PureComponent {
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
                 <Grid container className={classes.root} spacing={16}>
-                    <Grid item xs={8} className={"container"}>
+                    <Grid item xs={8} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol1) : classNames("container", classes.transDesExtencionCol1)}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}
                             <Typography className={classNames(classes.title, "tituloDetalleTributo")} variant="title">Identificador:
@@ -1716,6 +1723,8 @@ class DetalleTributo extends React.PureComponent {
                                         {infoTributo}
                                     </Typography> */}
                                     <MisPagosDetalle
+                                        tablaExpandida={this.state.tablaExpandida}
+                                        handleExpandirTabla={this.handleExpandirTabla}
                                         datosCuenta={this.state.infoDatosCuenta}
                                         textoBeneficioAplicado={this.state.descuentoBeneficio}
                                         paraMobile={this.props.paraMobile}
@@ -1744,6 +1753,8 @@ class DetalleTributo extends React.PureComponent {
                                             {infoTributo}
                                         </Typography> */}
                                         <MisPagosDetalle
+                                            tablaExpandida={this.state.tablaExpandida}
+                                            handleExpandirTabla={this.handleExpandirTabla}
                                             datosCuenta={this.state.infoDatosCuenta}
                                             textoBeneficioAplicado={this.state.descuentoBeneficio}
                                             paraMobile={this.props.paraMobile}
@@ -1777,6 +1788,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {infoTributo}
                                                 </Typography> */}
                                                 <MisPagosDetalle
+                                                    tablaExpandida={this.state.tablaExpandida}
+                                                    handleExpandirTabla={this.handleExpandirTabla}
                                                     datosCuenta={this.state.infoDatosCuenta}
                                                     textoBeneficioAplicado={this.state.descuentoBeneficio}
                                                     paraMobile={this.props.paraMobile}
@@ -1807,6 +1820,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {plan.textoInfo || `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagosDetalle
+                                                    tablaExpandida={this.state.tablaExpandida}
+                                                    handleExpandirTabla={this.handleExpandirTabla}
                                                     datosCuenta={this.state.infoDatosCuenta}
                                                     textoBeneficioAplicado={this.state.descuentoBeneficio}
                                                     paraMobile={this.props.paraMobile}
@@ -1830,7 +1845,7 @@ class DetalleTributo extends React.PureComponent {
                     </Grid>
 
 
-                    <Grid item xs={4} className={"container"}>
+                    <Grid item xs={4} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol2) : "container"}>
                         {/* Bloque Otras Operaciones */}
                         <MiCard rootClassName={"otrasOperaciones"}>
                             {/* Bloque Otras Operaciones */}

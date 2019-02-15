@@ -275,6 +275,21 @@ const styles = theme => ({
       minHeight: '100%',
       position: 'absolute',
       margin: '0px'
+    },
+    transExtencionCol1: {
+      maxWidth: '100% !important',
+      flexBasis: '100% !important',
+      transitionDuration: '2s',
+    },
+    transDesExtencionCol1: {
+      transitionDuration: '2s',
+    },
+    transExtencionCol2: {
+      opacity: '0',
+      transitionDuration: '2s',
+    },
+    contentMargin: {
+      marginTop: '20px !important'
     }
   });
 

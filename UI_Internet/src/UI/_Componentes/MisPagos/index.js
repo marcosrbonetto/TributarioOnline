@@ -69,7 +69,8 @@ class MisPagos extends React.PureComponent {
         }
       },
       beneficiosDisponibles: [],
-      descuentoBeneficio: 0
+      descuentoBeneficio: 0,
+      tablaExpandida: this.props.tablaExpandida || false
     };
   }
 
@@ -85,6 +86,10 @@ class MisPagos extends React.PureComponent {
 
     if (nextProps.tablaConfig && JSON.stringify(nextProps.tablaConfig) != JSON.stringify(this.props.tablaConfig)) {
       this.setState({ tableDisabled: nextProps.tablaConfig ? nextProps.tablaConfig.disabled : false });
+    }
+
+    if (JSON.stringify(nextProps.tablaExpandida) != JSON.stringify(this.props.tablaExpandida)) {
+      this.setState({ tablaExpandida: nextProps.tablaExpandida });
     }
   }
 
@@ -294,6 +299,10 @@ class MisPagos extends React.PureComponent {
     });
   }
 
+  handleExpandTable = () => {
+    this.props.handleExpandirTabla && this.props.handleExpandirTabla();
+  }
+
   render() {
     const classes = this.props.classes;
 
@@ -446,7 +455,7 @@ class MisPagos extends React.PureComponent {
           { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
           { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas[1] : 'Vencimiento') },
           { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas[2] : 'Importe ($)') },
-          { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+          { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, noSort: true, label: <i className={classNames("material-icons",classes.expandTableIcon)} onClick={this.handleExpandTable}>{this.state.tablaExpandida ? 'arrow_back' : 'arrow_forward'} </i> },
         ]}
         rows={rowList || []}
         order={order}
@@ -581,6 +590,12 @@ const styles = theme => ({
   },
   totalAPagar: {
     fontWeight: 'bold',
+  },
+  expandTableIcon: {
+    color: '#fff', 
+    cursor: 'pointer',
+    marginLeft: '24px',
+    marginTop: '4px'
   }
 });
 

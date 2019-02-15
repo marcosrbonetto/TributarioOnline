@@ -125,6 +125,18 @@ const styles = theme => ({
       top: '-4px',
       right: '0px',
     },
+    transExtencionCol1: {
+      maxWidth: '100% !important',
+      flexBasis: '100% !important',
+      transitionDuration: '2s',
+    },
+    transDesExtencionCol1: {
+      transitionDuration: '2s',
+    },
+    transExtencionCol2: {
+      opacity: '0',
+      transitionDuration: '2s',
+    },
     badgeGreen: {
       background: theme.color.ok.main,
       top: '-4px',
