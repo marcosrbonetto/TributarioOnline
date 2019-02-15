@@ -118,7 +118,11 @@ class DetalleJuicio extends React.PureComponent {
                     return {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                        base: formatNumber(concepto.importe.base),
+                        recargo: formatNumber(concepto.importe.recargo),
+                        deduccion: formatNumber(concepto.importe.deduccion),
                         importe: formatNumber(concepto.importe.total),
+                        referencia: concepto.referencia,
                         detalle: <MiTooltip
                             contenidoDetalle={<div>
                                 <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -126,7 +130,7 @@ class DetalleJuicio extends React.PureComponent {
                                 <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                 <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                             </div>}>
-                            <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                            <i class="material-icons  iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                         </MiTooltip>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
@@ -402,7 +406,15 @@ class DetalleJuicio extends React.PureComponent {
                                 registrosSeleccionados={registrosSeleccionados}
                                 tablaConfig={
                                     {
-                                        columnas: ['Concepto', 'Vencimiento', 'Importe ($)'],
+                                        columnas: {
+                                            concepto: 'Concepto',
+                                            vencimiento: 'Vencimiento',
+                                            base: 'Base ($)',
+                                            recargo: 'Recargo ($)',
+                                            deduccion: 'Deducción ($)',
+                                            importe: 'Importe ($)',
+                                            referencia: 'Referencia',
+                                        },
                                         order: 'asc',
                                         orderBy: 'concepto',
                                         check: false,

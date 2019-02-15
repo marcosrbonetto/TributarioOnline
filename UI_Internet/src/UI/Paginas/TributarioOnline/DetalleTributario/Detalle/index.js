@@ -139,7 +139,15 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'Administrativa',
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                    columnas: {
+                        concepto: 'Concepto',
+                        vencimiento: 'Vencimiento',
+                        base: 'Base ($)',
+                        recargo: 'Recargo ($)',
+                        deduccion: 'Deducción ($)',
+                        importe: 'Importe ($)',
+                        referencia: 'Referencia',
+                    },
                 },
                 registrosSeleccionados: [],
             },
@@ -154,7 +162,15 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'Administrativa de Multas',
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
-                    columnas: ['Causa', 'Fecha', 'Total ($)']
+                    columnas: {
+                        concepto: 'Causa',
+                        vencimiento: 'Fecha',
+                        base: 'Base ($)',
+                        recargo: 'Recargo ($)',
+                        deduccion: 'Deducción ($)',
+                        importe: 'Total ($)',
+                        referencia: 'Referencia',
+                    },
                 },
                 registrosSeleccionados: [],
             },
@@ -170,7 +186,15 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'del Juicio',
                     vencida: 'Capital',
                     aVencer: 'Gastos',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                    columnas: {
+                        concepto: 'Concepto',
+                        vencimiento: 'Vencimiento',
+                        base: 'Base ($)',
+                        recargo: 'Recargo ($)',
+                        deduccion: 'Deducción ($)',
+                        importe: 'Importe ($)',
+                        referencia: 'Referencia',
+                    },
                 },
                 menuItemSeleccionado: '',
                 registrosSeleccionados: [],
@@ -187,7 +211,15 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'Administrativa de Planes',
                     vencida: 'Vencida',
                     aVencer: 'A vencer',
-                    columnas: ['Concepto', 'Fecha', 'Total ($)']
+                    columnas: {
+                        concepto: 'Concepto',
+                        vencimiento: 'Fecha',
+                        base: 'Base ($)',
+                        recargo: 'Recargo ($)',
+                        deduccion: 'Deducción ($)',
+                        importe: 'Total ($)',
+                        referencia: 'Referencia',
+                    },
                 },
                 menuItemSeleccionado: '',
                 registrosSeleccionados: [],
@@ -323,7 +355,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service1 = servicesTributarioOnline.getInfoContribucion(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { 
+                if (!datos.ok) {
                     this.setState({
                         contribucion: {
                             ...this.state.contribucion,
@@ -332,7 +364,7 @@ class DetalleTributo extends React.PureComponent {
                             }
                         }
                     });
-                    return false; 
+                    return false;
                 } //mostrarAlerta('Períodos: ' + datos.error); return false; }
 
                 let data = datos.return;
@@ -345,7 +377,11 @@ class DetalleTributo extends React.PureComponent {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: fecha,
+                            base: formatNumber(concepto.importe.base),
+                            recargo: formatNumber(concepto.importe.recargo),
+                            deduccion: formatNumber(concepto.importe.deduccion),
                             importe: formatNumber(concepto.importe.total),
+                            referencia: concepto.referencia,
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
                                     <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -353,7 +389,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                                <i class="material-icons iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -386,7 +422,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { 
+                if (!datos.ok) {
                     this.setState({
                         multas: {
                             ...this.state.multas,
@@ -395,7 +431,7 @@ class DetalleTributo extends React.PureComponent {
                             }
                         }
                     });
-                    return false; 
+                    return false;
                 } //mostrarAlerta('Multas: ' + datos.error); return false; }
 
                 let data = datos.return;
@@ -408,7 +444,11 @@ class DetalleTributo extends React.PureComponent {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: fecha,
+                            base: formatNumber(concepto.importe.base),
+                            recargo: formatNumber(concepto.importe.recargo),
+                            deduccion: formatNumber(concepto.importe.deduccion),
                             importe: formatNumber(concepto.importe.total),
+                            referencia: concepto.referencia,
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
                                     <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -416,7 +456,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                                <i class="material-icons iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -448,7 +488,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service3 = servicesTributarioOnline.getInfoJuicios(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { 
+                if (!datos.ok) {
                     this.setState({
                         juicios: {
                             ...this.state.juicios,
@@ -457,7 +497,7 @@ class DetalleTributo extends React.PureComponent {
                             }
                         }
                     });
-                    return false; 
+                    return false;
                 } //mostrarAlerta('Juicios: ' + datos.error); return false; }
 
                 let data = datos.return;
@@ -471,7 +511,11 @@ class DetalleTributo extends React.PureComponent {
                             return {
                                 concepto: concepto.concepto,
                                 vencimiento: fecha,
+                                base: formatNumber(concepto.importe.base),
+                                recargo: formatNumber(concepto.importe.recargo),
+                                deduccion: formatNumber(concepto.importe.deduccion),
                                 importe: formatNumber(concepto.importe.total),
+                                referencia: concepto.referencia,
                                 detalle: <MiTooltip
                                     contenidoDetalle={<div>
                                         <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -479,7 +523,7 @@ class DetalleTributo extends React.PureComponent {
                                         <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                         <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                     </div>}>
-                                    <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                                    <i class="material-icons iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                                 </MiTooltip>,
                                 data: concepto //atributo "data" no se muestra en MiTabla
                             }
@@ -531,7 +575,7 @@ class DetalleTributo extends React.PureComponent {
 
         const service4 = servicesTributarioOnline.getInfoPlanes(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { 
+                if (!datos.ok) {
                     this.setState({
                         planes: {
                             ...this.state.planes,
@@ -540,7 +584,7 @@ class DetalleTributo extends React.PureComponent {
                             }
                         }
                     });
-                    return false; 
+                    return false;
                 } //mostrarAlerta('Planes Pago: ' + datos.error); return false; }
 
                 let data = datos.return;
@@ -557,7 +601,11 @@ class DetalleTributo extends React.PureComponent {
                             return {
                                 concepto: concepto.concepto,
                                 vencimiento: fecha,
+                                base: formatNumber(concepto.importe.base),
+                                recargo: formatNumber(concepto.importe.recargo),
+                                deduccion: formatNumber(concepto.importe.deduccion),
                                 importe: formatNumber(concepto.importe.total),
+                                referencia: concepto.referencia,
                                 detalle: <MiTooltip
                                     contenidoDetalle={<div>
                                         <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -565,7 +613,7 @@ class DetalleTributo extends React.PureComponent {
                                         <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                         <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                     </div>}>
-                                    <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                                    <i class="material-icons iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                                 </MiTooltip>,
                                 data: concepto //atributo "data" no se muestra en MiTabla
                             }
@@ -1564,19 +1612,19 @@ class DetalleTributo extends React.PureComponent {
 
                                             <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: !condicionMulta ? classes.badgeGreen : classes.badgeWhite  }} color="secondary" 
-                                            badgeContent={
-                                                condicionMulta &&
-                                                (<Tooltip
-                                                    disableFocusListener disableTouchListener
-                                                    classes={{ tooltip: classes.textTooltipInfoMultas }}
-                                                    title={'Comuniquese con Tribunar de Faltas'}
-                                                  >
-                                                    <i className={classNames(classes.infoIconInfoMultas, "material-icons")}>info</i>
-                                                  </Tooltip>)
-                                                ||
-                                                (listMultas ? listMultas.length : <CircularProgress className={classes.progress} color="secondary" />)
-                                            }
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: !condicionMulta ? classes.badgeGreen : classes.badgeWhite }} color="secondary"
+                                                badgeContent={
+                                                    condicionMulta &&
+                                                    (<Tooltip
+                                                        disableFocusListener disableTouchListener
+                                                        classes={{ tooltip: classes.textTooltipInfoMultas }}
+                                                        title={'Comuniquese con Tribunar de Faltas'}
+                                                    >
+                                                        <i className={classNames(classes.infoIconInfoMultas, "material-icons")}>info</i>
+                                                    </Tooltip>)
+                                                    ||
+                                                    (listMultas ? listMultas.length : <CircularProgress className={classes.progress} color="secondary" />)
+                                                }
                                             ><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
 
                                             <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
@@ -1623,29 +1671,29 @@ class DetalleTributo extends React.PureComponent {
                                 }
 
                                 {/* Planes de Pago */}
-                                {(menuItemSeleccionado == 'planes' && 
-                                listPlanes && listPlanes.length > 0 && <div>
+                                {(menuItemSeleccionado == 'planes' &&
+                                    listPlanes && listPlanes.length > 0 && <div>
 
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={12} className={classes.tabMenu}>
-                                            {/* SubMenu */}
-                                            <Tabs
-                                                value={planes.menuItemSeleccionado}
-                                                onChange={this.handleSubMenuChange}
-                                                scrollable
-                                                scrollButtons="auto"
-                                                classes={{ flexContainer: "flexContainersMenu", scrollButtons: classes.scrollButtonsSubMenu }}
-                                            >
+                                        <Grid container spacing={16}>
+                                            <Grid item sm={12} className={classes.tabMenu}>
+                                                {/* SubMenu */}
+                                                <Tabs
+                                                    value={planes.menuItemSeleccionado}
+                                                    onChange={this.handleSubMenuChange}
+                                                    scrollable
+                                                    scrollButtons="auto"
+                                                    classes={{ flexContainer: "flexContainersMenu", scrollButtons: classes.scrollButtonsSubMenu }}
+                                                >
 
-                                                {listPlanes && listPlanes.map((plan) => {
-                                                    return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
-                                                })}
+                                                    {listPlanes && listPlanes.map((plan) => {
+                                                        return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                                    })}
 
-                                            </Tabs>
+                                                </Tabs>
 
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </div>)
+                                    </div>)
                                     ||
                                     menuItemSeleccionado == 'planes' &&
                                     <Typography className={classes.infoTexto}>
@@ -2115,65 +2163,65 @@ class DetalleTributo extends React.PureComponent {
                                         </Grid>
                                     </Grid>
 
-                                    {menuItemSeleccionado != 'juicios' && 
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={2}>
-                                            <svg className={classes.icon} viewBox="0 0 24 24">
-                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                            </svg>
-                                        </Grid>
-                                        <Grid item sm={10}>
-                                            <MiControledDialog
-                                                paraMobile={this.props.paraMobile}
-                                                open={ultimosPagos.modal.open == true}
-                                                onDialogoOpen={this.onUltimosPagosDialogoOpen}
-                                                onDialogoClose={this.onUltimosPagosDialogoClose}
-                                                textoLink={'Últimos pagos'}
-                                                titulo={'Últimos pagos'}
-                                                textoInformativo={<div>
-                                                    <b>Observaciones:</b><br /><br />
+                                    {menuItemSeleccionado != 'juicios' &&
+                                        <Grid container spacing={16}>
+                                            <Grid item sm={2}>
+                                                <svg className={classes.icon} viewBox="0 0 24 24">
+                                                    <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                                </svg>
+                                            </Grid>
+                                            <Grid item sm={10}>
+                                                <MiControledDialog
+                                                    paraMobile={this.props.paraMobile}
+                                                    open={ultimosPagos.modal.open == true}
+                                                    onDialogoOpen={this.onUltimosPagosDialogoOpen}
+                                                    onDialogoClose={this.onUltimosPagosDialogoClose}
+                                                    textoLink={'Últimos pagos'}
+                                                    titulo={'Últimos pagos'}
+                                                    textoInformativo={<div>
+                                                        <b>Observaciones:</b><br /><br />
 
-                                                    <b>En la grilla de pagos pueden aparecer dos estados:</b><br />
+                                                        <b>En la grilla de pagos pueden aparecer dos estados:</b><br />
 
-                                                    <ul>
-                                                        <li><b>IMPUTADO:</b> el período fué abonado y el monto fué imputado.</li>
-                                                        <li><b>PENDIENTE:</b> el período fué pagado, pero todavía no imputó.</li>
-                                                    </ul><br /><br />
+                                                        <ul>
+                                                            <li><b>IMPUTADO:</b> el período fué abonado y el monto fué imputado.</li>
+                                                            <li><b>PENDIENTE:</b> el período fué pagado, pero todavía no imputó.</li>
+                                                        </ul><br /><br />
 
-                                                    Las imputaciones pueden demorar unos 10 días hábiles dependiendo del caso.<br /><br />
+                                                        Las imputaciones pueden demorar unos 10 días hábiles dependiendo del caso.<br /><br />
 
-                                                    Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
+                                                        Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
                                         </div>}
-                                                classMaxWidth={classes.maxWidthUltimosPagos}
-                                            >
-                                                <MiTabla
-                                                    pagination={!this.props.paraMobile}
-                                                    columns={[
-                                                        { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
-                                                        { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                        { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base ($)' },
-                                                        { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo ($)' },
-                                                        { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción ($)' },
-                                                        { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
-                                                        { id: 'ctl', type: 'string', numeric: false, disablePadding: false, label: 'CTL' },
-                                                        { id: 'estado', type: 'string', numeric: false, disablePadding: false, label: 'Estado' },
-                                                        { id: 'caja', type: 'string', numeric: false, disablePadding: false, label: 'Caja' },
-                                                    ]}
-                                                    rows={ultimosPagos.infoGrilla || []}
-                                                    msgNoRows={'No existen pagos registrados en los últimos dos años'}
-                                                    order='desc'
-                                                    orderBy='vencimiento'
-                                                    check={false}
-                                                    rowsPerPage={5}
-                                                    classes={{
-                                                        root: classes.miTabla
-                                                    }}
-                                                />
-                                            </MiControledDialog>
-                                        </Grid>
-                                    </Grid>}
+                                                    classMaxWidth={classes.maxWidthUltimosPagos}
+                                                >
+                                                    <MiTabla
+                                                        pagination={!this.props.paraMobile}
+                                                        columns={[
+                                                            { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
+                                                            { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                            { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base ($)' },
+                                                            { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo ($)' },
+                                                            { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción ($)' },
+                                                            { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
+                                                            { id: 'ctl', type: 'string', numeric: false, disablePadding: false, label: 'CTL' },
+                                                            { id: 'estado', type: 'string', numeric: false, disablePadding: false, label: 'Estado' },
+                                                            { id: 'caja', type: 'string', numeric: false, disablePadding: false, label: 'Caja' },
+                                                        ]}
+                                                        rows={ultimosPagos.infoGrilla || []}
+                                                        msgNoRows={'No existen pagos registrados en los últimos dos años'}
+                                                        order='desc'
+                                                        orderBy='vencimiento'
+                                                        check={false}
+                                                        rowsPerPage={5}
+                                                        classes={{
+                                                            root: classes.miTabla
+                                                        }}
+                                                    />
+                                                </MiControledDialog>
+                                            </Grid>
+                                        </Grid>}
                                 </div>}
-                                
+
                             {/* Cuando no este seleccionado Planes de Pago */}
                             {menuItemSeleccionado != 'planes' && <div>
 
@@ -2471,22 +2519,22 @@ class DetalleTributo extends React.PureComponent {
                             </div>}
 
                             {esInmueble &&
-                            <Grid container spacing={16}>
-                                <Grid item sm={2}>
-                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                    </svg>
-                                </Grid>
-                                <Grid item sm={10}>
-                                    <MiLinkDialog
-                                        paraMobile={this.props.paraMobile}
-                                        textoLink={'Ver ubicación del inmueble'}
-                                        titulo={'Ver ubicación del inmueble'}
-                                        onExternalAction={this.hableRedirectLocation}
-                                    >
-                                    </MiLinkDialog>
-                                </Grid>
-                            </Grid>}
+                                <Grid container spacing={16}>
+                                    <Grid item sm={2}>
+                                        <svg className={classes.icon} viewBox="0 0 24 24">
+                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                        </svg>
+                                    </Grid>
+                                    <Grid item sm={10}>
+                                        <MiLinkDialog
+                                            paraMobile={this.props.paraMobile}
+                                            textoLink={'Ver ubicación del inmueble'}
+                                            titulo={'Ver ubicación del inmueble'}
+                                            onExternalAction={this.hableRedirectLocation}
+                                        >
+                                        </MiLinkDialog>
+                                    </Grid>
+                                </Grid>}
 
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>

@@ -452,10 +452,15 @@ class MisPagos extends React.PureComponent {
       <MiTabla
         pagination={pagination}
         columns={[
-          { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
-          { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas[1] : 'Vencimiento') },
-          { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas[2] : 'Importe ($)') },
-          { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, noSort: true, label: <i className={classNames("material-icons",classes.expandTableIcon)} onClick={this.handleExpandTable}>{this.state.tablaExpandida ? 'arrow_back' : 'arrow_forward'} </i> },
+          { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas['concepto'] : 'Concepto') },
+          { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas['vencimiento'] : 'Vencimiento') },
+          { id: 'base', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['base'] : 'Base ($)'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
+          { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['recargo'] : 'Recargo ($)'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
+          { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['deduccion'] : 'Deducción ($)'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
+          { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['importe'] : 'Importe ($)') },
+          { id: 'referencia', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['referencia'] : 'Referencia'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
+          { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, noSort: true, label: <i className={classNames("material-icons",classes.expandTableIcon)} onClick={this.handleExpandTable}>{this.state.tablaExpandida ? 'arrow_back' : 'arrow_forward'} </i>, 
+          style: (this.state.tablaExpandida ? classes.ocultarDetalle : classes.mostrarDetalle) },
         ]}
         rows={rowList || []}
         order={order}
@@ -596,6 +601,26 @@ const styles = theme => ({
     cursor: 'pointer',
     marginLeft: '24px',
     marginTop: '4px'
+  },
+  celdaExpandida: {
+    maxWidth: 'initial',
+    transitionDuration: '2s'
+  },
+  celdaNoExpandida: {
+    maxWidth: '0px',
+    display: 'none',
+    transitionDuration: '2s'
+  },
+  mostrarDetalle: {
+    '& .iconosDetalle': {
+      transitionDuration: '2s'
+    }
+  },
+  ocultarDetalle: {
+    '& .iconosDetalle': {
+      display: 'none',
+      transitionDuration: '2s'
+    }
   }
 });
 

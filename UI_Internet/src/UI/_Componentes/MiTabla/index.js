@@ -104,7 +104,7 @@ class EnhancedTableHead extends React.Component {
                     {this.props.columns.map((row, key) => {
                         return (
                             <TableCell
-                                className={classes.tableCell}
+                                className={classNames(classes.tableCell, row.style)}
                                 key={row.id}
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'dense'}
@@ -427,7 +427,7 @@ class MiRow extends React.PureComponent {
                 if (cell == 'data' || cell == 'id') return; //'id' y 'data' son datos extras para utilizar
                 var column = _.find(columns, { id: cell });
 
-                return <TableCell className={column && column.numeric && classes.cellNumeric} key={cell} padding="dense">{info[cell]}</TableCell>
+                return <TableCell className={classNames(column && column.numeric && classes.cellNumeric, column.style)} key={cell} padding="dense">{info[cell]}</TableCell>
             })}
         </TableRow>
     }
