@@ -280,7 +280,8 @@ class DetalleTributo extends React.PureComponent {
                     let identificadorActual = {
                         "tipoTributo": idTipoTributo,
                         "identificador": identificador,
-                        "representado": datos.return.titular
+                        "representado": datos.return.titular,
+                        "cuit": datos.return.cuit
                     };
 
                     const tributosBienesPorCUIT = _.filter(this.props.tributosBienesPorCUIT, (o) => {
@@ -340,6 +341,7 @@ class DetalleTributo extends React.PureComponent {
 
         IdsTributos = (arrayTributos && arrayTributos.map((tributo) => {
             return {
+                cuit: tributo.titular.cuit,
                 representado: tributo.titular.titular,
                 identificador: tributo.identificador
             }
@@ -1588,10 +1590,9 @@ class DetalleTributo extends React.PureComponent {
                                 >
 
                                     {identificadores && identificadores.map((tributo, index) => {
-                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado}</MenuItem>
+                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado + (tributo.cuit && ' ('+tributo.cuit+')')}</MenuItem>
                                     })}
                                 </Select>
-                                {!this.props.paraMobile && <div>- <b className={classes.textoNoWrap}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b></div>}
                             </Typography>
 
                             {!this.props.paraMobile && <div>
@@ -1635,6 +1636,14 @@ class DetalleTributo extends React.PureComponent {
 
                                     </Grid>
                                 </Grid>
+
+                                {!this.props.paraMobile &&
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={12} className={classes.tabMenu}>
+                                            <Typography variant="title" className={classNames(classes.textoNoWrap, classes.textoSeccion)}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                }
 
                                 {/* Sub Menus */}
 

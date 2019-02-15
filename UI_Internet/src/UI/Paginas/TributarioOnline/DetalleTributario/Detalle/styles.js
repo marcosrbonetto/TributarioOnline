@@ -125,6 +125,15 @@ const styles = theme => ({
       top: '-4px',
       right: '0px',
     },
+    textoSeccion: {
+      textAlign: 'center',
+      color: '#fff',
+      background: '#149257',
+      padding: '10px',
+      fontWeight: '400',
+      marginTop: '12px',
+      borderRadius: '5px'
+    },
     transExtencionCol1: {
       maxWidth: '100% !important',
       flexBasis: '100% !important',
