@@ -127,12 +127,13 @@ const styles = theme => ({
     },
     textoSeccion: {
       textAlign: 'center',
-      color: '#fff',
-      background: '#149257',
+      color: '#149257',
+      background: '#fff',
       padding: '10px',
       fontWeight: '400',
       marginTop: '12px',
-      borderRadius: '5px'
+      borderTop: '1px solid #149257',
+      borderBottom: '1px solid #149257',
     },
     transExtencionCol1: {
       maxWidth: '100% !important',
@@ -207,7 +208,7 @@ const styles = theme => ({
       padding: '10px 0px',
       textAlign: 'center',
       position: 'relative',
-      margin: '28px 0px 10px 0px',
+      margin: '20px 0px 10px 0px',
       borderRadius: '5px',
       '& h3': {
         marginBottom: '0px'

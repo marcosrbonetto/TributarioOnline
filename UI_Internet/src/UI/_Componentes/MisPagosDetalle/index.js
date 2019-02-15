@@ -668,7 +668,7 @@ const styles = theme => ({
     padding: '10px 0px',
     textAlign: 'center',
     position: 'relative',
-    margin: '28px 0px 10px 0px',
+    margin: '20px 0px 10px 0px',
     borderRadius: '5px',
     '& h3': {
       marginBottom: '0px'
