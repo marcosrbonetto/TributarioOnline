@@ -40,7 +40,10 @@ const beneficios = {
                 const concideConBeneficio = difference.length == 0;
                 const concideExactamenteBeneficio = difference2.length == 0;
 
+                const filasCoincidentes = _.intersection(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
+
                 return {
+                    filasCoincidentes: filasCoincidentes,
                     concideConBeneficio: concideConBeneficio,
                     concideExactamenteBeneficio: concideExactamenteBeneficio,
                 };
@@ -84,7 +87,10 @@ const beneficios = {
                 const concideConBeneficio = difference.length == 0;
                 const concideExactamenteBeneficio = difference2.length == 0;
 
+                const filasCoincidentes = _.intersection(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
+
                 return {
+                    filasCoincidentes: filasCoincidentes,
                     concideConBeneficio: concideConBeneficio,
                     concideExactamenteBeneficio: concideExactamenteBeneficio,
                 };
@@ -126,7 +132,10 @@ const beneficios = {
                 const concideConBeneficio = difference.length == 0;
                 const concideExactamenteBeneficio = difference2.length == 0;
 
+                const filasCoincidentes = _.intersection(idRowsBeneficio.sort(), idRowsSeleccionados.sort());
+
                 return {
+                    filasCoincidentes: filasCoincidentes,
                     concideConBeneficio: concideConBeneficio,
                     concideExactamenteBeneficio: concideExactamenteBeneficio,
                 };

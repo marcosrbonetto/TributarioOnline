@@ -120,6 +120,32 @@ const styles = theme => ({
         borderRadius: '12px',
       }
     },
+    badgeWhite: {
+      background: '#fff',
+      top: '-4px',
+      right: '0px',
+    },
+    textoSeccion: {
+      textAlign: 'center',
+      color: '#fff',
+      background: '#149257',
+      padding: '10px',
+      fontWeight: '400',
+      marginTop: '12px',
+      borderRadius: '5px'
+    },
+    transExtencionCol1: {
+      maxWidth: '100% !important',
+      flexBasis: '100% !important',
+      transitionDuration: '2s',
+    },
+    transDesExtencionCol1: {
+      transitionDuration: '2s',
+    },
+    transExtencionCol2: {
+      opacity: '0',
+      transitionDuration: '2s',
+    },
     badgeGreen: {
       background: theme.color.ok.main,
       top: '-4px',
@@ -211,6 +237,21 @@ const styles = theme => ({
         right: '4px',
         cursor: 'pointer'
       }
+    },
+    textTooltipInfoMultas: {
+      fontSize: 16,
+    },
+    infoIconInfoMultas: {
+      color: '#0f8fea',
+      verticalAlign: 'middle',
+      cursor: 'pointer'
+    },
+    progress: {
+      width: '15px !important',
+      height: '15px !important',
+      marginRight: '1px !important',
+      marginBottom: '1px !important',
+      color: '#fff !important'
     },
     buttonFotterDialog: {
       textAlign: 'center',

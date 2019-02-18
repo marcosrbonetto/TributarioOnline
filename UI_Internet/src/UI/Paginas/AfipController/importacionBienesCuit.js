@@ -78,7 +78,8 @@ class importacionBienesCuit extends Component {
                                     tributosCUIT.push({
                                         tipoTributo: item.tipoTributo,
                                         identificador: item.identificador,
-                                        representado: item.titular.titular
+                                        representado: item.titular.titular,
+                                        cuit: item.titular.cuit
                                     });
                                 }
                             });

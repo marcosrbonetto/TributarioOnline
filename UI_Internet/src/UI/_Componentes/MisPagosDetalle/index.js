@@ -30,6 +30,7 @@ import { mostrarCargando } from '@Redux/Actions/mainContent';
 
 //Services
 import services from '@Rules/Rules_TributarioOnline';
+import { debug } from "util";
 
 const mapStateToProps = state => {
   return {
@@ -70,7 +71,8 @@ class MisPagosDetalle extends React.PureComponent {
         }
       },
       beneficiosDisponibles: [],
-      descuentoBeneficio: 0
+      descuentoBeneficio: 0,
+      tablaExpandida: this.props.tablaExpandida || false
     };
   }
 
@@ -86,6 +88,10 @@ class MisPagosDetalle extends React.PureComponent {
 
     if (JSON.stringify(nextProps.registrosSeleccionados) != JSON.stringify(this.props.registrosSeleccionados)) {
       this.setState({ registrosSeleccionados: nextProps.registrosSeleccionados });
+    }
+
+    if (JSON.stringify(nextProps.tablaExpandida) != JSON.stringify(this.props.tablaExpandida)) {
+      this.setState({ tablaExpandida: nextProps.tablaExpandida });
     }
   }
 
@@ -114,44 +120,49 @@ class MisPagosDetalle extends React.PureComponent {
     deduccionTotal = descuentoBeneficio ? stringToFloat(deduccionTotal) + stringToFloat(descuentoBeneficio) : deduccionTotal;
 
     this.setState({
-      importeAPagar: formatNumber(importeTotal),
+      importeAPagar: importeTotal >= 0 ? formatNumber(importeTotal) : formatNumber(0),
       recargoAPagar: formatNumber(recargoTotal),
       deduccionAPagar: formatNumber(deduccionTotal),
       registrosSeleccionados: registrosSeleccionados
     });
   };
 
-  condicionFilasTabla = (params, callback) => {
+  verificacionCondicionTabla = (params, callback) => {
     //CONDICIÓN: No debe permitir superar los 7 digitos (excepto en Comercio)
     const tributo = this.props.tributoActual;
     const idTipoTributo = getIdTipoTributo(tributo);
     let newDataRows = _.cloneDeep(params.rows);
     let importeTotal = 0;
-    
+
     //Calculamos el total
     newDataRows.map((item) => {
       importeTotal += parseFloat(params.rowsSetSelected.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
     });
 
-    if (importeTotal >= 10000000 && idTipoTributo != this.props.tipoTributos.byValue['Comercio']) {
-      mostrarAlerta('Para generar generar el cedulon o realizar un pago, el monto total no puede superar los $9.999.999');
+    //Verificamos la condición de la tabla
+    const pasaCondicion = this.condicionTabla(params);
+
+    if (!pasaCondicion) {
 
       if (params.lastClickedRow) { //Cuando se preciona una fila en particular
         var currentRow = _.find(newDataRows, { id: params.lastClickedRow.id });
 
         currentRow.data.checked = false;
 
-        const rowsSetSelected = _.filter(params.rowsSetSelected,function(ele){
-            return ele != currentRow.id;
+        const rowsSetSelected = _.filter(params.rowsSetSelected, function (ele) {
+          return ele != currentRow.id;
         });
 
         this.setState({
           rowList: newDataRows
         }, () => {
-          callback({
+          const resultCallback = {
             rows: newDataRows,
             rowsSetSelected: rowsSetSelected
-          });
+          };
+
+          if (callback instanceof Function)
+            callback(resultCallback);
         });
 
       } else {
@@ -162,22 +173,51 @@ class MisPagosDetalle extends React.PureComponent {
         this.setState({
           rowList: newDataRows
         }, () => {
-          callback({
+          const resultCallback = {
             rows: newDataRows,
             rowsSetSelected: []
-          });
+          };
+
+          if (callback instanceof Function)
+            callback(resultCallback);
         });
       }
 
     } else {
-      callback({
+      const resultCallback = {
         rows: params.rows,
         rowsSetSelected: params.rowsSetSelected
-      });
+      };
+
+      if (callback instanceof Function)
+        callback(resultCallback);
     }
   }
 
-  handleBeneficiosResult = (result) => {
+
+  condicionTabla = (params) => {
+    //CONDICIÓN: No debe permitir superar los 7 digitos (excepto en Comercio)
+    const tributo = this.props.tributoActual;
+    const idTipoTributo = getIdTipoTributo(tributo);
+    let newDataRows = _.cloneDeep(params.rows);
+    let importeTotal = 0;
+
+    //Calculamos el total
+    newDataRows.map((item) => {
+      importeTotal += parseFloat(params.rowsSetSelected.indexOf(item.id) != -1 ? stringToFloat(item['importe']) : 0);
+    });
+
+    if (importeTotal >= 10000000 && idTipoTributo != this.props.tipoTributos.byValue['Comercio']) {
+      mostrarAlerta('Para generar generar el cedulon o realizar un pago, el monto total no puede superar los $9.999.999');
+
+      return false;
+    } else {
+
+      return true;
+    }
+  }
+
+  handleBeneficiosResult = (result, callback) => {
     //Seteamos las nuevas rows con sus nuevas configuraciones de acuerdo a los beneficios y la tabla
     this.setState({
       ...this.state,
@@ -187,6 +227,23 @@ class MisPagosDetalle extends React.PureComponent {
     });
 
     const descuento = result.beneficio ? this.getDescuentoBeneficio() : 0;
+
+    //Verificamos condición de tabla
+    const pasaCondicion = this.condicionTabla({
+      rows: result.rowList,
+      rowsSetSelected: result.rowsSelected
+    });
+
+    //En caso que no pase la condición (de Tabla) se procedera a no aplicarlo (destildarlo) y ademas destildar el beneficio
+    if(!pasaCondicion) {
+      this.setState({
+        rowList: result.rowList
+      }, () => {
+        callback(pasaCondicion);
+      });
+      
+      return false;
+    }
 
     this.setState({
       descuentoBeneficio: descuento
@@ -229,7 +286,7 @@ class MisPagosDetalle extends React.PureComponent {
         callback(resultData.totalCedulon || 0);
         this.props.mostrarCargando(false);
       })
-      .catch((err) => { 
+      .catch((err) => {
         console.log(err);
         this.props.mostrarCargando(false);
       });
@@ -289,14 +346,12 @@ class MisPagosDetalle extends React.PureComponent {
       });
 
     } else {
-      const tieneBeneficio = resultCheckBeneficio.tieneBeneficio;
-      //tieneBeneficio True o False, continuamos el cedulon o pago online con beneficio (o no)
       this.setState({
-        tieneBeneficio: tieneBeneficio,
-        descuentoBeneficio: tieneBeneficio ? this.state.descuentoBeneficio : 0
+        tieneBeneficio: false,
+        descuentoBeneficio: 0
       }, () => {
-        //Seguimos con la acción del boton
-        callback(tieneBeneficio);
+        //Seguimos con la acción del boton sin beneficio
+        callback(false);
       });
     }
   }
@@ -348,6 +403,10 @@ class MisPagosDetalle extends React.PureComponent {
         }
       }
     });
+  }
+
+  handleExpandTable = () => {
+    this.props.handleExpandirTabla && this.props.handleExpandirTabla();
   }
 
   render() {
@@ -514,13 +573,18 @@ class MisPagosDetalle extends React.PureComponent {
 
       {/* Tabla de detalle del tributo */}
       <MiTabla
-        checkCondicion={this.condicionFilasTabla}
+        checkCondicion={this.verificacionCondicionTabla}
         pagination={pagination}
         columns={[
-          { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas[0] : 'Concepto') },
-          { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas[1] : 'Vencimiento') },
-          { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas[2] : 'Importe ($)') },
-          { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+          { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: (columnas ? columnas['concepto'] : 'Concepto') },
+          { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: (columnas ? columnas['vencimiento'] : 'Vencimiento') },
+          { id: 'base', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['base'] : 'Base ($)'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
+          { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['recargo'] : 'Recargo ($)'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
+          { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['deduccion'] : 'Deducción ($)'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
+          { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['importe'] : 'Importe ($)') },
+          { id: 'referencia', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['referencia'] : 'Referencia'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
+          { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, noSort: true, label: <i className={classNames("material-icons",classes.expandTableIcon)} onClick={this.handleExpandTable}>{this.state.tablaExpandida ? 'arrow_back' : 'arrow_forward'} </i>, 
+          style: (this.state.tablaExpandida ? classes.ocultarDetalle : classes.mostrarDetalle) },
         ]}
         rows={rowList || []}
         order={order}
@@ -655,6 +719,32 @@ const styles = theme => ({
   },
   totalAPagar: {
     fontWeight: 'bold',
+  },
+  expandTableIcon: {
+    color: '#fff', 
+    cursor: 'pointer',
+    marginLeft: '24px',
+    marginTop: '4px'
+  },
+  celdaExpandida: {
+    maxWidth: 'initial',
+    transitionDuration: '2s'
+  },
+  celdaNoExpandida: {
+    maxWidth: '0px',
+    display: 'none',
+    transitionDuration: '2s'
+  },
+  mostrarDetalle: {
+    '& .iconosDetalle': {
+      transitionDuration: '2s'
+    }
+  },
+  ocultarDetalle: {
+    '& .iconosDetalle': {
+      display: 'none',
+      transitionDuration: '2s'
+    }
   }
 });
 

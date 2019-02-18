@@ -1,7 +1,7 @@
 const DEPLOY = 1;
 const TEST = 2;
 const LOCAL = 3;
-const ENTORNO = DEPLOY;
+const ENTORNO = LOCAL;
 
 //WS Tributario
 const URL_WS_TRIBUTARIO_LOCAL = "https://srv-dev04/WSAutogestionTributaria_Bridge";

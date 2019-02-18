@@ -29,6 +29,8 @@ import Divider from '@material-ui/core/Divider';
 import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 
 //Custom Components
 import MiCard from "@Componentes/MiCard";
@@ -76,6 +78,7 @@ class DetalleTributo extends React.PureComponent {
         this.modoInvitado = this.props.loggedUser.token == window.Config.TOKEN_INVITADO;
         this.initialState = {
             anchorElMenu: null,
+            tablaExpandida: false,
             menuItemSeleccionado: this.props.match.params.seccionMenu || 'contribucion', //Menu seleccionado que muestra contenido MisPagosDetalle
             mostrarAlternativaPlan: false, //Se tiene que encontrar algun registro con 60 o más dias para mostrar la alternativa de plan
             infoDatosCuenta: '', //Info de cuenta que se muestra, depende de la seccion del menu en la que se encuentre menuItemSeleccionado
@@ -136,7 +139,15 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'Administrativa',
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                    columnas: {
+                        concepto: 'Concepto',
+                        vencimiento: 'Vencimiento',
+                        base: 'Base ($)',
+                        recargo: 'Recargo ($)',
+                        deduccion: 'Deducción ($)',
+                        importe: 'Importe ($)',
+                        referencia: 'Referencia',
+                    },
                 },
                 registrosSeleccionados: [],
             },
@@ -151,7 +162,15 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'Administrativa de Multas',
                     vencida: 'Deuda vencida',
                     aVencer: 'A vencer',
-                    columnas: ['Causa', 'Fecha', 'Total ($)']
+                    columnas: {
+                        concepto: 'Causa',
+                        vencimiento: 'Fecha',
+                        base: 'Base ($)',
+                        recargo: 'Recargo ($)',
+                        deduccion: 'Deducción ($)',
+                        importe: 'Total ($)',
+                        referencia: 'Referencia',
+                    },
                 },
                 registrosSeleccionados: [],
             },
@@ -167,7 +186,15 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'del Juicio',
                     vencida: 'Capital',
                     aVencer: 'Gastos',
-                    columnas: ['Concepto', 'Vencimiento', 'Importe ($)']
+                    columnas: {
+                        concepto: 'Concepto',
+                        vencimiento: 'Vencimiento',
+                        base: 'Base ($)',
+                        recargo: 'Recargo ($)',
+                        deduccion: 'Deducción ($)',
+                        importe: 'Importe ($)',
+                        referencia: 'Referencia',
+                    },
                 },
                 menuItemSeleccionado: '',
                 registrosSeleccionados: [],
@@ -184,7 +211,15 @@ class DetalleTributo extends React.PureComponent {
                     totalesDeuda: 'Administrativa de Planes',
                     vencida: 'Vencida',
                     aVencer: 'A vencer',
-                    columnas: ['Concepto', 'Fecha', 'Total ($)']
+                    columnas: {
+                        concepto: 'Concepto',
+                        vencimiento: 'Fecha',
+                        base: 'Base ($)',
+                        recargo: 'Recargo ($)',
+                        deduccion: 'Deducción ($)',
+                        importe: 'Total ($)',
+                        referencia: 'Referencia',
+                    },
                 },
                 menuItemSeleccionado: '',
                 registrosSeleccionados: [],
@@ -245,7 +280,8 @@ class DetalleTributo extends React.PureComponent {
                     let identificadorActual = {
                         "tipoTributo": idTipoTributo,
                         "identificador": identificador,
-                        "representado": datos.return.titular
+                        "representado": datos.return.titular,
+                        "cuit": datos.return.cuit
                     };
 
                     const tributosBienesPorCUIT = _.filter(this.props.tributosBienesPorCUIT, (o) => {
@@ -305,6 +341,7 @@ class DetalleTributo extends React.PureComponent {
 
         IdsTributos = (arrayTributos && arrayTributos.map((tributo) => {
             return {
+                cuit: tributo.titular.cuit,
                 representado: tributo.titular.titular,
                 identificador: tributo.identificador
             }
@@ -320,7 +357,17 @@ class DetalleTributo extends React.PureComponent {
 
         const service1 = servicesTributarioOnline.getInfoContribucion(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { return false; } //mostrarAlerta('Períodos: ' + datos.error); return false; }
+                if (!datos.ok) {
+                    this.setState({
+                        contribucion: {
+                            ...this.state.contribucion,
+                            infoSeccion: {
+                                rowList: []
+                            }
+                        }
+                    });
+                    return false;
+                } //mostrarAlerta('Períodos: ' + datos.error); return false; }
 
                 let data = datos.return;
                 //Corroboramos que existan registros
@@ -332,7 +379,11 @@ class DetalleTributo extends React.PureComponent {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: fecha,
+                            base: formatNumber(concepto.importe.base),
+                            recargo: formatNumber(concepto.importe.recargo),
+                            deduccion: formatNumber(concepto.importe.deduccion),
                             importe: formatNumber(concepto.importe.total),
+                            referencia: concepto.referencia,
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
                                     <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -340,7 +391,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                                <i class="material-icons iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -364,6 +415,7 @@ class DetalleTributo extends React.PureComponent {
                     this.refreshValoresPantalla({
                         datosItemSeleccionado: data
                     });
+                    this.props.mostrarCargando(false);
                 }
             }).catch(err => {
                 this.props.mostrarCargando(false);
@@ -372,7 +424,17 @@ class DetalleTributo extends React.PureComponent {
 
         const service2 = servicesTributarioOnline.getInfoMultas(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { return false; } //mostrarAlerta('Multas: ' + datos.error); return false; }
+                if (!datos.ok) {
+                    this.setState({
+                        multas: {
+                            ...this.state.multas,
+                            infoSeccion: {
+                                rowList: []
+                            }
+                        }
+                    });
+                    return false;
+                } //mostrarAlerta('Multas: ' + datos.error); return false; }
 
                 let data = datos.return;
                 //Corroboramos que existan registros
@@ -384,7 +446,11 @@ class DetalleTributo extends React.PureComponent {
                         return {
                             concepto: concepto.concepto,
                             vencimiento: fecha,
+                            base: formatNumber(concepto.importe.base),
+                            recargo: formatNumber(concepto.importe.recargo),
+                            deduccion: formatNumber(concepto.importe.deduccion),
                             importe: formatNumber(concepto.importe.total),
+                            referencia: concepto.referencia,
                             detalle: <MiTooltip
                                 contenidoDetalle={<div>
                                     <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -392,7 +458,7 @@ class DetalleTributo extends React.PureComponent {
                                     <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                     <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                 </div>}>
-                                <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                                <i class="material-icons iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                             </MiTooltip>,
                             data: concepto //atributo "data" no se muestra en MiTabla
                         }
@@ -424,7 +490,17 @@ class DetalleTributo extends React.PureComponent {
 
         const service3 = servicesTributarioOnline.getInfoJuicios(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { return false; } //mostrarAlerta('Juicios: ' + datos.error); return false; }
+                if (!datos.ok) {
+                    this.setState({
+                        juicios: {
+                            ...this.state.juicios,
+                            infoSeccion: {
+                                lista: []
+                            }
+                        }
+                    });
+                    return false;
+                } //mostrarAlerta('Juicios: ' + datos.error); return false; }
 
                 let data = datos.return;
                 if (data && data.length > 0) {
@@ -437,7 +513,11 @@ class DetalleTributo extends React.PureComponent {
                             return {
                                 concepto: concepto.concepto,
                                 vencimiento: fecha,
+                                base: formatNumber(concepto.importe.base),
+                                recargo: formatNumber(concepto.importe.recargo),
+                                deduccion: formatNumber(concepto.importe.deduccion),
                                 importe: formatNumber(concepto.importe.total),
+                                referencia: concepto.referencia,
                                 detalle: <MiTooltip
                                     contenidoDetalle={<div>
                                         <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -445,7 +525,7 @@ class DetalleTributo extends React.PureComponent {
                                         <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                         <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                     </div>}>
-                                    <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                                    <i class="material-icons iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                                 </MiTooltip>,
                                 data: concepto //atributo "data" no se muestra en MiTabla
                             }
@@ -497,7 +577,17 @@ class DetalleTributo extends React.PureComponent {
 
         const service4 = servicesTributarioOnline.getInfoPlanes(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { return false; } //mostrarAlerta('Planes Pago: ' + datos.error); return false; }
+                if (!datos.ok) {
+                    this.setState({
+                        planes: {
+                            ...this.state.planes,
+                            infoSeccion: {
+                                lista: []
+                            }
+                        }
+                    });
+                    return false;
+                } //mostrarAlerta('Planes Pago: ' + datos.error); return false; }
 
                 let data = datos.return;
                 if (data && data.length > 0) {
@@ -513,7 +603,11 @@ class DetalleTributo extends React.PureComponent {
                             return {
                                 concepto: concepto.concepto,
                                 vencimiento: fecha,
+                                base: formatNumber(concepto.importe.base),
+                                recargo: formatNumber(concepto.importe.recargo),
+                                deduccion: formatNumber(concepto.importe.deduccion),
                                 importe: formatNumber(concepto.importe.total),
+                                referencia: concepto.referencia,
                                 detalle: <MiTooltip
                                     contenidoDetalle={<div>
                                         <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -521,7 +615,7 @@ class DetalleTributo extends React.PureComponent {
                                         <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                         <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                                     </div>}>
-                                    <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                                    <i class="material-icons iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                                 </MiTooltip>,
                                 data: concepto //atributo "data" no se muestra en MiTabla
                             }
@@ -1420,6 +1514,14 @@ class DetalleTributo extends React.PureComponent {
         const identificadorLocation = identificador.substr(0, 2) + '-' + identificador.substr(2, 2) + '-' + identificador.substr(4, 3) + '-' + identificador.substr(7, 3);
 
         window.open('http://srv-lincatastro04/emap/?nomenclatura=' + identificadorLocation, '_blank');
+
+        return true;
+    }
+
+    handleExpandirTabla = () => {
+        this.setState({
+            tablaExpandida: !this.state.tablaExpandida
+        });
     }
 
     render() {
@@ -1448,25 +1550,31 @@ class DetalleTributo extends React.PureComponent {
 
         //rowList - Filas de grilla
         //lista - lista de tributos que contienen rowLists para mostrar en la grilla
-        const listContribucion = infoContribucion && infoContribucion.rowList ? infoContribucion.rowList : [];
-        const listMultas = infoMultas && infoMultas.rowList ? infoMultas.rowList : [];
-        const listJuicios = infoJuicios && infoJuicios.lista ? infoJuicios.lista : [];
-        const listPlanes = infoPlanes && infoPlanes.lista ? infoPlanes.lista : [];
+        const listContribucion = infoContribucion && infoContribucion.rowList;
+        const listMultas = infoMultas && infoMultas.rowList;
+        const listJuicios = infoJuicios && infoJuicios.lista;
+        const listPlanes = infoPlanes && infoPlanes.lista;
 
         let currentRowList = listContribucion;
-        switch(menuItemSeleccionado) {
-            case 'contribucion': currentRowList = listContribucion; break;
-            case 'multas': currentRowList = listMultas; break;
-            case 'juicios': currentRowList = listJuicios; break;
-            case 'planes': currentRowList = listPlanes; break;
+        switch (menuItemSeleccionado) {
+            case 'contribucion': currentRowList = listContribucion || []; break;
+            case 'multas': currentRowList = listMultas || []; break;
+            case 'juicios': currentRowList = listJuicios || []; break;
+            case 'planes': currentRowList = listPlanes || []; break;
         }
 
         const tipoTributo = getIdTipoTributo(this.props.match.params.tributo);
 
+        //En esta condición si viene en multas "Si tiene" pero la consulta trae 0, procedemos a mostrar un cartel de información
+        const condicionMulta = infoContribucion && infoContribucion.tieneMultas && listMultas && listMultas.length == 0;
+
+        //Esta variable es para determinar si se muestra el "Ver ubicacion del inmueble"
+        const esInmueble = tipoTributo == this.props.tipoTributos.byValue['Inmueble'];
+
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
                 <Grid container className={classes.root} spacing={16}>
-                    <Grid item xs={8} className={"container"}>
+                    <Grid item xs={8} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol1) : classNames("container", classes.transDesExtencionCol1)}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}
                             <Typography className={classNames(classes.title, "tituloDetalleTributo")} variant="title">Identificador:
@@ -1482,10 +1590,9 @@ class DetalleTributo extends React.PureComponent {
                                 >
 
                                     {identificadores && identificadores.map((tributo, index) => {
-                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado}</MenuItem>
+                                        return <MenuItem key={index} value={tributo.identificador}>{tributo.identificador}{tributo.representado && ' - ' + tributo.representado + (tributo.cuit && ' ('+tributo.cuit+')')}</MenuItem>
                                     })}
                                 </Select>
-                                {!this.props.paraMobile && <div>- <b className={classes.textoNoWrap}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</b></div>}
                             </Typography>
 
                             {!this.props.paraMobile && <div>
@@ -1504,24 +1611,45 @@ class DetalleTributo extends React.PureComponent {
                                             classes={{ flexContainer: classNames(classes.flexContainersMenu, "flexContainersMenu"), scrollButtons: classes.scrollButtonsMenu }}
                                         >
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : 0}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="contribucion" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listContribucion ? listContribucion.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Períodos correspondientes a la deuda adminsitrativa">Deuda Administrativa</div></Badge>} />
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listMultas ? listMultas.length : 0}><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="multas" label={<Badge className={classes.badgeTab} classes={{ badge: !condicionMulta ? classes.badgeGreen : classes.badgeWhite }} color="secondary"
+                                                badgeContent={
+                                                    condicionMulta &&
+                                                    (<Tooltip
+                                                        disableFocusListener disableTouchListener
+                                                        classes={{ tooltip: classes.textTooltipInfoMultas }}
+                                                        title={'Comuniquese con Tribunar de Faltas'}
+                                                    >
+                                                        <i className={classNames(classes.infoIconInfoMultas, "material-icons")}>info</i>
+                                                    </Tooltip>)
+                                                    ||
+                                                    (listMultas ? listMultas.length : <CircularProgress className={classes.progress} color="secondary" />)
+                                                }
+                                            ><div title="Multas correspondiente al Tribunal de Faltas">Multas</div></Badge>} />
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : 0}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="juicios" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeRed }} color="secondary" badgeContent={listJuicios ? listJuicios.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Deuda Judicial correspondientes a perídos en Procuración Fiscal">Deuda Judicial</div></Badge>} />
 
-                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="planes" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanes ? listPlanes.length : 0}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
+                                            <Tab classes={{ root: classNames(classes.itemMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value="planes" label={<Badge className={classes.badgeTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={listPlanes ? listPlanes.length : <CircularProgress className={classes.progress} color="secondary" />}><div title="Deuda correspondientes a Planes de Pago">Planes</div></Badge>} />
 
                                         </Tabs>
 
                                     </Grid>
                                 </Grid>
 
+                                {!this.props.paraMobile &&
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={12} className={classes.tabMenu}>
+                                            <Typography variant="title" className={classNames(classes.textoNoWrap, classes.textoSeccion)}>{this.state[menuItemSeleccionado].labels.detalleTitulo}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                }
+
                                 {/* Sub Menus */}
 
                                 {/* Juicio */}
                                 {(menuItemSeleccionado == 'juicios' &&
-                                    (listJuicios.length > 0 &&
+                                    (listJuicios && listJuicios.length > 0 &&
                                         <div>
 
                                             <Grid container spacing={16}>
@@ -1536,7 +1664,7 @@ class DetalleTributo extends React.PureComponent {
                                                     >
 
                                                         {/* Juicio por Contribución */}
-                                                        {listJuicios.map((juicio) => {
+                                                        {listJuicios && listJuicios.map((juicio) => {
                                                             return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={juicio.idJuicio} label={<Badge className={classes.badgeSubTab} classes={{ badge: classNames(classes.badgeJuicios, classes.badgeRed) }} badgeContent={juicio.rowList ? juicio.rowList.length : 0}><div>{juicio.idJuicio}</div></Badge>} />
                                                         })}
 
@@ -1547,37 +1675,38 @@ class DetalleTributo extends React.PureComponent {
                                         </div>)
                                     || menuItemSeleccionado == 'juicios' &&
                                     <Typography className={classes.infoTexto}>
-                                        {`Le informamos que no posee juicios`}
+                                        {listJuicios ? `Le informamos que no posee juicios` : `Cargando...`}
                                     </Typography>)
                                 }
 
                                 {/* Planes de Pago */}
-                                {(menuItemSeleccionado == 'planes' && listPlanes.length > 0 && <div>
+                                {(menuItemSeleccionado == 'planes' &&
+                                    listPlanes && listPlanes.length > 0 && <div>
 
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={12} className={classes.tabMenu}>
-                                            {/* SubMenu */}
-                                            <Tabs
-                                                value={planes.menuItemSeleccionado}
-                                                onChange={this.handleSubMenuChange}
-                                                scrollable
-                                                scrollButtons="auto"
-                                                classes={{ flexContainer: "flexContainersMenu", scrollButtons: classes.scrollButtonsSubMenu }}
-                                            >
+                                        <Grid container spacing={16}>
+                                            <Grid item sm={12} className={classes.tabMenu}>
+                                                {/* SubMenu */}
+                                                <Tabs
+                                                    value={planes.menuItemSeleccionado}
+                                                    onChange={this.handleSubMenuChange}
+                                                    scrollable
+                                                    scrollButtons="auto"
+                                                    classes={{ flexContainer: "flexContainersMenu", scrollButtons: classes.scrollButtonsSubMenu }}
+                                                >
 
-                                                {listPlanes.map((plan) => {
-                                                    return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
-                                                })}
+                                                    {listPlanes && listPlanes.map((plan) => {
+                                                        return <Tab classes={{ root: classNames(classes.itemSubMenu, "itemMenu"), labelContainer: classes.labelItemMenu }} value={plan.idPlan} label={<Badge className={classes.badgeSubTab} classes={{ badge: classes.badgeGreen }} color="secondary" badgeContent={plan.rowList ? plan.rowList.length : 0}><div>{plan.idPlan}</div></Badge>} />
+                                                    })}
 
-                                            </Tabs>
+                                                </Tabs>
 
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </div>)
+                                    </div>)
                                     ||
                                     menuItemSeleccionado == 'planes' &&
                                     <Typography className={classes.infoTexto}>
-                                        {`Le informamos que no posee planes de pago`}
+                                        {listPlanes ? `Le informamos que no posee planes de pago` : `Cargando...`}
                                     </Typography>}
 
                             </div>}
@@ -1612,8 +1741,8 @@ class DetalleTributo extends React.PureComponent {
                                                 value={'juicios'}
                                                 onClick={(event) => this.handleMenuSubMenu(event, false)}
                                             >Deuda Judicial</MenuItem>
-                                            {(menuItemSeleccionado == 'juicios' && listJuicios.length > 0 && <div>
-                                                {listJuicios.map((juicio) => {
+                                            {(menuItemSeleccionado == 'juicios' && listJuicios && listJuicios.length > 0 && <div>
+                                                {listJuicios && listJuicios.map((juicio) => {
                                                     return <MenuItem
                                                         className={classes.itemSubMenuMobile}
                                                         disabled={this.state[menuItemSeleccionado].menuItemSeleccionado == juicio.idJuicio}
@@ -1627,8 +1756,8 @@ class DetalleTributo extends React.PureComponent {
                                                 value={'planes'}
                                                 onClick={(event) => this.handleMenuSubMenu(event, false)}
                                             >Planes</MenuItem>
-                                            {(menuItemSeleccionado == 'planes' && listPlanes.length > 0 && <div>
-                                                {listPlanes.map((plan) => {
+                                            {(menuItemSeleccionado == 'planes' && listPlanes && listPlanes.length > 0 && <div>
+                                                {listPlanes && listPlanes.map((plan) => {
                                                     return <MenuItem
                                                         className={classes.itemSubMenuMobile}
                                                         disabled={this.state[menuItemSeleccionado].menuItemSeleccionado == plan.idPlan}
@@ -1646,11 +1775,13 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Contribución por período */}
                             {(menuItemSeleccionado == 'contribucion' &&
-                                listContribucion.length > 0 && <div>
+                                listContribucion && listContribucion.length > 0 && <div>
                                     {/* <Typography className={classes.infoTexto}>
                                         {infoTributo}
                                     </Typography> */}
                                     <MisPagosDetalle
+                                        tablaExpandida={this.state.tablaExpandida}
+                                        handleExpandirTabla={this.handleExpandirTabla}
                                         datosCuenta={this.state.infoDatosCuenta}
                                         textoBeneficioAplicado={this.state.descuentoBeneficio}
                                         paraMobile={this.props.paraMobile}
@@ -1668,17 +1799,19 @@ class DetalleTributo extends React.PureComponent {
                                 </div>)
                                 || menuItemSeleccionado == 'contribucion' &&
                                 <Typography className={classes.infoTexto}>
-                                    {`Le informamos que no posee deudas`}
+                                    {listContribucion ? `Le informamos que no posee deudas` : `Cargando...`}
                                 </Typography>}
 
                             {/* Multas */}
                             {(menuItemSeleccionado == 'multas' &&
-                                listMultas.length > 0 && <div>
+                                listMultas && listMultas.length > 0 && <div>
                                     <div>
                                         {/* <Typography className={classes.infoTexto}>
                                             {infoTributo}
                                         </Typography> */}
                                         <MisPagosDetalle
+                                            tablaExpandida={this.state.tablaExpandida}
+                                            handleExpandirTabla={this.handleExpandirTabla}
                                             datosCuenta={this.state.infoDatosCuenta}
                                             textoBeneficioAplicado={this.state.descuentoBeneficio}
                                             paraMobile={this.props.paraMobile}
@@ -1697,14 +1830,14 @@ class DetalleTributo extends React.PureComponent {
                                 </div>)
                                 || menuItemSeleccionado == 'multas' &&
                                 <Typography className={classes.infoTexto}>
-                                    {`Le informamos que no posee multas`}
+                                    {condicionMulta ? `Comuniquese con Tribunar de Faltas` : (listMultas ? `Le informamos que no posee multas` : `Cargando...`)}
                                 </Typography>}
 
                             {/* Sub Secciones */}
 
                             {/* Juicio por Contribucion */}
                             {menuItemSeleccionado == 'juicios' &&
-                                listJuicios.map((juicio) => {
+                                listJuicios && listJuicios.map((juicio) => {
                                     return <div>
                                         {juicios.menuItemSeleccionado == juicio.idJuicio &&
                                             <div>
@@ -1712,6 +1845,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {infoTributo}
                                                 </Typography> */}
                                                 <MisPagosDetalle
+                                                    tablaExpandida={this.state.tablaExpandida}
+                                                    handleExpandirTabla={this.handleExpandirTabla}
                                                     datosCuenta={this.state.infoDatosCuenta}
                                                     textoBeneficioAplicado={this.state.descuentoBeneficio}
                                                     paraMobile={this.props.paraMobile}
@@ -1734,7 +1869,7 @@ class DetalleTributo extends React.PureComponent {
 
                             {/* Planes de Pago */}
                             {menuItemSeleccionado == 'planes' &&
-                                listPlanes.map((plan) => {
+                                listPlanes && listPlanes.map((plan) => {
                                     return <div>
                                         {planes.menuItemSeleccionado == plan.idPlan &&
                                             <div>
@@ -1742,6 +1877,8 @@ class DetalleTributo extends React.PureComponent {
                                                     {plan.textoInfo || `En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                                                 </Typography>
                                                 <MisPagosDetalle
+                                                    tablaExpandida={this.state.tablaExpandida}
+                                                    handleExpandirTabla={this.handleExpandirTabla}
                                                     datosCuenta={this.state.infoDatosCuenta}
                                                     textoBeneficioAplicado={this.state.descuentoBeneficio}
                                                     paraMobile={this.props.paraMobile}
@@ -1763,91 +1900,10 @@ class DetalleTributo extends React.PureComponent {
 
                         </MiCard>
                     </Grid>
-                    <Grid item xs={4} className={"container"}>
-                        {/* Bloque Datos Generales */}
-                        <MiCard>
-                            <Typography className={classes.title} variant="title">Datos Generales</Typography>
-                            <Divider className={classes.divider} />
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Titular: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.titular && infoContribucion.titular.titular}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
 
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>CUIT: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.titular && infoContribucion.titular.cuit}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
 
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Identificador: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{decodeURIComponent(this.props.match.params.identificador)}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Juicios: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.tieneJuicios ? 'Si tiene' : 'No tiene'}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Planes: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.tienePlanes ? 'Si tiene' : 'No tiene'}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid container spacing={16}>
-                                <Grid item sm={4}>
-                                    <Typography variant="subheading" gutterBottom>Multas: </Typography>
-                                </Grid>
-                                <Grid item sm={8}>
-                                    <Typography variant="subheading" gutterBottom>
-                                        <b>{infoContribucion && infoContribucion.tieneMultas ? 'Si tiene' : 'No tiene'}</b>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-
-                            {tipoTributo == this.props.tipoTributos.byValue['Inmueble'] &&
-                                <Grid container spacing={16}>
-                                    <Grid item sm={4}>
-                                        <Typography variant="subheading" gutterBottom>Ubicación: </Typography>
-                                    </Grid>
-                                    <Grid item sm={8}>
-                                        <i className={classNames(classes.locationIcon, 'material-icons')} onClick={this.hableRedirectLocation}>
-                                            location_on
-                                    </i>
-                                    </Grid>
-                                </Grid>}
-
-                        </MiCard>
-
+                    <Grid item xs={4} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol2) : "container"}>
+                        {/* Bloque Otras Operaciones */}
                         <MiCard rootClassName={"otrasOperaciones"}>
                             {/* Bloque Otras Operaciones */}
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
@@ -1891,8 +1947,8 @@ class DetalleTributo extends React.PureComponent {
 
                             {(menuItemSeleccionado != 'multas' && (
                                 menuItemSeleccionado == 'contribucion' ||
-                                (menuItemSeleccionado == 'juicios' && listJuicios.length > 0) ||
-                                (menuItemSeleccionado == 'planes' && listPlanes.length > 0))
+                                (menuItemSeleccionado == 'juicios' && listJuicios && listJuicios.length > 0) ||
+                                (menuItemSeleccionado == 'planes' && listPlanes && listPlanes.length > 0))
                             ) && <div>
                                     <Grid container spacing={16}>
                                         <Grid item sm={2}>
@@ -2116,67 +2172,69 @@ class DetalleTributo extends React.PureComponent {
                                         </Grid>
                                     </Grid>
 
-                                    <Grid container spacing={16}>
-                                        <Grid item sm={2}>
-                                            <svg className={classes.icon} viewBox="0 0 24 24">
-                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                            </svg>
-                                        </Grid>
-                                        <Grid item sm={10}>
-                                            <MiControledDialog
-                                                paraMobile={this.props.paraMobile}
-                                                open={ultimosPagos.modal.open == true}
-                                                onDialogoOpen={this.onUltimosPagosDialogoOpen}
-                                                onDialogoClose={this.onUltimosPagosDialogoClose}
-                                                textoLink={'Últimos pagos'}
-                                                titulo={'Últimos pagos'}
-                                                textoInformativo={<div>
-                                                    <b>Observaciones:</b><br /><br />
+                                    {menuItemSeleccionado != 'juicios' &&
+                                        <Grid container spacing={16}>
+                                            <Grid item sm={2}>
+                                                <svg className={classes.icon} viewBox="0 0 24 24">
+                                                    <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                                </svg>
+                                            </Grid>
+                                            <Grid item sm={10}>
+                                                <MiControledDialog
+                                                    paraMobile={this.props.paraMobile}
+                                                    open={ultimosPagos.modal.open == true}
+                                                    onDialogoOpen={this.onUltimosPagosDialogoOpen}
+                                                    onDialogoClose={this.onUltimosPagosDialogoClose}
+                                                    textoLink={'Últimos pagos'}
+                                                    titulo={'Últimos pagos'}
+                                                    textoInformativo={<div>
+                                                        <b>Observaciones:</b><br /><br />
 
-                                                    <b>En la grilla de pagos pueden aparecer dos estados:</b><br />
+                                                        <b>En la grilla de pagos pueden aparecer dos estados:</b><br />
 
-                                                    <ul>
-                                                        <li><b>IMPUTADO:</b> el período fué abonado y el monto fué imputado.</li>
-                                                        <li><b>PENDIENTE:</b> el período fué pagado, pero todavía no imputó.</li>
-                                                    </ul><br /><br />
+                                                        <ul>
+                                                            <li><b>IMPUTADO:</b> el período fué abonado y el monto fué imputado.</li>
+                                                            <li><b>PENDIENTE:</b> el período fué pagado, pero todavía no imputó.</li>
+                                                        </ul><br /><br />
 
-                                                    Las imputaciones pueden demorar unos 10 días hábiles dependiendo del caso.<br /><br />
+                                                        Las imputaciones pueden demorar unos 10 días hábiles dependiendo del caso.<br /><br />
 
-                                                    Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
+                                                        Se recomienda siempre verificar en ésta pantalla los pagos realizados antes de emitir un cedulón ya que si un período está en estado PENDIENTE, al no tener una imputación en las cuentas municipales, el mismo <b>va a figurar dentro de los períodos pendiente de pago en la pantalla de emisión del cedulón</b>.
                                         </div>}
-                                                classMaxWidth={classes.maxWidthUltimosPagos}
-                                            >
-                                                <MiTabla
-                                                    pagination={!this.props.paraMobile}
-                                                    columns={[
-                                                        { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
-                                                        { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                        { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base ($)' },
-                                                        { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo ($)' },
-                                                        { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción ($)' },
-                                                        { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
-                                                        { id: 'ctl', type: 'string', numeric: false, disablePadding: false, label: 'CTL' },
-                                                        { id: 'estado', type: 'string', numeric: false, disablePadding: false, label: 'Estado' },
-                                                        { id: 'caja', type: 'string', numeric: false, disablePadding: false, label: 'Caja' },
-                                                    ]}
-                                                    rows={ultimosPagos.infoGrilla || []}
-                                                    msgNoRows={'No existen pagos registrados en los últimos dos años'}
-                                                    order='desc'
-                                                    orderBy='vencimiento'
-                                                    check={false}
-                                                    rowsPerPage={5}
-                                                    classes={{
-                                                        root: classes.miTabla
-                                                    }}
-                                                />
-                                            </MiControledDialog>
-                                        </Grid>
-                                    </Grid>
+                                                    classMaxWidth={classes.maxWidthUltimosPagos}
+                                                >
+                                                    <MiTabla
+                                                        pagination={!this.props.paraMobile}
+                                                        columns={[
+                                                            { id: 'concepto', type: 'string', numeric: false, disablePadding: false, label: 'Concepto' },
+                                                            { id: 'vencimiento', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                            { id: 'base', type: 'string', numeric: true, disablePadding: false, label: 'Base ($)' },
+                                                            { id: 'recargo', type: 'string', numeric: true, disablePadding: false, label: 'Recargo ($)' },
+                                                            { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: 'Deducción ($)' },
+                                                            { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: 'Importe ($)' },
+                                                            { id: 'ctl', type: 'string', numeric: false, disablePadding: false, label: 'CTL' },
+                                                            { id: 'estado', type: 'string', numeric: false, disablePadding: false, label: 'Estado' },
+                                                            { id: 'caja', type: 'string', numeric: false, disablePadding: false, label: 'Caja' },
+                                                        ]}
+                                                        rows={ultimosPagos.infoGrilla || []}
+                                                        msgNoRows={'No existen pagos registrados en los últimos dos años'}
+                                                        order='desc'
+                                                        orderBy='vencimiento'
+                                                        check={false}
+                                                        rowsPerPage={5}
+                                                        classes={{
+                                                            root: classes.miTabla
+                                                        }}
+                                                    />
+                                                </MiControledDialog>
+                                            </Grid>
+                                        </Grid>}
+                                </div>}
 
-                                    {/* Cuando no este seleccionado Planes de Pago */}
-                                    {menuItemSeleccionado != 'planes' && <div>
+                            {/* Cuando no este seleccionado Planes de Pago */}
+                            {menuItemSeleccionado != 'planes' && <div>
 
-                                        {/*mostrarAlternativaPlan && <div>
+                                {/*mostrarAlternativaPlan && <div>
                                             <Grid container spacing={16}>
                                                 <Grid item sm={2}>
                                                     <svg className={classes.icon} viewBox="0 0 24 24">
@@ -2191,156 +2249,156 @@ class DetalleTributo extends React.PureComponent {
                                             </Grid>
                                         </div>*/}
 
-                                        {tipoTributo == 1 && <div>
-                                            <Grid container spacing={16}>
-                                                <Grid item sm={2}>
-                                                    {/*<svg className={classes.icon} viewBox="0 0 24 24">
+                                {tipoTributo == 1 && <div>
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            {/*<svg className={classes.icon} viewBox="0 0 24 24">
                                                 <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
                                             </svg>*/}
-                                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                                    </svg>
-                                                </Grid>
-                                                <Grid item sm={10}>
-                                                    <MiControledDialog
-                                                        paraMobile={this.props.paraMobile}
-                                                        open={informeAntecedentes.modal.open}
-                                                        onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
-                                                        onDialogoClose={this.onInformeAntecedentesDialogoClose}
-                                                        textoLink={'Informe Antecedentes'}
-                                                        titulo={'Informe Antecedentes'}
-                                                        classMaxWidth={informeAntecedentes.modal.showReporte && classes.maxWidthPDF}
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <MiControledDialog
+                                                paraMobile={this.props.paraMobile}
+                                                open={informeAntecedentes.modal.open}
+                                                onDialogoOpen={this.onInformeAntecedentesDialogoOpen}
+                                                onDialogoClose={this.onInformeAntecedentesDialogoClose}
+                                                textoLink={'Informe Antecedentes'}
+                                                titulo={'Informe Antecedentes'}
+                                                classMaxWidth={informeAntecedentes.modal.showReporte && classes.maxWidthPDF}
+                                            >
+                                                <div key="headerContent"></div>
+                                                <div key="mainContent">
+                                                    {!informeAntecedentes.modal.showReporte && <div>
+                                                        <MiTabla
+                                                            pagination={!this.props.paraMobile}
+                                                            columns={[
+                                                                { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
+                                                                { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                                { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
+                                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                                            ]}
+                                                            rows={informeAntecedentes.infoGrilla || []}
+                                                            order='desc'
+                                                            orderBy='fecha'
+                                                            check={false}
+                                                            rowsPerPage={5}
+                                                            classes={{
+                                                                root: classes.miTabla
+                                                            }}
+                                                        />
+                                                    </div>}
+
+                                                    {informeAntecedentes.modal.showReporte && <div>
+                                                        {informeAntecedentes.reporteBase64 && informeAntecedentes.reporteBase64 != '' &&
+                                                            <MiPDFPrinter
+                                                                base64File={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64}
+                                                                textoLink={'Descargar Informe de Antecedentes'}
+                                                                textoFile={'Informe Informe de Antecedentes'} />}
+                                                        {!informeAntecedentes.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
+                                                    </div>}
+                                                </div>
+                                                <div key="footerContent" className={classes.buttonFotterDialog}>
+                                                    {!informeAntecedentes.modal.showReporte && <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        className={classes.buttonActions}
+                                                        onClick={this.onInformeAntecedentesShowReporte}
                                                     >
-                                                        <div key="headerContent"></div>
-                                                        <div key="mainContent">
-                                                            {!informeAntecedentes.modal.showReporte && <div>
-                                                                <MiTabla
-                                                                    pagination={!this.props.paraMobile}
-                                                                    columns={[
-                                                                        { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
-                                                                        { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                                        { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
-                                                                        { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
-                                                                    ]}
-                                                                    rows={informeAntecedentes.infoGrilla || []}
-                                                                    order='desc'
-                                                                    orderBy='fecha'
-                                                                    check={false}
-                                                                    rowsPerPage={5}
-                                                                    classes={{
-                                                                        root: classes.miTabla
-                                                                    }}
-                                                                />
-                                                            </div>}
-
-                                                            {informeAntecedentes.modal.showReporte && <div>
-                                                                {informeAntecedentes.reporteBase64 && informeAntecedentes.reporteBase64 != '' &&
-                                                                    <MiPDFPrinter
-                                                                        base64File={'data:application/pdf;base64,' + informeAntecedentes.reporteBase64}
-                                                                        textoLink={'Descargar Informe de Antecedentes'}
-                                                                        textoFile={'Informe Informe de Antecedentes'} />}
-                                                                {!informeAntecedentes.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
-                                                            </div>}
-                                                        </div>
-                                                        <div key="footerContent" className={classes.buttonFotterDialog}>
-                                                            {!informeAntecedentes.modal.showReporte && <Button
-                                                                variant="contained"
-                                                                color="secondary"
-                                                                className={classes.buttonActions}
-                                                                onClick={this.onInformeAntecedentesShowReporte}
-                                                            >
-                                                                Imprimir Informe
+                                                        Imprimir Informe
                                             </Button>}
 
-                                                            {informeAntecedentes.modal.showReporte && <Button
-                                                                variant="contained"
-                                                                color="secondary"
-                                                                className={classes.buttonActions}
-                                                                onClick={this.onInformeAntecedentesHideReporte}
-                                                            >
-                                                                Volver
+                                                    {informeAntecedentes.modal.showReporte && <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        className={classes.buttonActions}
+                                                        onClick={this.onInformeAntecedentesHideReporte}
+                                                    >
+                                                        Volver
                                             </Button>}
-                                                        </div>
+                                                </div>
 
-                                                    </MiControledDialog>
-                                                </Grid>
-                                            </Grid>
+                                            </MiControledDialog>
+                                        </Grid>
+                                    </Grid>
 
-                                            <Grid container spacing={16}>
-                                                <Grid item sm={2}>
-                                                    {/*<svg className={classes.icon} viewBox="0 0 24 24">
+                                    <Grid container spacing={16}>
+                                        <Grid item sm={2}>
+                                            {/*<svg className={classes.icon} viewBox="0 0 24 24">
                                                 <path fill="#ED1C24" d="M14,9H19.5L14,3.5V9M7,2H15L21,8V20A2,2 0 0,1 19,22H7C5.89,22 5,21.1 5,20V4A2,2 0 0,1 7,2M11.93,12.44C12.34,13.34 12.86,14.08 13.46,14.59L13.87,14.91C13,15.07 11.8,15.35 10.53,15.84V15.84L10.42,15.88L10.92,14.84C11.37,13.97 11.7,13.18 11.93,12.44M18.41,16.25C18.59,16.07 18.68,15.84 18.69,15.59C18.72,15.39 18.67,15.2 18.57,15.04C18.28,14.57 17.53,14.35 16.29,14.35L15,14.42L14.13,13.84C13.5,13.32 12.93,12.41 12.53,11.28L12.57,11.14C12.9,9.81 13.21,8.2 12.55,7.54C12.39,7.38 12.17,7.3 11.94,7.3H11.7C11.33,7.3 11,7.69 10.91,8.07C10.54,9.4 10.76,10.13 11.13,11.34V11.35C10.88,12.23 10.56,13.25 10.05,14.28L9.09,16.08L8.2,16.57C7,17.32 6.43,18.16 6.32,18.69C6.28,18.88 6.3,19.05 6.37,19.23L6.4,19.28L6.88,19.59L7.32,19.7C8.13,19.7 9.05,18.75 10.29,16.63L10.47,16.56C11.5,16.23 12.78,16 14.5,15.81C15.53,16.32 16.74,16.55 17.5,16.55C17.94,16.55 18.24,16.44 18.41,16.25M18,15.54L18.09,15.65C18.08,15.75 18.05,15.76 18,15.78H17.96L17.77,15.8C17.31,15.8 16.6,15.61 15.87,15.29C15.96,15.19 16,15.19 16.1,15.19C17.5,15.19 17.9,15.44 18,15.54M8.83,17C8.18,18.19 7.59,18.85 7.14,19C7.19,18.62 7.64,17.96 8.35,17.31L8.83,17M11.85,10.09C11.62,9.19 11.61,8.46 11.78,8.04L11.85,7.92L12,7.97C12.17,8.21 12.19,8.53 12.09,9.07L12.06,9.23L11.9,10.05L11.85,10.09Z" />
                                             </svg>*/}
-                                                    <svg className={classes.icon} viewBox="0 0 24 24">
-                                                        <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
-                                                    </svg>
-                                                </Grid>
-                                                <Grid item sm={10}>
-                                                    <MiControledDialog
-                                                        paraMobile={this.props.paraMobile}
-                                                        open={informeREMAT.modal.open}
-                                                        onDialogoOpen={this.onInformeREMATDialogoOpen}
-                                                        onDialogoClose={this.onInformeREMATDialogoClose}
-                                                        textoLink={'Informe REMAT'}
-                                                        titulo={'Informe REMAT'}
-                                                        classMaxWidth={informeREMAT.modal.showReporte && classes.maxWidthPDF}
+                                            <svg className={classes.icon} viewBox="0 0 24 24">
+                                                <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                            </svg>
+                                        </Grid>
+                                        <Grid item sm={10}>
+                                            <MiControledDialog
+                                                paraMobile={this.props.paraMobile}
+                                                open={informeREMAT.modal.open}
+                                                onDialogoOpen={this.onInformeREMATDialogoOpen}
+                                                onDialogoClose={this.onInformeREMATDialogoClose}
+                                                textoLink={'Informe REMAT'}
+                                                titulo={'Informe REMAT'}
+                                                classMaxWidth={informeREMAT.modal.showReporte && classes.maxWidthPDF}
+                                            >
+                                                <div key="headerContent"></div>
+                                                <div key="mainContent">
+                                                    {!informeREMAT.modal.showReporte && <div>
+                                                        <MiTabla
+                                                            pagination={!this.props.paraMobile}
+                                                            columns={[
+                                                                { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
+                                                                { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
+                                                                { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
+                                                                { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
+                                                            ]}
+                                                            rows={informeREMAT.infoGrilla || []}
+                                                            order='desc'
+                                                            orderBy='fecha'
+                                                            check={false}
+                                                            rowsPerPage={5}
+                                                            classes={{
+                                                                root: classes.miTabla
+                                                            }}
+                                                        />
+                                                    </div>}
+
+                                                    {informeREMAT.modal.showReporte && <div>
+                                                        {informeREMAT.reporteBase64 && informeREMAT.reporteBase64 != '' &&
+                                                            <MiPDFPrinter
+                                                                base64File={'data:application/pdf;base64,' + informeREMAT.reporteBase64}
+                                                                textoLink={'Descargar Informe REMAT'}
+                                                                textoFile={'Informe REMAT'} />}
+                                                        {!informeREMAT.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
+                                                    </div>}
+                                                </div>
+                                                <div key="footerContent" className={classes.buttonFotterDialog}>
+                                                    {!informeREMAT.modal.showReporte && <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        className={classes.buttonActions}
+                                                        onClick={this.onInformeREMATShowReporte}
                                                     >
-                                                        <div key="headerContent"></div>
-                                                        <div key="mainContent">
-                                                            {!informeREMAT.modal.showReporte && <div>
-                                                                <MiTabla
-                                                                    pagination={!this.props.paraMobile}
-                                                                    columns={[
-                                                                        { id: 'causa', type: 'string', numeric: false, disablePadding: false, label: 'Causa' },
-                                                                        { id: 'fecha', type: 'date', numeric: false, disablePadding: false, label: 'Fecha' },
-                                                                        { id: 'infracciones', type: 'string', numeric: false, disablePadding: false, label: 'Infracciones' },
-                                                                        { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, label: 'Detalle' },
-                                                                    ]}
-                                                                    rows={informeREMAT.infoGrilla || []}
-                                                                    order='desc'
-                                                                    orderBy='fecha'
-                                                                    check={false}
-                                                                    rowsPerPage={5}
-                                                                    classes={{
-                                                                        root: classes.miTabla
-                                                                    }}
-                                                                />
-                                                            </div>}
-
-                                                            {informeREMAT.modal.showReporte && <div>
-                                                                {informeREMAT.reporteBase64 && informeREMAT.reporteBase64 != '' &&
-                                                                    <MiPDFPrinter
-                                                                        base64File={'data:application/pdf;base64,' + informeREMAT.reporteBase64}
-                                                                        textoLink={'Descargar Informe REMAT'}
-                                                                        textoFile={'Informe REMAT'} />}
-                                                                {!informeREMAT.reporteBase64 && 'En este momento no se puede generar el detalle para imprimir, estamos trabajando en ello.'}
-                                                            </div>}
-                                                        </div>
-                                                        <div key="footerContent" className={classes.buttonFotterDialog}>
-                                                            {!informeREMAT.modal.showReporte && <Button
-                                                                variant="contained"
-                                                                color="secondary"
-                                                                className={classes.buttonActions}
-                                                                onClick={this.onInformeREMATShowReporte}
-                                                            >
-                                                                Imprimir Informe
+                                                        Imprimir Informe
                                             </Button>}
 
-                                                            {informeREMAT.modal.showReporte && <Button
-                                                                variant="contained"
-                                                                color="secondary"
-                                                                className={classes.buttonActions}
-                                                                onClick={this.onInformeREMATHideReporte}
-                                                            >
-                                                                Volver
+                                                    {informeREMAT.modal.showReporte && <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        className={classes.buttonActions}
+                                                        onClick={this.onInformeREMATHideReporte}
+                                                    >
+                                                        Volver
                                             </Button>}
-                                                        </div>
-                                                    </MiControledDialog>
-                                                </Grid>
-                                            </Grid>
-                                        </div>}
-                                    </div>}
+                                                </div>
+                                            </MiControledDialog>
+                                        </Grid>
+                                    </Grid>
                                 </div>}
+                            </div>}
+
 
                             {/* Cuando no este seleccionado Planes de Pago */}
                             {menuItemSeleccionado == 'planes' && <div>
@@ -2468,6 +2526,24 @@ class DetalleTributo extends React.PureComponent {
                                     </Grid>
                                 </Grid>
                             </div>}
+
+                            {esInmueble &&
+                                <Grid container spacing={16}>
+                                    <Grid item sm={2}>
+                                        <svg className={classes.icon} viewBox="0 0 24 24">
+                                            <path fill="#149257" d="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+                                        </svg>
+                                    </Grid>
+                                    <Grid item sm={10}>
+                                        <MiLinkDialog
+                                            paraMobile={this.props.paraMobile}
+                                            textoLink={'Ver ubicación del inmueble'}
+                                            titulo={'Ver ubicación del inmueble'}
+                                            onExternalAction={this.hableRedirectLocation}
+                                        >
+                                        </MiLinkDialog>
+                                    </Grid>
+                                </Grid>}
 
                             <Grid container spacing={16}>
                                 <Grid item sm={2}>

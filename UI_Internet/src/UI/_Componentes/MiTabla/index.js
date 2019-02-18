@@ -104,20 +104,27 @@ class EnhancedTableHead extends React.Component {
                     {this.props.columns.map((row, key) => {
                         return (
                             <TableCell
-                                className={classes.tableCell}
+                                className={classNames(classes.tableCell, row.style)}
                                 key={row.id}
                                 numeric={row.numeric}
                                 padding={row.disablePadding ? 'none' : 'dense'}
                                 sortDirection={orderBy === row.id ? order : false}
                             >
-                                <TableSortLabel
-                                    className={classes.tableCell}
-                                    active={orderBy === row.id}
-                                    direction={order}
-                                    onClick={this.createSortHandler(row.id, row.type)}
-                                >
-                                    {row.label}
-                                </TableSortLabel>
+                                {row.noSort &&
+                                    <React.Fragment>
+                                        {row.label}
+                                    </React.Fragment>
+                                    ||
+                                    <TableSortLabel
+                                        className={classes.tableCell}
+                                        active={orderBy === row.id}
+                                        direction={order}
+                                        onClick={this.createSortHandler(row.id, row.type)}
+                                    >
+                                        {row.label}
+                                    </TableSortLabel>
+                                }
+
                             </TableCell>
                         );
                     }, this)}
@@ -170,7 +177,7 @@ class MiTabla extends React.PureComponent {
             var rows = resultSelected.rows;
             var rowsSetSelected = resultSelected.rowsSetSelected;
 
-            this.updateRowsTable({rows, rowsSetSelected});
+            this.updateRowsTable({ rows, rowsSetSelected });
         }
     }
 
@@ -239,7 +246,7 @@ class MiTabla extends React.PureComponent {
         var rows = resultSelected.rows;
         var rowsSetSelected = resultSelected.rowsSetSelected;
 
-        this.updateRowsTable({rows, rowsSetSelected});
+        this.updateRowsTable({ rows, rowsSetSelected });
     };
 
     updateRowsTable = (params) => {
@@ -278,7 +285,7 @@ class MiTabla extends React.PureComponent {
             var rows = resultSelected.rows;
             var rowsSetSelected = resultSelected.rowsSetSelected;
 
-            this.updateRowsTable({rows, rowsSetSelected, lastClickedRow: currentRow});
+            this.updateRowsTable({ rows, rowsSetSelected, lastClickedRow: currentRow });
         }
     };
 
@@ -420,7 +427,7 @@ class MiRow extends React.PureComponent {
                 if (cell == 'data' || cell == 'id') return; //'id' y 'data' son datos extras para utilizar
                 var column = _.find(columns, { id: cell });
 
-                return <TableCell className={column && column.numeric && classes.cellNumeric} key={cell} padding="dense">{info[cell]}</TableCell>
+                return <TableCell className={classNames(column && column.numeric && classes.cellNumeric, column.style)} key={cell} padding="dense">{info[cell]}</TableCell>
             })}
         </TableRow>
     }

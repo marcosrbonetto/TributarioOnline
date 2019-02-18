@@ -69,6 +69,7 @@ class DetalleJuicio extends React.PureComponent {
         };
 
         this.initialState = {
+            tablaExpandida: false,
             registrosSeleccionados: [],
             infoJuicio: {},
             deudaTotales: {},
@@ -117,7 +118,11 @@ class DetalleJuicio extends React.PureComponent {
                     return {
                         concepto: concepto.concepto,
                         vencimiento: dateToString(new Date(concepto.fecha), 'DD/MM/YYYY'),
+                        base: formatNumber(concepto.importe.base),
+                        recargo: formatNumber(concepto.importe.recargo),
+                        deduccion: formatNumber(concepto.importe.deduccion),
                         importe: formatNumber(concepto.importe.total),
+                        referencia: concepto.referencia,
                         detalle: <MiTooltip
                             contenidoDetalle={<div>
                                 <Typography>Base: <b>$ {concepto.importe.base}</b></Typography>
@@ -125,7 +130,7 @@ class DetalleJuicio extends React.PureComponent {
                                 <Typography>Deducción: <b>$ {concepto.importe.deduccion}</b></Typography>
                                 <Typography>Referencia: <b>{concepto.referencia}</b></Typography>
                             </div>}>
-                            <i class="material-icons" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
+                            <i class="material-icons  iconosDetalle" style={{ color: '#149257', cursor: 'pointer' }}>add_circle_outline</i>
                         </MiTooltip>,
                         data: concepto //atributo "data" no se muestra en MiTabla
                     }
@@ -350,6 +355,11 @@ class DetalleJuicio extends React.PureComponent {
         window.open('http://srv-lincatastro04/emap/?nomenclatura='+identificadorLocation,'_blank');
     }
 
+    handleExpandirTabla = () => {
+        this.setState({
+            tablaExpandida: !this.state.tablaExpandida
+        });
+    }
 
     render() {
         const { classes } = this.props;
@@ -367,8 +377,8 @@ class DetalleJuicio extends React.PureComponent {
 
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
-                <Grid container className={classes.root} spacing={16} justify="center">
-                    <Grid item xs={8} className={"container"}>
+                <Grid container className={classes.root} spacing={16}>
+                    <Grid item xs={8} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol1) : classNames("container", classes.transDesExtencionCol1)}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}
                             <Typography className={classes.title} variant="title">
@@ -387,6 +397,8 @@ class DetalleJuicio extends React.PureComponent {
                                 {`En la tabla se listan las deudas que se deben pagar, puede seleccionar las que desee y proceder a pagarlas`}
                             </Typography>
                             <MisPagos
+                                tablaExpandida={this.state.tablaExpandida}
+                                handleExpandirTabla={this.handleExpandirTabla}
                                 textoBeneficioAplicado={descuentoBeneficio}
                                 setRegistrosSeleccionados={this.setRegistrosSeleccionados}
                                 deudaTotales={deudaTotales}
@@ -394,7 +406,15 @@ class DetalleJuicio extends React.PureComponent {
                                 registrosSeleccionados={registrosSeleccionados}
                                 tablaConfig={
                                     {
-                                        columnas: ['Concepto', 'Vencimiento', 'Importe ($)'],
+                                        columnas: {
+                                            concepto: 'Concepto',
+                                            vencimiento: 'Vencimiento',
+                                            base: 'Base ($)',
+                                            recargo: 'Recargo ($)',
+                                            deduccion: 'Deducción ($)',
+                                            importe: 'Importe ($)',
+                                            referencia: 'Referencia',
+                                        },
                                         order: 'asc',
                                         orderBy: 'concepto',
                                         check: false,
@@ -433,7 +453,7 @@ class DetalleJuicio extends React.PureComponent {
 
 
 
-                    <Grid item xs={4} className={"container"}>
+                    <Grid item xs={4} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol2) : "container"}>
                         {/* Bloque Datos Generales */}
                         <MiCard>
                             <Typography className={classes.title} variant="title">Datos Generales</Typography>
@@ -476,7 +496,7 @@ class DetalleJuicio extends React.PureComponent {
 
 
 
-                        <MiCard rootClassName={"otrasOperaciones"}>
+                        <MiCard rootClassName={classNames("otrasOperaciones", classes.contentMargin)}>
                             {/* Bloque Otras Operaciones */}
                             <Typography className={classes.title} variant="title">Otras operaciones</Typography>
                             <Divider className={classes.divider} />
