@@ -120,34 +120,6 @@ const styles = theme => ({
         borderRadius: '12px',
       }
     },
-    badgeWhite: {
-      background: '#fff',
-      top: '-4px',
-      right: '0px',
-    },
-    textoSeccion: {
-      fontSize: '24px',
-      textAlign: 'center',
-      color: '#149257',
-      background: '#fff',
-      padding: '10px',
-      fontWeight: 'bold',
-      marginTop: '12px',
-      borderTop: '1px solid #149257',
-      borderBottom: '1px solid #149257',
-    },
-    transExtencionCol1: {
-      maxWidth: '100% !important',
-      flexBasis: '100% !important',
-      transitionDuration: '2s',
-    },
-    transDesExtencionCol1: {
-      transitionDuration: '2s',
-    },
-    transExtencionCol2: {
-      opacity: '0',
-      transitionDuration: '2s',
-    },
     badgeGreen: {
       background: theme.color.ok.main,
       top: '-4px',
@@ -240,21 +212,6 @@ const styles = theme => ({
         cursor: 'pointer'
       }
     },
-    textTooltipInfoMultas: {
-      fontSize: 16,
-    },
-    infoIconInfoMultas: {
-      color: '#0f8fea',
-      verticalAlign: 'middle',
-      cursor: 'pointer'
-    },
-    progress: {
-      width: '15px !important',
-      height: '15px !important',
-      marginRight: '1px !important',
-      marginBottom: '1px !important',
-      color: '#fff !important'
-    },
     buttonFotterDialog: {
       textAlign: 'center',
       paddingTop: '10px'
@@ -272,8 +229,7 @@ const styles = theme => ({
       minWidth: '700px'
     },
     textDatosCuenta: {
-      fontFamily: "\"Courier New\", Courier, \"Lucida Sans Typewriter\", \"Lucida Typewriter\", monospace",
-      color: '#000'
+      fontFamily: "\"Courier New\", Courier, \"Lucida Sans Typewriter\", \"Lucida Typewriter\", monospace"
     },
     textList: {
       lineHeight: '28px',
@@ -294,36 +250,16 @@ const styles = theme => ({
     textoNoWrap: {
       whiteSpace: 'nowrap'
     },
-    subItemSeleccionadoMobile: {
-      fontFamily: "\'Roboto\', \'Helvetica\', \'Arial\', \'sans-serif\'",
-      width: '100%',
-      display: 'inline-block',
-      textAlign: 'center',
+    btnCuentaOrigen: {
+      float: 'right',
+      top: '-9px'
     },
-    itemSubMenuMobile: {
-      fontSize: '10px',
-      padding: '3px',
-      justifyContent: 'center',
+    btnCuentaOrigenParaMobile: {
+      float: 'none',
+      top: '0px',
     },
-    menuMobile: {
-      width: '100%',
-      color: '#149257',
-      border: '2px solid',
-      padding: '0px 10px 0px 15px',
-      fontSize: '22px',
-      fontWeight: 'bold',
-      marginRight: '5px',
-      borderColor: '#149257',
-      marginBottom: '12px',
-      borderRadius: '20px',
-    },
-    menuContainer: {
-      width: '100%'
-    },
-    maxWidthUltimosPagos: {
-      minWidth: '100%',
-      maxWidth: '100%',
-      margin: '0px'
+    maxWidthPeriodosAdeudados: {
+      minWidth: '100%'
     },
     locationIcon: {
       color: '#149257',
@@ -339,6 +275,21 @@ const styles = theme => ({
       minHeight: '100%',
       position: 'absolute',
       margin: '0px'
+    },
+    transExtencionCol1: {
+      maxWidth: '100% !important',
+      flexBasis: '100% !important',
+      transitionDuration: '2s',
+    },
+    transDesExtencionCol1: {
+      transitionDuration: '2s',
+    },
+    transExtencionCol2: {
+      opacity: '0',
+      transitionDuration: '2s',
+    },
+    contentMargin: {
+      marginTop: '20px !important'
     }
   });
 

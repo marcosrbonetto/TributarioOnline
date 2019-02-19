@@ -1,5 +1,6 @@
 import DetalleTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Detalle/index";
 import DetalleJuicio from "@UI/Paginas/TributarioOnline/DetalleTributario/DetalleJuicio/index";
+import DetalleMulta from "@UI/Paginas/TributarioOnline/DetalleTributario/DetalleMulta/index";
 import DetallePlan from "@UI/Paginas/TributarioOnline/DetalleTributario/DetallePlan/index";
 
 import InformacionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/InformacionTributo/index";
@@ -13,6 +14,7 @@ import Representantes from "@UI/Paginas/Representantes/index";
 
 import BusquedaPorJuicio from "@UI/Paginas/TributarioOnline/BusquedaPor/Juicio";
 import BusquedaPorPlan from "@UI/Paginas/TributarioOnline/BusquedaPor/Plan";
+import BusquedaPorTribunalFaltas from "@UI/Paginas/TributarioOnline/BusquedaPor/TribunalFaltas";
 
 const Menu = [
   {
@@ -40,12 +42,20 @@ const Menu = [
     titulo: "Juicio",
   },
   {
+    url: "/DetalleTributario/Multas/:tributo/:identificador",
+    exact: true,
+    mostrarEnMenu: false,
+    component: DetalleMulta,
+    nombre: "Multa",
+    titulo: "Multa",
+  },
+  {
     url: "/DetalleTributario/Plan/:identificador",
     exact: true,
     mostrarEnMenu: false,
     component: DetallePlan,
-    nombre: "Juicio",
-    titulo: "Juicio",
+    nombre: "Plan",
+    titulo: "Plan",
   },
   {
     url: "/DetalleTributario/:tributo",
@@ -174,6 +184,14 @@ const Menu = [
     component: BusquedaPorPlan,
     nombre: "Gestión por Plan",
     titulo: "Gestión por Plan",
+  },
+  {
+    url: "/Inicio/BusquedaPor/TribunalFalta",
+    exact: true,
+    mostrarEnMenu: true,
+    component: BusquedaPorTribunalFaltas,
+    nombre: "Tribunal de Faltas",
+    titulo: "Tribunal de Faltas",
   },
   {
     url: "/Inicio/Representantes/:tributo",

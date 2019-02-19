@@ -300,6 +300,41 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
   });
 };
 
+const getSiTieneMultas = (token, tipoTributo, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+  //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/TieneMultas?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
+      method: "GET",
+      headers: {
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      }
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        if (datos.accesoWS)
+          resolve(datos);
+        else {
+          const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
+        }
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
 
 const getInfoJuicios = (token, tipoTributo, identificador) => {
   //Este valor se obtiene luego de pasar la prueba del ReCaptcha
@@ -981,6 +1016,7 @@ const services = {
   getIdTributos: getIdTributos,
   getInfoContribucion: getInfoContribucion,
   getInfoMultas: getInfoMultas,
+  getSiTieneMultas: getSiTieneMultas,
   getInfoJuicios: getInfoJuicios,
   getInfoPlanes: getInfoPlanes,
   getInfoDetalleJuicio: getInfoDetalleJuicio,

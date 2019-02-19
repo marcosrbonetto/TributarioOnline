@@ -1,0 +1,5 @@
+@media only screen and (max-width: 1135px) {
+    .contentDetalleTributo .container {
+        min-width: 100%;
+    }
+} 

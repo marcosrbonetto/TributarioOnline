@@ -8,6 +8,7 @@ import SeleccionTributo from "@UI/Paginas/TributarioOnline/DetalleTributario/Sel
 
 import BusquedaPorJuicio from "@UI/Paginas/TributarioOnline/BusquedaPor/Juicio";
 import BusquedaPorPlan from "@UI/Paginas/TributarioOnline/BusquedaPor/Plan";
+import BusquedaPorTribunalFaltas from "@UI/Paginas/TributarioOnline/BusquedaPor/TribunalFaltas";
 
 import InformeDeudasCUIT from "@UI/Paginas/TributarioOnline/InformeDeudasCUIT/index";
 
@@ -149,6 +150,14 @@ const Menu = [
     component: BusquedaPorPlan,
     nombre: "Gestión por Plan",
     titulo: "Gestión por Plan",
+  },
+  {
+    url: "/Inicio/BusquedaPor/TribunalFalta",
+    exact: true,
+    mostrarEnMenu: true,
+    component: BusquedaPorTribunalFaltas,
+    nombre: "Tribunal de Faltas",
+    titulo: "Tribunal de Faltas",
   },
   {
     url: "/Inicio/Representantes/:tributo",
