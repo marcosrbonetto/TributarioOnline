@@ -16,6 +16,8 @@ import BusquedaPorJuicio from "@UI/Paginas/TributarioOnline/BusquedaPor/Juicio";
 import BusquedaPorPlan from "@UI/Paginas/TributarioOnline/BusquedaPor/Plan";
 import BusquedaPorTribunalFaltas from "@UI/Paginas/TributarioOnline/BusquedaPor/TribunalFaltas";
 
+import InformeDeudasCUIT from "@UI/Paginas/TributarioOnline/InformeDeudasCUIT/index";
+
 const Menu = [
   {
     url: "/DetalleTributario/InformacionTributo/:tributo/:identificador",
@@ -192,6 +194,14 @@ const Menu = [
     component: BusquedaPorTribunalFaltas,
     nombre: "Tribunal de Faltas",
     titulo: "Tribunal de Faltas",
+  },
+  {
+    url: "/Inicio/InformeDeudasCUIT",
+    exact: false,
+    mostrarEnMenu: true,
+    component: InformeDeudasCUIT,
+    nombre: "Informe de Deudas",
+    titulo: "Informe de Deudas",
   },
   {
     url: "/Inicio/Representantes/:tributo",
