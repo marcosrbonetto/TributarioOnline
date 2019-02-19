@@ -583,7 +583,7 @@ class MisPagosDetalle extends React.PureComponent {
           { id: 'deduccion', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['deduccion'] : 'Deducción ($)'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
           { id: 'importe', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['importe'] : 'Importe ($)') },
           { id: 'referencia', type: 'string', numeric: true, disablePadding: false, label: (columnas ? columnas['referencia'] : 'Referencia'), style: (this.state.tablaExpandida ? classes.celdaExpandida : classes.celdaNoExpandida) },
-          { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, noSort: true, label: <i className={classNames("material-icons",classes.expandTableIcon)} onClick={this.handleExpandTable}>{this.state.tablaExpandida ? 'arrow_back' : 'arrow_forward'} </i>, 
+          { id: 'detalle', type: 'custom', numeric: false, disablePadding: true, noSort: true, label: <i title="Expandir/Contraer" className={classNames("material-icons",classes.expandTableIcon)} onClick={this.handleExpandTable}>{this.state.tablaExpandida ? 'aspect_ratio' : 'aspect_ratio'} </i>, 
           style: (this.state.tablaExpandida ? classes.ocultarDetalle : classes.mostrarDetalle) },
         ]}
         rows={rowList || []}

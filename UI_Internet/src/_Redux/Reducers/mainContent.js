@@ -29,6 +29,7 @@ const reducer = (state = initialState, action) => {
       const cargar = action.payload;
       if(cargar == 'reset') {
         newState.cantProcesosCargando = 0;
+        newState.cargando = false;
       } else if (cargar) {
         newState.cargando = cargar;
         newState.cantProcesosCargando += 1;

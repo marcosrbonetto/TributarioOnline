@@ -207,7 +207,7 @@ class DetalleTributo extends React.PureComponent {
                 order: 'asc',
                 orderBy: 'vencimiento',
                 labels: {
-                    detalleTitulo: 'Planes',
+                    detalleTitulo: 'Planes de Pago',
                     totalesDeuda: 'Administrativa de Planes',
                     vencida: 'Vencida',
                     aVencer: 'A vencer',
@@ -415,7 +415,7 @@ class DetalleTributo extends React.PureComponent {
                     this.refreshValoresPantalla({
                         datosItemSeleccionado: data
                     });
-                    this.props.mostrarCargando(false);
+                    this.props.mostrarCargando('reset');
                 }
             }).catch(err => {
                 this.props.mostrarCargando(false);
@@ -482,6 +482,8 @@ class DetalleTributo extends React.PureComponent {
                     this.refreshValoresPantalla({
                         datosItemSeleccionado: data
                     });
+                    
+                    this.props.mostrarCargando('reset');
                 }
             }).catch(err => {
                 this.props.mostrarCargando(false);
@@ -557,6 +559,9 @@ class DetalleTributo extends React.PureComponent {
 
                 //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
                 if (this.props.match.params.seccionMenu) {
+                    if(this.props.match.params.seccionMenu == 'juicios')
+                        this.props.mostrarCargando('reset');
+                        
                     if (this.props.match.params.subIdentificador) {
                         const currentItem = _.find(data, { identificador: menuItem });
                         this.refreshValoresPantalla({
@@ -649,6 +654,9 @@ class DetalleTributo extends React.PureComponent {
 
                 //Se carga grilla ya que es la primera que aparece apenas se carga la pantalla
                 if (this.props.match.params.seccionMenu) {
+                    if(this.props.match.params.seccionMenu == 'planes') 
+                        this.props.mostrarCargando('reset');
+
                     if (this.props.match.params.subIdentificador) {
                         const currentItem = _.find(data, { identificador: menuItem });
                         this.refreshValoresPantalla({
@@ -661,7 +669,10 @@ class DetalleTributo extends React.PureComponent {
                     this.refreshValoresPantalla({
                         datosItemSeleccionado: data[0]
                     });
+
+                    
                 }
+                        
             }).catch(err => {
                 this.props.mostrarCargando(false);
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");

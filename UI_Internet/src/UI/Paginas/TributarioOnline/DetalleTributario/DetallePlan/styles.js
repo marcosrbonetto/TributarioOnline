@@ -93,7 +93,6 @@ const styles = theme => ({
       padding: '0px 10px 0px 15px',
       fontSize: '22px',
       fontWeight: 'bold',
-      marginLeft: '10px',
       marginRight: '5px',
       marginBottom: '12px',
       borderRadius: '20px',
