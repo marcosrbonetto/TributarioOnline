@@ -64,7 +64,8 @@ class DetallePlan extends React.PureComponent {
         this.token = 'INVITADO'; //this.props.loggedUser.token; -- Permitimos que INVITADOS Y VV Vean Planes
         this.tributo = 'Plan';
         this.idTipoTributo = getIdTipoTributo(this.tributo);
-        this.identificador = decodeURIComponent(this.props.match.params.identificador);
+        //this.props.idPlan Es en caso que se quiera mostrar el detalle de un plan desde otra pantalla o popup
+        this.identificador = this.props.idPlan ? decodeURIComponent(this.props.idPlan) : decodeURIComponent(this.props.match.params.identificador);
         this.tributoPadre = {
             tipoTributo: new URLSearchParams(this.props.location.search).get('tipoTributo'),
             identificador: new URLSearchParams(this.props.location.search).get('identificador'),
@@ -372,7 +373,7 @@ class DetallePlan extends React.PureComponent {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, intoDialog } = this.props;
 
         const {
             registrosSeleccionados,
@@ -389,7 +390,7 @@ class DetallePlan extends React.PureComponent {
 
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
-                <Grid container className={classes.root} spacing={16}>
+                <Grid container className={classNames(classes.root, intoDialog && classes.intoDialog)} spacing={16}>
                     <Grid item xs={8} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol1) : classNames("container", classes.transDesExtencionCol1)}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}

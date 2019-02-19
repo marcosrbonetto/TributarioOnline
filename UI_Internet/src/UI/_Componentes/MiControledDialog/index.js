@@ -85,7 +85,7 @@ class MiControledDialog extends React.PureComponent {
               <i className={classNames(classes.infoIcon, "material-icons")}>info</i>
             </Tooltip>}
           </DialogTitle>
-          <DialogContent className={classes.content}>
+          <DialogContent className={classNames(classes.content, this.props.styleDialogContent)}>
             <DialogContentText>
               {this.getComponent('headerContent')}
               {this.getComponent('mainContent')}

@@ -3,6 +3,9 @@ const styles = theme => ({
       width: '100%',
       margin: '16px',
     },
+    intoDialog: {
+      width: 'calc(100% - 10px) !important'
+    },
     title: {
       fontWeight: '100',
       margin: '5px 0px'

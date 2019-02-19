@@ -14,10 +14,13 @@ import Button from "@material-ui/core/Button";
 import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/core/Icon';
-
-import MiCard from "@Componentes/MiCard";
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+
+import MiCard from "@Componentes/MiCard";
+import MiControledDialog from "@Componentes/MiControledDialog"
+import DetalleJuicio from "@UI/Paginas/TributarioOnline/DetalleTributario/DetalleJuicio/index";
+import DetallePlan from "@UI/Paginas/TributarioOnline/DetalleTributario/DetallePlan/index";
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
@@ -48,20 +51,29 @@ class MiGestionPorCUIT extends Component {
             inputCUIT: '',
             errorInputCUIT: false,
             mensajeError: false,
-            lista: []
+            lista: [],
+            dialogoOpen: false,
+            idTributoSeleccionado: undefined,
+            identificadorSeleccionado: undefined,
         }
     }
 
     handleIrAlTributo = (event) => {
-        const tipoTributoPadre = event.currentTarget.attributes.tipoTributoPadre.value;
-        const identificadorPadre = event.currentTarget.attributes.identificadorPadre.value;
         const identificador = event.currentTarget.attributes.identificador.value;
 
-        let destino = 'planes';
-        if (this.props.idTipoTributo == 11)
-            destino = 'juicios';
+        this.props.mostrarCargando(true);
+        this.setState({
+            idTributoSeleccionado: this.props.idTipoTributo,
+            identificadorSeleccionado: identificador,
+        }, () => {
+            this.onDialogoOpen();
+        });
 
-        this.props.redireccionar('/DetalleTributario/' + tipoTributoPadre + '/' + identificadorPadre + '/' + destino + '/' + encodeURIComponent(identificador));
+        //Este es el caso que se quiera redireccionar a la cuenta padre en vez de mostrar el modal
+        // const tipoTributoPadre = event.currentTarget.attributes.tipoTributoPadre.value;
+        // const identificadorPadre = event.currentTarget.attributes.identificadorPadre.value;
+
+        // this.props.redireccionar('/DetalleTributario/' + tipoTributoPadre + '/' + identificadorPadre + '/' + destino + '/' + encodeURIComponent(identificador));
     }
 
     handleGetTributosHijos = (event) => {
@@ -154,9 +166,23 @@ class MiGestionPorCUIT extends Component {
         });
     }
 
+    onDialogoOpen = () => {
+        this.setState({
+            dialogoOpen: true
+        });
+    }
+
+    onDialogoClose = () => {
+        this.props.mostrarCargando(false);
+
+        this.setState({
+            dialogoOpen: false
+        });
+    }
+
     render() {
-        const { classes } = this.props;
-        const { lista } = this.state;
+        const { classes, paraMobile } = this.props;
+        const { lista, idTributoSeleccionado, identificadorSeleccionado } = this.state;
 
         return (
             <div>
@@ -242,6 +268,23 @@ class MiGestionPorCUIT extends Component {
 
                     </div>
                 </MiCard>
+
+                <MiControledDialog
+                    paraMobile={paraMobile}
+                    open={this.state.dialogoOpen}
+                    onDialogoOpen={this.onDialogoOpen}
+                    onDialogoClose={this.onDialogoClose}
+                    titulo={(idTributoSeleccionado == 11 && 'Detalle de Juicio') || (idTributoSeleccionado == 12 && 'Detalle de Plan') || 'Detalle'}
+                    classMaxWidth={classes.maxWidth}
+                    styleDialogContent={classes.backgroundContent}
+                >
+                    <div key="mainContent">
+                        {idTributoSeleccionado == 11 &&
+                            <DetalleJuicio idJuicio={identificadorSeleccionado} intoDialog={true} />}
+                        {idTributoSeleccionado == 12 &&
+                            <DetallePlan idPlan={identificadorSeleccionado} intoDialog={true} />}
+                    </div>
+                </MiControledDialog>
             </div>
         );
     }

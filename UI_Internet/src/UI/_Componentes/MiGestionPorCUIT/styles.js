@@ -90,6 +90,13 @@ const styles = theme => ({
   redButton: {
     color: theme.color.error.main,
     borderColor: theme.color.error.main
+  },
+  maxWidth: {
+    minWidth: '100%',
+    minHeight: '100%',
+  },
+  backgroundContent: {
+    background: '#eee'
   }
 });
 
