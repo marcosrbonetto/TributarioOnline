@@ -1588,7 +1588,7 @@ class DetalleTributo extends React.PureComponent {
                     <Grid item xs={8} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol1) : classNames("container", classes.transDesExtencionCol1)}>
                         <MiCard>
                             {/* Titulo y selección de identificador */}
-                            <Typography className={classNames(classes.title, "tituloDetalleTributo")} variant="title">Identificador:
+                            <Typography className={classNames(classes.title, "tituloDetalleTributo")} variant="title">Identificador: 
                             <Select
                                     className={classNames(classes.selectIdentificador, "MenuItemIdentificadores")}
                                     inputProps={{
