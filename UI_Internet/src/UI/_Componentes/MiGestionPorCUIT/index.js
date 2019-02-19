@@ -61,7 +61,6 @@ class MiGestionPorCUIT extends Component {
     handleIrAlTributo = (event) => {
         const identificador = event.currentTarget.attributes.identificador.value;
 
-        this.props.mostrarCargando(true);
         this.setState({
             idTributoSeleccionado: this.props.idTipoTributo,
             identificadorSeleccionado: identificador,
@@ -173,8 +172,6 @@ class MiGestionPorCUIT extends Component {
     }
 
     onDialogoClose = () => {
-        this.props.mostrarCargando(false);
-
         this.setState({
             dialogoOpen: false
         });

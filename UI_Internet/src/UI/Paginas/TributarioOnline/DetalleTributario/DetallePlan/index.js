@@ -65,7 +65,7 @@ class DetallePlan extends React.PureComponent {
         this.tributo = 'Plan';
         this.idTipoTributo = getIdTipoTributo(this.tributo);
         //this.props.idPlan Es en caso que se quiera mostrar el detalle de un plan desde otra pantalla o popup
-        this.identificador = this.props.idPlan ? decodeURIComponent(this.props.idPlan) : decodeURIComponent(this.props.match.params.identificador);
+        this.identificador = (this.props.idPlan && decodeURIComponent(this.props.idPlan)) || (this.props.match.params.identificador && decodeURIComponent(this.props.match.params.identificador)) || undefined;
         this.tributoPadre = {
             tipoTributo: new URLSearchParams(this.props.location.search).get('tipoTributo'),
             identificador: new URLSearchParams(this.props.location.search).get('identificador'),
@@ -101,7 +101,8 @@ class DetallePlan extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.init(this.token, this.identificador);
+        if(this.identificador)
+            this.init(this.token, this.identificador);
     }
 
     init = (token, identificador) => {
