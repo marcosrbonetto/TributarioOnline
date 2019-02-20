@@ -115,7 +115,7 @@ class MiGestionPorCUIT extends Component {
             let servicio;
             switch (tipoTributo) {
                 case 'Juicio':
-                    servicio = servicesTributarioOnline.getInfoJuicios(this.token, tributo.tipoTributo, tributo.identificador)
+                    servicio = servicesTributarioOnline.getIdJuicios(this.token, tributo.tipoTributo, tributo.identificador)
                         .then((datos) => {
                             if (!datos.ok) { console.log('Busqueda por CUIT: ' + datos.error); this.props.mostrarCargando(false); }
 
@@ -123,7 +123,7 @@ class MiGestionPorCUIT extends Component {
                                 lista: _.union(this.state.lista, [{
                                     idTipoTributo: tributo.tipoTributo,
                                     identificador: tributo.identificador,
-                                    tributos: _.map(datos.return, 'identificador')
+                                    tributos: datos.return
                                 }])
                             });
                         }).catch(err => {
@@ -133,7 +133,7 @@ class MiGestionPorCUIT extends Component {
                     arrayServicios.push(servicio);
                     break;
                 case 'Plan':
-                    servicio = servicesTributarioOnline.getInfoPlanes(this.token, tributo.tipoTributo, tributo.identificador)
+                    servicio = servicesTributarioOnline.getIdPlanes(this.token, tributo.tipoTributo, tributo.identificador)
                         .then((datos) => {
                             if (!datos.ok) { console.log('Busqueda por CUIT: ' + datos.error); this.props.mostrarCargando(false); }
 
@@ -141,7 +141,7 @@ class MiGestionPorCUIT extends Component {
                                 lista: _.union(this.state.lista, [{
                                     idTipoTributo: tributo.tipoTributo,
                                     identificador: tributo.identificador,
-                                    tributos: _.map(datos.return, 'identificador')
+                                    tributos: datos.return
                                 }])
                             });
                         }).catch(err => {

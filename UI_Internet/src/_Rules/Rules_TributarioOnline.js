@@ -300,6 +300,7 @@ const getInfoMultas = (token, tipoTributo, identificador) => {
   });
 };
 
+//Pedir desarrollo
 const getSiTieneMultas = (token, tipoTributo, identificador) => {
   //Este valor se obtiene luego de pasar la prueba del ReCaptcha
   const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
@@ -372,12 +373,87 @@ const getInfoJuicios = (token, tipoTributo, identificador) => {
   });
 };
 
+
+//Pedir desarrollo
+const getIdJuicios = (token, tipoTributo, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+  //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/IdJuiciosTributo?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
+      method: "GET",
+      headers: {
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      }
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        if (datos.accesoWS)
+          resolve(datos);
+        else {
+          const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
+        }
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
+
 const getInfoPlanes = (token, tipoTributo, identificador) => {
   //Este valor se obtiene luego de pasar la prueba del ReCaptcha
   const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
   //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
   return new Promise((resolve, reject) => {
     fetch(window.Config.BASE_URL_WS + '/v1/Tributario/Planes?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
+      method: "GET",
+      headers: {
+        "--ControlAcceso": accessCaptcha,
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Token": token
+      }
+    })
+      .then(res => {
+
+        if (res.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+
+        return res.json();
+      })
+      .then(datos => {
+        if (datos.accesoWS)
+          resolve(datos);
+        else {
+          const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+          if (window.location.hash.substring(1).indexOf('CaptchaAccess') == -1 && estadoAccesoWS) { Store.dispatch(setStateAccess(false)); };
+        }
+      })
+      .catch(err => {
+        reject("Error procesando la solicitud");
+      });
+  });
+};
+
+//Pedir desarrollo
+const getIdPlanes = (token, tipoTributo, identificador) => {
+  //Este valor se obtiene luego de pasar la prueba del ReCaptcha
+  const accessCaptcha = Store.getState().CaptchaAccess.accessCaptcha || '-';
+  //const estadoAccesoWS = Store.getState().CaptchaAccess.estadoAccesoWS || true;
+  return new Promise((resolve, reject) => {
+    fetch(window.Config.BASE_URL_WS + '/v1/Tributario/IdPlanesTributo?tipoTributo=' + tipoTributo + '&identificador=' + identificador, {
       method: "GET",
       headers: {
         "--ControlAcceso": accessCaptcha,
@@ -1018,7 +1094,9 @@ const services = {
   getInfoMultas: getInfoMultas,
   getSiTieneMultas: getSiTieneMultas,
   getInfoJuicios: getInfoJuicios,
+  getIdJuicios: getIdJuicios,
   getInfoPlanes: getInfoPlanes,
+  getIdPlanes: getIdPlanes,
   getInfoDetalleJuicio: getInfoDetalleJuicio,
   getInfoDetallePlan: getInfoDetallePlan,
   getReporteCedulon: getReporteCedulon,
