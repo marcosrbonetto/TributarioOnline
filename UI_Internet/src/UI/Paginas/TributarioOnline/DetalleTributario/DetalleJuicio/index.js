@@ -30,6 +30,7 @@ import MiLinkDialog from "@Componentes/MiLinkDialog";
 import MiControledDialog from "@Componentes/MiControledDialog"
 import MiTabla from "@Componentes/MiTabla";
 import MiPDFPrinter from "@Componentes/MiPDFPrinter";
+import IndicadorCargando from "@UI/_Componentes/IndicadorCargando"
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
@@ -70,6 +71,7 @@ class DetalleJuicio extends React.PureComponent {
         };
 
         this.initialState = {
+            cargandoVisible: false,
             tablaExpandida: false,
             registrosSeleccionados: [],
             infoJuicio: {},
@@ -101,8 +103,17 @@ class DetalleJuicio extends React.PureComponent {
             this.init(this.token, this.identificador);
     }
 
+    cargandoPantalla = (value) => {
+        if(this.props.intoDialog)
+            this.setState({
+                cargandoVisible: value || false
+            });
+        else
+            this.props.mostrarCargando(value);    
+    }
+
     init = (token, identificador) => {
-        this.props.mostrarCargando(true);
+        this.cargandoPantalla(true);
 
         servicesTributarioOnline.getInfoDetalleJuicio(token, identificador)
             .then((datos) => {
@@ -146,10 +157,10 @@ class DetalleJuicio extends React.PureComponent {
                     descuentoBeneficio: descuentoBeneficio
                 });
 
-                this.props.mostrarCargando(false);
+                this.cargandoPantalla(false);
             }).catch(err => {
                 console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
-                this.props.mostrarCargando(false);
+                this.cargandoPantalla(false);
             });
     }
 
@@ -167,7 +178,7 @@ class DetalleJuicio extends React.PureComponent {
 
     //Traemos datos de informe cuenta trayendo datos del WS
     onInformeCuentaDialogoOpen = () => {
-        this.props.mostrarCargando(true);
+        this.cargandoPantalla(true);
         const token = this.token;
         const tipoTributo = this.props.tipoTributos.byValue['Juicio'];
         const identificador = this.identificador;
@@ -178,7 +189,7 @@ class DetalleJuicio extends React.PureComponent {
             identificador: identificador
         })
             .then((datos) => {
-                if (!datos.ok) { this.props.mostrarCargando(false); return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
+                if (!datos.ok) { this.cargandoPantalla(false); return false; } //mostrarAlerta('Informe Cuenta: ' + datos.error);
 
                 this.setState({
                     informeCuenta: {
@@ -218,7 +229,7 @@ class DetalleJuicio extends React.PureComponent {
 
         Promise.all(arrayService).then(() => {
             this.handleInformeCuentaOpenDialog();
-            this.props.mostrarCargando(false);
+            this.cargandoPantalla(false);
         });
     }
 
@@ -233,7 +244,7 @@ class DetalleJuicio extends React.PureComponent {
                 }
             }
         }, () => {
-            this.props.mostrarCargando(false);
+            this.cargandoPantalla(false);
         });
     }
 
@@ -279,14 +290,14 @@ class DetalleJuicio extends React.PureComponent {
 
     //Traemos datos de periodos adeudados trayendo datos del WS
     onPeriodosAdeudadosDialogoOpen = () => {
-        this.props.mostrarCargando(true);
+        this.cargandoPantalla(true);
         const token = this.token;
         const tipoTributo = this.props.tipoTributos.byValue['Juicio'];
         const identificador = this.identificador;
 
         servicesTributarioOnline.getPeriodosAdeudados(token, tipoTributo, identificador)
             .then((datos) => {
-                if (!datos.ok) { this.props.mostrarCargando(false); mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
+                if (!datos.ok) { this.cargandoPantalla(false); mostrarAlerta('Períodos adeudados: ' + datos.error); return false; }
 
                 let rowList = [];
                 let data = datos.return;
@@ -331,7 +342,7 @@ class DetalleJuicio extends React.PureComponent {
                 }
             }
         }, () => {
-            this.props.mostrarCargando(false);
+            this.cargandoPantalla(false);
         });
     }
 
@@ -374,11 +385,13 @@ class DetalleJuicio extends React.PureComponent {
             informeCuenta,
             periodosAdeudados,
             infoDatosCuenta,
-            descuentoBeneficio
+            descuentoBeneficio,
+            cargandoVisible
         } = this.state;
 
         return (
             <div className={classNames(classes.mainContainer, "contentDetalleTributo", "mainContainer")}>
+                <IndicadorCargando visible={cargandoVisible} />
                 <Grid container className={classNames(classes.root, intoDialog && classes.intoDialog)} spacing={16}>
                     <Grid item xs={8} className={this.state.tablaExpandida ? classNames("container", classes.transExtencionCol1) : classNames("container", classes.transDesExtencionCol1)}>
                         <MiCard>
