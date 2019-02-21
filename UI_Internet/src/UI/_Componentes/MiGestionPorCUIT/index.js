@@ -24,6 +24,8 @@ import DetallePlan from "@UI/Paginas/TributarioOnline/DetalleTributario/DetalleP
 
 import servicesTributarioOnline from '@Rules/Rules_TributarioOnline';
 
+import { mostrarAlerta } from "@Utils/functions";
+
 const mapStateToProps = state => {
     return {
         loggedUser: state.Usuario.loggedUser,
@@ -119,13 +121,17 @@ class MiGestionPorCUIT extends Component {
                         .then((datos) => {
                             if (!datos.ok) { console.log('Busqueda por CUIT: ' + datos.error); this.props.mostrarCargando(false); }
 
-                            this.setState({
-                                lista: _.union(this.state.lista, [{
-                                    idTipoTributo: tributo.tipoTributo,
-                                    identificador: tributo.identificador,
-                                    tributos: datos.return
-                                }])
-                            });
+                            if(datos.return.length > 0) {
+                                this.setState({
+                                    lista: _.union(this.state.lista, [{
+                                        idTipoTributo: tributo.tipoTributo,
+                                        identificador: tributo.identificador,
+                                        tributos: datos.return
+                                    }])
+                                });
+                            } else {
+                                mostrarAlerta('No se encontraron juicios para el cuit seleccionado.');
+                            }
                         }).catch(err => {
                             console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                         });
@@ -137,13 +143,17 @@ class MiGestionPorCUIT extends Component {
                         .then((datos) => {
                             if (!datos.ok) { console.log('Busqueda por CUIT: ' + datos.error); this.props.mostrarCargando(false); }
 
-                            this.setState({
-                                lista: _.union(this.state.lista, [{
-                                    idTipoTributo: tributo.tipoTributo,
-                                    identificador: tributo.identificador,
-                                    tributos: datos.return
-                                }])
-                            });
+                            if(datos.return.length > 0) {
+                                this.setState({
+                                    lista: _.union(this.state.lista, [{
+                                        idTipoTributo: tributo.tipoTributo,
+                                        identificador: tributo.identificador,
+                                        tributos: datos.return
+                                    }])
+                                });
+                            } else {
+                                mostrarAlerta('No se encontraron planes para el cuit seleccionado.');
+                            }
                         }).catch(err => {
                             console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
                         });

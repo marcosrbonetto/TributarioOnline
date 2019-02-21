@@ -290,7 +290,7 @@ class DetalleMulta extends React.PureComponent {
                             </React.Fragment>
                                 ||
                                 <Typography className={classes.infoTexto}>
-                                    {condicionMulta ? `Comuniquese con Tribunar de Faltas` : (rowList ? `Le informamos que no posee multas` : `Cargando...`)}
+                                    {condicionMulta ? `Dirígase a Tribunales Administrativos Municipales de Faltas (Nicolás Avellaneda 439)` : (rowList ? `Le informamos que no posee multas` : `Cargando...`)}
                                 </Typography>}
                         </MiCard>
                     </Grid>

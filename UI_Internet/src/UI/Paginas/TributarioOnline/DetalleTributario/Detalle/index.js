@@ -1630,7 +1630,7 @@ class DetalleTributo extends React.PureComponent {
                                                     (<Tooltip
                                                         disableFocusListener disableTouchListener
                                                         classes={{ tooltip: classes.textTooltipInfoMultas }}
-                                                        title={'Comuniquese con Tribunar de Faltas'}
+                                                        title={'Dirígase a Tribunales Administrativos Municipales de Faltas (Nicolás Avellaneda 439)'}
                                                     >
                                                         <i className={classNames(classes.infoIconInfoMultas, "material-icons")}>info</i>
                                                     </Tooltip>)
@@ -1841,7 +1841,7 @@ class DetalleTributo extends React.PureComponent {
                                 </div>)
                                 || menuItemSeleccionado == 'multas' &&
                                 <Typography className={classes.infoTexto}>
-                                    {condicionMulta ? `Comuniquese con Tribunar de Faltas` : (listMultas ? `Le informamos que no posee multas` : `Cargando...`)}
+                                    {condicionMulta ? `Dirígase a Tribunales Administrativos Municipales de Faltas (Nicolás Avellaneda 439)` : (listMultas ? `Le informamos que no posee multas` : `Cargando...`)}
                                 </Typography>}
 
                             {/* Sub Secciones */}
