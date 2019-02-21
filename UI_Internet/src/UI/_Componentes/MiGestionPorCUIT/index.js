@@ -129,8 +129,7 @@ class MiGestionPorCUIT extends Component {
                                         tributos: datos.return
                                     }])
                                 });
-                            } else {
-                                mostrarAlerta('No se encontraron juicios para el cuit seleccionado.');
+                                return datos.return;
                             }
                         }).catch(err => {
                             console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -151,8 +150,7 @@ class MiGestionPorCUIT extends Component {
                                         tributos: datos.return
                                     }])
                                 });
-                            } else {
-                                mostrarAlerta('No se encontraron planes para el cuit seleccionado.');
+                                return datos.return;
                             }
                         }).catch(err => {
                             console.warn("[Advertencia] Ocurrió un error al intentar comunicarse con el servidor.");
@@ -163,7 +161,12 @@ class MiGestionPorCUIT extends Component {
             }
         });
 
-        Promise.all(arrayServicios).then(() => {
+        Promise.all(arrayServicios).then((arrayResult) => {
+        
+            const cantResult = _.filter(arrayResult,(o) => {return o != undefined}).length;
+            if(cantResult == 0)
+                mostrarAlerta('No se encontraron resultados para el cuit seleccionado.');
+
             this.props.mostrarCargando(false);
         });
     }
