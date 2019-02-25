@@ -148,13 +148,7 @@ class MiMercadoPago extends React.PureComponent {
           let arrayNexos = [];
           _.each(resultData.nexos, (nexo) => {
             var itemNexo = { ...nexo };
-            itemNexo.totalPeriodo = 0;
-
-            _.each(nexo.periodos, (periodo) => {
-              itemNexo.totalPeriodo += stringToFloat(periodo.importe.total, 2);
-            });
-
-            itemNexo.totalPeriodo = formatNumber(itemNexo.totalPeriodo);
+            itemNexo.totalPeriodo = formatNumber(nexo.montoTotal);
             arrayNexos.push(itemNexo);
           });
 
