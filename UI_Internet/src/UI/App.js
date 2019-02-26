@@ -26,8 +26,10 @@ import { setTipoTributos, setTipoCedulones, setEstadoPagos, setAplicacionPanel, 
 //Componentes
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import { IconButton, Icon } from "@material-ui/core";
+import { IconButton, Icon, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import TextField from '@material-ui/core/TextField';
+import Button from "@material-ui/core/Button";
 
 //Mis componentes
 import Inicio from "./Inicio";
@@ -97,9 +99,15 @@ class App extends React.Component {
     const paraMobile = !isWidthUp(limite, props.width);
     this.props.paraMobile(paraMobile);
 
+    this.clickTimes = 0;
+    this.refreshIntervalId;
+
     this.state = {
       validandoToken: false,
-      cargandoVisible: true
+      cargandoVisible: true,
+      sistemaOFF: false,
+      showInput: false,
+      inputAccess: ''
     };
   }
 
@@ -155,10 +163,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    
+
     //Realizamos acciónes iniciales y luego seguimos cargando la aplicación
     this.init(() => {
-        this.setState({ cargandoVisible: false }, () => {
+      this.setState({ cargandoVisible: false }, () => {
         let token = localStorage.getItem("token");
 
         let search = this.props.location.search;
@@ -170,6 +178,16 @@ class App extends React.Component {
             token = tokenQueryString;
           }
         }
+
+        //////////////////////////////////////////////
+        let adminCodeLocal = localStorage.getItem("adminCode");
+        if (!adminCodeLocal || !(adminCodeLocal == '´¨Ç©%À')) {
+            this.setState({
+              sistemaOFF: true
+            });
+            return false;
+        }
+        //////////////////////////////////////////////
 
         //Usuario Invitado
         if (token == undefined || token == null || token == "undefined" || token == "" || token == window.Config.TOKEN_INVITADO) {
@@ -183,8 +201,8 @@ class App extends React.Component {
             datos: undefined,
             token: window.Config.TOKEN_INVITADO
           });
-          
-          if(window.location.hash == '#/' || window.location.hash == '#/Inicio/HomeUsuario') {
+
+          if (window.location.hash == '#/' || window.location.hash == '#/Inicio/HomeUsuario') {
             this.props.redireccionar("/Inicio");
           }
           // --------------------- OJO!! comente esto pero probar de q ande todo bien
@@ -238,7 +256,7 @@ class App extends React.Component {
                     window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
                   });
 
-                  this.setState({ validandoToken: false });
+                this.setState({ validandoToken: false });
               })
               .catch(error => {
                 this.props.logout();
@@ -254,9 +272,9 @@ class App extends React.Component {
 
   init = (callback) => {
     //Quitamos variable para mostra info de tributos solo en Home
-    if(window.location.hash == '#/' || 
-    window.location.hash.indexOf('HomeInvitado') != -1 ||
-    window.location.hash.indexOf('HomeUsuario') != -1) {
+    if (window.location.hash == '#/' ||
+      window.location.hash.indexOf('HomeInvitado') != -1 ||
+      window.location.hash.indexOf('HomeUsuario') != -1) {
       localStorage.removeItem("timeInfoTributos");
     }
 
@@ -283,7 +301,7 @@ class App extends React.Component {
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
 
-      const service3 = Rules_TributarioOnline.getEstadoPagos()
+    const service3 = Rules_TributarioOnline.getEstadoPagos()
       .then(datos => {
         this.props.setEstadoPagos(datos.return);
       })
@@ -292,7 +310,7 @@ class App extends React.Component {
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
 
-      const service4 = Rules_MercadoPago.getPublicKeyMercadoPago()
+    const service4 = Rules_MercadoPago.getPublicKeyMercadoPago()
       .then(datos => {
         this.props.setPublicKeyMercadoPago(datos.return);
       })
@@ -301,7 +319,7 @@ class App extends React.Component {
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
 
-      const service5 = Rules_VecinoVirtual.AplicacionPanel()
+    const service5 = Rules_VecinoVirtual.AplicacionPanel()
       .then(datos => {
         this.props.setAplicacionPanel(datos);
       })
@@ -309,7 +327,7 @@ class App extends React.Component {
         this.props.logout();
         window.location.href = window.Config.URL_LOGIN + "?url=" + this.props.location.pathname + this.props.location.search;
       });
-      
+
     Promise.all([service1, service2, service3, service4, service5]).then(() => {
       callback();
     });
@@ -351,6 +369,37 @@ class App extends React.Component {
     this.intervalo && clearInterval(this.intervalo);
   }
 
+  onClickText = () => {
+
+    if (this.clickTimes == 0) {
+      this.refreshIntervalId = setInterval(() => {
+        this.clickTimes = 0;
+        clearInterval(this.refreshIntervalId);
+      }, 5000);
+    }
+
+    this.clickTimes = this.clickTimes + 1;
+
+    if (this.clickTimes >= 7) {
+      clearInterval(this.refreshIntervalId);
+      this.setState({
+        showInput: true,
+      });
+    }
+  }
+
+  onChangeInputAccess = (event) => {
+    this.setState({
+      inputAccess: event.target.value
+    })
+  }
+
+  onClickAccess = () => {
+    debugger;
+    localStorage.setItem("adminCode",atob(this.state.inputAccess));
+    window.location.reload();
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -365,13 +414,32 @@ class App extends React.Component {
 
   renderContent() {
     const { classes } = this.props;
-    const { cargandoVisible } = this.state;
-    
+    const { cargandoVisible, sistemaOFF, showInput, inputAccess } = this.state;
+
     let base = "";
     const login = this.state.validandoToken == false && this.props.loggedUser != undefined;
 
     return (
       <main className={classes.content}>
+        {sistemaOFF &&
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+            <Typography variant="headline" noWrap style={{ fontWeight: 200 }} onClick={this.onClickText}>Sistema en etapa de prueba.</Typography>
+            {showInput && <div>
+              <TextField
+                value={inputAccess}
+                autoComplete="off"
+                placeholder="Ingrese clave..."
+                type="password"
+                onChange={this.onChangeInputAccess}
+              />
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={this.onClickAccess}
+              //className={classes.buttonActions}
+              >Entrar</Button>
+            </div>}
+          </div>}
         <MiCaptcha />
         <IndicadorCargando visible={cargandoVisible} />
         <MiSoporteUsuario />
